@@ -1,0 +1,9 @@
+# 本领域的数据集来源（与核心 sources.yaml 合并；顺序即优先级，领域来源排在前面）。
+- id: nbs
+  title: 国家统计局
+  protocol: nbs
+  status: experimental        # 新版发布库 2026-03 上线、试运行、无正式文档
+  official: true
+  langs: [zh]
+  options: {country: CN}
+

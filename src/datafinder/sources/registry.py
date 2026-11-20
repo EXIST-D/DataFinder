@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-from ..resources import load_yaml
+from .. import domains
+from ..resources import load_package_yaml, load_yaml
 from .base import Source, SourceSpec
 from .ckan import CkanSource
 from .datacite import DataCiteSource
 from .dataseek import DataseekSource
-from .nbs import NbsSource
 from .zenodo import ZenodoSource
 
 PROTOCOLS: dict[str, type[Source]] = {
-    "nbs": NbsSource,
     "zenodo": ZenodoSource,
     "datacite": DataCiteSource,
     "ckan": CkanSource,
@@ -20,10 +19,23 @@ PROTOCOLS: dict[str, type[Source]] = {
 _STATUSES = {"active", "experimental", "disabled"}
 
 
+def register_protocol(name: str, cls: type[Source]) -> None:
+    """领域包通过它登记自己的来源协议（核心不再 import 任何领域的来源类）。"""
+    PROTOCOLS[name] = cls
+
+
+def _rows() -> list[dict]:
+    """领域包的来源排在核心之前（顺序即合并去重时的字段优先级）。"""
+    rows: list[dict] = []
+    for pkg in domains.data_packages():
+        rows += load_package_yaml(pkg, "sources.yaml") or []
+    return rows + load_yaml("sources.yaml")
+
+
 def load_specs() -> list[SourceSpec]:
     specs: list[SourceSpec] = []
     seen: set[str] = set()
-    for row in load_yaml("sources.yaml"):
+    for row in _rows():
         spec = SourceSpec(
             id=row["id"],
             title=row["title"],

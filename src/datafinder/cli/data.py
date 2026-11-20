@@ -16,11 +16,11 @@ from rich.console import Console
 from rich.table import Table as RichTable
 
 from .. import service
+from ..domains.official_statistics_cn.nbs import index as nbs_index
+from ..domains.official_statistics_cn.nbs.client import DATABASES, NbsClient
 from ..engine.cache import Cache
 from ..engine.http import Http
 from ..finder import MIN_INTERVAL
-from ..nbs import index as nbs_index
-from ..nbs.client import DATABASES, NbsClient
 from ..service import ServiceError
 from ..tables import describe, describe_markdown
 from .yearbook import yearbook_app

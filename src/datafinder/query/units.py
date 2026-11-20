@@ -8,9 +8,8 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from functools import lru_cache
 
-from ..resources import load_yaml
+from .. import domains
 from .plan import parse
 from .tokenize import tokenize
 
@@ -31,10 +30,21 @@ class Unit:
         return frozenset(g for a in self.alts for g in tokenize(a) if len(g) == 2)
 
 
-@lru_cache(maxsize=1)
+_THESAURI: dict[str, dict[str, tuple[str, ...]]] = {}  # 领域 id -> {词: 相关词}
+
+
+def register_thesaurus(domain_id: str, raw: dict[str, list[str]]) -> None:
+    """领域包登记自己的术语同义词表（概念 → 该领域里实际使用的名称）。"""
+    _THESAURI[domain_id] = {k: tuple(v) for k, v in raw.items()}
+
+
 def _thesaurus() -> dict[str, tuple[str, ...]]:
-    raw = load_yaml("thesaurus.zh.yaml")
-    return {k: tuple(v) for k, v in raw.items()}
+    domains.load_all()
+    merged: dict[str, tuple[str, ...]] = {}
+    for table in _THESAURI.values():
+        for key, syns in table.items():
+            merged[key] = tuple(dict.fromkeys((*merged.get(key, ()), *syns)))
+    return merged
 
 
 # 多省区域称呼：不是任何一个指标名的组成部分

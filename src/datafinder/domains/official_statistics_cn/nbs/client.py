@@ -21,9 +21,9 @@ import re
 from datetime import date
 from typing import Any
 
-from ..engine.cache import Cache
-from ..engine.errors import ShapeError, SourceError
-from ..engine.http import Http
+from datafinder.engine.cache import Cache
+from datafinder.engine.errors import ShapeError, SourceError
+from datafinder.engine.http import Http
 
 BASE = "https://data.stats.gov.cn/dg/website/publicrelease/web/external"
 PAGE = "https://data.stats.gov.cn/dg/website/page.html"

@@ -7,12 +7,8 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import datetime
 
-from ..engine.cache import Cache
-from ..engine.errors import SourceError
-from ..engine.http import Http
-from ..finder import MIN_INTERVAL
-from ..nbs import index as nbs_index
-from ..nbs.client import (
+from ..domains.official_statistics_cn.nbs import index as nbs_index
+from ..domains.official_statistics_cn.nbs.client import (
     DATABASES,
     MAX_AREAS_TABLE,
     NATIONAL,
@@ -22,6 +18,10 @@ from ..nbs.client import (
     valid_area,
     valid_id,
 )
+from ..engine.cache import Cache
+from ..engine.errors import SourceError
+from ..engine.http import Http
+from ..finder import MIN_INTERVAL
 from ..tables import Table, to_number
 from .errors import ServiceError
 

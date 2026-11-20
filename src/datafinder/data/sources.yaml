@@ -6,15 +6,6 @@
 # 字段：id, title, protocol, status(active|experimental|disabled), official, langs, base_url, options
 #   options.dsk_id：该来源在 Dataseek 里的 id，用于告诉 Dataseek 不要重复搜它。
 
-# ── 中国 ──
-- id: nbs
-  title: 国家统计局
-  protocol: nbs
-  status: experimental        # 新版发布库 2026-03 上线、试运行、无正式文档
-  official: true
-  langs: [zh]
-  options: {country: CN}
-
 # ── 高质量英文 / 国际 ──
 - id: zenodo
   title: Zenodo

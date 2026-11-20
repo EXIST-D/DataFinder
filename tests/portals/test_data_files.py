@@ -40,21 +40,3 @@ def test_curated_entries_are_well_formed():
         assert e.get("name_zh"), e["link"]
         if e.get("add"):
             assert {"name", "country", "catalog_type"} <= set(e), e["link"]
-
-
-def test_thesaurus_entries_are_well_formed():
-    th = load_yaml("thesaurus.zh.yaml")
-    assert len(th) >= 30
-    for key, syns in th.items():
-        assert isinstance(key, str) and len(key) >= 2, key
-        assert isinstance(syns, list) and syns and all(isinstance(s, str) and s for s in syns), key
-        assert len(syns) == len(set(syns)), f"{key} 的相关词有重复"
-        assert len(syns) <= 8, f"{key} 的相关词太多，会把无关指标拉进来"
-
-
-def test_yearbook_registry_regions_exist():
-    from datafinder.yearbook.registry import load_series
-
-    provinces = set(load_yaml("regions.yaml")["provinces"])
-    for s in load_series():
-        assert s.region == "CN" or s.region in provinces, s.id

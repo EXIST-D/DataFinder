@@ -6,13 +6,13 @@ import re
 import sqlite3
 from typing import Any
 
+from ..domains.official_statistics_cn.nbs import index as nbs_index
+from ..domains.official_statistics_cn.yearbook import index as yb_index
 from ..links import build_links
-from ..nbs import index as nbs_index
 from ..portals.browse import Filters, browse, portal_dict
 from ..query.plan import industries_in, parse, province_zh_name
 from ..query.tokenize import has_cjk
 from ..store import connect, portal_count
-from ..yearbook import index as yb_index
 from .errors import ServiceError
 
 # ───────────── 找数方案（旗舰能力）─────────────

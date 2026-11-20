@@ -6,8 +6,9 @@ import sqlite3
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from ..engine.errors import SourceError
-from ..engine.http import Http
+from datafinder.engine.errors import SourceError
+from datafinder.engine.http import Http
+
 from .index import replace_edition
 from .parse import decode, parse_toc
 from .registry import Series

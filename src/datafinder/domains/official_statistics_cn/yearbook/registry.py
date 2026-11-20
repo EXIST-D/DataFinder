@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ..resources import load_yaml
+from datafinder.resources import load_package_yaml
 
 
 @dataclass(frozen=True)
@@ -33,7 +33,7 @@ class Series:
 
 def load_series() -> list[Series]:
     out = []
-    for s in load_yaml("yearbooks.yaml")["series"]:
+    for s in load_package_yaml("datafinder.domains.official_statistics_cn", "yearbooks.yaml")["series"]:
         years = tuple(s["years"]) if s.get("years") else None
         out.append(
             Series(

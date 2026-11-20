@@ -22,9 +22,8 @@ from .sources.registry import build_sources
 
 PER_SOURCE_LIMIT = 20
 
-# 按 host 的最小请求间隔（秒）：礼貌限速。国家统计局是试运行期的政府站点，更保守。
+# 按 host 的最小请求间隔（秒）：礼貌限速。领域包在 plugin 里追加自己的站点。
 MIN_INTERVAL = {
-    "data.stats.gov.cn": 0.8,  # 防火墙对并发/高频敏感，串行且间隔 ≥0.8 秒
     "zenodo.org": 0.5,
     "api.datacite.org": 0.2,
 }

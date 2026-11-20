@@ -3,12 +3,16 @@ from pathlib import Path
 import httpx
 import pytest
 
+from datafinder.domains.official_statistics_cn.yearbook import crawl
+from datafinder.domains.official_statistics_cn.yearbook import index as yb
+from datafinder.domains.official_statistics_cn.yearbook.registry import (
+    Series,
+    get_series,
+    load_series,
+)
 from datafinder.engine.http import Http
-from datafinder.yearbook import crawl
-from datafinder.yearbook import index as yb
-from datafinder.yearbook.registry import Series, get_series, load_series
 
-HTML = (Path(__file__).parents[1] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
+HTML = (Path(__file__).parents[3] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
 BIG = HTML.replace("</ul></body>", "".join(f"<li><a href='h/{i}.jpg'>9-{i} 表{i}</a></li>" for i in range(30)) + "</ul></body>")
 
 

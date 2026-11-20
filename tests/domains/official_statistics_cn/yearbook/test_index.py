@@ -1,5 +1,5 @@
-from datafinder.yearbook import index as yb
-from datafinder.yearbook.parse import TocEntry
+from datafinder.domains.official_statistics_cn.yearbook import index as yb
+from datafinder.domains.official_statistics_cn.yearbook.parse import TocEntry
 
 
 def E(chapter, no, title, fmt="jpg"):

@@ -20,7 +20,7 @@ def test_plan_sources_hebei_industry_picks_region_and_domain_portals(portals):
 
 
 def test_plan_sources_with_index_gives_fetch_args(portals):
-    from datafinder.nbs import index as nbs_index
+    from datafinder.domains.official_statistics_cn.nbs import index as nbs_index
 
     conn = nbs_index.connect_index()
     conn.execute("INSERT INTO ind VALUES ('6', ?, ?, '分省年度数据 › 工业', ?, '规模以上工业企业利润总额', '亿元', NULL)",
@@ -94,8 +94,8 @@ async def test_nbs_fetch_validates_before_any_network(monkeypatch):
 
 
 def _fill_yearbooks():
-    from datafinder.yearbook import index as yb
-    from datafinder.yearbook.parse import TocEntry
+    from datafinder.domains.official_statistics_cn.yearbook import index as yb
+    from datafinder.domains.official_statistics_cn.yearbook.parse import TocEntry
 
     conn = yb.connect_index()
     yb.replace_edition(conn, "CN-HE", 2025, status="ok", toc_url="u", entries=[

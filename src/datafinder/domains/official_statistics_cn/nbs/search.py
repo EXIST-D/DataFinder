@@ -18,10 +18,10 @@ import json
 import re
 from typing import Any
 
-from ..engine.errors import ShapeError, SourceError
-from ..models import Dataset, Resource
-from ..query.plan import QueryPlan
-from .base import Ctx, Source, SourceSpec
+from datafinder.engine.errors import ShapeError, SourceError
+from datafinder.models import Dataset, Resource
+from datafinder.query.plan import QueryPlan
+from datafinder.sources.base import Ctx, Source, SourceSpec
 
 BASE = "https://data.stats.gov.cn/dg/website/publicrelease/web/external"
 PAGE = "https://data.stats.gov.cn/dg/website/page.html"

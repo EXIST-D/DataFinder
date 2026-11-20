@@ -16,9 +16,10 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from ..config import data_dir
-from ..engine.errors import SourceError
-from ..query.units import balanced_pick, build_units, combine, prefilter_terms, unit_scores
+from datafinder.config import data_dir
+from datafinder.engine.errors import SourceError
+from datafinder.query.units import balanced_pick, build_units, combine, prefilter_terms, unit_scores
+
 from .client import DATABASES, NbsClient
 
 # 默认索引的库：年度、分省年度、主要城市年度（论文最常用）；其余库可用 --db 追加

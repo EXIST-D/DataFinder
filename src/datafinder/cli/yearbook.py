@@ -10,11 +10,11 @@ from rich.console import Console
 from rich.table import Table as RichTable
 
 from .. import service
+from ..domains.official_statistics_cn.yearbook import crawl as yb_crawl
+from ..domains.official_statistics_cn.yearbook import index as yb_index
+from ..domains.official_statistics_cn.yearbook.registry import load_series
 from ..engine.http import Http
 from ..service import ServiceError
-from ..yearbook import crawl as yb_crawl
-from ..yearbook import index as yb_index
-from ..yearbook.registry import load_series
 
 console = Console()
 yearbook_app = typer.Typer(help="统计年鉴目录：按年鉴 × 年份建立数据表清单，并按关键词查找。", no_args_is_help=True)

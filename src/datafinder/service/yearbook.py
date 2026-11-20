@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ..yearbook import index as yb_index
+from ..domains.official_statistics_cn.yearbook import index as yb_index
 from .errors import ServiceError
 
 NOT_BUILT = (

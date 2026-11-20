@@ -32,6 +32,13 @@ from fastapi.responses import FileResponse, JSONResponse, Response, StreamingRes
 from fastapi.staticfiles import StaticFiles
 
 from .. import __version__
+from ..domains.official_statistics_cn.nbs.client import (
+    DATABASES,
+    MAX_AREAS,
+    NbsClient,
+    valid_area,
+    valid_id,
+)
 from ..engine.cache import Cache
 from ..engine.errors import SourceError
 from ..engine.http import Http
@@ -39,7 +46,6 @@ from ..enrich import enrich, lookup_portal
 from ..finder import MIN_INTERVAL, SearchResult, stream_search
 from ..links import build_links
 from ..models import Dataset
-from ..nbs.client import DATABASES, MAX_AREAS, NbsClient, valid_area, valid_id
 from ..portals.browse import Filters, browse, facets, portal_dict
 from ..portals.search import search_portals
 from ..sources.base import SourceSpec

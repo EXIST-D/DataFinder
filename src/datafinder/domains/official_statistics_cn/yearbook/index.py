@@ -6,9 +6,10 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-from ..config import data_dir
-from ..query.plan import parse
-from ..query.units import balanced_pick, build_units, combine, prefilter_terms, unit_scores
+from datafinder.config import data_dir
+from datafinder.query.plan import parse
+from datafinder.query.units import balanced_pick, build_units, combine, prefilter_terms, unit_scores
+
 from .parse import norm_title
 from .registry import load_series
 

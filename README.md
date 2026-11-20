@@ -155,23 +155,23 @@ uv run datafinder bench topics                   # 真实选题验收（需本�
 uv run datafinder bench topics --holdout         # 留出集：估计没调过的新选题上的命中率
 ```
 
-目录结构：
+目录结构（核心通用、领域插件化，详见 [CONTRIBUTING.md](CONTRIBUTING.md)）：
 
 ```
 src/datafinder/
   cli/            命令行：app（主命令）· data（plan / nbs / describe / mcp）· yearbook
   mcp_server/     MCP 服务（stdio）
-  service/        共用服务层（CLI 与 MCP 都走这里）：nbs · yearbook · plan · discovery · export · status
-  nbs/            国家统计局：client（接口）· index（本地指标索引）
-  yearbook/       统计年鉴：registry · parse · crawl · index
+  service/        共用服务层（CLI 与 MCP 都走这里）
+  domains/        领域包（每个领域自带连接器、分类词典、术语词表、数据文件、plugin.py）
+    official_statistics_cn/   中国官方统计：nbs（国家统计局）· yearbook（统计年鉴）
   portals/        门户目录：同步、分类、浏览、检索
-  sources/        数据集来源（Zenodo、DataCite、CKAN、国家统计局搜索、Dataseek）
+  sources/        通用数据集来源（Zenodo、DataCite、CKAN、Dataseek）
   engine/         并发检索、HTTP、缓存、去重、排序
-  query/          分词、词表、检索计划、检索单元与统计术语同义词
+  query/          分词、词表、检索计划、检索单元
   bench/          排序基准（ranking）与真实选题验收（topics）
   server/         本地网页
-  data/           词表、行业、地区、精选门户、年鉴系列、术语同义词等 YAML
-tests/            按模块分目录，与 src 一一对应；fixtures/ 放真实页面/接口响应的缩小样本
+  data/           核心数据文件：词表、行业、地区、精选门户、来源登记
+tests/            按模块分目录，与 src 一一对应；architecture/ 守护分层；fixtures/ 放缩小的真实响应样本
 bench/            基准数据：问句、相关性标注、选题验收集（开发集 + 留出集）
 ```
 

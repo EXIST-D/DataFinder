@@ -5,11 +5,11 @@ from __future__ import annotations
 from typing import Any
 
 from .. import __version__
-from ..nbs import index as nbs_index
+from ..domains.official_statistics_cn.nbs import index as nbs_index
+from ..domains.official_statistics_cn.yearbook import index as yb_index
 from ..sources.dataseek import find_executable
 from ..store import connect, db_path, get_meta, portal_count
 from ..tables import exports_dir
-from ..yearbook import index as yb_index
 
 # ───────────── 状态 ─────────────
 

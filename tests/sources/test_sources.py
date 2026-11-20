@@ -5,6 +5,8 @@ from pathlib import Path
 import httpx
 import pytest
 
+from datafinder.domains.official_statistics_cn.nbs.search import NbsSource
+from datafinder.domains.official_statistics_cn.nbs.search import to_dataset as nbs_to_dataset
 from datafinder.engine.errors import ShapeError, SourceError
 from datafinder.engine.http import Http
 from datafinder.query.plan import parse
@@ -12,8 +14,6 @@ from datafinder.sources.base import Ctx, SourceSpec
 from datafinder.sources.ckan import CkanSource
 from datafinder.sources.datacite import DataCiteSource
 from datafinder.sources.dataseek import DataseekSource
-from datafinder.sources.nbs import NbsSource
-from datafinder.sources.nbs import to_dataset as nbs_to_dataset
 from datafinder.sources.registry import build_sources, load_specs
 from datafinder.sources.zenodo import ZenodoSource
 

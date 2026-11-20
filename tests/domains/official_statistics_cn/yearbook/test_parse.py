@@ -1,8 +1,13 @@
 from pathlib import Path
 
-from datafinder.yearbook.parse import decode, fmt_of, norm_title, parse_toc
+from datafinder.domains.official_statistics_cn.yearbook.parse import (
+    decode,
+    fmt_of,
+    norm_title,
+    parse_toc,
+)
 
-HTML = (Path(__file__).parents[1] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
+HTML = (Path(__file__).parents[3] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
 BASE = "https://example.gov.cn/sj/ndsj/2025/left.htm"
 
 

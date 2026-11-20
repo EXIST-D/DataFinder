@@ -14,7 +14,9 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
-_NUMBERING = re.compile(r"^(?:[（(]?[一二三四五六七八九十百零]+[）)、.．]\s*|第[一二三四五六七八九十百零\d]+[篇章部分]\s*)")
+_NUMBERING = re.compile(
+    r"^(?:[（(]?[一二三四五六七八九十百零]+[）)、.．]\s*|第[一二三四五六七八九十百零\d]+[篇章部分]\s*)"
+)
 _SPACES = re.compile(r"[\s\u3000\xa0]+")
 
 
@@ -80,14 +82,22 @@ class RuleSet:
     def from_raw(cls, raw: dict[str, Any]) -> RuleSet:
         topic_rules = tuple(
             TopicRule(
-                r.get("scope", "top"), tuple(r["topics"]), tuple(r["any"]), tuple(r.get("none", ())), r.get("under")
+                r.get("scope", "top"),
+                tuple(r["topics"]),
+                tuple(r["any"]),
+                tuple(r.get("none", ())),
+                r.get("under"),
             )
             for r in raw.get("topic_rules", [])
         )
         region_rules = tuple(
             RegionRule(
-                r.get("scope", "top"), tuple(r["any"]), r.get("region"), r.get("relation", "covers"),
-                r.get("granularity"), r.get("scope_mode", "unknown"),
+                r.get("scope", "top"),
+                tuple(r["any"]),
+                r.get("region"),
+                r.get("relation", "covers"),
+                r.get("granularity"),
+                r.get("scope_mode", "unknown"),
             )
             for r in raw.get("region_rules", [])
         )

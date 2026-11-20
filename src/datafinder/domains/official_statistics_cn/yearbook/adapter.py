@@ -45,7 +45,11 @@ async def fetch_edition(http: Http, series: Series, year: int):
         if n >= MIN_TABLES:
             return "ok", url, toc, ""
         last = f"{url} 解析出的数据表只有 {n} 张，不像年鉴目录页"
-    return ("error", None, None, last) if last else ("missing", None, None, "该版次的目录页不存在（404）")
+    return (
+        ("error", None, None, last)
+        if last
+        else ("missing", None, None, "该版次的目录页不存在（404）")
+    )
 
 
 class YearbookAdapter(Adapter):
@@ -60,7 +64,9 @@ class YearbookAdapter(Adapter):
         wanted = {x.strip() for x in opts.params.get("series", "").split(",") if x.strip()}
         known = {s.id for s in load_series()}
         if wanted - known:
-            raise AdapterError(f"未知年鉴系列：{', '.join(sorted(wanted - known))}（可选：{', '.join(sorted(known))}）")
+            raise AdapterError(
+                f"未知年鉴系列：{', '.join(sorted(wanted - known))}（可选：{', '.join(sorted(known))}）"
+            )
         lo = int(opts.params["from"]) if opts.params.get("from") else None
         hi = int(opts.params["to"]) if opts.params.get("to") else None
         self.register_sources(cat)
@@ -75,11 +81,23 @@ class YearbookAdapter(Adapter):
                 await self._series(cat, http, s, lo, hi, opts, result)
         finally:
             await http.aclose()
-        cat.finish_run(run, "ok", seen=result.seen, changed=result.added, message="；".join(result.stopped) or None)
+        cat.finish_run(
+            run,
+            "ok",
+            seen=result.seen,
+            changed=result.added,
+            message="；".join(result.stopped) or None,
+        )
         return result
 
     async def _series(
-        self, cat: Catalog, http: Http, s: Series, lo: int | None, hi: int | None, opts: DiscoverOptions,
+        self,
+        cat: Catalog,
+        http: Http,
+        s: Series,
+        lo: int | None,
+        hi: int | None,
+        opts: DiscoverOptions,
         result: DiscoverResult,
     ) -> None:
         for year in s.edition_years(lo, hi):
@@ -90,7 +108,13 @@ class YearbookAdapter(Adapter):
                 status, toc_url, toc, msg = await fetch_edition(http, s, year)
             except SourceError as exc:
                 blocked = exc.kind in ("blocked", "rate_limited")
-                cat.upsert([series_entry(s, access_status="blocked" if blocked else "unavailable", note=str(exc))])
+                cat.upsert(
+                    [
+                        series_entry(
+                            s, access_status="blocked" if blocked else "unavailable", note=str(exc)
+                        )
+                    ]
+                )
                 result.stopped.append(f"{s.zh}：{exc}")
                 opts.say(f"{s.zh} {year}：{exc}（放弃该系列，不重试不绕过）")
                 return

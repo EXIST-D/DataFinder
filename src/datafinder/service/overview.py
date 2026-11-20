@@ -26,9 +26,13 @@ def status() -> dict[str, Any]:
     if not portals:
         hints.append("门户库为空：运行 datafinder sync")
     if not info["resources"]:
-        hints.append("资源目录为空：运行 datafinder index build 抓取；有旧版本地索引则运行 datafinder index migrate 一次性迁入")
+        hints.append(
+            "资源目录为空：运行 datafinder index build 抓取；有旧版本地索引则运行 datafinder index migrate 一次性迁入"
+        )
     elif migratable:
-        hints.append(f"发现旧版本地索引（{', '.join(migratable)}）尚未迁入：运行 datafinder index migrate")
+        hints.append(
+            f"发现旧版本地索引（{', '.join(migratable)}）尚未迁入：运行 datafinder index migrate"
+        )
     return {
         "version": __version__,
         "catalog": info,

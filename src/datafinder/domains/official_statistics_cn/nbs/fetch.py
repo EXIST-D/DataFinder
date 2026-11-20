@@ -47,7 +47,9 @@ def resolve_regions(available: list[dict], wanted: list[str]) -> list[dict]:
             chosen[w] = by_code[w]
             continue
         key = _norm_region(w)
-        match = [r for r in available if r["text"] == w] or [r for r in available if _norm_region(r["text"]) == key]
+        match = [r for r in available if r["text"] == w] or [
+            r for r in available if _norm_region(r["text"]) == key
+        ]
         if not match:
             sample = "、".join(r["text"] for r in available[:12])
             raise AdapterError(f"该数据集没有地区「{w}」。可选地区示例：{sample}……")
@@ -68,19 +70,35 @@ def resolve_indicators(catalog: list[dict], wanted: list[str]) -> list[dict]:
                 raise AdapterError(f"该数据集下没有指标 {w}，请用 inspect 查看该数据集的指标清单")
             chosen[w] = by_id[w]
             continue
-        exact = [i for i in catalog if i["name"].strip() == w or clean_name(i["name"], i.get("unit")) == w]
+        exact = [
+            i
+            for i in catalog
+            if i["name"].strip() == w or clean_name(i["name"], i.get("unit")) == w
+        ]
         hit = exact or [i for i in catalog if w in i["name"]]
         if not hit:
-            raise AdapterError(f"该数据集下没有名为「{w}」的指标。可用：{'、'.join(i['name'] for i in catalog[:10])}……")
+            raise AdapterError(
+                f"该数据集下没有名为「{w}」的指标。可用：{'、'.join(i['name'] for i in catalog[:10])}……"
+            )
         if len(hit) > 1 and not exact:
-            raise AdapterError(f"「{w}」匹配多个指标：{'、'.join(i['name'] for i in hit[:6])}，请写得更具体或直接给指标 id")
+            raise AdapterError(
+                f"「{w}」匹配多个指标：{'、'.join(i['name'] for i in hit[:6])}，请写得更具体或直接给指标 id"
+            )
         chosen[hit[0]["id"]] = hit[0]
     return list(chosen.values())
 
 
 async def fetch_table(
-    client: NbsClient, *, db: str, cid: str, root_id: str | None, indicators: list[str], regions: list[str],
-    start: str | None, end: str | None, periods: int,
+    client: NbsClient,
+    *,
+    db: str,
+    cid: str,
+    root_id: str | None,
+    indicators: list[str],
+    regions: list[str],
+    start: str | None,
+    end: str | None,
+    periods: int,
 ) -> Table:
     if db not in DATABASES:
         raise AdapterError(f"未知数据库代码 {db!r}")
@@ -93,7 +111,9 @@ async def fetch_table(
     chosen = resolve_indicators(catalog, indicators)
     if region_info["catalogs"]:
         if not regions:
-            raise AdapterError('这是分地区的数据集，需要指定 regions（如 ["河北", "北京"] 或 ["全部"]）')
+            raise AdapterError(
+                '这是分地区的数据集，需要指定 regions（如 ["河北", "北京"] 或 ["全部"]）'
+            )
         areas = resolve_regions(region_info["regions"], regions)
     else:
         areas = [dict(NATIONAL)]
@@ -105,8 +125,14 @@ async def fetch_table(
             raise AdapterError("无法确定 root_id；请重新建立该库的目录索引后再试")
     try:
         records = await client.table(
-            code=db, cid=cid, indicator_ids=[i["id"] for i in chosen], root_id=root_id, areas=areas,
-            n=max(1, min(periods, 30)), start=start, end=end,
+            code=db,
+            cid=cid,
+            indicator_ids=[i["id"] for i in chosen],
+            root_id=root_id,
+            areas=areas,
+            n=max(1, min(periods, 30)),
+            start=start,
+            end=end,
         )
     except ValueError as exc:
         raise AdapterError(str(exc)) from exc
@@ -116,11 +142,18 @@ async def fetch_table(
     seen_indicator = {r["指标ID"]: r["指标"] for r in records}
     expected = {
         "regions": [seen_region.get(a["value"], a["text"]) for a in areas],
-        "indicators": [seen_indicator.get(i["id"], clean_name(i["name"], i.get("unit"))) for i in chosen],
+        "indicators": [
+            seen_indicator.get(i["id"], clean_name(i["name"], i.get("unit"))) for i in chosen
+        ],
     }
-    rows = [[r["期别"], r["期别代码"], r["地区"], r["指标"], to_number(r["数值"]), r["单位"]] for r in records]
+    rows = [
+        [r["期别"], r["期别代码"], r["地区"], r["指标"], to_number(r["数值"]), r["单位"]]
+        for r in records
+    ]
     rows.sort(key=lambda r: (r[3], r[2], r[1]))  # 指标、地区、期别：便于阅读与透视
-    names = "、".join(clean_name(i["name"], i.get("unit")) for i in chosen[:3]) + ("等" if len(chosen) > 3 else "")
+    names = "、".join(clean_name(i["name"], i.get("unit")) for i in chosen[:3]) + (
+        "等" if len(chosen) > 3 else ""
+    )
     where = "、".join(a["text"] for a in areas[:3]) + ("等" if len(areas) > 3 else "")
     return Table(
         title=f"{names}（{where}）",

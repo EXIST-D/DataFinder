@@ -31,7 +31,10 @@ def test_parse_toc_ignores_front_matter_and_script_links_but_keeps_notes():
 def test_parse_toc_handles_trailing_space_in_href_and_plain_li_chapter():
     entries = {e.no: e for e in parse_toc(HTML, BASE) if e.kind == "table"}
     assert entries["1-3"].url.endswith("/html/Z0103C.xls") and entries["1-3"].fmt == "xls"
-    assert entries["15.1"].chapter == "第十五章 其他" and entries["15.1"].url == "https://example.gov.cn/sj/ndsj/x/C15-01.HTM"  # ../ 相对路径正确解析
+    assert (
+        entries["15.1"].chapter == "第十五章 其他"
+        and entries["15.1"].url == "https://example.gov.cn/sj/ndsj/x/C15-01.HTM"
+    )  # ../ 相对路径正确解析
     assert entries["15.1"].fmt == "html"
 
 
@@ -41,3 +44,9 @@ def test_fmt_of_and_decode():
     assert fmt_of("https://a/b/") == "other"
     assert decode("中国统计年鉴".encode("gb18030")) == "中国统计年鉴"
     assert decode("中国统计年鉴".encode()) == "中国统计年鉴"
+
+
+def test_appendix_tables_with_prefixed_numbers_are_tables_not_notes():
+    html = "<ul><li id='foldheader'>附录、国际主要社会经济指标</li><li><a href='h/a.jpg'>附录1-15 货币汇率(年平均价)</a></li><li><a href='h/b.jpg'>表2.1 户数</a></li></ul>"
+    got = [(e.no, e.title, e.kind) for e in parse_toc(html, "https://x/")]
+    assert got == [("附录1-15", "货币汇率(年平均价)", "table"), ("2.1", "户数", "table")]

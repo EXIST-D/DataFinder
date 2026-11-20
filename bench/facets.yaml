@@ -1,0 +1,159 @@
+# 分面检索验收集（开发集）：直接验收 主题 × 地域 × 资源类型 × 获取方式 × 观测期 的筛选语义。
+#
+# 运行：datafinder bench facets            （只读本机资源目录，不联网）
+#
+# filters：topic / region / kind / delivery / granularity / from / to / frequency / mode / region_match
+# expect：
+#   min_results / max_results   结果数下限/上限（写了 max_results 且没写 min_results 时下限为 0）
+#   hit      列表；每项是一组条件，至少有一个结果同时满足
+#   all      每个结果都必须满足
+#   forbid   列表；任何结果都不得满足（"误导项"）
+#   hint_contains  响应的提示里应包含这段文字
+# 条件键：title_any / kind / delivery / usability / source_id / source_prefix / path_prefix / topic / region /
+#         frequency / period_known / missing_any / versions_min；多个取值写成列表（OR）。
+#
+# 重点是"误导项"：出版年冒充观测期、发布机构所在地冒充数据覆盖地域、标题推断的粒度冒充已验证、图片冒充可分析表格……
+# 留出集（facets.holdout.yaml）在写用例时没看过检索结果，调参时不许参考。
+
+cases:
+  # ── 地域：覆盖与发布机构不是一回事 ──
+  - id: sd-tables-versions-merged
+    query: 规模以上工业增加值
+    filters: {region: [CN-SD], kind: [table]}
+    expect:
+      hit: [{title_any: 规模以上工业增加值, source_prefix: yearbook.CN-SD, delivery: download, versions_min: 5}]
+      forbid: [{source_prefix: [yearbook.CN-LN, yearbook.CN-HA]}]   # 别的省的年鉴不覆盖山东
+  - id: hebei-yearbook-not-crawled-honest
+    query: 工业
+    filters: {region: [CN-HE], kind: [table]}
+    expect:
+      forbid: [{source_prefix: [yearbook.CN-SD, yearbook.CN-LN, yearbook.CN-HA]}]   # 河北年鉴没抓到：不拿别省的冒充
+  - id: hebei-series-link-with-reason
+    query: 河北统计年鉴
+    filters: {region: [CN-HE], kind: [series]}
+    expect:
+      hit: [{title_any: 河北统计年鉴, delivery: link}]
+  - id: provincial-indicators-cover-hebei
+    query: 工业增加值
+    filters: {region: [河北], kind: [indicator]}
+    expect:
+      hit: [{path_prefix: 分省年度数据, delivery: generate}]
+      forbid: [{path_prefix: "年度数据 ›"}]    # 全国汇总（只覆盖"全国"）不包含河北
+  - id: national-exact-excludes-provincial-databases
+    query: 工业增加值
+    filters: {region: [CN], region_match: exact, kind: [indicator]}
+    expect:
+      hit: [{path_prefix: "年度数据 ›"}]
+      forbid: [{path_prefix: 分省}]
+  - id: hongkong-chapters-set-the-region
+    query: 香港
+    filters: {region: [CN-HK], kind: [table]}
+    expect:
+      hit: [{region: CN-HK, source_prefix: yearbook.cn}]
+  - id: international-appendix-is-world
+    query: 国际
+    filters: {region: [WORLD], kind: [table]}
+    expect:
+      hit: [{region: WORLD}]
+
+  # ── 观测期与出版年 ──
+  - id: yearbook-tables-have-no-observation-period
+    query: 规模以上工业增加值
+    filters: {kind: [table]}
+    expect:
+      all: [{period_known: false}]     # 出版年不冒充观测期
+  - id: strict-period-excludes-edition-only-tables
+    query: 规模以上工业增加值
+    filters: {kind: [table], region: [CN-SD], from: 2015, to: 2020, mode: strict}
+    expect:
+      max_results: 0
+      hint_contains: discovery
+  - id: discovery-period-flags-unknown
+    query: 规模以上工业增加值
+    filters: {kind: [table], region: [CN-SD], from: 2015, to: 2020}
+    expect:
+      hit: [{missing_any: 观测期未知}]
+  - id: ongoing-dataset-title-period-is-known
+    query: 规模以上工业企业主要经济指标
+    filters: {kind: [dataset], from: 2025, mode: strict}
+    expect:
+      hit: [{period_known: true}]      # 标题里写明"2023-至今"的数据集，strict 下也算覆盖 2025
+
+  # ── 粒度：标题推断 ≠ 已验证 ──
+  - id: strict-prefecture-excludes-title-inferred
+    query: 工业增加值
+    filters: {kind: [table], region: [CN-SD], granularity: prefecture, mode: strict}
+    expect:
+      max_results: 0                   # 山东年鉴表"各市"粒度只是标题推断
+  - id: discovery-prefecture-flags-inference
+    query: 各市规模以上工业增加值
+    filters: {kind: [table], region: [CN-SD], granularity: prefecture}
+    expect:
+      hit: [{missing_any: 由标题推断}]
+  - id: county-chapter-flagged-as-inferred
+    query: 各县
+    filters: {kind: [table], granularity: county}
+    expect:
+      hit: [{missing_any: 由标题推断}]
+
+  # ── 获取方式与可用性 ──
+  - id: download-only
+    query: 人口
+    filters: {kind: [table], delivery: [download]}
+    expect:
+      all: [{delivery: download}]
+  - id: generate-only-indicators
+    query: 能源消费
+    filters: {kind: [indicator], delivery: [generate]}
+    expect:
+      hit: [{title_any: 能源消费}]
+      all: [{delivery: generate}]
+  - id: series-are-link-only
+    query: 统计年鉴
+    filters: {kind: [series], delivery: [link]}
+    expect:
+      hit: [{title_any: 统计年鉴}]
+      all: [{delivery: link}]
+  - id: image-yearbook-is-download-but-flagged
+    query: 规模以上工业增加值
+    filters: {region: [CN-SD], kind: [table], delivery: [download]}
+    expect:
+      hit: [{usability: image}]        # 能下载，但标明是图片
+
+  # ── 主题 ──
+  - id: topic-l2-value-added
+    query: 增加值
+    filters: {topic: [cnstat.industry.value_added], kind: [indicator]}
+    expect:
+      all: [{topic: cnstat.industry.value_added}]
+  - id: topic-population-liaoning
+    filters: {topic: [cnstat.population], region: [CN-LN], kind: [table]}
+    expect:
+      hit: [{source_prefix: yearbook.CN-LN, topic: cnstat.population}]
+      forbid: [{source_prefix: yearbook.CN-SD}]
+  - id: reserved-topic-has-no-resources-yet
+    filters: {topic: [cnstat.quality]}
+    expect:
+      max_results: 0
+  - id: thesaurus-maps-rnd-to-statistical-name
+    query: 研发投入
+    filters: {kind: [indicator]}
+    expect:
+      hit: [{title_any: 研究与试验发展}]
+
+  # ── 其他语义 ──
+  - id: monthly-frequency
+    query: 居民消费价格指数
+    filters: {kind: [indicator], frequency: monthly}
+    expect:
+      hit: [{delivery: generate}]
+      all: [{frequency: monthly}]
+  - id: navigation-categories-hidden-by-default
+    query: 国民经济核算
+    expect:
+      forbid: [{kind: category}]
+  - id: generic-only-query-gives-hint-not-garbage
+    query: 统计数据分析评价
+    expect:
+      max_results: 0
+      hint_contains: 无区分度

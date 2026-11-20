@@ -19,10 +19,24 @@ _TOKEN = re.compile(
     """
 )
 _TAGS = re.compile(r"<[^>]+>")
-_NUMBERED = re.compile(r"^(?:表\s*)?(\d+(?:[-.．]\d+)+)\s*(.+)$")
+_NUMBERED = re.compile(
+    r"^(?:表\s*)?((?:附录)?\s*\d+(?:[-.．]\d+)+)\s*(.+)$"
+)  # 含"附录1-15 货币汇率"这类附录表
 _SPACES = re.compile(r"[\s\u3000\xa0]+")
-_FORMATS = {"xls": "xls", "xlsx": "xlsx", "htm": "html", "html": "html", "jpg": "jpg", "jpeg": "jpg",
-            "png": "png", "gif": "gif", "pdf": "pdf", "doc": "doc", "docx": "docx", "csv": "csv"}
+_FORMATS = {
+    "xls": "xls",
+    "xlsx": "xlsx",
+    "htm": "html",
+    "html": "html",
+    "jpg": "jpg",
+    "jpeg": "jpg",
+    "png": "png",
+    "gif": "gif",
+    "pdf": "pdf",
+    "doc": "doc",
+    "docx": "docx",
+    "csv": "csv",
+}
 
 
 @dataclass(frozen=True)
@@ -77,7 +91,16 @@ def parse_toc(html: str, base_url: str) -> list[TocEntry]:
         url = urljoin(base_url, href)
         num = _NUMBERED.match(text)
         if num:
-            entries.append(TocEntry(chapter, num.group(1).replace("．", "."), num.group(2).strip(), url, fmt_of(url), "table"))
+            entries.append(
+                TocEntry(
+                    chapter,
+                    _SPACES.sub("", num.group(1)).replace("．", "."),
+                    num.group(2).strip(),
+                    url,
+                    fmt_of(url),
+                    "table",
+                )
+            )
         else:
             entries.append(TocEntry(chapter, "", text, url, fmt_of(url), "note"))
     return entries

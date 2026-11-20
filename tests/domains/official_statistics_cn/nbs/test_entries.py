@@ -27,13 +27,21 @@ def test_period_from_title_only_trusts_explicit_ranges(title, expected):
 
 
 def test_database_entries_carry_region_structure_by_database_type():
-    assert [(r.region_id, r.granularity, r.scope_mode, r.evidence_status) for r in database_entry("3").regions] == [
-        ("CN", "country", "exact", "structure")]
-    assert database_entry("6").regions[0].granularity == "province" and database_entry("6").regions[0].scope_mode == "descendants"
+    assert [
+        (r.region_id, r.granularity, r.scope_mode, r.evidence_status)
+        for r in database_entry("3").regions
+    ] == [("CN", "country", "exact", "structure")]
+    assert (
+        database_entry("6").regions[0].granularity == "province"
+        and database_entry("6").regions[0].scope_mode == "descendants"
+    )
     assert database_entry("8").regions[0].granularity == "prefecture"
     assert {r.region_id for r in database_entry("10").regions} == {"CN-HK", "CN-MO", "CN-TW"}
     assert database_entry("14").regions[0].region_id == "WORLD"
-    assert database_entry("6").frequency == FREQUENCY["YY"] == "annual" and database_entry("4").frequency == "monthly"
+    assert (
+        database_entry("6").frequency == FREQUENCY["YY"] == "annual"
+        and database_entry("4").frequency == "monthly"
+    )
 
 
 def test_dataset_entry_hierarchy_topics_period_and_delivery():
@@ -43,7 +51,9 @@ def test_dataset_entry_hierarchy_topics_period_and_delivery():
     assert ds.path == "年度数据 › 工业 › 规模以上工业企业主要经济指标 (2012-2022)"
     assert (ds.period_start, ds.period_end, ds.frequency) == (2012, 2022, "annual")
     assert ds.extra["period_from"] == "title" and ds.verification_level == "source_asserted"
-    assert {"cnstat.industry", "cnstat.industry.enterprise_performance"} <= {t.topic_id for t in ds.topics}
+    assert {"cnstat.industry", "cnstat.industry.enterprise_performance"} <= {
+        t.topic_id for t in ds.topics
+    }
     assert ds.delivery == "generate" and ds.distributions[0].usability == "tabular"
     assert ds.regions[0].region_id == "CN" and ds.regions[0].granularity == "country"
 
@@ -61,12 +71,20 @@ def test_nested_categories_chain_parents():
 
 def test_indicator_inherits_dataset_and_cleans_name_and_adds_title_topics():
     ds = dataset_entry("6", ["国民经济核算", "地区生产总值"], CID, ROOT)
-    ind = indicator_entry(ds, {"id": "i" * 32, "name": "工业增加值 (亿元) ", "unit": "亿元", "mark": "指工业企业……"})
+    ind = indicator_entry(
+        ds, {"id": "i" * 32, "name": "工业增加值 (亿元) ", "unit": "亿元", "mark": "指工业企业……"}
+    )
     assert ind.title == "工业增加值" and ind.unit == "亿元"  # 单位另有字段，名称里不再重复
-    assert ind.resource_id == f"nbs:indicator:6/{CID}/{'i' * 32}" and ind.parent_id == ds.resource_id
+    assert (
+        ind.resource_id == f"nbs:indicator:6/{CID}/{'i' * 32}" and ind.parent_id == ds.resource_id
+    )
     assert ind.extra["indicator_id"] == "i" * 32 and ind.extra["mark"].startswith("指工业")
-    assert {"cnstat.macro", "cnstat.industry", "cnstat.industry.value_added"} <= {t.topic_id for t in ind.topics}
-    assert ind.regions[0].granularity == "province" and ind.regions[0].evidence_status == "structure"
+    assert {"cnstat.macro", "cnstat.industry", "cnstat.industry.value_added"} <= {
+        t.topic_id for t in ind.topics
+    }
+    assert (
+        ind.regions[0].granularity == "province" and ind.regions[0].evidence_status == "structure"
+    )
     assert ind.distributions == ds.distributions and ind.frequency == "annual"
 
 

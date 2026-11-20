@@ -19,7 +19,8 @@
       </a>
       <nav class="tabs" aria-label="主导航">
         <a href="/" data-view="search">搜索</a>
-        <a href="/?v=browse" data-view="browse">分类浏览</a>
+        <a href="/?v=catalog" data-view="catalog">资源目录</a>
+        <a href="/?v=browse" data-view="browse">门户目录</a>
         <a href="/?v=china" data-view="china">中国统计</a>
         <a href="/?v=links" data-view="links">检索入口</a>
       </nav>
@@ -81,6 +82,30 @@
         </div>
         <p class="footnote" id="footnote"></p>
       </section>
+    </div>
+
+    <!-- ═══════════ 资源目录（主题 × 地域 × 资源类型）═══════════ -->
+    <div class="view page" data-view="catalog" hidden>
+      <header class="page-head">
+        <h1 class="page-title">资源目录</h1>
+        <p class="page-sub">指标、数据表、数据集：按主题、地域、资源类型筛选，每条都标明能不能下载。</p>
+      </header>
+      <form class="search compact" id="cForm" role="search" autocomplete="off">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="cQ" type="search" placeholder="关键词，如：工业增加值、各省人口" maxlength="200" aria-label="关键词">
+      </form>
+      <div class="domains" id="cTopics" aria-label="按主题浏览"></div>
+      <div class="browse-layout">
+        <aside class="filters" id="cFilters" aria-label="筛选"></aside>
+        <section class="browse-main" aria-label="资源列表">
+          <div class="bar">
+            <div class="bar-left"><strong id="cTotal"></strong><button type="button" class="chip sm filter-toggle" id="cFilterToggle" aria-expanded="false" aria-controls="cFilters">筛选</button><span class="active-chips" id="cChips"></span></div>
+          </div>
+          <div id="cList"></div>
+          <nav class="pager" id="cPager" aria-label="分页"></nav>
+          <p class="note browse-note">目录只收录名称、口径与链接，不含数值。“可下载”表示有文件直链，图片类只能看、不能直接分析；“需生成”表示要通过接口取数，请在命令行用 <code>datafinder get</code>（或让 AI 助手通过 MCP）获取。</p>
+        </section>
+      </div>
     </div>
 
     <!-- ═══════════ 分类浏览 ═══════════ -->

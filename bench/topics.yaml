@@ -2,10 +2,10 @@
 #
 # 运行：datafinder bench topics            （只读本机门户库、指标索引、年鉴目录，不联网）
 #
-# expect 下三类，每类是一个列表；列表里每一项是"一条期望"：
+# expect 下三类（portals / indicators / tables），每类是一个列表；列表里每一项是"一条期望"：
 #   - 写成字符串 = 命中该关键词即通过
 #   - 写成列表   = 任一关键词命中即通过（同义说法）
-# 检查范围就是找数方案里用户/助手实际看到的条目（指标：名称+分类路径；门户：名称；年鉴：表标题+章节）。
+# 检查范围就是找数方案里用户/助手实际看到的条目（指标：名称+分类路径；门户：名称；数据表：标题+章节）。
 #
 # 写期望的原则：
 #   1. 只写**确实存在**的东西（先在国家统计局/年鉴里确认有，再写进来），否则失败不代表检索有问题；
@@ -19,21 +19,21 @@ topics:
     expect:
       portals: [河北省统计局, 工业和信息化部, 国家市场监督管理总局, [国家标准, 标准信息]]
       indicators: [工业增加值, 规模以上工业企业, [工业企业, 工业总产值]]
-      yearbooks: [[规模以上工业, 工业企业主要经济指标]]
+      tables: [[规模以上工业, 工业企业主要经济指标, 产品质量, 质量]]
 
   - id: manufacturing-innovation
     topic: 各省制造业创新能力与研发投入
     expect:
       portals: [国家统计局, [科学技术部, 国家知识产权局]]
       indicators: [[研究与试验发展, R&D], 专利, [新产品, 高技术]]
-      yearbooks: [[研究与试验发展, R&D, 科技活动]]
+      tables: [[研究与试验发展, R&D, 科技活动]]
 
   - id: regional-growth-yrd
     topic: 长三角地区经济增长与产业结构
     expect:
       portals: [国家统计局]
       indicators: [[地区生产总值, 国内生产总值], [第二产业增加值, 工业增加值, 三次产业]]
-      yearbooks: [[地区生产总值, 国内生产总值]]
+      tables: [[地区生产总值, 国内生产总值]]
 
   - id: aging-liaoning
     topic: 辽宁省人口老龄化与养老服务
@@ -41,14 +41,14 @@ topics:
     expect:
       portals: [辽宁省统计局, 国家统计局]
       indicators: [[老年人口, 抚养比], 养老]
-      yearbooks: [[人口年龄, 抚养比, 老年, 养老]]
+      tables: [[人口年龄, 抚养比, 老年, 养老]]
 
   - id: urbanization-income
     topic: 城镇化进程与居民收入差距
     expect:
       portals: [国家统计局]
       indicators: [[城镇化率, 城镇人口], 居民人均可支配收入]
-      yearbooks: [[城镇居民, 农村居民, 居民收入]]
+      tables: [[城镇居民, 农村居民, 居民收入]]
 
   - id: energy-carbon-shandong
     topic: 山东省能源消费与碳排放
@@ -56,7 +56,7 @@ topics:
     expect:
       portals: [山东省统计局, 国家能源局, 生态环境部]
       indicators: [[能源消费总量, 能源消费], [发电量, 电力消费]]
-      yearbooks: [[能源消费, 能源]]
+      tables: [[能源消费, 能源]]
 
   - id: grain-henan
     topic: 河南省粮食生产与农业现代化
@@ -64,21 +64,21 @@ topics:
     expect:
       portals: [河南省统计局, 农业农村部]
       indicators: [粮食产量, [农业机械, 化肥, 农业]]
-      yearbooks: [[粮食, 农作物]]
+      tables: [[粮食, 农作物]]
 
   - id: education-resources
     topic: 各省教育资源配置与教育公平
     expect:
       portals: [教育部, 国家统计局]
       indicators: [[普通高等学校, 高等教育, 普通中学, 普通小学, 学校数], [在校学生, 招生数, 教职工]]
-      yearbooks: [[学校, 教育, 在校学生]]
+      tables: [[学校, 教育, 在校学生]]
 
   - id: health-resources
     topic: 医疗卫生资源配置的地区差异
     expect:
       portals: [国家卫生健康委员会, 国家统计局]
       indicators: [[卫生技术人员, 执业, 医师], [床位, 医疗卫生机构]]
-      yearbooks: [[卫生技术人员, 医疗卫生机构, 床位]]
+      tables: [[卫生技术人员, 医疗卫生机构, 床位]]
 
   - id: trade-guangdong
     topic: 广东省对外贸易与外商直接投资
@@ -86,18 +86,18 @@ topics:
     expect:
       portals: [广东省统计局, 国家统计局]
       indicators: [货物进出口, [外商直接投资, 外商投资]]
-      yearbooks: [[进出口, 对外经济贸易, 外商直接投资]]
+      tables: [[进出口, 对外经济贸易, 外商直接投资]]
 
   - id: investment-consumption
     topic: 固定资产投资与社会消费品零售总额
     expect:
       portals: [国家统计局, 国家发展和改革委员会]
       indicators: [固定资产投资, 社会消费品零售总额]
-      yearbooks: [[固定资产投资], [社会消费品零售总额]]
+      tables: [[固定资产投资], [社会消费品零售总额]]
 
   - id: environment-pollution
     topic: 工业废水废气排放与环境治理
     expect:
       portals: [生态环境部]
       indicators: [废水, [二氧化硫, 废气]]
-      yearbooks: [[废水, 废气, 环境污染]]
+      tables: [[废水, 废气, 环境污染]]

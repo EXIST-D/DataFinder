@@ -20,7 +20,9 @@ PACKAGE = f"datafinder.domains.{DOMAIN_ID}"
 register_protocol("nbs", NbsSource)
 register_thesaurus(DOMAIN_ID, load_package_yaml(PACKAGE, "thesaurus.zh.yaml"))
 register_taxonomy(
-    DOMAIN_ID, load_package_yaml(PACKAGE, "taxonomy.yaml"), load_package_yaml(PACKAGE, "topic_rules.yaml")
+    DOMAIN_ID,
+    load_package_yaml(PACKAGE, "taxonomy.yaml"),
+    load_package_yaml(PACKAGE, "topic_rules.yaml"),
 )
 # 国家统计局发布库前面有防火墙，对并发/高频敏感：串行且间隔 ≥0.8 秒
 MIN_INTERVAL["data.stats.gov.cn"] = 0.8

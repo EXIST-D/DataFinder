@@ -17,11 +17,19 @@ from .query import DELIVERY_BY_RANK, InvalidFacet, SearchRequest, Where, deliver
 from .repository import Catalog
 from .text import norm_title
 
-CANDIDATE_CAP = 6000  # 打分前的候选上限：关键词命中太多时（如"工业增加值"5 万条）按 FTS 相关度先取前一批
+CANDIDATE_CAP = (
+    6000  # 打分前的候选上限：关键词命中太多时（如"工业增加值"5 万条）按 FTS 相关度先取前一批
+)
 PER_PARENT = 2  # 同一父级（数据集）下最多出几个指标：避免同模板指标刷屏
 KIND_PREFERENCE = {
-    "indicator": 0.0, "table": 0.0, "dataset": -0.02, "bulletin": -0.02, "database": -0.04,
-    "series": -0.04, "edition": -0.04, "portal": -0.05,
+    "indicator": 0.0,
+    "table": 0.0,
+    "dataset": -0.02,
+    "bulletin": -0.02,
+    "database": -0.04,
+    "series": -0.04,
+    "edition": -0.04,
+    "portal": -0.05,
 }
 FACET_TOP = 60
 DELIVERY_ZH = {"download": "可直接下载", "generate": "需要生成", "link": "只有链接"}
@@ -38,38 +46,74 @@ class SearchResponse:
     def to_dict(self) -> dict[str, Any]:
         r = self.request
         return {
-            "query": r.query, "mode": r.mode, "total": self.total, "returned": len(self.results),
-            "offset": r.offset, "results": self.results, "facets": self.facets, "hints": self.hints,
+            "query": r.query,
+            "mode": r.mode,
+            "total": self.total,
+            "returned": len(self.results),
+            "offset": r.offset,
+            "results": self.results,
+            "facets": self.facets,
+            "hints": self.hints,
         }
 
 
 # ── 单条结果的整理 ──
 
 
-def summarize(e: Entry, *, units: list[Unit], req: SearchRequest, score: float,
-              editions: list[Entry] | None = None) -> dict[str, Any]:
+def summarize(
+    e: Entry,
+    *,
+    units: list[Unit],
+    req: SearchRequest,
+    score: float,
+    editions: list[Entry] | None = None,
+) -> dict[str, Any]:
     item: dict[str, Any] = {
-        "resource_id": e.resource_id, "kind": e.kind, "title": e.title, "source_id": e.source_id,
-        "path": e.path, "parent_id": e.parent_id, "unit": e.unit,
+        "resource_id": e.resource_id,
+        "kind": e.kind,
+        "title": e.title,
+        "source_id": e.source_id,
+        "path": e.path,
+        "parent_id": e.parent_id,
+        "unit": e.unit,
         "topic_ids": [t.topic_id for t in e.topics],
         "regions": [
-            {"region_id": r.region_id, "relation": r.relation, "granularity": r.granularity,
-             "scope_mode": r.scope_mode, "evidence": r.evidence_status}
+            {
+                "region_id": r.region_id,
+                "relation": r.relation,
+                "granularity": r.granularity,
+                "scope_mode": r.scope_mode,
+                "evidence": r.evidence_status,
+            }
             for r in e.regions
         ],
-        "period": {"start": e.period_start, "end": e.period_end,
-                   "ongoing": bool(e.period_start and not e.period_end), "edition_year": e.edition_year},
-        "frequency": e.frequency, "delivery": e.delivery,
+        "period": {
+            "start": e.period_start,
+            "end": e.period_end,
+            "ongoing": bool(e.period_start and not e.period_end),
+            "edition_year": e.edition_year,
+        },
+        "frequency": e.frequency,
+        "delivery": e.delivery,
         "usability": next((d.usability for d in e.distributions if d.usability), None),
-        "verification_level": e.verification_level, "access_status": e.access_status,
-        "landing_url": e.landing_url, "score": round(score, 3),
-        "why_matched": _why(e, units, req), "missing_requirements": _missing(e, req),
+        "verification_level": e.verification_level,
+        "access_status": e.access_status,
+        "landing_url": e.landing_url,
+        "score": round(score, 3),
+        "why_matched": _why(e, units, req),
+        "missing_requirements": _missing(e, req),
     }
     if editions:
         item["editions"] = [
-            {"resource_id": x.resource_id, "edition_year": x.edition_year, "title": x.title,
-             "url": next((d.url for d in x.distributions if d.url), x.landing_url),
-             "file_format": next((d.file_format for d in x.distributions if d.file_format), None)}
+            {
+                "resource_id": x.resource_id,
+                "edition_year": x.edition_year,
+                "title": x.title,
+                "url": next((d.url for d in x.distributions if d.url), x.landing_url),
+                "file_format": next(
+                    (d.file_format for d in x.distributions if d.file_format), None
+                ),
+            }
             for x in editions
         ]
         item["versions"] = [x.edition_year for x in editions]
@@ -83,7 +127,11 @@ def _why(e: Entry, units: list[Unit], req: SearchRequest) -> list[str]:
         if not hit:
             hit, where = next(((a, "分类路径") for a in u.alts if a in (e.path or "")), (None, ""))
         if hit:
-            out.append(f"{where}含“{hit}”" if hit == u.alts[0] else f"{where}含“{hit}”（“{u.alts[0]}”的相关词）")
+            out.append(
+                f"{where}含“{hit}”"
+                if hit == u.alts[0]
+                else f"{where}含“{hit}”（“{u.alts[0]}”的相关词）"
+            )
     for tid in req.topic_ids:
         if any(t.topic_id == tid or tid in taxonomy.ancestors(t.topic_id) for t in e.topics):
             out.append(f"主题：{taxonomy.get(tid).name_zh}")  # type: ignore[union-attr]
@@ -115,8 +163,19 @@ def _missing(e: Entry, req: SearchRequest) -> list[str]:
 def search(cat: Catalog, request: SearchRequest) -> SearchResponse:
     req = request.normalized()
     units = build_units(req.query) if req.query.strip() else []
+    hints: list[str] = []
     if req.query.strip() and not units:
-        return SearchResponse(req, 0, [], {}, ["关键词里只有“数据/统计/评价”这类无区分度的词，请换成具体的指标或主题词"])
+        if not req.has_filters:
+            return SearchResponse(
+                req,
+                0,
+                [],
+                {},
+                [
+                    "关键词里只有“数据/统计/评价”或地名这类无区分度的词，请换成具体的指标或主题词，或加上筛选条件"
+                ],
+            )
+        hints.append("关键词只含地名/泛词，已忽略，按筛选条件浏览")
     where = Where(req, units)
     clause, args = where.sql()
     total = cat.conn.execute(f"SELECT COUNT(*) FROM resources r WHERE {clause}", args).fetchone()[0]
@@ -124,20 +183,27 @@ def search(cat: Catalog, request: SearchRequest) -> SearchResponse:
     if units:
         results = _materialize(cat, _page(_rank(cat, where, units, req), req), units, req)
     else:  # 纯分面浏览：SQL 直接排序分页
+        order, order_args = where.order_sql()
         rows = cat.conn.execute(
-            f"SELECT r.* FROM resources r WHERE {clause} ORDER BY r.kind, r.title LIMIT ? OFFSET ?",
-            [*args, req.limit, req.offset],
+            f"SELECT r.* FROM resources r WHERE {clause} ORDER BY {order}r.kind, r.title LIMIT ? OFFSET ?",
+            [*args, *order_args, req.limit, req.offset],
         ).fetchall()
         results = [summarize(e, units=[], req=req, score=0.0) for e in cat.hydrate_rows(rows)]
 
-    hints: list[str] = []
     if req.mode == "strict":
         relaxed = SearchRequest(**{**req.__dict__, "mode": "discovery"})
         c2, a2 = Where(relaxed, units).sql()
-        extra = cat.conn.execute(f"SELECT COUNT(*) FROM resources r WHERE {c2}", a2).fetchone()[0] - total
+        extra = (
+            cat.conn.execute(f"SELECT COUNT(*) FROM resources r WHERE {c2}", a2).fetchone()[0]
+            - total
+        )
         if extra > 0:
-            hints.append(f"strict 模式排除了 {extra} 条“信息未知/未验证”的候选；mode=discovery 可以看到它们（会标注缺什么）")
-    return SearchResponse(req, total, results, _facets(cat, where) if req.include_facets else {}, hints)
+            hints.append(
+                f"strict 模式排除了 {extra} 条“信息未知/未验证”的候选；mode=discovery 可以看到它们（会标注缺什么）"
+            )
+    return SearchResponse(
+        req, total, results, _facets(cat, where) if req.include_facets else {}, hints
+    )
 
 
 @dataclass
@@ -161,7 +227,21 @@ def _rank(cat: Catalog, where: Where, units: list[Unit], req: SearchRequest) -> 
         vec = unit_scores(units, row["title"], row["path"] or "")
         s = combine(units, vec)
         if s > 0:
-            cands.append(_Cand(row, s + KIND_PREFERENCE.get(row["kind"], 0.0) - 0.0005 * min(len(row["title"]), 80), vec))
+            known = (0.02 if req.frequency and row["frequency"] else 0.0) + (
+                0.02
+                if (req.period_start or req.period_end) and row["period_start"] is not None
+                else 0.0
+            )  # 同分时，筛选条件"已确认"的排在"信息未知"的前面
+            cands.append(
+                _Cand(
+                    row,
+                    s
+                    + known
+                    + KIND_PREFERENCE.get(row["kind"], 0.0)
+                    - 0.0005 * min(len(row["title"]), 80),
+                    vec,
+                )
+            )
     cands.sort(key=lambda c: -c.score)
     if req.group_versions:
         cands = _merge_versions(cands)
@@ -205,12 +285,27 @@ def _page(ranked: list[_Cand], req: SearchRequest) -> list[_Cand]:
     return ranked[req.offset : req.offset + req.limit]
 
 
-def _materialize(cat: Catalog, page: list[_Cand], units: list[Unit], req: SearchRequest) -> list[dict[str, Any]]:
-    entries = {e.resource_id: e for e in cat.hydrate_rows([c.row for c in page] + [v for c in page for v in c.versions])}
+def _materialize(
+    cat: Catalog, page: list[_Cand], units: list[Unit], req: SearchRequest
+) -> list[dict[str, Any]]:
+    entries = {
+        e.resource_id: e
+        for e in cat.hydrate_rows([c.row for c in page] + [v for c in page for v in c.versions])
+    }
     out = []
     for c in page:
-        eds = sorted((entries[v["resource_id"]] for v in c.versions), key=lambda x: -(x.edition_year or 0)) or None
-        out.append(summarize(entries[c.row["resource_id"]], units=units, req=req, score=c.score, editions=eds))
+        eds = (
+            sorted(
+                (entries[v["resource_id"]] for v in c.versions),
+                key=lambda x: -(x.edition_year or 0),
+            )
+            or None
+        )
+        out.append(
+            summarize(
+                entries[c.row["resource_id"]], units=units, req=req, score=c.score, editions=eds
+            )
+        )
     return out
 
 
@@ -224,24 +319,53 @@ def _facets(cat: Catalog, where: Where) -> dict[str, list[dict[str, Any]]]:
         count = "COUNT(DISTINCT r.resource_id)" if distinct else "COUNT(*)"
         return cat.conn.execute(
             f"SELECT {select} AS id, {count} AS n FROM resources r {join}"
-            f" WHERE {clause} GROUP BY id ORDER BY n DESC LIMIT {FACET_TOP}", args,
+            f" WHERE {clause} GROUP BY id ORDER BY n DESC LIMIT {FACET_TOP}",
+            args,
         ).fetchall()
 
     topics = []
-    for r in counts("topic", "rt.topic_id", "JOIN resource_topics rt ON rt.resource_id = r.resource_id"):
+    for r in counts(
+        "topic", "rt.topic_id", "JOIN resource_topics rt ON rt.resource_id = r.resource_id"
+    ):
         t = taxonomy.get(r["id"])
         if t and not t.reserved:
-            topics.append({"id": t.id, "name": t.name_zh, "count": r["n"], "level": t.level, "parent_id": t.parent_id})
-    regs = [{"id": r["id"], "name": regions.name_zh(r["id"]), "count": r["n"]}
-            for r in counts("region", "rr.region_id", "JOIN resource_regions rr ON rr.resource_id = r.resource_id", True)]
-    ks = [{"id": r["id"], "name": kinds.kinds()[r["id"]]["zh"], "count": r["n"]}
-          for r in counts("kind", "r.kind") if r["id"] in kinds.kinds()]
-    dl = [{"id": DELIVERY_BY_RANK[r["id"]], "name": DELIVERY_ZH[DELIVERY_BY_RANK[r["id"]]], "count": r["n"]}
-          for r in counts("delivery", delivery_rank_sql())]
+            topics.append(
+                {
+                    "id": t.id,
+                    "name": t.name_zh,
+                    "count": r["n"],
+                    "level": t.level,
+                    "parent_id": t.parent_id,
+                }
+            )
+    regs = [
+        {"id": r["id"], "name": regions.name_zh(r["id"]), "count": r["n"]}
+        for r in counts(
+            "region",
+            "rr.region_id",
+            "JOIN resource_regions rr ON rr.resource_id = r.resource_id",
+            True,
+        )
+    ]
+    ks = [
+        {"id": r["id"], "name": kinds.kinds()[r["id"]]["zh"], "count": r["n"]}
+        for r in counts("kind", "r.kind")
+        if r["id"] in kinds.kinds() and not kinds.kinds()[r["id"]].get("navigational")
+    ]
+    dl = [
+        {
+            "id": DELIVERY_BY_RANK[r["id"]],
+            "name": DELIVERY_ZH[DELIVERY_BY_RANK[r["id"]]],
+            "count": r["n"],
+        }
+        for r in counts("delivery", delivery_rank_sql())
+    ]
     return {"topics": topics, "regions": regs, "kinds": ks, "delivery": dl}
 
 
-def facet_counts(cat: Catalog, request: SearchRequest | None = None) -> dict[str, list[dict[str, Any]]]:
+def facet_counts(
+    cat: Catalog, request: SearchRequest | None = None
+) -> dict[str, list[dict[str, Any]]]:
     """只要分面计数（不取结果）。"""
     req = (request or SearchRequest()).normalized()
     units = build_units(req.query) if req.query.strip() else []

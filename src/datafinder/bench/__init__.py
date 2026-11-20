@@ -1,5 +1,6 @@
-"""基准：排序基准（ranking）与真实选题验收（topics）。命令：`datafinder bench pool|run|topics`。"""
+"""基准：排序基准（ranking）、真实选题验收（topics）、分面检索验收（facets）。命令：`datafinder bench pool|run|topics|facets`。"""
 
+from .facets import facets_app
 from .ranking import (
     VARIANTS,
     BenchQuery,
@@ -15,7 +16,7 @@ from .ranking import (
 from .topics import topics_app
 
 # 把 topics 命令并进同一个 `bench` 命令组
-for _cmd in topics_app.registered_commands:
+for _cmd in [*topics_app.registered_commands, *facets_app.registered_commands]:
     bench_app.registered_commands.append(_cmd)
 
 __all__ = [

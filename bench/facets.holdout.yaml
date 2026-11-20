@@ -1,0 +1,60 @@
+# 分面检索验收集（留出集）：写这些用例时没看过检索结果，调检索/词典/规则时不许参考。
+# 用途是估计"没调过的新查询"上的真实通过率；开发集调参后分数会偏高。修完缺口要换一批新的留出题。
+# 写法见 facets.yaml 顶部说明。
+
+cases:
+  - id: h-liaoning-population-tables
+    query: 各地区人口
+    filters: {kind: [table], region: [CN-LN]}
+    expect:
+      hit: [{source_prefix: yearbook.CN-LN}]
+      forbid: [{source_prefix: [yearbook.CN-SD, yearbook.CN-HA]}]
+  - id: h-beijing-income-indicators
+    query: 居民人均可支配收入
+    filters: {kind: [indicator], region: [北京]}
+    expect:
+      hit: [{title_any: 可支配收入, delivery: generate}]
+      forbid: [{path_prefix: "年度数据 ›"}]
+  - id: h-henan-grain
+    query: 粮食产量
+    filters: {kind: [indicator], region: [河南], topic: [cnstat.agriculture]}
+    expect:
+      hit: [{title_any: 粮食}]
+  - id: h-energy-generate
+    query: 能源消费总量
+    filters: {kind: [indicator], delivery: [generate]}
+    expect:
+      hit: [{title_any: 能源消费}]
+      all: [{delivery: generate}]
+  - id: h-guangdong-trade-strict
+    query: 进出口
+    filters: {kind: [table], region: [广东], mode: strict}
+    expect:
+      forbid: [{source_prefix: [yearbook.CN-SD, yearbook.CN-LN, yearbook.CN-HA]}]
+  - id: h-monthly-price-generate
+    query: 价格指数
+    filters: {kind: [indicator], frequency: monthly, delivery: [generate]}
+    expect:
+      hit: [{title_any: 价格}]
+      all: [{frequency: monthly}]
+  - id: h-explicit-category-kind
+    query: 国民经济核算
+    filters: {kind: [category]}
+    expect:
+      hit: [{kind: category, delivery: link}]
+      all: [{kind: category}]
+  - id: h-shandong-health-personnel
+    query: 卫生技术人员
+    filters: {kind: [indicator], region: [CN-SD]}
+    expect:
+      hit: [{path_prefix: 分省年度数据}]
+  - id: h-taiwan-chapters
+    query: 台湾
+    filters: {kind: [table], region: [CN-TW]}
+    expect:
+      hit: [{region: CN-TW}]
+  - id: h-census-datasets
+    query: 普查
+    filters: {kind: [dataset], topic: [cnstat.population.census]}
+    expect:
+      hit: [{topic: cnstat.population.census}]

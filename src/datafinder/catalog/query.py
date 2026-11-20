@@ -45,6 +45,22 @@ class SearchRequest:
     include_facets: bool = True
     group_versions: bool = True
 
+    @property
+    def has_filters(self) -> bool:
+        """除关键词外是否还有结构化筛选条件。"""
+        return bool(
+            self.domain_ids
+            or self.topic_ids
+            or self.region_ids
+            or self.kinds
+            or self.delivery
+            or self.source_ids
+            or self.geo_granularity
+            or self.frequency
+            or self.period_start
+            or self.period_end
+        )
+
     def normalized(self) -> SearchRequest:
         """校验并把名称/别名/代码解析成规范 id；认不出的直接报错，不猜。"""
         if self.mode not in MODES:
@@ -73,15 +89,22 @@ class SearchRequest:
         if self.period_start and self.period_end and self.period_start > self.period_end:
             raise InvalidFacet("period_start 不能晚于 period_end")
         return SearchRequest(
-            **{**self.__dict__, "topic_ids": topic_ids, "region_ids": region_ids,
-               "limit": max(1, min(self.limit, 100)), "offset": max(0, self.offset)}
+            **{
+                **self.__dict__,
+                "topic_ids": topic_ids,
+                "region_ids": region_ids,
+                "limit": max(1, min(self.limit, 100)),
+                "offset": max(0, self.offset),
+            }
         )
 
 
 def delivery_rank_sql() -> str:
     """资源最方便的获取方式（0 download / 1 generate / 2 link）；没有分发入口 = link。"""
     order = {"download": 0, "generate": 1, "link": 2}
-    cases = " ".join(f"WHEN '{m}' THEN {order[v['delivery']]}" for m, v in kinds.access_methods().items())
+    cases = " ".join(
+        f"WHEN '{m}' THEN {order[v['delivery']]}" for m, v in kinds.access_methods().items()
+    )
     return (
         f"COALESCE((SELECT MIN(CASE d.access_method {cases} ELSE 2 END) FROM distributions d"
         " WHERE d.resource_id = r.resource_id), 2)"
@@ -123,7 +146,11 @@ class Where:
         terms = prefilter_terms(units)
         match = fts_query(terms)
         if match:
-            self._add("text", "r.rowid IN (SELECT rowid FROM resources_fts WHERE resources_fts MATCH ?)", [match])
+            self._add(
+                "text",
+                "r.rowid IN (SELECT rowid FROM resources_fts WHERE resources_fts MATCH ?)",
+                [match],
+            )
         if req.source_ids:
             self._add("source", f"r.source_id IN ({_marks(req.source_ids)})", list(req.source_ids))
         if req.domain_ids:
@@ -133,7 +160,9 @@ class Where:
                 list(req.domain_ids),
             )
         if req.topic_ids:
-            expanded = list(dict.fromkeys(t for tid in req.topic_ids for t in (tid, *taxonomy.descendants(tid))))
+            expanded = list(
+                dict.fromkeys(t for tid in req.topic_ids for t in (tid, *taxonomy.descendants(tid)))
+            )
             self._add(
                 "topic",
                 "EXISTS (SELECT 1 FROM resource_topics rt WHERE rt.resource_id = r.resource_id"
@@ -150,20 +179,32 @@ class Where:
         if req.period_start or req.period_end:
             lo, hi = req.period_start or -(10**6), req.period_end or 10**6
             known = "(r.period_start IS NOT NULL AND r.period_start <= ? AND (r.period_end IS NULL OR r.period_end >= ?))"
-            self._add("period", known if strict else f"({known} OR r.period_start IS NULL)", [hi, lo])
+            self._add(
+                "period", known if strict else f"({known} OR r.period_start IS NULL)", [hi, lo]
+            )
         if req.frequency:
             eq = "r.frequency = ?"
-            self._add("frequency", eq if strict else f"({eq} OR r.frequency IS NULL)", [req.frequency])
+            self._add(
+                "frequency", eq if strict else f"({eq} OR r.frequency IS NULL)", [req.frequency]
+            )
 
     def _region_block(self, strict: bool) -> tuple[str, list]:
         clauses, args = [], []
+        exact = self.req.region_match == "exact"
         for rid in self.req.region_ids:
-            clauses.append("rr.region_id = ?")
+            # exact：资源明确标注为该地区本身。"含下级"（descendants）的资源是按下级逐个报告的数据，不算地区本身
+            clauses.append(
+                "(rr.region_id = ? AND rr.scope_mode != 'descendants')"
+                if exact
+                else "rr.region_id = ?"
+            )
             args.append(rid)
-            if self.req.region_match == "intersects":
+            if not exact:
                 anc = regions.ancestors(rid)
                 if anc:  # 上级区域的"含下级"资源也覆盖本区域（如全国分省库覆盖河北）
-                    clauses.append(f"(rr.scope_mode = 'descendants' AND rr.region_id IN ({_marks(anc)}))")
+                    clauses.append(
+                        f"(rr.scope_mode = 'descendants' AND rr.region_id IN ({_marks(anc)}))"
+                    )
                     args += anc
         sql = (
             "EXISTS (SELECT 1 FROM resource_regions rr WHERE rr.resource_id = r.resource_id"
@@ -192,6 +233,20 @@ class Where:
         """关键词的 FTS 查询串（没有关键词时为 None）。"""
         block = self.blocks.get("text")
         return block[1][0] if block else None
+
+    def order_sql(self) -> tuple[str, list]:
+        """纯分面浏览时的排序：已确认满足筛选条件的排前面，信息未知的排后面（再按类型、标题）。"""
+        parts, args = [], []
+        if self.req.geo_granularity:
+            parts.append(
+                "CASE WHEN EXISTS (SELECT 1 FROM resource_regions og WHERE og.resource_id = r.resource_id AND og.granularity = ?) THEN 0 ELSE 1 END"
+            )
+            args.append(self.req.geo_granularity)
+        if self.req.period_start or self.req.period_end:
+            parts.append("CASE WHEN r.period_start IS NOT NULL THEN 0 ELSE 1 END")
+        if self.req.frequency:
+            parts.append("CASE WHEN r.frequency IS NOT NULL THEN 0 ELSE 1 END")
+        return "".join(f"{p}, " for p in parts), args
 
     def sql(self, skip: tuple[str, ...] = ()) -> tuple[str, list]:
         parts = [(s, a) for name, (s, a) in self.blocks.items() if name not in skip]

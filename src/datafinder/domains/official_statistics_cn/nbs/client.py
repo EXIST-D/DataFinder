@@ -59,7 +59,11 @@ MAX_AREAS = 8  # 网页一次最多选的地区数
 MAX_AREAS_TABLE = 40  # 取表（CLI/MCP）一次最多的地区数，够装下 31 个省
 MAX_PERIODS = 30
 MAX_INDICATORS = 10
-_PERIOD = {"YY": re.compile(r"^\d{4}$"), "MM": re.compile(r"^\d{6}$"), "SS": re.compile(r"^\d{4}0[1-4]$")}
+_PERIOD = {
+    "YY": re.compile(r"^\d{4}$"),
+    "MM": re.compile(r"^\d{6}$"),
+    "SS": re.compile(r"^\d{4}0[1-4]$"),
+}
 
 
 NATIONAL = {"text": "全国", "value": "000000000000"}
@@ -99,13 +103,24 @@ def explicit_window(dt_type: str, start: str | None, end: str | None) -> str:
     if pattern is None:
         raise ValueError(f"未知时间类型 {dt_type}")
     today = date.today()
-    default_end = {"YY": f"{today.year}", "MM": f"{today.year}{today.month:02d}",
-                   "SS": f"{today.year}{(today.month - 1) // 3 + 1:02d}"}[dt_type]
-    default_start = {"YY": f"{today.year - 10}", "MM": f"{today.year - 5}01", "SS": f"{today.year - 5}01"}[dt_type]
+    default_end = {
+        "YY": f"{today.year}",
+        "MM": f"{today.year}{today.month:02d}",
+        "SS": f"{today.year}{(today.month - 1) // 3 + 1:02d}",
+    }[dt_type]
+    default_start = {
+        "YY": f"{today.year - 10}",
+        "MM": f"{today.year - 5}01",
+        "SS": f"{today.year - 5}01",
+    }[dt_type]
     a, b = (start or default_start), (end or default_end)
     for label, v in (("起", a), ("止", b)):
         if not pattern.match(v):
-            hint = {"YY": "年度写 2015", "MM": "月度写 201501", "SS": "季度写 202401（2024 年第 1 季）"}[dt_type]
+            hint = {
+                "YY": "年度写 2015",
+                "MM": "月度写 201501",
+                "SS": "季度写 202401（2024 年第 1 季）",
+            }[dt_type]
             raise ValueError(f"{label}期格式不对：{v!r}（{hint}）")
     if a > b:
         raise ValueError("起期不能晚于止期")
@@ -316,7 +331,11 @@ class NbsClient:
         if not 1 <= len(indicator_ids) <= MAX_INDICATORS:
             raise ValueError(f"一次取 1–{MAX_INDICATORS} 个指标")
         dt_type = DATABASES[code][1]
-        dts = explicit_window(dt_type, start, end) if (start or end) else dts_window(dt_type, n, today)
+        dts = (
+            explicit_window(dt_type, start, end)
+            if (start or end)
+            else dts_window(dt_type, n, today)
+        )
         # 实测：showType 3（多地区）下一次传多个指标，接口每个 地区×期别 只回其中一个指标（其余被吞掉，
         # 且不报错）。所以一个指标一个请求，串行（有限速），宁可慢一点也不能静默丢数据。
         data: list[dict] = []
@@ -379,9 +398,10 @@ def parse_tidy(data: Any, n: int | None) -> list[dict]:
                 continue
             # 注意：`_name` 是该指标所属的标准名（如"工业增加值"行里写的是"国内生产总值"），
             # 官网上显示、用户要找的是 `i_showname`（实测）
-            indicator = clean_name(v.get("i_showname"), v.get("du_name")) or str(
-                v.get("_name") or ""
-            ).strip()
+            indicator = (
+                clean_name(v.get("i_showname"), v.get("du_name"))
+                or str(v.get("_name") or "").strip()
+            )
             rows.append(
                 {
                     "期别": str(p.get("name") or p.get("code") or ""),

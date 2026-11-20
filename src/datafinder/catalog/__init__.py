@@ -13,6 +13,15 @@ from .repository import Catalog
 from .search import SearchResponse, facet_counts, search
 
 __all__ = [
-    "Catalog", "Distribution", "Entry", "InvalidFacet", "RegionLink", "SearchRequest", "SearchResponse",
-    "TopicLink", "facet_counts", "make_id", "search",
+    "Catalog",
+    "Distribution",
+    "Entry",
+    "InvalidFacet",
+    "RegionLink",
+    "SearchRequest",
+    "SearchResponse",
+    "TopicLink",
+    "facet_counts",
+    "make_id",
+    "search",
 ]

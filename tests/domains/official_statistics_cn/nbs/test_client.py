@@ -17,7 +17,9 @@ from datafinder.engine.cache import Cache
 from datafinder.engine.errors import SourceError
 from datafinder.engine.http import Http
 
-FIX = json.loads((Path(__file__).parents[3] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
+FIX = json.loads(
+    (Path(__file__).parents[3] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8")
+)
 TODAY = date(2026, 11, 20)
 WZWS = "<html><body><h1>Please enable JavaScript and refresh the page.</h1><script>WZWS</script></body></html>"
 

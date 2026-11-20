@@ -112,7 +112,9 @@ def prefilter_terms(units: list[Unit]) -> list[str]:
 def unit_scores(units: list[Unit], name: str, extra: str = "") -> list[float]:
     """每个单元各自的得分（0–1）：整词在名称里 1.0，在分类/章节里 0.5，只有二元组部分重合时最多 0.3。"""
     out = []
-    name_g: frozenset[str] | None = None  # 只有走到"部分重合"才需要分词，绝大多数候选整词命中，省掉这一步
+    name_g: frozenset[str] | None = (
+        None  # 只有走到"部分重合"才需要分词，绝大多数候选整词命中，省掉这一步
+    )
     for u in units:
         if any(a in name for a in u.alts):
             out.append(1.0)

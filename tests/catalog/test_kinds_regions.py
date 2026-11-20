@@ -13,7 +13,13 @@ def test_kinds_keep_what_it_is_apart_from_how_to_get_it():
 
 @pytest.mark.parametrize(
     ("method", "expected"),
-    [("direct_file", "download"), ("api", "generate"), ("html_parse", "generate"), ("page", "link"), ("manual", "link")],
+    [
+        ("direct_file", "download"),
+        ("api", "generate"),
+        ("html_parse", "generate"),
+        ("page", "link"),
+        ("manual", "link"),
+    ],
 )
 def test_delivery_is_derived_from_access_method(method, expected):
     assert kinds.delivery_of(method) == expected
@@ -27,7 +33,12 @@ def test_best_delivery_prefers_download_then_generate_then_link():
 
 
 def test_enums_have_no_duplicates():
-    for values in (kinds.file_formats(), kinds.usabilities(), kinds.verification_levels(), kinds.access_statuses()):
+    for values in (
+        kinds.file_formats(),
+        kinds.usabilities(),
+        kinds.verification_levels(),
+        kinds.access_statuses(),
+    ):
         assert len(values) == len(set(values))
 
 

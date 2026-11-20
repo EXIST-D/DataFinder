@@ -22,7 +22,7 @@ from ..portals.tag import industry_zh, load_config
 from ..query.plan import country_zh_name
 from ..sources.registry import load_specs
 from ..store import connect, db_path, portal_count
-from .data import register as register_data_commands
+from .catalog import register as register_catalog_commands
 
 app = typer.Typer(
     help="DataFinder：中文优先的找数入口。",
@@ -31,7 +31,7 @@ app = typer.Typer(
 )
 console = Console()
 app.add_typer(bench_app, name="bench")
-register_data_commands(app)
+register_catalog_commands(app)
 
 _ICON = {"ok": "[green]✓[/green]", "warn": "[yellow]![/yellow]", "fail": "[red]✗[/red]"}
 
@@ -292,7 +292,7 @@ def _dataset_json(d: Dataset) -> dict:
 
 
 @app.command()
-def search(
+def datasets(
     query: str = typer.Argument(..., help="关键词或一句话，如 “中国各省近十年人口 GDP 城镇化率”"),
     limit: int = typer.Option(10, "--limit", "-n", min=1, max=50, help="返回条数"),
     source: str | None = typer.Option(
@@ -306,7 +306,7 @@ def search(
     as_json: bool = typer.Option(False, "--json", help="输出 JSON"),
     explain: bool = typer.Option(False, "--explain", help="显示排序依据与查询计划"),
 ) -> None:
-    """查找数据集：一次查多个来源，合并去重，给出原站链接与下载/API 资源。"""
+    """实时查找数据集：一次查多个外部来源（Zenodo、DataCite、各国开放数据…），合并去重。资源目录检索请用 `search`。"""
     only = {x.strip() for x in source.split(",") if x.strip()} if source else None
     skip = {x.strip() for x in exclude.split(",") if x.strip()} if exclude else None
     try:
@@ -385,28 +385,6 @@ class _null:
 
     def __exit__(self, *exc: object) -> None:
         return None
-
-
-@app.command()
-def sources() -> None:
-    """列出数据集来源及其状态。"""
-    from ..sources.dataseek import find_executable
-
-    table = Table(show_header=True, header_style="bold", box=None, pad_edge=False)
-    for col in ("id", "名称", "协议", "状态", "官方", "语言"):
-        table.add_column(col)
-    for s in load_specs():
-        status = {
-            "active": "[green]启用[/green]",
-            "experimental": "[yellow]实验性[/yellow]",
-            "disabled": "[dim]停用[/dim]",
-        }[s.status]
-        table.add_row(
-            s.id, s.title, s.protocol, status, "是" if s.official else "", "/".join(s.langs)
-        )
-    console.print(table)
-    exe = find_executable()
-    console.print(f"\n[dim]Dataseek 桥接：{exe or '未安装（可选）'}[/dim]")
 
 
 @app.command()

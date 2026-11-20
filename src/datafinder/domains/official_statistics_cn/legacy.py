@@ -47,7 +47,12 @@ def _nbs_entries(rows: list[sqlite3.Row]) -> Iterator:
     if names and names[0] == db_name:
         names = names[1:]
     ds = dataset_entry(code, names, cid, first["root_id"])
-    inds = [indicator_entry(ds, {"id": r["ind_id"], "name": r["name"], "unit": r["unit"], "mark": r["mark"]}) for r in rows]
+    inds = [
+        indicator_entry(
+            ds, {"id": r["ind_id"], "name": r["name"], "unit": r["unit"], "mark": r["mark"]}
+        )
+        for r in rows
+    ]
     ds.extra["indicators_done"] = True
     return ds, names, inds
 
@@ -88,8 +93,13 @@ def migrate_nbs(cat: Catalog) -> dict:
     flush()
     conn.close()
     _retire(NBS_LEGACY)
-    return {"migrated": True, "databases": len(codes), "categories": len(seen_cats), "datasets": datasets,
-            "indicators": indicators}
+    return {
+        "migrated": True,
+        "databases": len(codes),
+        "categories": len(seen_cats),
+        "datasets": datasets,
+        "indicators": indicators,
+    }
 
 
 def migrate_yearbook(cat: Catalog) -> dict:
@@ -108,7 +118,9 @@ def migrate_yearbook(cat: Catalog) -> dict:
             continue
         toc = [
             TocEntry(r["chapter"], r["no"], r["title"], r["url"], r["fmt"], r["kind"])
-            for r in conn.execute("SELECT * FROM ytable WHERE series=? AND year=? ORDER BY rowid", (s.id, ed["year"]))
+            for r in conn.execute(
+                "SELECT * FROM ytable WHERE series=? AND year=? ORDER BY rowid", (s.id, ed["year"])
+            )
         ]
         entries = table_entries(s, ed["year"], toc)
         cat.upsert([edition_entry(s, ed["year"], ed["toc_url"] or ""), *entries])

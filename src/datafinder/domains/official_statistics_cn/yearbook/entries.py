@@ -15,10 +15,16 @@ from .registry import Series
 
 # 文件扩展名 → (file_format, usability)。图片可以"下载"，但内容不能直接分析（usability=image）。
 FORMATS = {
-    "xls": ("xls", "tabular"), "xlsx": ("xlsx", "tabular"), "csv": ("csv", "tabular"),
+    "xls": ("xls", "tabular"),
+    "xlsx": ("xlsx", "tabular"),
+    "csv": ("csv", "tabular"),
     "html": ("html", "html_table"),
-    "jpg": ("jpg", "image"), "png": ("png", "image"), "gif": ("gif", "image"),
-    "pdf": ("pdf", "document"), "doc": ("doc", "document"), "docx": ("docx", "document"),
+    "jpg": ("jpg", "image"),
+    "png": ("png", "image"),
+    "gif": ("gif", "image"),
+    "pdf": ("pdf", "document"),
+    "doc": ("doc", "document"),
+    "docx": ("docx", "document"),
 }
 
 
@@ -45,33 +51,63 @@ def distribution_for(url: str, fmt: str) -> Distribution:
     return Distribution("page", url, note="目录页给出的链接格式不是常见文件，请在浏览器打开")
 
 
-def series_entry(series: Series, *, access_status: str = "unknown", note: str | None = None) -> Entry:
+def series_entry(
+    series: Series, *, access_status: str = "unknown", note: str | None = None
+) -> Entry:
     """年鉴系列。拒绝机器人/连不上的站点只给人工入口（manual），并如实标注原因。"""
     manual = access_status in ("blocked", "unavailable")
-    dist = Distribution("manual" if manual else "page", series.home, note=note or ("站点拒绝自动访问，请用浏览器打开" if manual else None))
+    dist = Distribution(
+        "manual" if manual else "page",
+        series.home,
+        note=note or ("站点拒绝自动访问，请用浏览器打开" if manual else None),
+    )
     return Entry(
-        source_id(series), "series", series.id, series.zh, landing_url=series.home, access_status=access_status,
-        verification_level="source_asserted", regions=_base_region(series),
-        topics=[], distributions=[dist], extra={"publisher": series.publisher, "crawlable": series.crawl},
+        source_id(series),
+        "series",
+        series.id,
+        series.zh,
+        landing_url=series.home,
+        access_status=access_status,
+        verification_level="source_asserted",
+        regions=_base_region(series),
+        topics=[],
+        distributions=[dist],
+        extra={"publisher": series.publisher, "crawlable": series.crawl},
     )
 
 
 def edition_entry(series: Series, year: int, toc_url: str) -> Entry:
     landing = series.base.format(year=year) + "indexch.htm" if series.base else series.home
     return Entry(
-        source_id(series), "edition", str(year), f"{series.zh} {year}", parent_id=series_resource_id(series),
-        landing_url=landing, edition_year=year, verification_level="source_asserted", regions=_base_region(series),
-        distributions=[Distribution("page", landing)], extra={"toc_url": toc_url},
+        source_id(series),
+        "edition",
+        str(year),
+        f"{series.zh} {year}",
+        parent_id=series_resource_id(series),
+        landing_url=landing,
+        edition_year=year,
+        verification_level="source_asserted",
+        regions=_base_region(series),
+        distributions=[Distribution("page", landing)],
+        extra={"toc_url": toc_url},
     )
 
 
 def table_entry(series: Series, year: int, t: TocEntry, key_suffix: str = "") -> Entry:
     target = Target(top=t.chapter, path=[t.chapter], title=t.title)
     return Entry(
-        source_id(series), "table", f"{year}/{t.no or t.title[:20]}{key_suffix}", t.title,
-        parent_id=edition_resource_id(series, year), path=t.chapter, landing_url=t.url, edition_year=year,
-        verification_level="source_asserted", topics=topics_for(target),
-        regions=regions_for(target, _base_region(series)), distributions=[distribution_for(t.url, t.fmt)],
+        source_id(series),
+        "table",
+        f"{year}/{t.no or t.title[:20]}{key_suffix}",
+        t.title,
+        parent_id=edition_resource_id(series, year),
+        path=t.chapter,
+        landing_url=t.url,
+        edition_year=year,
+        verification_level="source_asserted",
+        topics=topics_for(target),
+        regions=regions_for(target, _base_region(series)),
+        distributions=[distribution_for(t.url, t.fmt)],
         extra={"no": t.no, "chapter": t.chapter, "series": series.id},
     )
 

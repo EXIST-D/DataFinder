@@ -31,14 +31,20 @@ def _analysis_hints(topic: str, *, regions: list[str]) -> list[str]:
         "描述性统计建议：各指标的样本量、均值、中位数、标准差、变异系数、极值，以及首末期与年均复合增长率（`describe` 可直接算）。",
     ]
     if not regions or len(regions) > 1:
-        hints.append("做地区横向比较：同一指标、同一年份对各地区排名，并看与全国均值的差距；总量指标与人均/比率指标分开解读。")
-    hints.append("时间趋势：用折线图展示关键指标，标注政策节点；比率类指标优先用同比/年均增速，总量类用绝对值与增速并列。")
+        hints.append(
+            "做地区横向比较：同一指标、同一年份对各地区排名，并看与全国均值的差距；总量指标与人均/比率指标分开解读。"
+        )
+    hints.append(
+        "时间趋势：用折线图展示关键指标，标注政策节点；比率类指标优先用同比/年均增速，总量类用绝对值与增速并列。"
+    )
     if any(w in topic for w in _ASSESS):
         hints += [
             "若题目是'评价/指数/水平'类：先搭指标体系（一级维度→二级指标），统一方向（正向/逆向）并标准化，再考虑熵值法或 TOPSIS 等客观赋权，附稳健性检验（换赋权方法、剔除指标）。",
             "指标体系里每个指标都要有可追溯的官方来源（见 indicators 与 official_portals）；缺失的指标要说明替代口径或剔除理由。",
         ]
-    hints.append("统计数据常有修订：引用时写明取数日期与来源名称；不同来源（年鉴 vs 数据库）数字可能有出入，以最新官方发布为准。")
+    hints.append(
+        "统计数据常有修订：引用时写明取数日期与来源名称；不同来源（年鉴 vs 数据库）数字可能有出入，以最新官方发布为准。"
+    )
     return hints
 
 
@@ -64,18 +70,24 @@ def _regional_portals(conn: sqlite3.Connection, region_codes: list[str], size: i
     return _dedupe_portals(out)[:size]
 
 
-def _official_portals(conn: sqlite3.Connection, domains: list[str], country: str | None, size: int) -> list[dict]:
+def _official_portals(
+    conn: sqlite3.Connection, domains: list[str], country: str | None, size: int
+) -> list[dict]:
     """领域权威门户：对口的国家部委 → 统计类官方入口 → 其余官方门户。"""
     ministries: list[dict] = []
     others: list[dict] = []
     for d in domains or [None]:
-        rows, _ = browse(conn, Filters(domain=d, country=country, label="ministry"), page=1, size=size)
+        rows, _ = browse(
+            conn, Filters(domain=d, country=country, label="ministry"), page=1, size=size
+        )
         ministries += [portal_dict(r) for r in rows]
         rows, _ = browse(conn, Filters(domain=d, country=country, official=True), page=1, size=size)
         others += [portal_dict(r) for r in rows]
     stats: list[dict] = []
     if country == "CN":  # 统计类入口对任何中国主题都相关（年鉴、公报、统计数据库）
-        rows, _ = browse(conn, Filters(domain="statistics", country="CN", official=True), page=1, size=3)
+        rows, _ = browse(
+            conn, Filters(domain="statistics", country="CN", official=True), page=1, size=3
+        )
         stats = [portal_dict(r) for r in rows]
     return _dedupe_portals(ministries, stats, others)[: size + 4]
 
@@ -95,8 +107,12 @@ def _fetch_hint(item: dict[str, Any], region_names: list[str]) -> dict[str, Any]
     if item["delivery"] != "generate":
         return None
     args: dict[str, Any] = {"resource_id": item["resource_id"]}
-    if any(r["scope_mode"] == "descendants" and r["relation"] == "covers" and r["granularity"] in ("province", "prefecture")
-           for r in item["regions"]):
+    if any(
+        r["scope_mode"] == "descendants"
+        and r["relation"] == "covers"
+        and r["granularity"] in ("province", "prefecture")
+        for r in item["regions"]
+    ):
         args["regions"] = region_names[:1] or ["全部"]
     if item["kind"] == "dataset":
         args["indicators"] = ["<先 inspect 数据集看指标清单>"]
@@ -129,8 +145,16 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
             else:
                 regional, regional_tables = [], []
             # 全国口径也要给：做地区研究时总要和全国对照（它们覆盖的是"全国"，不含该地区，所以单独查）
-            national = run(kinds=["indicator"], region_ids=["CN"], region_match="exact") if intent else run(kinds=["indicator"])
-            national_tables = run(kinds=["table"], region_ids=["CN"], region_match="exact") if intent else run(kinds=["table"])
+            national = (
+                run(kinds=["indicator"], region_ids=["CN"], region_match="exact")
+                if intent
+                else run(kinds=["indicator"])
+            )
+            national_tables = (
+                run(kinds=["table"], region_ids=["CN"], region_match="exact")
+                if intent
+                else run(kinds=["table"])
+            )
         indicators = list({r["resource_id"]: r for r in [*regional, *national]}.values())
         tables = list({r["resource_id"]: r for r in [*regional_tables, *national_tables]}.values())
         for item in indicators:
@@ -139,7 +163,11 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
         conn = connect()
         try:
             if not portal_count(conn):
-                raise ServiceError("门户库为空，请先在终端运行 datafinder sync", code="INDEX_NOT_READY", next_action="datafinder sync")
+                raise ServiceError(
+                    "门户库为空，请先在终端运行 datafinder sync",
+                    code="INDEX_NOT_READY",
+                    next_action="datafinder sync",
+                )
             regional_portals = _regional_portals(conn, region_codes, per_group)
             official_portals = _official_portals(conn, domains, country, per_group)
         finally:
@@ -147,16 +175,26 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
 
         steps = []
         if any(i["delivery"] == "generate" for i in indicators):
-            steps.append("对 indicators 里的指标调用 fetch 取表（先不带 confirm 预览，确认后 confirm=true；会导出 CSV/Excel 并给出描述统计与覆盖检查）。")
+            steps.append(
+                "对 indicators 里的指标调用 fetch 取表（先不带 confirm 预览，确认后 confirm=true；会导出 CSV/Excel 并给出描述统计与覆盖检查）。"
+            )
         if any(t["delivery"] == "download" for t in tables):
-            steps.append("tables 里 delivery=download 的可用 download 下载；注意 usability=image 的只是图片，不能直接分析。")
-        steps.append("用 search 加主题/地域/类型筛选继续找；官方入口里 verify=blocked 的站点拒绝自动访问，需用浏览器打开。")
+            steps.append(
+                "tables 里 delivery=download 的可用 download 下载；注意 usability=image 的只是图片，不能直接分析。"
+            )
+        steps.append(
+            "用 search 加主题/地域/类型筛选继续找；官方入口里 verify=blocked 的站点拒绝自动访问，需用浏览器打开。"
+        )
         steps.append("需要更多文件型数据时，用 search 的 live=true 搜科研与开放数据平台。")
         return {
             "topic": topic,
             "understanding": {
-                "country": country, "regions": region_names, "region_codes": region_codes, "domains": domains,
-                "concepts": [c.zh for c in plan.concepts if c.zh and not c.dimension], "years": plan.years,
+                "country": country,
+                "regions": region_names,
+                "region_codes": region_codes,
+                "domains": domains,
+                "concepts": [c.zh for c in plan.concepts if c.zh and not c.dimension],
+                "years": plan.years,
             },
             "sources": {
                 "indicators": {"title": "可取数的指标", "items": indicators},

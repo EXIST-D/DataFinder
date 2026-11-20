@@ -93,8 +93,14 @@ class Adapter:
     def register_sources(self, cat: Catalog) -> None:
         for s in self.sources():
             cat.upsert_source(
-                s.source_id, domain_id=self.domain_id, adapter_id=self.id, name=s.name, publisher=s.publisher,
-                base_url=s.base_url, capabilities=self.capabilities, access_policy=s.access_policy,
+                s.source_id,
+                domain_id=self.domain_id,
+                adapter_id=self.id,
+                name=s.name,
+                publisher=s.publisher,
+                base_url=s.base_url,
+                capabilities=self.capabilities,
+                access_policy=s.access_policy,
             )
 
 
@@ -117,13 +123,17 @@ def adapters() -> dict[str, Adapter]:
 def get_adapter(adapter_id: str) -> Adapter:
     found = adapters().get(adapter_id)
     if found is None:
-        raise Unsupported(f"没有名为 {adapter_id!r} 的适配器；可用：{', '.join(sorted(adapters()))}")
+        raise Unsupported(
+            f"没有名为 {adapter_id!r} 的适配器；可用：{', '.join(sorted(adapters()))}"
+        )
     return found
 
 
 def adapter_for(cat: Catalog, source_id: str) -> Adapter:
     """某个来源由哪个适配器负责（登记在 sources 表里）。"""
-    row = cat.conn.execute("SELECT adapter_id FROM sources WHERE source_id=?", (source_id,)).fetchone()
+    row = cat.conn.execute(
+        "SELECT adapter_id FROM sources WHERE source_id=?", (source_id,)
+    ).fetchone()
     if row is None:
         raise Unsupported(f"目录里没有来源 {source_id!r}")
     return get_adapter(row["adapter_id"])

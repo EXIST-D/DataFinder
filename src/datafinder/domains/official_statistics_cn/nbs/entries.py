@@ -21,7 +21,9 @@ FREQUENCY = {"YY": "annual", "MM": "monthly", "SS": "quarterly"}
 _COUNTRY = [RegionLink("CN", "covers", "country", "exact", "structure")]
 _PROVINCES = [RegionLink("CN", "covers", "province", "descendants", "structure")]
 _CITIES = [RegionLink("CN", "covers", "prefecture", "descendants", "structure")]
-_HK_MO_TW = [RegionLink(r, "covers", None, "exact", "structure") for r in ("CN-HK", "CN-MO", "CN-TW")]
+_HK_MO_TW = [
+    RegionLink(r, "covers", None, "exact", "structure") for r in ("CN-HK", "CN-MO", "CN-TW")
+]
 _WORLD = [RegionLink("WORLD", "covers", "country", "descendants", "structure")]
 DB_REGIONS: dict[str, list[RegionLink]] = {
     **dict.fromkeys(("1", "2", "3"), _COUNTRY),
@@ -58,8 +60,15 @@ def _parent(code: str, names: list[str]) -> str:
 def database_entry(code: str) -> Entry:
     name, dt = DATABASES[code]
     return Entry(
-        SOURCE_ID, "database", code, name, path=name, landing_url=PAGE, frequency=FREQUENCY[dt],
-        verification_level="source_asserted", regions=list(DB_REGIONS[code]),
+        SOURCE_ID,
+        "database",
+        code,
+        name,
+        path=name,
+        landing_url=PAGE,
+        frequency=FREQUENCY[dt],
+        verification_level="source_asserted",
+        regions=list(DB_REGIONS[code]),
         distributions=[Distribution("page", PAGE, note="单页应用，需按分类逐级点开")],
     )
 
@@ -68,8 +77,13 @@ def category_entry(code: str, names: list[str]) -> Entry:
     """names：库名之后的各级分类名（不含库名）。"""
     db_name = DATABASES[code][0]
     return Entry(
-        SOURCE_ID, "category", category_key(code, names), names[-1], parent_id=_parent(code, names[:-1]),
-        path=" › ".join([db_name, *names]), verification_level="source_asserted",
+        SOURCE_ID,
+        "category",
+        category_key(code, names),
+        names[-1],
+        parent_id=_parent(code, names[:-1]),
+        path=" › ".join([db_name, *names]),
+        verification_level="source_asserted",
     )
 
 
@@ -81,12 +95,30 @@ def dataset_entry(code: str, names: list[str], cid: str, root_id: str) -> Entry:
     target = Target(top=top, path=names[:-1], title=title)
     start, end = period_from_title(title)
     return Entry(
-        SOURCE_ID, "dataset", f"{code}/{cid}", title, parent_id=_parent(code, names[:-1]),
-        path=" › ".join([db_name, *names]), landing_url=PAGE, period_start=start, period_end=end,
-        frequency=FREQUENCY[dt], verification_level="source_asserted",
-        topics=topics_for(target), regions=regions_for(target, DB_REGIONS[code]),
-        distributions=[Distribution("api", f"{BASE}/stream/esData", usability="tabular", note="POST JSON，需带 Referer")],
-        extra={"db": code, "cid": cid, "root_id": root_id, **({"period_from": "title"} if start else {})},
+        SOURCE_ID,
+        "dataset",
+        f"{code}/{cid}",
+        title,
+        parent_id=_parent(code, names[:-1]),
+        path=" › ".join([db_name, *names]),
+        landing_url=PAGE,
+        period_start=start,
+        period_end=end,
+        frequency=FREQUENCY[dt],
+        verification_level="source_asserted",
+        topics=topics_for(target),
+        regions=regions_for(target, DB_REGIONS[code]),
+        distributions=[
+            Distribution(
+                "api", f"{BASE}/stream/esData", usability="tabular", note="POST JSON，需带 Referer"
+            )
+        ],
+        extra={
+            "db": code,
+            "cid": cid,
+            "root_id": root_id,
+            **({"period_from": "title"} if start else {}),
+        },
     )
 
 
@@ -97,10 +129,24 @@ def indicator_entry(ds: Entry, ind: dict) -> Entry:
     names = (ds.path or "").split(" › ")[1:]  # 去掉库名
     target = Target(top=names[0] if names else title, path=names[:-1], title=f"{ds.title} {title}")
     return Entry(
-        SOURCE_ID, "indicator", f"{code}/{cid}/{ind['id']}", title, parent_id=ds.resource_id, path=ds.path,
-        unit=ind.get("unit"), landing_url=PAGE, period_start=ds.period_start, period_end=ds.period_end,
-        frequency=ds.frequency, verification_level="source_asserted",
-        topics=topics_for(target), regions=regions_for(target, DB_REGIONS[code]),
+        SOURCE_ID,
+        "indicator",
+        f"{code}/{cid}/{ind['id']}",
+        title,
+        parent_id=ds.resource_id,
+        path=ds.path,
+        unit=ind.get("unit"),
+        landing_url=PAGE,
+        period_start=ds.period_start,
+        period_end=ds.period_end,
+        frequency=ds.frequency,
+        verification_level="source_asserted",
+        topics=topics_for(target),
+        regions=regions_for(target, DB_REGIONS[code]),
         distributions=list(ds.distributions),
-        extra={**ds.extra, "indicator_id": ind["id"], **({"mark": ind["mark"]} if ind.get("mark") else {})},
+        extra={
+            **ds.extra,
+            "indicator_id": ind["id"],
+            **({"mark": ind["mark"]} if ind.get("mark") else {}),
+        },
     )

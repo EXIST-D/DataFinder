@@ -27,13 +27,43 @@ def db():
     write_db(
         conn,
         [
-            P("bj", "Beijing Stats", name_zh="北京市统计局", country="CN", region="CN-BJ", catalog_type="Indicators catalog",
-              owner_type="Regional government", industries=["statistics"], labels=["stats_bureau"], verify="ok"),
-            P("sh", "Shanghai Stats", name_zh="上海市统计局", country="CN", region="CN-SH", catalog_type="Indicators catalog",
-              owner_type="Regional government", industries=["statistics"], labels=["stats_bureau"], verify="unverified",
-              note="未能核验"),
-            P("gdp", "Shanghai Open Data", country="CN", region="CN-SH", catalog_type="Open data portal",
-              owner_type="Local government", industries=["government"], labels=["open_platform"], note="需注册", has_api=True),
+            P(
+                "bj",
+                "Beijing Stats",
+                name_zh="北京市统计局",
+                country="CN",
+                region="CN-BJ",
+                catalog_type="Indicators catalog",
+                owner_type="Regional government",
+                industries=["statistics"],
+                labels=["stats_bureau"],
+                verify="ok",
+            ),
+            P(
+                "sh",
+                "Shanghai Stats",
+                name_zh="上海市统计局",
+                country="CN",
+                region="CN-SH",
+                catalog_type="Indicators catalog",
+                owner_type="Regional government",
+                industries=["statistics"],
+                labels=["stats_bureau"],
+                verify="unverified",
+                note="未能核验",
+            ),
+            P(
+                "gdp",
+                "Shanghai Open Data",
+                country="CN",
+                region="CN-SH",
+                catalog_type="Open data portal",
+                owner_type="Local government",
+                industries=["government"],
+                labels=["open_platform"],
+                note="需注册",
+                has_api=True,
+            ),
         ],
         {"registry_ref": "test"},
     )
@@ -171,5 +201,3 @@ def test_nbs_other_errors_become_502(client, monkeypatch):
 
     monkeypatch.setattr(web, "NbsClient", Broken)
     assert client.get("/api/nbs/indicators", params={"cid": CID}).status_code == 502
-
-

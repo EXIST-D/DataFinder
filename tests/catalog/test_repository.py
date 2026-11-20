@@ -20,23 +20,31 @@ def test_upsert_is_idempotent_and_replaces_relations(cat):
     cat.upsert([e, e])  # 重复写入
     again = cat.get(e.resource_id)
     assert cat.stats()["resources"] == before
-    assert again.title.endswith("（改名）") and [t.topic_id for t in again.topics] == ["cnstat.industry"]
+    assert again.title.endswith("（改名）") and [t.topic_id for t in again.topics] == [
+        "cnstat.industry"
+    ]
     assert again.distributions == [] and again.delivery == "link"  # 没有分发入口 = 只有链接
 
 
 def test_hierarchy_children_roots_and_counts(cat):
     assert [r.source_key for r in cat.roots(NBS)] == ["3/c9/i1", "6"]
     kids = cat.children("nbs:dataset:6/c1")
-    assert [k.title for k in kids] == ["工业增加值", "第二产业增加值"] and cat.child_count("nbs:dataset:6/c1") == 2
+    assert [k.title for k in kids] == ["工业增加值", "第二产业增加值"] and cat.child_count(
+        "nbs:dataset:6/c1"
+    ) == 2
     assert cat.get("nbs:nope") is None and cat.exists("nbs:database:6")
 
 
 def test_delivery_is_derived_not_stored(cat):
     assert cat.get("nbs:indicator:6/c1/i1").delivery == "generate"
-    assert cat.get("yb.sd:table:2025/14-08").delivery == "download"  # 图片也是"可下载"，usability 另标
+    assert (
+        cat.get("yb.sd:table:2025/14-08").delivery == "download"
+    )  # 图片也是"可下载"，usability 另标
     assert cat.get("yb.sd:table:2025/14-08").distributions[0].usability == "image"
     assert cat.get("yb.sd:series:CN-SD").delivery == "link"
-    assert not any("delivery" in r[1] for r in cat.conn.execute("PRAGMA table_info(resources)").fetchall())
+    assert not any(
+        "delivery" in r[1] for r in cat.conn.execute("PRAGMA table_info(resources)").fetchall()
+    )
 
 
 @pytest.mark.parametrize(
@@ -67,7 +75,12 @@ def test_unknown_topic_or_region_is_rejected_by_foreign_keys(cat):
 
 
 def test_dimensions_are_synced_from_taxonomy_and_regions(cat):
-    assert cat.conn.execute("SELECT COUNT(*) FROM topics WHERE domain_id='official_statistics_cn'").fetchone()[0] >= 27
+    assert (
+        cat.conn.execute(
+            "SELECT COUNT(*) FROM topics WHERE domain_id='official_statistics_cn'"
+        ).fetchone()[0]
+        >= 27
+    )
     he = cat.conn.execute("SELECT * FROM regions WHERE region_id='CN-HE'").fetchone()
     assert he["parent_id"] == "CN" and "130000000000" in he["codes"]
 
@@ -79,7 +92,12 @@ def test_stats_runs_and_delete_source(cat):
     cat.finish_run(run, "ok", seen=5, changed=2)
     assert cat.conn.execute("SELECT status, seen FROM ingest_runs").fetchone()[:] == ("ok", 5)
     assert cat.delete_source(NBS) == 5 and cat.stats()["sources"]["nbs"]["resources"] == 0
-    assert cat.conn.execute("SELECT COUNT(*) FROM resource_topics WHERE resource_id LIKE 'nbs:%'").fetchone()[0] == 0
+    assert (
+        cat.conn.execute(
+            "SELECT COUNT(*) FROM resource_topics WHERE resource_id LIKE 'nbs:%'"
+        ).fetchone()[0]
+        == 0
+    )
 
 
 def test_schema_version_guard(tmp_path):

@@ -112,12 +112,16 @@ def test_static_files_comply_with_csp_and_stay_offline():
         cleaned = text.replace("http://www.w3.org/2000/svg", "")
         if path.suffix == ".js":
             # 脚本里允许出现外部站点的"链接文字"，但不能主动加载外部资源
-            assert not re.search(r"""(fetch|import|EventSource|WebSocket)\s*\(?\s*["']https?://""", cleaned), name
+            assert not re.search(
+                r"""(fetch|import|EventSource|WebSocket)\s*\(?\s*["']https?://""", cleaned
+            ), name
             assert "eval(" not in cleaned and "new Function" not in cleaned
         elif path.suffix == ".css":
             assert "http://" not in cleaned and "https://" not in cleaned, f"{name} 引用了外部资源"
         else:  # html：<a> 可以指向外站，但 link/script/img/iframe 不能加载外部资源
-            assert not re.search(r"""<(link|script|img|iframe|source)\b[^>]*\b(src|href)=["']https?://""", cleaned), name
+            assert not re.search(
+                r"""<(link|script|img|iframe|source)\b[^>]*\b(src|href)=["']https?://""", cleaned
+            ), name
     html = (STATIC / "index.html").read_text(encoding="utf-8")
     assert '<script type="module" src="/static/js/main.js">' in html
 

@@ -27,9 +27,13 @@ def regions_for(target: Target, base: list[RegionLink]) -> list[RegionLink]:
         region = tag.region or primary
         if region is None:
             continue
-        link = RegionLink(region, tag.relation, tag.granularity, tag.scope_mode, tag.evidence_status)
+        link = RegionLink(
+            region, tag.relation, tag.granularity, tag.scope_mode, tag.evidence_status
+        )
         if link not in out and not any(
-            o.region_id == link.region_id and o.relation == link.relation and o.evidence_status == "structure"
+            o.region_id == link.region_id
+            and o.relation == link.relation
+            and o.evidence_status == "structure"
             and (o.granularity == link.granularity or link.granularity is None)
             for o in out
         ):

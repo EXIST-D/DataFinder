@@ -11,7 +11,9 @@ from .errors import ServiceError
 PREVIEW_ROWS = 40
 
 
-def table_result(table: Table, *, fmt: str | None = None, path: str | None = None, stats: bool = True) -> dict:
+def table_result(
+    table: Table, *, fmt: str | None = None, path: str | None = None, stats: bool = True
+) -> dict:
     """保存并整理成给助手/命令行展示的结果。"""
     saved = save(table, path, fmt)
     out: dict[str, Any] = {
@@ -55,6 +57,8 @@ def load_table(path: str | Path, *, anywhere: bool = False) -> Table:
     else:
         raise ServiceError("只支持 .csv / .xlsx")
     if [str(h) for h in header[:5]] != COLUMNS[:5]:
-        raise ServiceError("不是 DataFinder 导出的整洁长表（需要 期别、期别代码、地区、指标、数值 等列）")
+        raise ServiceError(
+            "不是 DataFinder 导出的整洁长表（需要 期别、期别代码、地区、指标、数值 等列）"
+        )
     fixed = [[*r[:4], to_number(r[4]), *(r[5:6] or [""])] for r in rows if len(r) >= 5]
     return Table(title=p.stem, rows=fixed, meta={"来源文件": str(p)}, columns=list(header[:6]))

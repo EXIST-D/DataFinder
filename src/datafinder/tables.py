@@ -191,7 +191,9 @@ def describe(table: Table) -> dict[str, Any]:
     cross: list[dict[str, Any]] = []
     by_indicator: dict[str, list[tuple[str, str, float]]] = {}
     for s in series:
-        by_indicator.setdefault(s["indicator"], []).append((s["region"], s["last_period"], s["last"]))
+        by_indicator.setdefault(s["indicator"], []).append(
+            (s["region"], s["last_period"], s["last"])
+        )
     for indicator, items in by_indicator.items():
         if len(items) < 2:
             continue
@@ -204,7 +206,9 @@ def describe(table: Table) -> dict[str, Any]:
             {
                 "indicator": indicator,
                 "period": period,
-                "ranking": [{"region": r, "value": v, "rank": i + 1} for i, (r, v) in enumerate(same)],
+                "ranking": [
+                    {"region": r, "value": v, "rank": i + 1} for i, (r, v) in enumerate(same)
+                ],
                 "mean": _fmt(statistics.fmean(vals)),
                 "range_ratio": _fmt(vals[0] / vals[-1]) if vals[-1] > 0 else None,
             }
@@ -236,7 +240,9 @@ def describe_markdown(result: dict[str, Any]) -> str:
         "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for s in result["series"]:
-        name = s["indicator"] + (f"（{s['unit']}）" if s["unit"] and s["unit"] not in s["indicator"] else "")
+        name = s["indicator"] + (
+            f"（{s['unit']}）" if s["unit"] and s["unit"] not in s["indicator"] else ""
+        )
         lines.append(
             f"| {name} | {s['region']} | {s['n']} | {s['first_period']}→{s['last_period']} "
             f"| {num(s['first'])} | {num(s['last'])} | {num(s['mean'])} | {num(s['median'])} "
@@ -244,7 +250,9 @@ def describe_markdown(result: dict[str, Any]) -> str:
         )
     for c in result["cross_section"]:
         lines += ["", f"**{c['indicator']}**，{c['period']} 地区排名：", ""]
-        lines.append("；".join(f"{r['rank']}. {r['region']} {num(r['value'])}" for r in c["ranking"]))
+        lines.append(
+            "；".join(f"{r['rank']}. {r['region']} {num(r['value'])}" for r in c["ranking"])
+        )
     lines += ["", f"> {result['note']}"]
     return "\n".join(lines)
 
@@ -268,10 +276,15 @@ def write_manifest(artifact: Path, **info: Any) -> Path:
 
     manifest = artifact.with_name(artifact.name + ".manifest.json")
     data = {
-        "file": artifact.name, "size_bytes": artifact.stat().st_size, "sha256": sha256_of(artifact),
-        "created_at": datetime.now().isoformat(timespec="seconds"), **info,
+        "file": artifact.name,
+        "size_bytes": artifact.stat().st_size,
+        "sha256": sha256_of(artifact),
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        **info,
     }
-    manifest.write_text(json.dumps(data, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    manifest.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2, default=str), encoding="utf-8"
+    )
     return manifest
 
 
@@ -306,7 +319,11 @@ def coverage(table: Table, *, periods: list[str] | None = None) -> dict[str, Any
         "observed_cells": len(cells) - len(missing),
         "missing_cells": len(missing),
         "coverage_ratio": round((len(cells) - len(missing)) / len(cells), 4) if cells else None,
-        "missing_by_region": by(0), "missing_by_indicator": by(1), "missing_by_period": by(2),
+        "missing_by_region": by(0),
+        "missing_by_indicator": by(1),
+        "missing_by_period": by(2),
         "missing_sample": [{"region": g, "indicator": i, "period": p} for g, i, p in missing[:30]],
-        "status": "complete" if cells and not missing else ("partial" if len(missing) < len(cells) else "none"),
+        "status": "complete"
+        if cells and not missing
+        else ("partial" if len(missing) < len(cells) else "none"),
     }

@@ -48,7 +48,11 @@ def check_url(url: str, *, origin_host: str | None = None) -> str:
     if parts.scheme not in ("http", "https") or not parts.hostname:
         raise AdapterError(f"只允许 http/https 链接：{url}")
     host = parts.hostname.lower()
-    if origin_host and host != origin_host and _registered_domain(host) != _registered_domain(origin_host):
+    if (
+        origin_host
+        and host != origin_host
+        and _registered_domain(host) != _registered_domain(origin_host)
+    ):
         raise AdapterError(f"重定向到了其他站点（{host}），已拒绝")
     if _is_private(host):
         raise AdapterError(f"拒绝访问内网/本机地址：{host}")
@@ -63,7 +67,9 @@ def safe_filename(url: str, hint: str) -> str:
     return f"{base}-{tag}{dot}{_SAFE.sub('', ext)[:8]}" if dot else f"{base}-{tag}"
 
 
-def download_file(url: str, dest_dir: Path, *, hint: str, transport: httpx.BaseTransport | None = None) -> tuple[Path, int]:
+def download_file(
+    url: str, dest_dir: Path, *, hint: str, transport: httpx.BaseTransport | None = None
+) -> tuple[Path, int]:
     """下载到 dest_dir；返回 (文件路径, 字节数)。"""
     origin = check_url(url)
     dest_dir.mkdir(parents=True, exist_ok=True)
@@ -71,7 +77,12 @@ def download_file(url: str, dest_dir: Path, *, hint: str, transport: httpx.BaseT
     if dest_dir.resolve() not in target.parents:
         raise AdapterError("目标路径越界")
     current = url
-    with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=TIMEOUT, follow_redirects=False, transport=transport) as c:
+    with httpx.Client(
+        headers={"User-Agent": USER_AGENT},
+        timeout=TIMEOUT,
+        follow_redirects=False,
+        transport=transport,
+    ) as c:
         for _ in range(MAX_REDIRECTS + 1):
             with c.stream("GET", current) as r:
                 if r.status_code in (301, 302, 303, 307, 308):
@@ -79,7 +90,9 @@ def download_file(url: str, dest_dir: Path, *, hint: str, transport: httpx.BaseT
                     check_url(current, origin_host=origin)
                     continue
                 if r.status_code in (401, 403, 412, 418):
-                    raise AdapterError(f"站点拒绝了自动下载（HTTP {r.status_code}）：请用浏览器打开原站页面")
+                    raise AdapterError(
+                        f"站点拒绝了自动下载（HTTP {r.status_code}）：请用浏览器打开原站页面"
+                    )
                 if r.status_code >= 400:
                     raise AdapterError(f"下载失败（HTTP {r.status_code}）")
                 size = 0

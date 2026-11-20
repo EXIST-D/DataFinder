@@ -31,14 +31,22 @@ class Region:
 @lru_cache(maxsize=1)
 def _load() -> tuple[dict[str, Region], dict[str, str]]:
     raw = load_yaml("regions.yaml")
-    regions: dict[str, Region] = {WORLD: Region(WORLD, "全球/国际", "world", None, ("国际", "世界", "全球"))}
+    regions: dict[str, Region] = {
+        WORLD: Region(WORLD, "全球/国际", "world", None, ("国际", "世界", "全球"))
+    }
     for code, info in raw["countries"].items():
         regions[code] = Region(code, info["zh"], "country", WORLD, tuple(info.get("aliases", [])))
     for group, level in (("provinces", "province"), ("special", "special")):
         for code, info in raw.get(group, {}).items():
             gb = info.get("gb")
             regions[code] = Region(
-                code, info["zh"], level, COUNTRY_CN, tuple(info.get("aliases", [])), gb, gb + "000000" if gb else None
+                code,
+                info["zh"],
+                level,
+                COUNTRY_CN,
+                tuple(info.get("aliases", [])),
+                gb,
+                gb + "000000" if gb else None,
             )
     index: dict[str, str] = {}
     for r in regions.values():

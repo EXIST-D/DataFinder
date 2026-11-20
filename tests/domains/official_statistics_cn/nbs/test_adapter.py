@@ -25,11 +25,17 @@ class FakeClient:
         self.tree_data = {
             ("6", ""): [node("root6", "分省年度数据")],
             ("6", "root6"): [node("cat1", "工业"), node("cat2", "人口")],
-            ("6", "cat1"): [node(C1, "规模以上工业企业主要经济指标 (2012-2022)", True), node(C2, "工业产品产量", True)],
+            ("6", "cat1"): [
+                node(C1, "规模以上工业企业主要经济指标 (2012-2022)", True),
+                node(C2, "工业产品产量", True),
+            ],
             ("6", "cat2"): [node(C3, "人口数", True)],
         }
         self.inds = {
-            C1: [("a1", "规模以上工业企业单位数 (个)", "个"), ("a2", "规模以上工业企业利润总额 (亿元)", "亿元")],
+            C1: [
+                ("a1", "规模以上工业企业单位数 (个)", "个"),
+                ("a2", "规模以上工业企业利润总额 (亿元)", "亿元"),
+            ],
             C2: [("a3", "原煤产量 (万吨)", "万吨")],
             C3: [("a4", "年末常住人口 (万人)", "万人")],
         }
@@ -73,11 +79,21 @@ async def test_discover_builds_full_hierarchy_with_classification(cat, use_clien
     use_client(FakeClient())
     res = await NbsAdapter().discover(cat, DiscoverOptions(params={"db": "6"}))
     assert res.status == "done" and res.added == 3 + 4 + 0  # 3 个数据集 + 4 个指标
-    assert titles(cat, "database") == ["分省年度数据"] and titles(cat, "category") == ["人口", "工业"]
+    assert titles(cat, "database") == ["分省年度数据"] and titles(cat, "category") == [
+        "人口",
+        "工业",
+    ]
     ds = cat.get(f"nbs:dataset:6/{C1}")
-    assert ds.parent_id == "nbs:category:6/工业" and ds.extra["indicators_done"] is True and ds.period_start == 2012
+    assert (
+        ds.parent_id == "nbs:category:6/工业"
+        and ds.extra["indicators_done"] is True
+        and ds.period_start == 2012
+    )
     assert {"cnstat.industry.enterprise_performance"} <= {t.topic_id for t in ds.topics}
-    assert [c.title for c in cat.children(ds.resource_id)] == ["规模以上工业企业单位数", "规模以上工业企业利润总额"]
+    assert [c.title for c in cat.children(ds.resource_id)] == [
+        "规模以上工业企业单位数",
+        "规模以上工业企业利润总额",
+    ]
     assert cat.conn.execute("SELECT status FROM ingest_runs").fetchone()[0] == "ok"
     assert cat.conn.execute("SELECT COUNT(*) FROM sources WHERE source_id='nbs'").fetchone()[0] == 1
 
@@ -86,7 +102,9 @@ async def test_discover_is_resumable_and_idempotent(cat, use_client):
     use_client(FakeClient(fail_on=C2))
     first = await NbsAdapter().discover(cat, DiscoverOptions(params={"db": "6"}))
     assert first.status == "paused" and "稍后" in first.message
-    assert cat.exists(f"nbs:dataset:6/{C1}") and not cat.exists(f"nbs:dataset:6/{C2}")  # 已完成的保存，失败的下次重做
+    assert cat.exists(f"nbs:dataset:6/{C1}") and not cat.exists(
+        f"nbs:dataset:6/{C2}"
+    )  # 已完成的保存，失败的下次重做
     second = use_client(FakeClient())
     await NbsAdapter().discover(cat, DiscoverOptions(params={"db": "6"}))
     assert cat.exists(f"nbs:dataset:6/{C2}") and cat.exists(f"nbs:dataset:6/{C3}")

@@ -31,15 +31,31 @@ def test_taxonomy_structure():
 @pytest.mark.parametrize(
     ("top", "title", "expected"),
     [
-        ("工业", "按行业分规模以上工业企业主要经济指标 (2012-2022)", {"cnstat.industry", "cnstat.industry.enterprise_performance"}),
-        ("十三、工 业", "规模以上工业企业主要经济指标(2024年)", {"cnstat.industry", "cnstat.industry.enterprise_performance"}),
+        (
+            "工业",
+            "按行业分规模以上工业企业主要经济指标 (2012-2022)",
+            {"cnstat.industry", "cnstat.industry.enterprise_performance"},
+        ),
+        (
+            "十三、工 业",
+            "规模以上工业企业主要经济指标(2024年)",
+            {"cnstat.industry", "cnstat.industry.enterprise_performance"},
+        ),
         ("二十、科学技术", "研究与试验发展(R&D)经费", {"cnstat.innovation"}),
         ("十九篇 教育和科技", "普通高等学校基本情况", {"cnstat.education", "cnstat.innovation"}),
         ("第二十篇 文化、体育和卫生", "卫生机构数", {"cnstat.culture", "cnstat.health"}),
         ("价格指数", "居民消费价格指数 (上年=100)", {"cnstat.prices", "cnstat.prices.cpi"}),
-        ("价格指数", "工业生产者出厂价格指数", {"cnstat.prices", "cnstat.prices.ppi", "cnstat.industry"}),
+        (
+            "价格指数",
+            "工业生产者出厂价格指数",
+            {"cnstat.prices", "cnstat.prices.ppi", "cnstat.industry"},
+        ),
         ("国民经济核算", "分行业增加值", {"cnstat.macro"}),
-        ("国民经济核算", "工业增加值", {"cnstat.macro", "cnstat.industry", "cnstat.industry.value_added"}),
+        (
+            "国民经济核算",
+            "工业增加值",
+            {"cnstat.macro", "cnstat.industry", "cnstat.industry.value_added"},
+        ),
         ("固定资产投资和房地产", "商品房销售面积", {"cnstat.investment"}),
         ("就业人员和工资", "城镇单位就业人员平均工资", {"cnstat.livelihood"}),
         ("采购经理指数", "制造业采购经理指数", {"cnstat.macro", "cnstat.industry"}),
@@ -49,7 +65,10 @@ def test_taxonomy_structure():
 def test_real_category_and_title_names_map_to_expected_topics(top, title, expected):
     got = set(rules().topics(Target(top=top, path=[top], title=title)))
     assert expected <= got
-    assert got - expected <= {"cnstat.industry.value_added", "cnstat.industry.enterprise_performance"}
+    assert got - expected <= {
+        "cnstat.industry.value_added",
+        "cnstat.industry.enterprise_performance",
+    }
 
 
 def test_chapters_that_are_really_a_region_set_the_region_facet():

@@ -7,7 +7,11 @@ from datafinder.tables import COLUMNS, Table, describe, describe_markdown, save,
 def tidy():
     rows = []
     # 两个地区 × 三年，一个指标
-    for code, name, bj, sh in (("2021YY", "2021年", 100.0, 200.0), ("2022YY", "2022年", 110.0, 190.0), ("2023YY", "2023年", 121.0, 180.0)):
+    for code, name, bj, sh in (
+        ("2021YY", "2021年", 100.0, 200.0),
+        ("2022YY", "2022年", 110.0, 190.0),
+        ("2023YY", "2023年", 121.0, 180.0),
+    ):
         rows.append([name, code, "北京", "工业增加值", bj, "亿元"])
         rows.append([name, code, "上海", "工业增加值", sh, "亿元"])
     return Table("测试表", rows, meta={"来源": "测试"})
@@ -106,11 +110,19 @@ def _table(rows, expected):
 def test_coverage_counts_expected_vs_observed_cells_and_names_the_gaps():
     from datafinder.tables import coverage
 
-    rows = [["2023年", "2023YY", "河北", "工业增加值", 1.0, "亿元"], ["2024年", "2024YY", "河北", "工业增加值", 2.0, "亿元"],
-            ["2024年", "2024YY", "北京", "工业增加值", 3.0, "亿元"], ["2023年", "2023YY", "北京", "工业增加值", "—", "亿元"]]
+    rows = [
+        ["2023年", "2023YY", "河北", "工业增加值", 1.0, "亿元"],
+        ["2024年", "2024YY", "河北", "工业增加值", 2.0, "亿元"],
+        ["2024年", "2024YY", "北京", "工业增加值", 3.0, "亿元"],
+        ["2023年", "2023YY", "北京", "工业增加值", "—", "亿元"],
+    ]
     cov = coverage(_table(rows, {"regions": ["河北", "北京"], "indicators": ["工业增加值"]}))
     assert cov["period_basis"] == "observed_union" and cov["expected_cells"] == 4
-    assert cov["missing_cells"] == 1 and cov["missing_by_region"] == {"北京": 1} and cov["status"] == "partial"
+    assert (
+        cov["missing_cells"] == 1
+        and cov["missing_by_region"] == {"北京": 1}
+        and cov["status"] == "partial"
+    )
     assert cov["coverage_ratio"] == 0.75  # 非数值（"—"）不算有效观测
 
 
@@ -118,18 +130,30 @@ def test_coverage_with_explicit_periods_flags_years_nobody_has():
     from datafinder.tables import coverage
 
     rows = [["2024年", "2024YY", "河北", "A", 1.0, ""]]
-    cov = coverage(_table(rows, {"regions": ["河北"], "indicators": ["A"]}), periods=["2023YY", "2024YY"])
-    assert cov["period_basis"] == "explicit" and cov["missing_by_period"] == {"2023YY": 1} and cov["coverage_ratio"] == 0.5
+    cov = coverage(
+        _table(rows, {"regions": ["河北"], "indicators": ["A"]}), periods=["2023YY", "2024YY"]
+    )
+    assert (
+        cov["period_basis"] == "explicit"
+        and cov["missing_by_period"] == {"2023YY": 1}
+        and cov["coverage_ratio"] == 0.5
+    )
 
 
 def test_coverage_complete_none_and_unknown_expectations():
     from datafinder.tables import coverage
 
-    full = coverage(_table([["2024年", "2024YY", "河北", "A", 1.0, ""]], {"regions": ["河北"], "indicators": ["A"]}))
+    full = coverage(
+        _table(
+            [["2024年", "2024YY", "河北", "A", 1.0, ""]], {"regions": ["河北"], "indicators": ["A"]}
+        )
+    )
     assert full["status"] == "complete" and full["missing_cells"] == 0
     empty = coverage(_table([], {"regions": ["河北"], "indicators": ["A"]}), periods=["2024YY"])
     assert empty["status"] == "none" and empty["coverage_ratio"] == 0.0
-    assert coverage(Table("t", [["x"]], columns=["a"])) is None and coverage(_table([], {})) is None  # 没有期望就不下结论
+    assert (
+        coverage(Table("t", [["x"]], columns=["a"])) is None and coverage(_table([], {})) is None
+    )  # 没有期望就不下结论
 
 
 def test_manifest_records_hash_size_and_request(tmp_path):
@@ -141,5 +165,9 @@ def test_manifest_records_hash_size_and_request(tmp_path):
     f = tmp_path / "a.csv"
     f.write_bytes(b"abc")
     m = json.loads(write_manifest(f, resource_id="r", request={"x": 1}).read_text(encoding="utf-8"))
-    assert m["sha256"] == hashlib.sha256(b"abc").hexdigest() and m["size_bytes"] == 3 and m["request"] == {"x": 1}
+    assert (
+        m["sha256"] == hashlib.sha256(b"abc").hexdigest()
+        and m["size_bytes"] == 3
+        and m["request"] == {"x": 1}
+    )
     assert f.with_name("a.csv.manifest.json").exists()

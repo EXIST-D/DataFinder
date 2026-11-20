@@ -21,12 +21,23 @@ from datafinder.domains.official_statistics_cn.yearbook.registry import Series, 
 from datafinder.engine.http import Http
 
 HTML = (Path(__file__).parents[3] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
-BIG = HTML.replace("</ul></body>", "".join(f"<li><a href='h/{i}.jpg'>9-{i} 表{i}</a></li>" for i in range(30)) + "</ul></body>")
+BIG = HTML.replace(
+    "</ul></body>",
+    "".join(f"<li><a href='h/{i}.jpg'>9-{i} 表{i}</a></li>" for i in range(30)) + "</ul></body>",
+)
 
 
 def series(**kw):
-    base = dict(id="CN-SD", zh="山东统计年鉴", region="CN-SD", publisher="x", home="https://t.example/home",
-                years=(2023, 2025), base="https://t.example/{year}/zk/", toc=("left.htm", "lefte.htm"))
+    base = dict(
+        id="CN-SD",
+        zh="山东统计年鉴",
+        region="CN-SD",
+        publisher="x",
+        home="https://t.example/home",
+        years=(2023, 2025),
+        base="https://t.example/{year}/zk/",
+        toc=("left.htm", "lefte.htm"),
+    )
     return Series(**{**base, **kw})
 
 
@@ -54,7 +65,10 @@ def patch_series(monkeypatch):
 
 
 def test_distribution_formats_and_usability():
-    assert (distribution_for("https://x/a.jpg", "jpg").usability, distribution_for("https://x/a.jpg", "jpg").delivery) == ("image", "download")
+    assert (
+        distribution_for("https://x/a.jpg", "jpg").usability,
+        distribution_for("https://x/a.jpg", "jpg").delivery,
+    ) == ("image", "download")
     assert distribution_for("https://x/a.xls", "xls").usability == "tabular"
     assert distribution_for("https://x/a.HTM", "html").usability == "html_table"
     assert distribution_for("https://x/a.pdf", "pdf").usability == "document"
@@ -64,7 +78,11 @@ def test_distribution_formats_and_usability():
 
 def test_table_entries_have_unique_ids_topics_regions_and_skip_notes():
     toc = parse_toc(HTML, "https://t.example/2025/zk/left.htm")
-    toc.append(TocEntry("十四、工业", "14-1", "重复表号的另一张表", "https://t.example/x.jpg", "jpg", "table"))
+    toc.append(
+        TocEntry(
+            "十四、工业", "14-1", "重复表号的另一张表", "https://t.example/x.jpg", "jpg", "table"
+        )
+    )
     entries = table_entries(series(), 2025, toc)
     ids = [e.resource_id for e in entries]
     assert len(ids) == len(set(ids)) and all(e.kind == "table" for e in entries)
@@ -78,7 +96,11 @@ def test_table_entries_have_unique_ids_topics_regions_and_skip_notes():
 
 def test_series_entry_is_navigation_only_when_blocked():
     ok = series_entry(series())
-    assert ok.delivery == "link" and ok.distributions[0].access_method == "page" and ok.access_status == "unknown"
+    assert (
+        ok.delivery == "link"
+        and ok.distributions[0].access_method == "page"
+        and ok.access_status == "unknown"
+    )
     blocked = series_entry(series(), access_status="blocked", note="HTTP 403")
     assert blocked.distributions[0].access_method == "manual" and blocked.access_status == "blocked"
     assert edition_entry(series(), 2025, "u").landing_url == "https://t.example/2025/zk/indexch.htm"
@@ -89,11 +111,17 @@ def test_series_entry_is_navigation_only_when_blocked():
 
 async def test_fetch_edition_falls_back_to_second_toc_name_and_rejects_non_toc_pages():
     def handler(req):
-        return httpx.Response(404) if str(req.url).endswith("/left.htm") else httpx.Response(200, content=BIG.encode("utf-8"))
+        return (
+            httpx.Response(404)
+            if str(req.url).endswith("/left.htm")
+            else httpx.Response(200, content=BIG.encode("utf-8"))
+        )
 
     status, url, toc, _ = await fetch_edition(http_for(handler), series(), 2025)
     assert status == "ok" and url.endswith("lefte.htm") and len(toc) > 30
-    status, _, _, msg = await fetch_edition(http_for(lambda r: httpx.Response(200, text="<html>错误页</html>")), series(), 2025)
+    status, _, _, msg = await fetch_edition(
+        http_for(lambda r: httpx.Response(200, text="<html>错误页</html>")), series(), 2025
+    )
     assert status == "error" and "不像年鉴目录页" in msg
 
 
@@ -102,7 +130,11 @@ async def test_discover_records_editions_skips_missing_and_resumes(cat, patch_se
 
     def handler(req):
         seen.append(str(req.url))
-        return httpx.Response(404) if "/2024/" in str(req.url) else httpx.Response(200, content=BIG.encode("gb18030"))
+        return (
+            httpx.Response(404)
+            if "/2024/" in str(req.url)
+            else httpx.Response(200, content=BIG.encode("gb18030"))
+        )
 
     patch_series(handler, [series()])
     res = await YearbookAdapter().discover(cat, DiscoverOptions())
@@ -111,22 +143,36 @@ async def test_discover_records_editions_skips_missing_and_resumes(cat, patch_se
     assert not cat.exists("yearbook.CN-SD:edition:2024")  # 404 的版次不收录
     assert cat.get("yearbook.CN-SD:series:CN-SD").title == "山东统计年鉴"
     first = len(seen)
-    await YearbookAdapter().discover(cat, DiscoverOptions())  # 续跑：已收录版次不再请求（404 的版次会再探一次）
-    assert len(seen) < first * 2 and sum("/2023/" in u for u in seen) == sum("/2023/" in u for u in seen[:first])
+    await YearbookAdapter().discover(
+        cat, DiscoverOptions()
+    )  # 续跑：已收录版次不再请求（404 的版次会再探一次）
+    assert len(seen) < first * 2 and sum("/2023/" in u for u in seen) == sum(
+        "/2023/" in u for u in seen[:first]
+    )
 
 
 async def test_blocked_site_gives_up_that_series_only_and_marks_it(cat, patch_series):
     def handler(req):
-        return httpx.Response(403) if "blocked.example" in str(req.url) else httpx.Response(200, content=BIG.encode("utf-8"))
+        return (
+            httpx.Response(403)
+            if "blocked.example" in str(req.url)
+            else httpx.Response(200, content=BIG.encode("utf-8"))
+        )
 
-    bad = series(id="CN-HE", zh="河北统计年鉴", region="CN-HE", base="https://blocked.example/{year}/zk/")
+    bad = series(
+        id="CN-HE", zh="河北统计年鉴", region="CN-HE", base="https://blocked.example/{year}/zk/"
+    )
     good = series()
     patch_series(handler, [bad, good])
     res = await YearbookAdapter().discover(cat, DiscoverOptions())
     assert len(res.stopped) == 1 and "河北统计年鉴" in res.stopped[0]
     assert cat.get("yearbook.CN-SD:edition:2025") is not None  # 一个站点拒绝不影响其他系列
     he = cat.get("yearbook.CN-HE:series:CN-HE")
-    assert he.access_status == "blocked" and he.delivery == "link" and he.distributions[0].access_method == "manual"
+    assert (
+        he.access_status == "blocked"
+        and he.delivery == "link"
+        and he.distributions[0].access_method == "manual"
+    )
     assert not cat.exists("yearbook.CN-HE:edition:2025")
 
 

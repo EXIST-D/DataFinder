@@ -60,7 +60,15 @@ class NbsAdapter(Adapter):
     capabilities = frozenset({CAP_DISCOVER, CAP_FETCH, CAP_MIGRATE})
 
     def sources(self) -> list[SourceInfo]:
-        return [SourceInfo(SOURCE_ID, "国家统计局", "国家统计局", "https://data.stats.gov.cn", "open_with_protection")]
+        return [
+            SourceInfo(
+                SOURCE_ID,
+                "国家统计局",
+                "国家统计局",
+                "https://data.stats.gov.cn",
+                "open_with_protection",
+            )
+        ]
 
     # ── 目录抓取 ──
     async def discover(self, cat: Catalog, opts: DiscoverOptions) -> DiscoverResult:
@@ -77,24 +85,43 @@ class NbsAdapter(Adapter):
                     if result.status == "limited":
                         break
             except SourceError as exc:
-                result.status, result.message = "paused", f"{exc}。已保存进度，稍后重新运行即可继续。"
+                result.status, result.message = (
+                    "paused",
+                    f"{exc}。已保存进度，稍后重新运行即可继续。",
+                )
             result.requests = client.calls
-        cat.finish_run(run, "ok" if result.status == "done" else result.status, seen=result.seen,
-                       changed=result.added, message=result.message or None)
+        cat.finish_run(
+            run,
+            "ok" if result.status == "done" else result.status,
+            seen=result.seen,
+            changed=result.added,
+            message=result.message or None,
+        )
         return result
 
     # ── 实时取数 ──
     async def fetch(self, cat: Catalog, entry: Entry, params: FetchParams) -> Table:
         if entry.kind not in ("indicator", "dataset"):
-            raise AdapterError(f"{entry.kind} 不能直接取数：请选一个指标（indicator）或数据集（dataset）")
+            raise AdapterError(
+                f"{entry.kind} 不能直接取数：请选一个指标（indicator）或数据集（dataset）"
+            )
         ex = entry.extra
         indicators = [ex["indicator_id"]] if entry.kind == "indicator" else params.indicators
         if entry.kind == "dataset" and not indicators:
-            raise AdapterError("数据集需要指定要取的指标（indicators）：先 inspect 这个数据集看指标清单")
+            raise AdapterError(
+                "数据集需要指定要取的指标（indicators）：先 inspect 这个数据集看指标清单"
+            )
         async with open_client() as client:
             return await fetch_table(
-                client, db=ex["db"], cid=ex["cid"], root_id=ex.get("root_id"), indicators=indicators,
-                regions=params.regions, start=params.start, end=params.end, periods=params.periods,
+                client,
+                db=ex["db"],
+                cid=ex["cid"],
+                root_id=ex.get("root_id"),
+                indicators=indicators,
+                regions=params.regions,
+                start=params.start,
+                end=params.end,
+                periods=params.periods,
             )
 
     def legacy_present(self) -> bool:
@@ -111,13 +138,18 @@ class NbsAdapter(Adapter):
 
 
 class _Crawl:
-    def __init__(self, cat: Catalog, client: NbsClient, opts: DiscoverOptions, result: DiscoverResult) -> None:
+    def __init__(
+        self, cat: Catalog, client: NbsClient, opts: DiscoverOptions, result: DiscoverResult
+    ) -> None:
         self.cat, self.client, self.opts, self.result = cat, client, opts, result
         self._start_calls = client.calls
         self._categories: set[str] = set()
 
     def _budget_left(self) -> bool:
-        return self.opts.max_requests is None or self.client.calls - self._start_calls < self.opts.max_requests
+        return (
+            self.opts.max_requests is None
+            or self.client.calls - self._start_calls < self.opts.max_requests
+        )
 
     def _ensure_categories(self, code: str, names: list[str]) -> None:
         for i in range(1, len(names) + 1):
@@ -127,7 +159,9 @@ class _Crawl:
                 self.cat.upsert([e])
 
     def _done(self, resource_id: str) -> bool:
-        row = self.cat.conn.execute("SELECT extra FROM resources WHERE resource_id=?", (resource_id,)).fetchone()
+        row = self.cat.conn.execute(
+            "SELECT extra FROM resources WHERE resource_id=?", (resource_id,)
+        ).fetchone()
         return bool(row and '"indicators_done": true' in row["extra"])
 
     async def walk(self, code: str, pid: str, names: list[str]) -> None:
@@ -150,7 +184,10 @@ class _Crawl:
         if not self.opts.refresh and self._done(ds.resource_id):
             return
         if not self._budget_left():
-            self.result.status, self.result.message = "limited", "已达到本次请求上限，重新运行可继续。"
+            self.result.status, self.result.message = (
+                "limited",
+                "已达到本次请求上限，重新运行可继续。",
+            )
             return
         self._ensure_categories(code, here[:-1])
         indicators = await self.client.indicators(node["id"])

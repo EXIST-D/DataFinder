@@ -36,9 +36,15 @@ def register_taxonomy(domain_id: str, taxonomy: dict, rules: dict | None = None)
     for t in taxonomy["topics"]:
         parent = t.get("parent_id")
         topic = Topic(
-            id=t["id"], domain=domain_id, parent_id=parent, name_zh=t["name_zh"], name_en=t.get("name_en"),
-            level=2 if parent else 1, aliases=tuple(t.get("aliases", ())),
-            global_topics=tuple(t.get("global_topics", ())), reserved=bool(t.get("reserved", False)),
+            id=t["id"],
+            domain=domain_id,
+            parent_id=parent,
+            name_zh=t["name_zh"],
+            name_en=t.get("name_en"),
+            level=2 if parent else 1,
+            aliases=tuple(t.get("aliases", ())),
+            global_topics=tuple(t.get("global_topics", ())),
+            reserved=bool(t.get("reserved", False)),
         )
         topics[topic.id] = topic
     for t in topics.values():
@@ -47,7 +53,7 @@ def register_taxonomy(domain_id: str, taxonomy: dict, rules: dict | None = None)
     for tid, t in list(topics.items()):  # 二级主题没写 global_topics 时继承父主题的
         if t.parent_id and not t.global_topics:
             topics[tid] = replace(t, global_topics=topics[t.parent_id].global_topics)
-    dup = (set(topics) & {i for d, tt in _TOPICS.items() if d != domain_id for i in tt})
+    dup = set(topics) & {i for d, tt in _TOPICS.items() if d != domain_id for i in tt}
     if dup:
         raise ValueError(f"主题 id 与其他领域重复：{sorted(dup)}")
     _TOPICS[domain_id] = topics

@@ -42,16 +42,13 @@ _ADMIN_ORDER = {
 }
 
 
-
 @router.get("/api/china/overview")
 def china_overview() -> dict[str, Any]:
     conn = connect()
     try:
 
         def by_label(label: str) -> list[dict]:
-            rows, _ = browse(
-                conn, Filters(country="CN", label=label), sort="name", page=1, size=50
-            )
+            rows, _ = browse(conn, Filters(country="CN", label=label), sort="name", page=1, size=50)
             return [portal_dict(r) for r in rows]
 
         bureaus = by_label("stats_bureau")
@@ -68,6 +65,7 @@ def china_overview() -> dict[str, Any]:
     finally:
         conn.close()
 
+
 @asynccontextmanager
 async def nbs() -> AsyncIterator[NbsClient]:
     http = Http(min_interval=MIN_INTERVAL)
@@ -78,15 +76,18 @@ async def nbs() -> AsyncIterator[NbsClient]:
         await http.aclose()
         cache.close()
 
+
 def check_id(value: str, what: str) -> str:
     if not valid_id(value):
         raise HTTPException(400, f"{what} 格式不正确")
     return value
 
+
 def check_code(code: str) -> str:
     if code not in DATABASES:
         raise HTTPException(400, f"未知数据库代码：{code}")
     return code
+
 
 @router.get("/api/nbs/tree")
 async def nbs_tree(
@@ -101,6 +102,7 @@ async def nbs_tree(
     except (SourceError, TimeoutError) as exc:
         raise _nbs_http_error(exc) from exc
 
+
 @router.get("/api/nbs/indicators")
 async def nbs_indicators(cid: str = Query(..., max_length=32)) -> dict[str, Any]:
     check_id(cid, "cid")
@@ -110,6 +112,7 @@ async def nbs_indicators(cid: str = Query(..., max_length=32)) -> dict[str, Any]
     except (SourceError, TimeoutError) as exc:
         raise _nbs_http_error(exc) from exc
 
+
 @router.get("/api/nbs/regions")
 async def nbs_regions(cid: str = Query(..., max_length=32)) -> dict[str, Any]:
     check_id(cid, "cid")
@@ -118,6 +121,7 @@ async def nbs_regions(cid: str = Query(..., max_length=32)) -> dict[str, Any]:
             return {"cid": cid, **await client.regions(cid)}
     except (SourceError, TimeoutError) as exc:
         raise _nbs_http_error(exc) from exc
+
 
 @router.get("/api/nbs/series")
 async def nbs_series(

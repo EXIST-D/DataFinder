@@ -33,7 +33,9 @@ class Series:
 
 def load_series() -> list[Series]:
     out = []
-    for s in load_package_yaml("datafinder.domains.official_statistics_cn", "yearbooks.yaml")["series"]:
+    for s in load_package_yaml("datafinder.domains.official_statistics_cn", "yearbooks.yaml")[
+        "series"
+    ]:
         years = tuple(s["years"]) if s.get("years") else None
         out.append(
             Series(

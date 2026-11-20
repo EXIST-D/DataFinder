@@ -4,17 +4,17 @@
 - GET /api/portals            门户检索（毫秒级，先出）
 - GET /api/search             数据集检索，SSE 逐批推送"当前最佳结果快照"（含详情增强字段）
 - GET /api/inspect            按需读取某个数据集页面公布的文件列表（只允许本次会话搜到过的链接）
-分类浏览：
+资源目录（统一检索：主题 × 地域 × 资源类型）：
+- GET /api/catalog/search|facets|inspect   目录检索、合法分面词表、资源详情（不联网；网页只展示获取方式，不执行下载）
+门户目录：
 - GET /api/browse/facets      各维度取值与条数（在其他筛选条件下）
 - GET /api/browse/portals     分页门户列表
 - GET /api/links              外部检索入口（带关键词）
-中国统计：
-- GET /api/china/overview     省级统计局、省市开放平台、国家统计局数据库列表
-- GET /api/nbs/tree|indicators|regions|series   国家统计局分类树、指标、地区、取值
+领域接口：各领域包通过 routers 注册自己的网页接口（如统计数据库的逐级浏览），核心不 import 领域代码。
 
 安全底线（本地工具，只留必要的）：
 - Host 头必须是 localhost/127.0.0.1/[::1]，防 DNS 重绑定；
-- inspect 只接受本服务搜索结果里出现过的 URL；国家统计局的各种 id 只接受 32 位十六进制 / 12 位数字；
+- inspect 只接受本服务搜索结果里出现过的 URL；
 - 严格 CSP：只加载本站资源。
 """
 
@@ -23,7 +23,6 @@ from __future__ import annotations
 import json
 from collections import OrderedDict
 from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
@@ -31,19 +30,10 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-from .. import __version__
-from ..domains.official_statistics_cn.nbs.client import (
-    DATABASES,
-    MAX_AREAS,
-    NbsClient,
-    valid_area,
-    valid_id,
-)
-from ..engine.cache import Cache
+from .. import __version__, service
 from ..engine.errors import SourceError
-from ..engine.http import Http
 from ..enrich import enrich, lookup_portal
-from ..finder import MIN_INTERVAL, SearchResult, stream_search
+from ..finder import SearchResult, stream_search
 from ..links import build_links
 from ..models import Dataset
 from ..portals.browse import Filters, browse, facets, portal_dict
@@ -52,6 +42,7 @@ from ..sources.base import SourceSpec
 from ..sources.dataseek import find_executable, inspect_url
 from ..sources.registry import load_specs
 from ..store import connect, get_meta, portal_count
+from . import routers
 
 STATIC = Path(__file__).parent / "static"
 ALLOWED_HOSTS = {"localhost", "127.0.0.1", "[::1]", "::1"}
@@ -161,28 +152,30 @@ def filter_params(
     )
 
 
-def _nbs_http_error(exc: Exception) -> HTTPException:
-    if isinstance(exc, SourceError):
-        status = 429 if exc.kind in ("rate_limited", "blocked") else 502
-        return HTTPException(status, str(exc))
-    if isinstance(exc, TimeoutError):
-        return HTTPException(504, "国家统计局响应超时")
-    return HTTPException(502, f"{type(exc).__name__}: {exc}")
-
-
-# 行政区划通行顺序（北京、天津、河北……），比按拼音或区划代码更符合阅读习惯
-_ADMIN_ORDER = {
-    f"CN-{c}": i
-    for i, c in enumerate(
-        "BJ TJ HE SX NM LN JL HL SH JS ZJ AH FJ JX SD HA HB HN GD GX HI CQ SC GZ YN XZ SN GS QH NX XJ".split()
-    )
+_HTTP_STATUS = {
+    "INVALID_FACET_ID": 400,
+    "INVALID_ARGUMENT": 400,
+    "NOT_FOUND": 404,
+    "INDEX_NOT_READY": 503,
+    "SOURCE_RATE_LIMITED": 429,
+    "SOURCE_ACCESS_BLOCKED": 502,
+    "SOURCE_TIMEOUT": 504,
+    "UNSUPPORTED": 400,
 }
+
+
+def _service_http_error(exc: Exception) -> HTTPException:
+    err = service.translate(exc)
+    tail = f"（{err.next_action}）" if err.next_action else ""
+    return HTTPException(_HTTP_STATUS.get(err.code, 502), f"[{err.code}] {err}{tail}")
 
 
 def create_app() -> FastAPI:
     app = FastAPI(title="DataFinder", docs_url=None, redoc_url=None, openapi_url=None)
     specs = {s.id: s for s in load_specs()}
     seen_urls: OrderedDict[str, None] = OrderedDict()
+    for r in routers.build_all():  # 领域包注册的网页接口（如统计数据库浏览）
+        app.include_router(r)
 
     def remember(urls: list[str]) -> None:
         for u in urls:
@@ -281,115 +274,59 @@ def create_app() -> FastAPI:
     def links(q: str = Query("", max_length=MAX_QUERY)) -> dict[str, Any]:
         return {"query": q, "groups": build_links(q)}
 
-    # ───────────── 中国统计 ─────────────
+    # ───────────── 资源目录（统一检索：主题 × 地域 × 资源类型）─────────────
 
-    @app.get("/api/china/overview")
-    def china_overview() -> dict[str, Any]:
-        conn = connect()
-        try:
+    def _csv(value: str) -> list[str]:
+        return [x.strip() for x in value.split(",") if x.strip()][:10]
 
-            def by_label(label: str) -> list[dict]:
-                rows, _ = browse(
-                    conn, Filters(country="CN", label=label), sort="name", page=1, size=50
-                )
-                return [portal_dict(r) for r in rows]
-
-            bureaus = by_label("stats_bureau")
-            bureaus.sort(key=lambda p: _ADMIN_ORDER.get(p["region_code"] or "", 99))
-            return {
-                "synced": portal_count(conn) > 0,
-                "databases": [
-                    {"code": code, "name": name, "dt_type": dt}
-                    for code, (name, dt) in DATABASES.items()
-                ],
-                "bureaus": bureaus,
-                "platforms": by_label("open_platform"),
-            }
-        finally:
-            conn.close()
-
-    @asynccontextmanager
-    async def nbs() -> AsyncIterator[NbsClient]:
-        http = Http(min_interval=MIN_INTERVAL)
-        cache = Cache()
-        try:
-            yield NbsClient(http, cache)
-        finally:
-            await http.aclose()
-            cache.close()
-
-    def check_id(value: str, what: str) -> str:
-        if not valid_id(value):
-            raise HTTPException(400, f"{what} 格式不正确")
-        return value
-
-    def check_code(code: str) -> str:
-        if code not in DATABASES:
-            raise HTTPException(400, f"未知数据库代码：{code}")
-        return code
-
-    @app.get("/api/nbs/tree")
-    async def nbs_tree(
-        code: str = Query(..., max_length=3), pid: str = Query("", max_length=32)
+    @app.get("/api/catalog/search")
+    async def catalog_search(
+        q: str = Query("", max_length=MAX_QUERY),
+        topic: str = Query("", max_length=200),
+        region: str = Query("", max_length=200),
+        kind: str = Query("", max_length=200),
+        delivery: str = Query("", max_length=60),
+        granularity: str | None = Query(None, max_length=20),
+        mode: str = Query("discovery", max_length=12),
+        y1: int | None = Query(None, ge=1000, le=3000),
+        y2: int | None = Query(None, ge=1000, le=3000),
+        limit: int = Query(20, ge=1, le=50),
+        offset: int = Query(0, ge=0, le=5000),
     ) -> dict[str, Any]:
-        check_code(code)
-        if pid:
-            check_id(pid, "pid")
         try:
-            async with nbs() as client:
-                return {"code": code, "pid": pid, "nodes": await client.tree(code, pid)}
-        except (SourceError, TimeoutError) as exc:
-            raise _nbs_http_error(exc) from exc
+            return await service.search(
+                q,
+                topic_ids=_csv(topic),
+                region_ids=_csv(region),
+                kinds_=_csv(kind),
+                delivery=_csv(delivery),
+                geo_granularity=granularity,
+                mode=mode,
+                period_start=y1,
+                period_end=y2,
+                limit=limit,
+                offset=offset,
+            )
+        except Exception as exc:  # noqa: BLE001 —— 边界层：统一翻译成 HTTP 错误
+            raise _service_http_error(exc) from exc
 
-    @app.get("/api/nbs/indicators")
-    async def nbs_indicators(cid: str = Query(..., max_length=32)) -> dict[str, Any]:
-        check_id(cid, "cid")
+    @app.get("/api/catalog/facets")
+    def catalog_facets() -> dict[str, Any]:
         try:
-            async with nbs() as client:
-                return {"cid": cid, "indicators": await client.indicators(cid)}
-        except (SourceError, TimeoutError) as exc:
-            raise _nbs_http_error(exc) from exc
+            return service.facets()
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
 
-    @app.get("/api/nbs/regions")
-    async def nbs_regions(cid: str = Query(..., max_length=32)) -> dict[str, Any]:
-        check_id(cid, "cid")
+    @app.get("/api/catalog/inspect")
+    def catalog_inspect(
+        id: str = Query(..., max_length=400),
+        children: bool = False,
+        offset: int = Query(0, ge=0, le=5000),
+    ) -> dict[str, Any]:  # noqa: A002
         try:
-            async with nbs() as client:
-                return {"cid": cid, **await client.regions(cid)}
-        except (SourceError, TimeoutError) as exc:
-            raise _nbs_http_error(exc) from exc
-
-    @app.get("/api/nbs/series")
-    async def nbs_series(
-        code: str = Query(..., max_length=3),
-        cid: str = Query(..., max_length=32),
-        ind: str = Query(..., max_length=32),
-        root: str = Query(..., max_length=32),
-        areas: str = Query(..., max_length=200),
-        n: int = Query(8, ge=1, le=30),
-    ) -> dict[str, Any]:
-        check_code(code)
-        for value, what in ((cid, "cid"), (ind, "ind"), (root, "root")):
-            check_id(value, what)
-        codes = [a for a in areas.split(",") if a]
-        if not codes or len(codes) > MAX_AREAS or not all(valid_area(a) for a in codes):
-            raise HTTPException(400, f"areas 必须是 1–{MAX_AREAS} 个 12 位地区代码")
-        try:
-            async with nbs() as client:
-                known = {r["value"]: r["text"] for r in (await client.regions(cid))["regions"]}
-                unknown = [c for c in codes if c not in known]
-                if unknown:
-                    raise HTTPException(400, f"该数据集不支持这些地区代码：{', '.join(unknown)}")
-                return await client.series(
-                    code=code,
-                    cid=cid,
-                    indicator_id=ind,
-                    root_id=root,
-                    areas=[{"text": known[c], "value": c} for c in codes],
-                    n=n,
-                )
-        except (SourceError, TimeoutError) as exc:
-            raise _nbs_http_error(exc) from exc
+            return service.inspect(id, children=children, limit=30, offset=offset)
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
 
     # ───────────── 数据集搜索（SSE）与 inspect ─────────────
 

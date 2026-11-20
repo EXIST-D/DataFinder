@@ -14,7 +14,9 @@ from datafinder.domains.official_statistics_cn.nbs.fetch import resolve_indicato
 from datafinder.engine.cache import Cache
 from datafinder.engine.http import Http
 
-FIX = json.loads((Path(__file__).parents[3] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
+FIX = json.loads(
+    (Path(__file__).parents[3] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8")
+)
 REGIONS = [
     {"text": "北京市", "value": "110000000000"},
     {"text": "内蒙古自治区", "value": "150000000000"},
@@ -44,7 +46,12 @@ def test_explicit_window_formats_per_type():
 
 @pytest.mark.parametrize(
     ("dt", "start", "end"),
-    [("YY", "15", "2024"), ("MM", "2015", "202412"), ("SS", "202405", "202504"), ("YY", "2024", "2020")],
+    [
+        ("YY", "15", "2024"),
+        ("MM", "2015", "202412"),
+        ("SS", "202405", "202504"),
+        ("YY", "2024", "2020"),
+    ],
 )
 def test_explicit_window_rejects_bad_input_with_hint(dt, start, end):
     with pytest.raises(ValueError):
@@ -64,8 +71,18 @@ def test_parse_tidy_multi_region_rows_and_recent_n():
 
 
 def test_parse_tidy_drops_unpublished_and_without_n_keeps_all():
-    data = [{"code": "2025YY", "name": "2025年", "values": [{"_name": "x", "value": "", "area": "北京", "areaCode": "1"}]},
-            {"code": "2024YY", "name": "2024年", "values": [{"_name": "x", "value": "5", "area": "北京", "areaCode": "1"}]}]
+    data = [
+        {
+            "code": "2025YY",
+            "name": "2025年",
+            "values": [{"_name": "x", "value": "", "area": "北京", "areaCode": "1"}],
+        },
+        {
+            "code": "2024YY",
+            "name": "2024年",
+            "values": [{"_name": "x", "value": "5", "area": "北京", "areaCode": "1"}],
+        },
+    ]
     assert [r["期别代码"] for r in parse_tidy(data, None)] == ["2024YY"]
 
 
@@ -84,15 +101,39 @@ async def test_table_sends_one_request_per_indicator_and_keeps_all_rows(tmp_path
     def handler(req):
         body = json.loads(req.content)
         bodies.append(body)
-        assert body["showType"] == "3" and body["dts"] == ["2020YY-2023YY"] and len(body["das"]) == 2
+        assert (
+            body["showType"] == "3" and body["dts"] == ["2020YY-2023YY"] and len(body["das"]) == 2
+        )
         tag = body["indicatorIds"][0]
-        data = [{"code": "2023YY", "name": "2023年", "values": [
-            {"_id": tag, "i_showname": f"指标{tag[0]} (亿元) ", "_name": "父级", "du_name": "亿元", "value": "1", "area": "北京\t", "areaCode": "110000000000"}]}]
+        data = [
+            {
+                "code": "2023YY",
+                "name": "2023年",
+                "values": [
+                    {
+                        "_id": tag,
+                        "i_showname": f"指标{tag[0]} (亿元) ",
+                        "_name": "父级",
+                        "du_name": "亿元",
+                        "value": "1",
+                        "area": "北京\t",
+                        "areaCode": "110000000000",
+                    }
+                ],
+            }
+        ]
         return ok(data)
 
     c = make(handler, tmp_path)
-    rows = await c.table(code="6", cid="C" * 32, indicator_ids=["a" * 32, "b" * 32], root_id="R" * 32,
-                         areas=REGIONS[:2], start="2020", end="2023")
+    rows = await c.table(
+        code="6",
+        cid="C" * 32,
+        indicator_ids=["a" * 32, "b" * 32],
+        root_id="R" * 32,
+        areas=REGIONS[:2],
+        start="2020",
+        end="2023",
+    )
     assert [b["indicatorIds"] for b in bodies] == [["a" * 32], ["b" * 32]]
     assert {r["指标"] for r in rows} == {"指标a", "指标b"}  # 两个指标都在
     assert {r["地区"] for r in rows} == {"北京"}  # 地区名里的制表符/空白被清掉
@@ -110,14 +151,30 @@ def testclean_name_strips_only_matching_unit():
 async def test_table_limits_indicator_count(tmp_path):
     c = make(lambda r: ok([]), tmp_path)
     with pytest.raises(ValueError):
-        await c.table(code="6", cid="C" * 32, indicator_ids=[f"{i:032x}" for i in range(11)],
-                      root_id="R" * 32, areas=REGIONS[:1])
+        await c.table(
+            code="6",
+            cid="C" * 32,
+            indicator_ids=[f"{i:032x}" for i in range(11)],
+            root_id="R" * 32,
+            areas=REGIONS[:1],
+        )
 
 
 async def test_search_national_maps_database_code(tmp_path):
-    rows = [{"show_name": "国内生产总值 (亿元)", "cid": "c" * 32, "indic_id": "i" * 32, "da_name": "全国",
-             "dt_name": "2025年", "value": "1349084.1", "dt_type": "YY", "type_text": "指标",
-             "treeinfo_globalid": "r" * 32 + ".x.y"}, {"oops": 1}]
+    rows = [
+        {
+            "show_name": "国内生产总值 (亿元)",
+            "cid": "c" * 32,
+            "indic_id": "i" * 32,
+            "da_name": "全国",
+            "dt_name": "2025年",
+            "value": "1349084.1",
+            "dt_type": "YY",
+            "type_text": "指标",
+            "treeinfo_globalid": "r" * 32 + ".x.y",
+        },
+        {"oops": 1},
+    ]
     c = make(lambda r: ok({"data": rows}), tmp_path)
     (hit,) = await c.search_national("国内生产总值")
     assert hit["db"] == "3" and hit["root_id"] == "r" * 32 and hit["indicator_id"] == "i" * 32
@@ -126,8 +183,17 @@ async def test_search_national_maps_database_code(tmp_path):
 # ───────────── 名称解析（助手常用中文简称）─────────────
 
 
-@pytest.mark.parametrize(("name", "code"), [("河北", "130000000000"), ("河北省", "130000000000"), ("内蒙古", "150000000000"),
-                                          ("广西", "450000000000"), ("北京", "110000000000"), ("110000000000", "110000000000")])
+@pytest.mark.parametrize(
+    ("name", "code"),
+    [
+        ("河北", "130000000000"),
+        ("河北省", "130000000000"),
+        ("内蒙古", "150000000000"),
+        ("广西", "450000000000"),
+        ("北京", "110000000000"),
+        ("110000000000", "110000000000"),
+    ],
+)
 def test_resolve_regions_accepts_short_names_and_codes(name, code):
     (r,) = resolve_regions(REGIONS, [name])
     assert r["value"] == code
@@ -145,8 +211,15 @@ def test_resolve_regions_all_excludes_national_and_unknown_is_helpful():
 
 
 def testresolve_indicators_by_id_name_and_ambiguity():
-    cat = [{"id": "a" * 32, "name": "工业增加值"}, {"id": "b" * 32, "name": "工业总产值"}, {"id": "c" * 32, "name": "工业总产值指数"}]
-    assert [i["id"] for i in resolve_indicators(cat, ["工业增加值", "b" * 32])] == ["a" * 32, "b" * 32]
+    cat = [
+        {"id": "a" * 32, "name": "工业增加值"},
+        {"id": "b" * 32, "name": "工业总产值"},
+        {"id": "c" * 32, "name": "工业总产值指数"},
+    ]
+    assert [i["id"] for i in resolve_indicators(cat, ["工业增加值", "b" * 32])] == [
+        "a" * 32,
+        "b" * 32,
+    ]
     assert resolve_indicators(cat, ["工业总产值"])[0]["id"] == "b" * 32  # 精确优先于模糊
     with pytest.raises(AdapterError, match="匹配多个"):
         resolve_indicators(cat, ["工业总"])

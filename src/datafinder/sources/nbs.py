@@ -83,6 +83,7 @@ def to_dataset(row: dict[str, Any]) -> Dataset | None:
         title=title,
         # 页面本身是单页应用，参数会被忽略；带上 cid 只为让每个指标有唯一地址（去重要用）
         url=f"{PAGE}?cid={cid}&indicatorId={indic_id}&da={row.get('da') or ''}",
+        landing_url=PAGE,  # 单页应用打不开指标深链接：给人点的是官网入口，上面的 url 只用来区分每个指标
         source="nbs",
         description=desc,
         publisher="国家统计局",

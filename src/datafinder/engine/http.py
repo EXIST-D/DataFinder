@@ -17,6 +17,31 @@ from ..config import USER_AGENT
 from .errors import ShapeError, SourceError
 
 MAX_RETRY_AFTER = 4.0  # 秒；更长的 Retry-After 不等，直接报限流
+
+# 站点防火墙/人机验证页的特征（HTTP 200 的 HTML，而不是 JSON）。
+# 实测：国家统计局发布库对并发访问会返回 "WZWS" JS 验证页；Cloudflare 等会返回 "Just a moment"。
+# 遇到这类页面必须当成"被限流"暂停访问，而不是重试或绕过。
+_CHALLENGE_MARKERS = (
+    "wzws",
+    "please enable javascript",
+    "just a moment",
+    "security checkpoint",
+    "云防护",
+    "安全验证",
+    "captcha",
+)
+
+
+# 每个主机"下一次允许请求的时刻"，进程内所有 Http 实例共享：
+# 网页里连续点分类树、搜索和取值同时发生时，对同一个主机仍是串行且保持间隔。
+_NEXT_OK: dict[str, float] = {}
+
+
+def looks_like_challenge(text: str) -> bool:
+    head = text[:4000].lower()
+    return any(m in head for m in _CHALLENGE_MARKERS)
+
+
 MAX_BODY = 8 * 1024 * 1024  # 响应体上限，防止异常大响应
 
 
@@ -32,7 +57,6 @@ class Http:
         )
         self._owns = client is None
         self._min_interval = min_interval or {}
-        self._next_ok: dict[str, float] = {}
 
     async def aclose(self) -> None:
         if self._owns:
@@ -44,8 +68,8 @@ class Http:
         if not gap:
             return
         now = time.monotonic()
-        wait = self._next_ok.get(host, 0.0) - now
-        self._next_ok[host] = max(now, self._next_ok.get(host, 0.0)) + gap
+        wait = _NEXT_OK.get(host, 0.0) - now
+        _NEXT_OK[host] = max(now, _NEXT_OK.get(host, 0.0)) + gap
         if wait > 0:
             await asyncio.sleep(wait)
 
@@ -95,6 +119,11 @@ class Http:
                     try:
                         return resp.json()
                     except ValueError as exc:  # 2xx 但不是 JSON
+                        if looks_like_challenge(resp.text):
+                            raise SourceError(
+                                "rate_limited",
+                                "站点防护要求人机验证（访问过快或被识别为机器人），已暂停访问，稍后再试",
+                            ) from exc
                         last = ShapeError(f"响应不是 JSON：{exc}")
                         if attempt == 0:
                             await asyncio.sleep(0.3)

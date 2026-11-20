@@ -11,6 +11,7 @@ import json
 import sqlite3
 import time
 from pathlib import Path
+from typing import Any
 
 from ..config import data_dir
 from ..models import Dataset
@@ -22,6 +23,9 @@ MAX_ROWS = 2000  # 缓存条数上限，超出时淘汰最旧的
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS query_cache (
     key TEXT PRIMARY KEY, source TEXT NOT NULL, payload TEXT NOT NULL, created_at REAL NOT NULL
+);
+CREATE TABLE IF NOT EXISTS kv (
+    key TEXT PRIMARY KEY, payload TEXT NOT NULL, created_at REAL NOT NULL
 );
 CREATE TABLE IF NOT EXISTS outage (
     source TEXT PRIMARY KEY, until REAL NOT NULL, reason TEXT NOT NULL
@@ -43,7 +47,7 @@ class Cache:
         target = cache_path() if path is None else path
         if isinstance(target, Path):
             target.parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(str(target))
+        self._conn = sqlite3.connect(str(target), check_same_thread=False)
         self._conn.executescript(_SCHEMA)
 
     def close(self) -> None:
@@ -81,6 +85,25 @@ class Cache:
                 "DELETE FROM query_cache WHERE key IN ("
                 "SELECT key FROM query_cache ORDER BY created_at DESC LIMIT -1 OFFSET ?)",
                 (MAX_ROWS,),
+            )
+
+    # ── 通用 JSON 键值缓存（分类树、指标清单等）──
+    def kv_get(self, key: str, *, max_age: float | None) -> Any | None:
+        row = self._conn.execute(
+            "SELECT payload, created_at FROM kv WHERE key = ?", (key,)
+        ).fetchone()
+        if row is None or (max_age is not None and time.time() - row[1] > max_age):
+            return None
+        try:
+            return json.loads(row[0])
+        except ValueError:
+            return None
+
+    def kv_put(self, key: str, value: Any) -> None:
+        with self._conn:
+            self._conn.execute(
+                "INSERT OR REPLACE INTO kv(key, payload, created_at) VALUES (?,?,?)",
+                (key, json.dumps(value, ensure_ascii=False), time.time()),
             )
 
     # ── 故障标记 ──

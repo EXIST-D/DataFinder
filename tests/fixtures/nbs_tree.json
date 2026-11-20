@@ -1,0 +1,281 @@
+{
+ "root6": [
+  {
+   "sdate": null,
+   "_name": "分省年度数据",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e",
+   "name": "分省年度数据",
+   "_id": "c4d82af16c3d4f0cb4f09d4af7d5888e"
+  }
+ ],
+ "children": [
+  {
+   "sdate": null,
+   "_name": "综合",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.0dfd5436f7f0485bafd185f9895db7a0",
+   "name": "综合",
+   "_id": "0dfd5436f7f0485bafd185f9895db7a0"
+  },
+  {
+   "sdate": null,
+   "_name": "国民经济核算",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.da5ccb68e9de4671ad967247fe427c91",
+   "name": "国民经济核算",
+   "_id": "da5ccb68e9de4671ad967247fe427c91"
+  },
+  {
+   "sdate": null,
+   "_name": "人口",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.1b8b3021a931466d99b65cac34d89ee3",
+   "name": "人口",
+   "_id": "1b8b3021a931466d99b65cac34d89ee3"
+  },
+  {
+   "sdate": null,
+   "_name": "就业人员和工资",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.d41ae1904e194b9384e0380b1effdc9d",
+   "name": "就业人员和工资",
+   "_id": "d41ae1904e194b9384e0380b1effdc9d"
+  },
+  {
+   "sdate": null,
+   "_name": "固定资产投资和房地产",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.61eae4d718cf4a4683bcbbf4ea064c56",
+   "name": "固定资产投资和房地产",
+   "_id": "61eae4d718cf4a4683bcbbf4ea064c56"
+  },
+  {
+   "sdate": null,
+   "_name": "对外经济贸易",
+   "edate": null,
+   "isLeaf": false,
+   "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.97ba46254b8a4b9b9b0b933f5878c663",
+   "name": "对外经济贸易",
+   "_id": "97ba46254b8a4b9b9b0b933f5878c663"
+  }
+ ],
+ "leaf": {
+  "sdate": null,
+  "_name": "行政区划",
+  "edate": null,
+  "isLeaf": true,
+  "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.6b8e8719075f43d4bf83b261208b37b5.c4d82af16c3d4f0cb4f09d4af7d5888e.0dfd5436f7f0485bafd185f9895db7a0.f401b4ba4e494f1e9e00629720f4408f",
+  "name": "行政区划",
+  "_id": "f401b4ba4e494f1e9e00629720f4408f"
+ },
+ "indicators": {
+  "list": [
+   {
+    "i_showname": "地级区划数 (个) ",
+    "i_annotation": null,
+    "i_mark": null,
+    "_id": "bd561031e16b47ad854697ad9e8d96ee",
+    "du_name": "个"
+   },
+   {
+    "i_showname": "地级市数 (个) ",
+    "i_annotation": null,
+    "i_mark": null,
+    "_id": "3bb085e03ec04bbca3bb3aa807782d11",
+    "du_name": "个"
+   },
+   {
+    "i_showname": "县级区划数 (个) ",
+    "i_annotation": null,
+    "i_mark": null,
+    "_id": "2bd4eb47c2764e638d553fca2f3a15d1",
+    "du_name": "个"
+   }
+  ]
+ },
+ "da_catalogs": [
+  {
+   "_name": "全部地区",
+   "treeinfo_globalid": "6a99abef22d44119bdf5f8e2451ac390.a10dceae75d245008bf4b9a0e6fe1d55",
+   "show_name": "全部地区",
+   "treeinfo_pid": "6a99abef22d44119bdf5f8e2451ac390",
+   "treeinfo_level": 2,
+   "name": "全部地区",
+   "_level": 1,
+   "_id": "a10dceae75d245008bf4b9a0e6fe1d55",
+   "publicrelease_web_dacatalog_id": "a10dceae75d245008bf4b9a0e6fe1d55"
+  },
+  {
+   "_name": "四大区域",
+   "treeinfo_globalid": "6a99abef22d44119bdf5f8e2451ac390.a40ae1698e08488b9ce67a2887330997",
+   "children": [
+    {
+     "_name": "东部地区",
+     "treeinfo_globalid": "6a99abef22d44119bdf5f8e2451ac390.a40ae1698e08488b9ce67a2887330997.ea5f666a6d514569a29f8c4af7a26fa7",
+     "show_name": "东部地区",
+     "treeinfo_pid": "a40ae1698e08488b9ce67a2887330997",
+     "treeinfo_level": 3,
+     "name": "东部地区",
+     "_level": 2,
+     "_id": "ea5f666a6d514569a29f8c4af7a26fa7",
+     "publicrelease_web_dacatalog_id": "ea5f666a6d514569a29f8c4af7a26fa7"
+    },
+    {
+     "_name": "中部地区",
+     "treeinfo_globalid": "6a99abef22d44119bdf5f8e2451ac390.a40ae1698e08488b9ce67a2887330997.26c1f468bf9b44bf814ebbf74a80cae7",
+     "show_name": "中部地区",
+     "treeinfo_pid": "a40ae1698e08488b9ce67a2887330997",
+     "treeinfo_level": 3,
+     "name": "中部地区",
+     "_level": 2,
+     "_id": "26c1f468bf9b44bf814ebbf74a80cae7",
+     "publicrelease_web_dacatalog_id": "26c1f468bf9b44bf814ebbf74a80cae7"
+    },
+    {
+     "_name": "西部地区",
+     "treeinfo_globalid": "6a99abef22d44119bdf5f8e2451ac390.a40ae1698e08488b9ce67a2887330997.83936cf20d7d477d8a63c0cec9dc27bd",
+     "show_name": "西部地区",
+     "treeinfo_pid": "a40ae1698e08488b9ce67a2887330997",
+     "treeinfo_level": 3,
+     "name": "西部地区",
+     "_level": 2,
+     "_id": "83936cf20d7d477d8a63c0cec9dc27bd",
+     "publicrelease_web_dacatalog_id": "83936cf20d7d477d8a63c0cec9dc27bd"
+    },
+    {
+     "_name": "东北地区",
+     "treeinfo_globalid": "6a99abef22d44119bdf5f8e2451ac390.a40ae1698e08488b9ce67a2887330997.1a84c73cbee749cf8fe7702bf39082b4",
+     "show_name": "东北地区",
+     "treeinfo_pid": "a40ae1698e08488b9ce67a2887330997",
+     "treeinfo_level": 3,
+     "name": "东北地区",
+     "_level": 2,
+     "_id": "1a84c73cbee749cf8fe7702bf39082b4",
+     "publicrelease_web_dacatalog_id": "1a84c73cbee749cf8fe7702bf39082b4"
+    }
+   ],
+   "show_name": "四大区域",
+   "treeinfo_pid": "6a99abef22d44119bdf5f8e2451ac390",
+   "treeinfo_level": 2,
+   "name": "四大区域",
+   "_level": 1,
+   "_id": "a40ae1698e08488b9ce67a2887330997",
+   "publicrelease_web_dacatalog_id": "a40ae1698e08488b9ce67a2887330997"
+  }
+ ],
+ "das": {
+  "data": [
+   {
+    "name_text": "北京市",
+    "name_value": "110000000000"
+   },
+   {
+    "name_text": "天津市",
+    "name_value": "120000000000"
+   },
+   {
+    "name_text": "河北省",
+    "name_value": "130000000000"
+   }
+  ]
+ },
+ "series_multi": [
+  {
+   "code": "2023YY",
+   "name": "2023年",
+   "values": [
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "2186",
+     "area": "北京",
+     "areaCode": "110000000000"
+    },
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "2487",
+     "area": "上海市",
+     "areaCode": "310000000000"
+    },
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "12706",
+     "area": "广东省",
+     "areaCode": "440000000000"
+    }
+   ]
+  },
+  {
+   "code": "2022YY",
+   "name": "2022年",
+   "values": [
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "2184",
+     "area": "北京",
+     "areaCode": "110000000000"
+    },
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "2475",
+     "area": "上海市",
+     "areaCode": "310000000000"
+    },
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "12657",
+     "area": "广东省",
+     "areaCode": "440000000000"
+    }
+   ]
+  },
+  {
+   "code": "2021YY",
+   "name": "2021年",
+   "values": [
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "2189",
+     "area": "北京",
+     "areaCode": "110000000000"
+    },
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "2489",
+     "area": "上海市",
+     "areaCode": "310000000000"
+    },
+    {
+     "i_showname": "年末常住人口 (万人) ",
+     "_name": "年末总人口",
+     "du_name": "万人",
+     "value": "12684",
+     "area": "广东省",
+     "areaCode": "440000000000"
+    }
+   ]
+  }
+ ]
+}

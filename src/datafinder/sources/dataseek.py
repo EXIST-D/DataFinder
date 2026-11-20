@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from ..engine.errors import ShapeError, SourceError
-from ..models import Dataset
+from ..models import Dataset, Resource
 from ..query.plan import QueryPlan
 from .base import Ctx, EnglishSource, SourceSpec, clean_text
 
@@ -54,6 +54,97 @@ def to_dataset(r: dict[str, Any]) -> Dataset | None:
         aliases=list(r.get("aliases") or []),
         sources=list(r.get("sources") or []),  # 底层仓库名，用于展示出处
     )
+
+
+_MIME = {
+    "text/csv": "CSV",
+    "application/json": "JSON",
+    "application/zip": "ZIP",
+    "application/pdf": "PDF",
+    "application/vnd.ms-excel": "XLS",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "XLSX",
+    "application/x-netcdf": "NETCDF",
+    "application/xml": "XML",
+    "text/plain": "TXT",
+    "text/tab-separated-values": "TSV",
+    "application/x-rar-compressed": "RAR",
+    "application/x-7z-compressed": "7Z",
+    "application/gzip": "GZ",
+    "application/x-tar": "TAR",
+    "application/geo+json": "GEOJSON",
+    "application/vnd.google-earth.kml+xml": "KML",
+}
+
+
+def _format_for(mime: str, name: str) -> str | None:
+    """MIME → 常见格式名；MIME 不明（如 octet-stream）时看文件扩展名。"""
+    known = _MIME.get(mime.lower())
+    if known:
+        return known
+    ext = name.rsplit(".", 1)[-1].upper() if "." in name else None
+    if ext and 1 < len(ext) <= 8:
+        return ext
+    sub = mime.split("/")[-1].removeprefix("x-").upper()
+    return None if sub in ("", "OCTET-STREAM") else sub
+
+
+def _resource_name(url: str) -> str:
+    parts = [p for p in url.split("?")[0].split("/") if p]
+    if parts and parts[-1] == "content" and len(parts) > 1:  # Zenodo: .../files/名字/content
+        return parts[-2]
+    return parts[-1] if parts else url
+
+
+async def inspect_url(url: str, *, timeout: float = 20.0) -> list[Resource]:
+    """用 `dsk inspect` 读取一个数据集页面公布的文件列表（按需调用，不在搜索阶段做）。"""
+    exe = find_executable()
+    if exe is None:
+        raise SourceError("down", "未安装 Dataseek，无法读取文件列表")
+    proc = await asyncio.create_subprocess_exec(
+        exe,
+        "inspect",
+        url,
+        "--json",
+        "-q",
+        stdin=asyncio.subprocess.DEVNULL,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    try:
+        out, err = await asyncio.wait_for(proc.communicate(), timeout)
+    except (TimeoutError, asyncio.CancelledError):
+        proc.kill()
+        await proc.wait()
+        raise
+    if proc.returncode != 0:
+        tail = err.decode("utf-8", "replace").strip().splitlines()[-1:] or ["（无输出）"]
+        raise SourceError("http", f"读取文件列表失败：{tail[0][:200]}")
+    if len(out) > MAX_STDOUT:
+        raise ShapeError("dsk 输出过大")
+    try:
+        data = json.loads(out)
+    except ValueError as exc:
+        raise ShapeError(f"dsk 输出不是 JSON：{exc}") from exc
+    files = data.get("files") if isinstance(data, dict) else None
+    if not isinstance(files, list):
+        raise ShapeError("dsk inspect 输出缺少 files")
+    out_res: list[Resource] = []
+    for f in files:
+        furl = f.get("url") if isinstance(f, dict) else None
+        if not isinstance(furl, str) or not furl.startswith("http"):
+            continue
+        mime = str(f.get("format") or "")
+        name = str(f.get("name") or _resource_name(furl))
+        out_res.append(
+            Resource(
+                "file",
+                name,
+                furl,
+                _format_for(mime, name),
+                f.get("size") if isinstance(f.get("size"), int) else None,
+            )
+        )
+    return out_res
 
 
 class DataseekSource(EnglishSource):

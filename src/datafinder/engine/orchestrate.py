@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import math
 import time
+from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from typing import Literal
 
@@ -111,7 +112,7 @@ async def _one(
     return [], status(kind, [], str(err))
 
 
-async def run_search(
+async def iter_results(
     sources: list[Source],
     ctx: Ctx,
     plan: QueryPlan,
@@ -122,7 +123,12 @@ async def run_search(
     cache: Cache | None = None,
     refresh: bool = False,
     explicit: frozenset[str] = frozenset(),
-) -> Outcome:
+) -> AsyncIterator[tuple[list[Dataset], SourceStatus]]:
+    """每个来源完成（或被放弃等待）就产出一次 (结果, 状态)，按完成顺序。
+
+    网页用它做"逐批出现"；`run_search` 用它收集全部结果。
+    调用方中途停止迭代（如客户端断开）时，未完成的任务会被取消。
+    """
     started = time.monotonic()
     stop_at = started + deadline
     n = len(sources)
@@ -132,55 +138,68 @@ async def run_search(
         ): s
         for s in sources
     }
-    results: dict[str, tuple[list[Dataset], SourceStatus]] = {}
     pending = set(tasks)
     answered = failed = 0
     quorum_applied = False
+    try:
+        while pending:
+            timeout = max(0.0, stop_at - time.monotonic())
+            done, pending = await asyncio.wait(
+                pending, timeout=timeout, return_when=asyncio.FIRST_COMPLETED
+            )
+            if not done:
+                break
+            for t in done:
+                items, st = t.result()
+                if st.answered:
+                    answered += 1
+                elif st.status in ("error", "timeout", "resting"):
+                    failed += 1
+                yield items, st
+            reachable = n - failed
+            if (
+                not quorum_applied
+                and n >= QUORUM_MIN_SOURCES
+                and not (explicit & {tasks[t].id for t in pending})
+                and answered > 0
+                and answered >= math.ceil(reachable * QUORUM_SHARE)
+            ):
+                stop_at = min(stop_at, time.monotonic() + QUORUM_GRACE)
+                quorum_applied = True
 
-    while pending:
-        timeout = max(0.0, stop_at - time.monotonic())
-        done, pending = await asyncio.wait(
-            pending, timeout=timeout, return_when=asyncio.FIRST_COMPLETED
-        )
-        if not done:
-            break
-        for t in done:
-            items, st = t.result()
-            results[tasks[t].id] = (items, st)
-            if st.answered:
-                answered += 1
-            elif st.status in ("error", "timeout", "resting"):
-                failed += 1
-        reachable = n - failed
-        if (
-            not quorum_applied
-            and n >= QUORUM_MIN_SOURCES
-            and not (explicit & {tasks[t].id for t in pending})
-            and answered > 0
-            and answered >= math.ceil(reachable * QUORUM_SHARE)
-        ):
-            stop_at = min(stop_at, time.monotonic() + QUORUM_GRACE)
-            quorum_applied = True
+        for t in list(pending):
+            src = tasks[t]
+            t.cancel()
+            yield (
+                [],
+                SourceStatus(
+                    src.id,
+                    src.title,
+                    "not_waited",
+                    int((time.monotonic() - started) * 1000),
+                    0,
+                    "没等它：已有足够来源回答或到了截止时间",
+                ),
+            )
+    finally:
+        for t in tasks:
+            if not t.done():
+                t.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
 
-    for t in pending:
-        t.cancel()
-        src = tasks[t]
-        results[src.id] = (
-            [],
-            SourceStatus(
-                src.id,
-                src.title,
-                "not_waited",
-                int((time.monotonic() - started) * 1000),
-                0,
-                "没等它：已有足够来源回答或到了截止时间",
-            ),
-        )
-    if pending:
-        await asyncio.gather(*pending, return_exceptions=True)
 
+async def run_search(
+    sources: list[Source],
+    ctx: Ctx,
+    plan: QueryPlan,
+    **kwargs,
+) -> Outcome:
+    """收集全部结果。按注册顺序输出，保证去重时来源优先级稳定。"""
+    results: dict[str, tuple[list[Dataset], SourceStatus]] = {}
+    async for items, st in iter_results(sources, ctx, plan, **kwargs):
+        results[st.id] = (items, st)
     outcome = Outcome()
-    for src in sources:  # 按注册顺序输出，保证去重时的来源优先级稳定
+    for src in sources:
         items, st = results[src.id]
         outcome.statuses.append(st)
         if st.answered:

@@ -75,11 +75,10 @@ def to_dataset(row: dict[str, Any]) -> Dataset | None:
         "dts": [f"{start}-{end}"],
         "rootId": root,
     }
-    note = f"POST，Content-Type: application/json，需带 Referer: {PAGE}。请求体示例：" + json.dumps(
-        body, ensure_ascii=False, separators=(",", ":")
-    )
+    note = f"POST，Content-Type: application/json，需带 Referer: {PAGE}"
     if dt_type not in ("YY", "MM"):
-        note += "（年度、月度已实测；季度等的 dts 格式以官网为准）"
+        note += "。年度、月度已实测；季度等的 dts 格式以官网为准"
+    body_text = json.dumps(body, ensure_ascii=False, separators=(",", ":"))
     return Dataset(
         title=title,
         # 页面本身是单页应用，参数会被忽略；带上 cid 只为让每个指标有唯一地址（去重要用）
@@ -90,7 +89,7 @@ def to_dataset(row: dict[str, Any]) -> Dataset | None:
         period=period,
         formats=["API"],
         resources=[
-            Resource("api", "时间序列取值", f"{BASE}/stream/esData", "JSON", None, note),
+            Resource("api", "时间序列取值", f"{BASE}/stream/esData", "JSON", None, note, body_text),
             Resource(
                 "api",
                 "指标元数据",

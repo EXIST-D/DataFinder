@@ -1,17 +1,23 @@
-"""数据集检索入口：解析查询 → 并发查各来源 → 去重 → 排序。CLI、网页、MCP 共用。"""
+"""数据集检索入口：解析查询 → 并发查各来源 → 去重 → 排序。CLI、网页、MCP 共用。
+
+核心是 `stream_search`：每个来源完成就产出一份"当前最佳结果快照"，网页据此逐批显示；
+`search_datasets` 只是取最后一份快照，CLI 用它。
+"""
 
 from __future__ import annotations
 
+import copy
+from collections.abc import AsyncIterator
 from dataclasses import dataclass
 
 from .engine.cache import Cache
 from .engine.dedup import merge
 from .engine.http import Http
-from .engine.orchestrate import SourceStatus, run_search
+from .engine.orchestrate import SourceStatus, iter_results
 from .engine.rank import rank
 from .models import Dataset
 from .query.plan import QueryPlan, parse
-from .sources.base import Ctx
+from .sources.base import Ctx, Source
 from .sources.registry import build_sources
 
 PER_SOURCE_LIMIT = 20
@@ -28,12 +34,35 @@ MIN_INTERVAL = {
 class SearchResult:
     plan: QueryPlan
     datasets: list[Dataset]
-    statuses: list[SourceStatus]
+    statuses: list[SourceStatus]  # 按注册顺序；还没回答的来源状态为 pending
     complete: bool
     candidates: int  # 去重后、排序前的候选数
+    final: bool = False  # 所有来源都已回答或被放弃
 
 
-async def search_datasets(
+def _pending(src: Source) -> SourceStatus:
+    return SourceStatus(src.id, src.title, "pending", 0, 0, None)  # type: ignore[arg-type]
+
+
+def _snapshot(
+    plan: QueryPlan,
+    sources: list[Source],
+    per_source: dict[str, list[Dataset]],
+    done: dict[str, SourceStatus],
+    limit: int,
+) -> SearchResult:
+    # 深拷贝：去重合并会原地改 Dataset，而同一批对象要在多次快照里复用
+    ordered = {s.id: copy.deepcopy(per_source[s.id]) for s in sources if s.id in per_source}
+    merged, ranks = merge(ordered)
+    official = frozenset(s.id for s in sources if s.spec.official)
+    ranked = rank(merged, ranks, plan, official=official)
+    statuses = [done.get(s.id) or _pending(s) for s in sources]
+    final = all(s.id in done for s in sources)
+    complete = final and all(st.answered or st.status == "skipped" for st in statuses)
+    return SearchResult(plan, ranked[:limit], statuses, complete, len(merged), final)
+
+
+async def stream_search(
     query: str,
     *,
     limit: int = 15,
@@ -42,13 +71,16 @@ async def search_datasets(
     refresh: bool = False,
     use_cache: bool = True,
     deadline: float = 20.0,
-) -> SearchResult:
+) -> AsyncIterator[SearchResult]:
     plan = parse(query)
     sources = build_sources(only=only, exclude=exclude)
     http = Http(min_interval=MIN_INTERVAL)
     cache = Cache() if use_cache else None
+    per_source: dict[str, list[Dataset]] = {}
+    done: dict[str, SourceStatus] = {}
     try:
-        outcome = await run_search(
+        yield _snapshot(plan, sources, per_source, done, limit)  # 初始：全部 pending
+        async for items, st in iter_results(
             sources,
             Ctx(http),
             plan,
@@ -57,12 +89,20 @@ async def search_datasets(
             cache=cache,
             refresh=refresh,
             explicit=frozenset(only or ()),
-        )
+        ):
+            done[st.id] = st
+            if st.answered:
+                per_source[st.id] = items
+            yield _snapshot(plan, sources, per_source, done, limit)
     finally:
         await http.aclose()
         if cache:
             cache.close()
-    merged, ranks = merge(outcome.per_source)
-    official = frozenset(s.id for s in sources if s.spec.official)
-    ranked = rank(merged, ranks, plan, official=official)
-    return SearchResult(plan, ranked[:limit], outcome.statuses, outcome.complete, len(merged))
+
+
+async def search_datasets(query: str, **kwargs) -> SearchResult:
+    last: SearchResult | None = None
+    async for snap in stream_search(query, **kwargs):
+        last = snap
+    assert last is not None
+    return last

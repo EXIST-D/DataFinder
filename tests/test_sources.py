@@ -153,8 +153,7 @@ def test_nbs_dataset_has_unique_url_per_indicator_and_api_resource():
     assert d.period and "最新" in d.description
     api = d.resources[0]
     assert api.kind == "api" and api.url.endswith("/stream/esData")
-    note = api.note
-    body = json.loads(note[note.index("{") : note.rindex("}") + 1])
+    body = json.loads(api.body)  # 请求体是独立字段，可直接复制
     assert body["cid"] and body["indicatorIds"] and body["rootId"]
 
 
@@ -264,3 +263,27 @@ def test_only_and_exclude_and_unknown():
     assert "nbs" not in [s.id for s in build_sources(exclude={"nbs"})]
     with pytest.raises(ValueError, match="未知来源"):
         build_sources(only={"nope"})
+
+
+async def test_inspect_url_maps_files_and_normalizes_formats(tmp_path, monkeypatch):
+    from datafinder.sources import dataseek as ds
+
+    payload = {
+        "schema": "dataseek-inspect/1",
+        "files": [
+            {"format": "text/csv", "url": "https://zenodo.org/api/records/1/files/a.csv/content"},
+            {"format": "text/tab-separated-values", "url": "https://x.org/api/access/datafile/9"},
+            {"format": "application/octet-stream", "url": "https://x.org/files/Prov0010.rar"},
+            {"format": "application/octet-stream", "url": "https://x.org/files/blob"},
+            {"format": "text/csv", "url": "ftp://x.org/not-http.csv"},
+        ],
+    }
+    exe = fake_dsk(tmp_path, f"import sys, json\nsys.stdout.write({json.dumps(payload)!r})")
+    monkeypatch.setattr(ds, "find_executable", lambda: exe)
+    res = await ds.inspect_url("https://zenodo.org/records/1")
+    assert [(r.name, r.format) for r in res] == [
+        ("a.csv", "CSV"),  # Zenodo 的 .../files/名字/content 取"名字"
+        ("9", "TSV"),
+        ("Prov0010.rar", "RAR"),  # octet-stream 看扩展名
+        ("blob", None),  # 无法判断就不编造
+    ]

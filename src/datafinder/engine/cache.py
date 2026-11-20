@@ -34,7 +34,7 @@ def cache_path() -> Path:
 
 
 def make_key(source: str, query: str, limit: int) -> str:
-    raw = f"v1|{source}|{query}|{limit}"
+    raw = f"v2|{source}|{query}|{limit}"  # 适配器输出结构变化时升版本，让旧缓存失效
     return hashlib.sha1(raw.encode()).hexdigest()
 
 

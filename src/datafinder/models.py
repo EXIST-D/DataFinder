@@ -19,7 +19,8 @@ class Resource:
     url: str
     format: str | None = None
     size_bytes: int | None = None
-    note: str | None = None  # 如调用方式、请求体示例
+    note: str | None = None  # 调用说明（方法、请求头等）
+    body: str | None = None  # 可直接复制的请求体（如 JSON）
 
 
 @dataclass

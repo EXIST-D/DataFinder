@@ -25,4 +25,4 @@ uv run datafinder doctor
 
 ## 许可
 
-待定。
+[MIT](LICENSE)

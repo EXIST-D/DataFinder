@@ -1,0 +1,97 @@
+# 地区词表：中文名/别名 → ISO 代码。用于识别查询里的地点、给门户补中文检索词。
+# 省份 ISO 代码与 Dateno 注册表的 subregion.id 一致（如 CN-GD）。
+
+provinces:
+  CN-BJ: {zh: 北京, aliases: [北京市]}
+  CN-TJ: {zh: 天津, aliases: [天津市]}
+  CN-HE: {zh: 河北, aliases: [河北省]}
+  CN-SX: {zh: 山西, aliases: [山西省]}
+  CN-NM: {zh: 内蒙古, aliases: [内蒙古自治区]}
+  CN-LN: {zh: 辽宁, aliases: [辽宁省]}
+  CN-JL: {zh: 吉林, aliases: [吉林省]}
+  CN-HL: {zh: 黑龙江, aliases: [黑龙江省]}
+  CN-SH: {zh: 上海, aliases: [上海市]}
+  CN-JS: {zh: 江苏, aliases: [江苏省]}
+  CN-ZJ: {zh: 浙江, aliases: [浙江省]}
+  CN-AH: {zh: 安徽, aliases: [安徽省]}
+  CN-FJ: {zh: 福建, aliases: [福建省]}
+  CN-JX: {zh: 江西, aliases: [江西省]}
+  CN-SD: {zh: 山东, aliases: [山东省]}
+  CN-HA: {zh: 河南, aliases: [河南省]}
+  CN-HB: {zh: 湖北, aliases: [湖北省]}
+  CN-HN: {zh: 湖南, aliases: [湖南省]}
+  CN-GD: {zh: 广东, aliases: [广东省]}
+  CN-GX: {zh: 广西, aliases: [广西壮族自治区]}
+  CN-HI: {zh: 海南, aliases: [海南省]}
+  CN-CQ: {zh: 重庆, aliases: [重庆市]}
+  CN-SC: {zh: 四川, aliases: [四川省]}
+  CN-GZ: {zh: 贵州, aliases: [贵州省]}
+  CN-YN: {zh: 云南, aliases: [云南省]}
+  CN-XZ: {zh: 西藏, aliases: [西藏自治区]}
+  CN-SN: {zh: 陕西, aliases: [陕西省]}
+  CN-GS: {zh: 甘肃, aliases: [甘肃省]}
+  CN-QH: {zh: 青海, aliases: [青海省]}
+  CN-NX: {zh: 宁夏, aliases: [宁夏回族自治区]}
+  CN-XJ: {zh: 新疆, aliases: [新疆维吾尔自治区]}
+
+countries:
+  CN: {zh: 中国, en: [china, chinese, prc], aliases: [中华人民共和国, 全国, 国内, 我国]}
+  HK: {zh: 香港, en: [hong kong]}
+  MO: {zh: 澳门, en: [macao, macau]}
+  TW: {zh: 台湾, en: [taiwan]}
+  US: {zh: 美国, en: [united states, usa, america, american]}
+  GB: {zh: 英国, en: [united kingdom, uk, britain, british]}
+  EU: {zh: 欧盟, en: [european union, eu, europe, european], aliases: [欧洲]}
+  DE: {zh: 德国, en: [germany, german]}
+  FR: {zh: 法国, en: [france, french]}
+  IT: {zh: 意大利, en: [italy, italian]}
+  ES: {zh: 西班牙, en: [spain, spanish]}
+  NL: {zh: 荷兰, en: [netherlands, dutch]}
+  CH: {zh: 瑞士, en: [switzerland, swiss]}
+  SE: {zh: 瑞典, en: [sweden]}
+  "NO": {zh: 挪威, en: [norway]}   # 必须加引号，否则 YAML 会解析成布尔值 False
+  FI: {zh: 芬兰, en: [finland]}
+  DK: {zh: 丹麦, en: [denmark]}
+  IE: {zh: 爱尔兰, en: [ireland]}
+  PT: {zh: 葡萄牙, en: [portugal]}
+  AT: {zh: 奥地利, en: [austria]}
+  BE: {zh: 比利时, en: [belgium]}
+  PL: {zh: 波兰, en: [poland]}
+  RU: {zh: 俄罗斯, en: [russia]}
+  UA: {zh: 乌克兰, en: [ukraine]}
+  JP: {zh: 日本, en: [japan, japanese]}
+  KR: {zh: 韩国, en: [south korea, korea, korean]}
+  SG: {zh: 新加坡, en: [singapore]}
+  MY: {zh: 马来西亚, en: [malaysia]}
+  TH: {zh: 泰国, en: [thailand]}
+  VN: {zh: 越南, en: [vietnam]}
+  ID: {zh: 印度尼西亚, en: [indonesia], aliases: [印尼]}
+  PH: {zh: 菲律宾, en: [philippines]}
+  IN: {zh: 印度, en: [india, indian]}
+  PK: {zh: 巴基斯坦, en: [pakistan]}
+  BD: {zh: 孟加拉国, en: [bangladesh], aliases: [孟加拉]}
+  AU: {zh: 澳大利亚, en: [australia], aliases: [澳洲]}
+  NZ: {zh: 新西兰, en: [new zealand]}
+  CA: {zh: 加拿大, en: [canada, canadian]}
+  MX: {zh: 墨西哥, en: [mexico]}
+  BR: {zh: 巴西, en: [brazil]}
+  AR: {zh: 阿根廷, en: [argentina]}
+  CL: {zh: 智利, en: [chile]}
+  CO: {zh: 哥伦比亚, en: [colombia]}
+  PE: {zh: 秘鲁, en: [peru]}
+  ZA: {zh: 南非, en: [south africa]}
+  EG: {zh: 埃及, en: [egypt]}
+  NG: {zh: 尼日利亚, en: [nigeria]}
+  KE: {zh: 肯尼亚, en: [kenya]}
+  ET: {zh: 埃塞俄比亚, en: [ethiopia]}
+  TR: {zh: 土耳其, en: [turkey]}
+  IL: {zh: 以色列, en: [israel]}
+  SA: {zh: 沙特阿拉伯, en: [saudi arabia], aliases: [沙特]}
+  AE: {zh: 阿联酋, en: [united arab emirates, uae]}
+  IR: {zh: 伊朗, en: [iran]}
+  KZ: {zh: 哈萨克斯坦, en: [kazakhstan]}
+  MN: {zh: 蒙古, en: [mongolia]}
+  GR: {zh: 希腊, en: [greece]}
+  CZ: {zh: 捷克, en: [czech republic, czechia]}
+  HU: {zh: 匈牙利, en: [hungary]}
+  RO: {zh: 罗马尼亚, en: [romania]}

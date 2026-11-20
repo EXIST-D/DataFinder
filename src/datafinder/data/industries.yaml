@@ -1,0 +1,159 @@
+# 行业分类：用于门户打标签与查询意图识别。
+# 打标规则（可复现，非 AI）：在 名称+描述+标签+主题 里统计 keywords 命中数，
+# 命中 ≥ min_hits 或命中 Dateno 主题映射（topic_map）即打上该行业。
+# 加行业或加关键词直接改本文件。
+
+min_hits: 2
+
+industries:
+  - id: statistics
+    zh: 统计
+    en: Statistics
+    keywords: [statistics, statistical, statistic, census, yearbook, national accounts, 统计, 统计局, 普查, 年鉴]
+  - id: economy
+    zh: 宏观经济
+    en: Economy
+    keywords: [economy, economic, gdp, inflation, trade, fiscal, macroeconomic, price index, business, 经济, 贸易, 财政, 物价]
+  - id: finance
+    zh: 金融
+    en: Finance
+    keywords: [finance, financial, bank, banking, stock, securities, fund, insurance, interest rate, currency, exchange rate, 金融, 银行, 证券, 股票, 基金, 保险]
+  - id: population
+    zh: 人口社会
+    en: Population & Society
+    keywords: [population, demographic, census, household, migration, society, social, poverty, gender, 人口, 社会, 户籍]
+  - id: government
+    zh: 政务公共
+    en: Government & Public Sector
+    keywords: [government, public sector, open data, public data, municipal, administration, procurement, 政府, 政务, 公共数据, 开放数据, 开放平台]
+  - id: education
+    zh: 教育
+    en: Education
+    keywords: [education, school, university, student, academic, learning, 教育, 学校, 高校, 学生]
+  - id: health
+    zh: 医疗卫生
+    en: Health
+    keywords: [health, medical, disease, hospital, clinical, epidemic, drug, covid, genome, biomedical, 医疗, 卫生, 健康, 疾病, 医院]
+  - id: agriculture
+    zh: 农业
+    en: Agriculture
+    keywords: [agriculture, agricultural, crop, farm, food, livestock, fishery, forestry, soil, 农业, 粮食, 作物, 渔业, 林业, 土壤]
+  - id: energy
+    zh: 能源
+    en: Energy
+    keywords: [energy, electricity, power, coal, oil, gas, solar, wind, renewable, carbon, emission, 能源, 电力, 煤炭, 石油, 碳]
+  - id: environment
+    zh: 生态环境
+    en: Environment
+    keywords: [environment, environmental, pollution, air quality, water quality, ecology, biodiversity, waste, forest, wetland, 环境, 污染, 空气质量, 生态, 生物多样性]
+  - id: climate
+    zh: 气象气候
+    en: Weather & Climate
+    keywords: [weather, climate, meteorology, meteorological, atmosphere, precipitation, temperature, cma, 气象, 气候, 天气, 降水]
+  - id: transport
+    zh: 交通物流
+    en: Transport & Logistics
+    keywords: [transport, transportation, traffic, railway, aviation, airport, road, port, shipping, logistics, mobility, 交通, 铁路, 航空, 港口, 物流]
+  - id: geospatial
+    zh: 地理空间
+    en: Geospatial
+    keywords: [geospatial, geographic, gis, map, maps, remote sensing, satellite, imagery, elevation, land use, geoportal, 地理, 地图, 遥感, 卫星, 测绘]
+  - id: ocean
+    zh: 海洋
+    en: Ocean & Marine
+    keywords: [ocean, oceanography, marine, sea, coastal, fisheries, 海洋, 海岸]
+  - id: geology
+    zh: 地质水文
+    en: Geology & Hydrology
+    keywords: [geology, geological, mineral, earthquake, seismic, hydrology, groundwater, glacier, permafrost, tibetan plateau, 地质, 矿产, 地震, 水文, 冰川]
+  - id: science
+    zh: 科学研究
+    en: Science & Research
+    keywords: [science, scientific, research data, repository, publication, patent, innovation, technology, 科学, 科研, 专利, 科技, 数据仓库]
+  - id: ml
+    zh: 人工智能
+    en: AI & Machine Learning
+    keywords: [machine learning, artificial intelligence, deep learning, nlp, corpus, benchmark, training data, model, 机器学习, 人工智能, 语料, 模型]
+  - id: housing
+    zh: 住房建筑
+    en: Housing & Construction
+    keywords: [housing, real estate, property, construction, building, cadastre, planning, urban planning, 住房, 房地产, 建筑, 规划]
+  - id: culture
+    zh: 文化旅游
+    en: Culture & Tourism
+    keywords: [culture, cultural, heritage, museum, tourism, sports, library, film, 文化, 旅游, 文物, 博物馆, 体育]
+  - id: law
+    zh: 法律司法
+    en: Law & Justice
+    keywords: [law, legal, justice, court, legislation, regulation, crime, 法律, 司法, 法院, 法规]
+  - id: industry
+    zh: 工业制造
+    en: Industry & Manufacturing
+    keywords: [industry, industrial, manufacturing, enterprise, company, chemical, steel, semiconductor, electronics, 工业, 制造业, 企业, 电子]
+  - id: trade_market
+    zh: 数据交易
+    en: Data Marketplace
+    keywords: [marketplace, data exchange, data trading, data market, commercial, 数据交易, 数据交易所, 数据市场]
+
+# Dateno 主题（ISO/DCAT 体系）→ 行业。命中即打标，不需要 min_hits。
+topic_map:
+  "Economy and finance": [economy, finance]
+  "Economy": [economy]
+  "Population and society": [population]
+  "Society": [population]
+  "Government and public sector": [government]
+  "Education, culture and sport": [education, culture]
+  "Health": [health]
+  "Agriculture, fisheries, forestry and food": [agriculture]
+  "Energy": [energy]
+  "Environment": [environment]
+  "Climatology / Meteorology / Atmosphere": [climate]
+  "Transport": [transport]
+  "Transportation": [transport]
+  "Science and technology": [science]
+  "Oceans": [ocean]
+  "Geoscientific Information": [geology]
+  "Inland Waters": [geology]
+  "Planning / Cadastre": [housing, geospatial]
+  "Imagery / Base Maps / Earth Cover": [geospatial]
+  "Elevation": [geospatial]
+  "Boundaries": [geospatial]
+  "Location": [geospatial]
+  "Justice, legal system and public safety": [law]
+  "International issues": [statistics]
+
+# Dateno catalog_type → 中文名与检索提示词（让中文查询能命中英文条目）
+catalog_types:
+  "Open data portal":
+    zh: 开放数据门户
+    hints: [开放数据, 数据开放, 政府数据, 公共数据, 数据门户, 开放平台]
+  "Geoportal":
+    zh: 地理信息门户
+    hints: [地理信息, 地图, 地理空间, 空间数据, 测绘, gis]
+  "Scientific data repository":
+    zh: 科学数据仓库
+    hints: [科学数据, 科研数据, 数据仓库, 数据中心, 科学数据中心]
+  "Indicators catalog":
+    zh: 统计指标库
+    hints: [统计, 统计数据, 指标, 数据库, 经济数据, 指标库]
+  "Microdata catalog":
+    zh: 微观数据目录
+    hints: [微观数据, 调查数据, 普查数据, 问卷调查, 抽样调查]
+  "Machine learning catalog":
+    zh: 机器学习数据集目录
+    hints: [机器学习, 人工智能, 训练数据, 数据集, 模型]
+  "Data marketplace":
+    zh: 数据交易平台
+    hints: [数据交易, 数据交易所, 数据市场, 数据流通, 数据产品]
+  "Data search engine":
+    zh: 数据搜索引擎
+    hints: [数据搜索, 数据检索, 数据发现]
+  "API Catalog":
+    zh: API 目录
+    hints: [接口, api, 接口目录]
+  "Metadata catalog":
+    zh: 元数据目录
+    hints: [元数据, 数据目录]
+  "Datasets list":
+    zh: 数据集清单
+    hints: [数据集清单, 数据清单, 资源列表]

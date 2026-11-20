@@ -287,3 +287,76 @@ async def test_inspect_url_maps_files_and_normalizes_formats(tmp_path, monkeypat
         ("Prov0010.rar", "RAR"),  # octet-stream 看扩展名
         ("blob", None),  # 无法判断就不编造
     ]
+
+
+# ───────────── 中英双路检索 ─────────────
+
+ZH_SPEC = spec("zenodo", "zenodo", options={"zh_query": True})
+
+
+def _zenodo_payload(title, rid):
+    p = fixture("zenodo.json")
+    hit = p["hits"]["hits"][0]
+    hit = {
+        **hit,
+        "id": rid,
+        "metadata": {**hit["metadata"], "title": title},
+        "links": {**hit["links"], "self_html": f"https://zenodo.org/records/{rid}"},
+        "title": title,
+    }
+    return {"hits": {"hits": [hit]}}
+
+
+async def test_zh_query_searches_both_languages_and_merges():
+    seen = []
+
+    def handler(req):
+        q = req.url.params["q"]
+        seen.append(q)
+        zh = any("\u4e00" <= ch <= "\u9fff" for ch in q)
+        return httpx.Response(
+            200, json=_zenodo_payload("第七次人口普查" if zh else "Census tables", 2 if zh else 1)
+        )
+
+    ctx = Ctx(Http(httpx.AsyncClient(transport=httpx.MockTransport(handler))))
+    items = await ZenodoSource(ZH_SPEC).search(ctx, parse("人口普查"), 10)
+    assert sorted(d.title for d in items) == ["Census tables", "第七次人口普查"]
+    assert any(c for q in seen for c in q if "\u4e00" <= c <= "\u9fff")  # 确实发了中文查询
+    assert any(q.isascii() for q in seen)  # 也发了英文查询
+
+
+async def test_zh_query_is_off_by_default():
+    seen = []
+
+    def handler(req):
+        seen.append(req.url.params["q"])
+        return httpx.Response(200, json=_zenodo_payload("Census tables", 1))
+
+    ctx = Ctx(Http(httpx.AsyncClient(transport=httpx.MockTransport(handler))))
+    await ZenodoSource(spec("zenodo", "zenodo")).search(ctx, parse("人口普查"), 10)
+    assert all(q.isascii() for q in seen)
+
+
+async def test_one_language_failing_still_returns_the_other():
+    def handler(req):
+        q = req.url.params["q"]
+        if any("\u4e00" <= ch <= "\u9fff" for ch in q):
+            return httpx.Response(500)
+        return httpx.Response(200, json=_zenodo_payload("Census tables", 1))
+
+    ctx = Ctx(Http(httpx.AsyncClient(transport=httpx.MockTransport(handler))))
+    items = await ZenodoSource(ZH_SPEC).search(ctx, parse("人口普查"), 10)
+    assert [d.title for d in items] == ["Census tables"]
+
+
+async def test_both_languages_failing_is_an_error():
+    ctx = Ctx(Http(httpx.AsyncClient(transport=httpx.MockTransport(lambda r: httpx.Response(500)))))
+    with pytest.raises(SourceError):
+        await ZenodoSource(ZH_SPEC).search(ctx, parse("人口普查"), 10)
+
+
+def test_cache_key_distinguishes_zh_query_setting():
+    plan = parse("人口普查")
+    assert ZenodoSource(ZH_SPEC).cache_query(plan) != ZenodoSource(
+        spec("zenodo", "zenodo")
+    ).cache_query(plan)

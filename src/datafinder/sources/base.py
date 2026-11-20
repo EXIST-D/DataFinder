@@ -11,6 +11,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import itertools
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any
@@ -61,16 +63,46 @@ class Source:
 
 
 class EnglishSource(Source):
-    """用英文检索词的来源：先用较多词，没结果就逐步放宽（4 词 → 2 词 → 1 词）。"""
+    """用检索词查询的来源：先用较多词，没结果就逐步放宽（4 词 → 2 词 → 1 词）。
+
+    `options.zh_query: true` 时，中文问句**同时**再用中文词查一遍（两路并发、结果合并）：
+    基准显示，只发英文词会漏掉中文记录（如《西南八省县级人口普查原始数据》）。
+    """
+
+    @property
+    def zh_query(self) -> bool:
+        return bool(self.spec.options.get("zh_query"))
 
     def supports(self, plan: QueryPlan) -> bool:
-        return bool(plan.query_en())
+        return bool(plan.query_en()) or (self._zh_enabled(plan))
+
+    def _zh_enabled(self, plan: QueryPlan) -> bool:
+        return self.zh_query and plan.lang == "zh" and bool(plan.zh_terms())
+
+    def cache_query(self, plan: QueryPlan) -> str:
+        zh = " ".join(plan.zh_terms()) if self._zh_enabled(plan) else ""
+        return f"{plan.query_en()}|{zh}"
 
     async def fetch(self, ctx: Ctx, query: str, limit: int) -> list[Dataset]:
         raise NotImplementedError
 
     async def search(self, ctx: Ctx, plan: QueryPlan, limit: int) -> list[Dataset]:
-        return await relaxed(plan, lambda q: self.fetch(ctx, q, limit))
+        runs = []
+        if plan.query_en():
+            runs.append(relaxed(plan, lambda q: self.fetch(ctx, q, limit)))
+        if self._zh_enabled(plan):
+            runs.append(relaxed_zh(plan, lambda q: self.fetch(ctx, q, limit)))
+        outcomes = await asyncio.gather(*runs, return_exceptions=True)
+        lists = [o for o in outcomes if not isinstance(o, BaseException)]
+        if not lists:  # 两路都失败才算失败；只有一路失败时用另一路的结果
+            raise next(o for o in outcomes if isinstance(o, BaseException))
+        seen: set[str] = set()
+        merged: list[Dataset] = []
+        for d in itertools.chain.from_iterable(itertools.zip_longest(*lists)):
+            if d is not None and d.url not in seen:
+                seen.add(d.url)
+                merged.append(d)
+        return merged
 
 
 async def relaxed(
@@ -79,6 +111,21 @@ async def relaxed(
     tried: set[str] = set()
     for max_terms in (4, 2, 1):
         query = plan.query_en(max_terms=max_terms)
+        if not query or query in tried:
+            continue
+        tried.add(query)
+        items = await fetch(query)
+        if items:
+            return items
+    return []
+
+
+async def relaxed_zh(
+    plan: QueryPlan, fetch: Callable[[str], Awaitable[list[Dataset]]]
+) -> list[Dataset]:
+    tried: set[str] = set()
+    for max_terms in (3, 2, 1):
+        query = " ".join(plan.zh_terms(max_terms=max_terms))
         if not query or query in tried:
             continue
         tried.add(query)

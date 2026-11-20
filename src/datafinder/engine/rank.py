@@ -24,6 +24,8 @@ RRF_K = 60
 TITLE_CREDIT = 1.0
 DESC_CREDIT = 0.7
 DIMENSION_WEIGHT = 0.3
+COVERAGE_FLOOR = 0.25  # score × (floor + (1-floor) × 覆盖度^power)
+COVERAGE_POWER = 1.0
 # 产品取向：中文优先、官方优先。多来源一致（RRF）仍是更强的信号，所以这两个加成保持温和
 OFFICIAL_BOOST = 1.3
 ZH_BOOST = 1.3
@@ -47,7 +49,15 @@ def rank(
     plan: QueryPlan,
     *,
     official: frozenset[str] = frozenset(),
+    use_coverage: bool = True,
+    use_boosts: bool = True,
+    coverage_floor: float = COVERAGE_FLOOR,
+    coverage_power: float = COVERAGE_POWER,
+    disabled_boosts: frozenset[
+        str
+    ] = frozenset(),  # 仅基准做逐项消融：official/zh/location/resources
 ) -> list[Dataset]:
+    """use_coverage / use_boosts 只给基准做对照实验用（关掉后看每一项的贡献），产品里永远开启。"""
     n = len(merged)
     if n == 0:
         return []
@@ -69,27 +79,35 @@ def rank(
     out: list[Dataset] = []
     for d, rank_map, title, desc in zip(merged, ranks, titles, descs, strict=True):
         credits = [_credit(c, title, desc) for c in concepts]
-        if concepts and total_weight > 0:
+        if use_coverage and concepts and total_weight > 0:
             coverage = sum(w * cr for w, cr in zip(weights, credits, strict=True)) / total_weight
         else:
             coverage = 1.0
         matched_any = any(cr > 0 for cr in credits)
-        if concepts and d.description and not matched_any:
+        if use_coverage and concepts and d.description and not matched_any:
             continue  # 有描述却一个概念都没提：多半是来源的松散匹配，丢弃
         rrf = sum(1.0 / (RRF_K + 1 + r) for r in rank_map.values())
-        score = rrf * (0.25 + 0.75 * coverage)
+        score = rrf * (coverage_floor + (1 - coverage_floor) * coverage**coverage_power)
         explain: dict[str, float] = {"rrf": rrf, "覆盖度": coverage, "来源数": float(len(rank_map))}
 
-        if rank_map.keys() & official:
+        if not use_boosts:
+            d.score, d.explain = score, explain
+            out.append(d)
+            continue
+        if "official" not in disabled_boosts and rank_map.keys() & official:
             score *= OFFICIAL_BOOST
             explain["官方来源"] = OFFICIAL_BOOST
-        if plan.lang == "zh" and has_cjk(d.title):
+        if "zh" not in disabled_boosts and plan.lang == "zh" and has_cjk(d.title):
             score *= ZH_BOOST
             explain["中文资源"] = ZH_BOOST
-        if location_phrases and any(_in(p, title) or _in(p, desc) for p in location_phrases):
+        if (
+            "location" not in disabled_boosts
+            and location_phrases
+            and any(_in(p, title) or _in(p, desc) for p in location_phrases)
+        ):
             score *= 1.2
             explain["地区匹配"] = 1.2
-        if d.resources:
+        if "resources" not in disabled_boosts and d.resources:
             score *= 1.05
             explain["有资源"] = 1.05
         d.score = score

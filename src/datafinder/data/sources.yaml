@@ -18,12 +18,12 @@
 - id: zenodo
   title: Zenodo
   protocol: zenodo
-  options: {dsk_id: zenodo}
+  options: {dsk_id: zenodo, zh_query: true}
 
 - id: datacite
   title: DataCite
   protocol: datacite          # 覆盖上千个仓库，含中国科学数据银行 ScienceDB（10.57760）
-  options: {dsk_id: datacite}
+  options: {dsk_id: datacite, zh_query: true}
 
 - id: hdx
   title: 人道主义数据交换 HDX
@@ -61,3 +61,4 @@
 - id: dataseek
   title: Dataseek（长尾来源）
   protocol: dataseek
+  options: {zh_query: true}

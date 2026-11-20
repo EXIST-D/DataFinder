@@ -104,3 +104,20 @@ def test_query_builders_cap_terms_and_add_location():
 def test_english_only_query_has_no_chinese_terms_unless_mappable():
     assert parse("zebra giraffe", today=TODAY).zh_terms() == []
     assert parse("population", today=TODAY).zh_terms() == ["人口"]
+
+
+def test_synonym_concepts_are_merged():
+    # 词表里 居民消费价格指数 的说法已含 cpi，单独的 CPI 是同义重复，不能让它拉低中文记录的覆盖度
+    assert labels(parse("居民消费价格指数 CPI", today=TODAY)) == ["居民消费价格指数"]
+    assert labels(parse("CPI 居民消费价格指数", today=TODAY)) == ["居民消费价格指数"]
+
+
+def test_unrelated_concepts_are_not_merged():
+    assert labels(parse("人口 GDP", today=TODAY)) == ["人口", "gdp"]
+
+
+def test_city_is_a_dimension_not_a_search_term():
+    plan = parse("城市房价", today=TODAY)
+    assert [c.label for c in plan.concepts if c.dimension] == ["城市"]
+    assert plan.query_en() == "house price"  # 不带 city，避免 AND 检索把结果搜没
+    assert plan.zh_terms() == ["房价"]  # 也不把"城市"单独发给国家统计局（会带回"城市绿地面积"）

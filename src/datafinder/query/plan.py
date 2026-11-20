@@ -256,6 +256,26 @@ def _extract_locations(text: str) -> tuple[str, list[str], list[str]]:
     return text, countries, regions
 
 
+def _drop_redundant(concepts: list[Concept]) -> list[Concept]:
+    """去掉"说法被另一个概念完全包含"的概念。
+
+    例："居民消费价格指数 CPI"——词表里 居民消费价格指数 的说法已含 cpi，单独的 CPI 是同义重复。
+    若不去掉，英文记录两个概念都命中、中文记录只命中一个，覆盖度会不公平地偏向英文。
+    """
+    keep: list[Concept] = []
+    for i, c in enumerate(concepts):
+        mine = set(c.alts)
+        redundant = any(
+            j != i
+            and mine <= set(o.alts)
+            and (mine < set(o.alts) or j < i)  # 说法完全相同时只保留先出现的
+            for j, o in enumerate(concepts)
+        )
+        if not redundant:
+            keep.append(c)
+    return keep
+
+
 def parse(query: str, *, today: date | None = None, lex: Lexicon | None = None) -> QueryPlan:
     lex = lex or load_lexicon()
     today = today or date.today()
@@ -314,7 +334,7 @@ def parse(query: str, *, today: date | None = None, lex: Lexicon | None = None) 
             if ind not in industries:
                 industries.append(ind)
 
-    plan.concepts = strong or weak  # 有实义词时丢弃泛化词
+    plan.concepts = _drop_redundant(strong or weak)  # 有实义词时丢弃泛化词
     plan.industries = industries
     plan.location_zh = [
         *(n for r in plan.regions if (n := province_zh_name(r))),

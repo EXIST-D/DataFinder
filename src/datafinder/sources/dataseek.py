@@ -157,7 +157,7 @@ class DataseekSource(EnglishSource):
         return self.exe is not None and super().supports(plan)
 
     def cache_query(self, plan: QueryPlan) -> str:
-        return f"{plan.query_en()}|x={','.join(self.exclude)}"
+        return f"{super().cache_query(plan)}|x={','.join(self.exclude)}"
 
     async def fetch(self, ctx: Ctx, query: str, limit: int) -> list[Dataset]:
         assert self.exe

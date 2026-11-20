@@ -44,6 +44,22 @@ def _pending(src: Source) -> SourceStatus:
     return SourceStatus(src.id, src.title, "pending", 0, 0, None)  # type: ignore[arg-type]
 
 
+def rank_with(
+    plan: QueryPlan,
+    sources: list[Source],
+    per_source: dict[str, list[Dataset]],
+    **rank_kwargs,
+) -> tuple[list[Dataset], int]:
+    """对一批检索结果做 去重 + 排序。返回 (排序后列表, 候选数)。
+
+    深拷贝：去重合并会原地改 Dataset，而同一批对象要在多次快照/多种排序方案里复用。
+    """
+    ordered = {s.id: copy.deepcopy(per_source[s.id]) for s in sources if s.id in per_source}
+    merged, ranks = merge(ordered)
+    official = frozenset(s.id for s in sources if s.spec.official)
+    return rank(merged, ranks, plan, official=official, **rank_kwargs), len(merged)
+
+
 def _snapshot(
     plan: QueryPlan,
     sources: list[Source],
@@ -51,15 +67,11 @@ def _snapshot(
     done: dict[str, SourceStatus],
     limit: int,
 ) -> SearchResult:
-    # 深拷贝：去重合并会原地改 Dataset，而同一批对象要在多次快照里复用
-    ordered = {s.id: copy.deepcopy(per_source[s.id]) for s in sources if s.id in per_source}
-    merged, ranks = merge(ordered)
-    official = frozenset(s.id for s in sources if s.spec.official)
-    ranked = rank(merged, ranks, plan, official=official)
+    ranked, candidates = rank_with(plan, sources, per_source)
     statuses = [done.get(s.id) or _pending(s) for s in sources]
     final = all(s.id in done for s in sources)
     complete = final and all(st.answered or st.status == "skipped" for st in statuses)
-    return SearchResult(plan, ranked[:limit], statuses, complete, len(merged), final)
+    return SearchResult(plan, ranked[:limit], statuses, complete, candidates, final)
 
 
 async def stream_search(
@@ -106,3 +118,48 @@ async def search_datasets(query: str, **kwargs) -> SearchResult:
         last = snap
     assert last is not None
     return last
+
+
+@dataclass
+class Retrieval:
+    plan: QueryPlan
+    sources: list[Source]
+    per_source: dict[str, list[Dataset]]
+    statuses: list[SourceStatus]
+
+
+async def retrieve(
+    query: str,
+    *,
+    only: set[str] | None = None,
+    exclude: set[str] | None = None,
+    refresh: bool = False,
+    use_cache: bool = True,
+    deadline: float = 20.0,
+) -> Retrieval:
+    """只检索、不排序：基准用它对同一批结果比较不同排序方案。"""
+    plan = parse(query)
+    sources = build_sources(only=only, exclude=exclude)
+    http = Http(min_interval=MIN_INTERVAL)
+    cache = Cache() if use_cache else None
+    per_source: dict[str, list[Dataset]] = {}
+    statuses: list[SourceStatus] = []
+    try:
+        async for items, st in iter_results(
+            sources,
+            Ctx(http),
+            plan,
+            limit=PER_SOURCE_LIMIT,
+            deadline=deadline,
+            cache=cache,
+            refresh=refresh,
+            explicit=frozenset(only or ()),
+        ):
+            statuses.append(st)
+            if st.answered:
+                per_source[st.id] = items
+    finally:
+        await http.aclose()
+        if cache:
+            cache.close()
+    return Retrieval(plan, sources, per_source, statuses)

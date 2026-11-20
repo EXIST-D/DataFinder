@@ -504,6 +504,10 @@ PM2.5: [pm2.5, particulate matter, air quality]
 # ── 维度词：描述"范围/粒度/时间"，不适合当 API 检索词（AND 语义会把结果搜没），
 #    只参与排序、权重很低 ──
 dimension:
+  - 城市
+  - 城镇
+  - 农村
+  - 乡村
   - 各省
   - 分省
   - 省级

@@ -63,7 +63,8 @@ uv run datafinder doctor                    # 体检
 ```bash
 datafinder mcp --print-config        # 打印可粘贴到 Cursor / Claude Desktop / Claude Code 的配置
 datafinder sync                      # 一次：门户库
-datafinder nbs index                 # 一次：国家统计局指标索引（十几分钟，可中断续跑；没有它也能用，只是找指标要靠逐级浏览）
+datafinder nbs index                 # 一次：国家统计局指标索引（可中断续跑；没有它也能用，只是找指标要靠逐级浏览）
+datafinder yearbook index            # 一次：统计年鉴目录（几分钟）
 ```
 
 | 工具 | 作用 |
@@ -71,6 +72,7 @@ datafinder nbs index                 # 一次：国家统计局指标索引（�
 | `plan_data_sources` | **起点**：给主题（和地区），返回可直接取表的指标、目标地区官方入口、领域权威门户、检索入口与统计建议。纯本地，秒回 |
 | `nbs_fetch` | 实时取数 → 整洁长表，自动保存 CSV/xlsx，附描述统计。可一次取多指标、多地区（`["全部"]`=31 省） |
 | `nbs_find` / `nbs_browse` / `nbs_indicators` / `nbs_search_national` | 找指标：本地索引关键词查 / 逐级浏览分类树 / 看数据集下的指标与地区 / 官方全局搜索（全国口径） |
+| `yearbook_find` / `yearbook_catalog` | 统计年鉴目录：按关键词找数据表，列出每张表有哪些年份版次、链接与格式；各年鉴系列收录情况 |
 | `portals_list` | 按领域、国家、省、"仅官方"、专区（省级统计局 / 国家部委 / 省市开放平台）浏览门户目录 |
 | `datasets_search` | 跨来源检索具体数据集（科研、开放数据、各国政府） |
 | `describe_table` | 对导出文件重算描述统计（均值、中位数、变异系数、年均增速、最新一期地区排名） |
@@ -90,6 +92,19 @@ datafinder nbs dbs / tree / indicators                    # 浏览分类树
 ```
 
 输出是**整洁长表**（期别、地区、指标、数值、单位，每行一个观测值），CSV 带 BOM，Excel 直接打开不乱码；xlsx 含"说明"工作表（来源、取数时间、口径提示）。不指定路径时保存在 `~/.datafinder/exports/`。时间格式：年度 `2015`、月度 `201501`、季度 `202401`（2024 年第 1 季）。
+
+## 统计年鉴目录
+
+按"年鉴系列 × 年份版次"建立数据表清单：表号、标题、章节、**该版次的链接与文件格式**，并把不同年份的同一张表归并，告诉你"这张表有哪些年份可查"。
+
+```bash
+datafinder yearbook index                    # 抓目录页（一版次一个请求，串行限速；只存标题和链接，不下载表格）
+datafinder yearbook list                     # 各系列收录了哪些年份
+datafinder yearbook find "规模以上工业企业主要经济指标" -r CN-SD
+```
+
+目前收录：**中国统计年鉴 2005–2025（21 版，约 1.4 万张表）**，以及山东、辽宁、河南等省级年鉴（页面结构与统计出版社"zk"模板一致的）。北京、河北、四川、黑龙江的地址模板已登记，但从部分网络环境访问会超时或被拒绝，会如实标注、不重试不绕过，换网络后重跑同一命令即可。其余省份先只做导航入口。
+表格文件的格式以目录页给出的为准：2005–2012 版多为网页表格，2013 版起多为图片，个别版次有 xls——**要可直接分析的数值请用国家统计局指标（`nbs find` + `nbs get`）**，年鉴目录负责告诉你"表在哪、哪年有"。
 
 ## 它查哪些来源
 
@@ -134,8 +149,30 @@ datafinder nbs dbs / tree / indicators                    # 浏览分类树
 
 ```bash
 uv sync --extra dev
-uv run pytest
+uv run pytest                                    # 单元测试（不联网）
 uv run ruff check . && uv run ruff format --check .
+uv run datafinder bench topics                   # 真实选题验收（需本机已建门户库/指标索引/年鉴目录）
+uv run datafinder bench topics --holdout         # 留出集：估计没调过的新选题上的命中率
+```
+
+目录结构：
+
+```
+src/datafinder/
+  cli/            命令行：app（主命令）· data（plan / nbs / describe / mcp）· yearbook
+  mcp_server/     MCP 服务（stdio）
+  service/        共用服务层（CLI 与 MCP 都走这里）：nbs · yearbook · plan · discovery · export · status
+  nbs/            国家统计局：client（接口）· index（本地指标索引）
+  yearbook/       统计年鉴：registry · parse · crawl · index
+  portals/        门户目录：同步、分类、浏览、检索
+  sources/        数据集来源（Zenodo、DataCite、CKAN、国家统计局搜索、Dataseek）
+  engine/         并发检索、HTTP、缓存、去重、排序
+  query/          分词、词表、检索计划、检索单元与统计术语同义词
+  bench/          排序基准（ranking）与真实选题验收（topics）
+  server/         本地网页
+  data/           词表、行业、地区、精选门户、年鉴系列、术语同义词等 YAML
+tests/            按模块分目录，与 src 一一对应；fixtures/ 放真实页面/接口响应的缩小样本
+bench/            基准数据：问句、相关性标注、选题验收集（开发集 + 留出集）
 ```
 
 ## 许可

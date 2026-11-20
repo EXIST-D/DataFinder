@@ -1,0 +1,232 @@
+# 精选与补充门户（叠加在 Dateno 注册表之上）
+#
+# 两种条目：
+# 1) 标注：按 `link` 匹配注册表里已有记录，补充中文名、中文说明、行业，并标 featured（精选，排序加权）。
+# 2) 新增：`add: true`，注册表里没有的才加。新增前必须自己访问核验过（下方每条新增都注明核验日期）。
+#
+# 字段：link, name_zh, desc_zh, industries[], featured, [add, name, country, catalog_type, is_national]
+# industries 取值见 industries.yaml 的 id。
+
+# ───────────── 中国（中文优先）─────────────
+- link: https://data.stats.gov.cn
+  name_zh: 国家统计局·国家数据
+  desc_zh: 国家统计局数据发布库，含月度、季度、年度、分省、主要城市、港澳台与国际数据。
+  industries: [statistics, economy, population]
+  featured: true
+
+- link: https://scidb.cn
+  name_zh: 科学数据银行 ScienceDB
+  desc_zh: 面向科研人员的通用科学数据存储与共享平台，数据多带 DOI。
+  industries: [science]
+  featured: true
+
+- link: https://data.tpdc.ac.cn
+  name_zh: 国家青藏高原科学数据中心
+  desc_zh: 青藏高原及周边地区的地球科学、环境与气候科学数据。
+  industries: [geology, climate, environment, geospatial, science]
+  featured: true
+
+- link: https://www.geodata.cn
+  name_zh: 国家地球系统科学数据中心
+  desc_zh: 地球系统科学领域的数据共享服务平台。
+  industries: [geospatial, environment, geology, science]
+  featured: true
+
+- link: https://data.beijing.gov.cn
+  name_zh: 北京市公共数据开放平台
+  industries: [government]
+  featured: true
+
+- link: https://data.sh.gov.cn
+  name_zh: 上海市公共数据开放平台
+  industries: [government]
+  featured: true
+
+- link: https://gddata.gd.gov.cn
+  name_zh: 开放广东 政府数据统一开放平台
+  industries: [government]
+  featured: true
+
+- link: https://data.zjzwfw.gov.cn
+  name_zh: 浙江省数据开放平台
+  industries: [government]
+  featured: true
+
+- link: https://opendata.sz.gov.cn
+  name_zh: 深圳市政府数据开放平台
+  industries: [government]
+  featured: true
+
+- link: https://data.cq.gov.cn
+  name_zh: 重庆市公共数据开放平台
+  industries: [government]
+
+- link: https://open.data.tj.gov.cn
+  name_zh: 天津市信息资源统一开放平台
+  industries: [government]
+
+- link: https://www.tianditu.gov.cn
+  name_zh: 天地图（国家地理信息公共服务平台）
+  industries: [geospatial]
+
+- link: https://data.cnki.net
+  name_zh: 中国知网 经济社会大数据研究平台
+  industries: [statistics, economy, population]
+
+- link: https://db.cei.cn
+  name_zh: 中国经济信息网 统计数据库
+  industries: [statistics, economy]
+
+- link: https://data.csmar.com
+  name_zh: 国泰安 CSMAR 研究数据库
+  industries: [finance, economy]
+
+- link: https://opendatalab.org.cn
+  name_zh: OpenDataLab 开放数据平台
+  desc_zh: 面向人工智能的开放数据集平台。
+  industries: [ml]
+  featured: true
+
+- link: https://www.modelscope.cn/datasets
+  name_zh: 魔搭社区 ModelScope 数据集
+  industries: [ml]
+  featured: true
+
+- link: https://opendata.pku.edu.cn
+  name_zh: 北京大学开放研究数据平台
+  industries: [science]
+
+- link: https://escience.org.cn
+  name_zh: 国家科技资源共享服务平台
+  industries: [science]
+
+- link: https://data.gov.hk/en/
+  name_zh: 香港政府数据一线通 DATA.GOV.HK
+  industries: [government]
+  featured: true
+
+- link: https://data.gov.tw
+  name_zh: 台湾政府资料开放平台
+  industries: [government]
+  featured: true
+
+# 新增：2026-11-20 已访问，HTTP 200，页面标题与名称一致
+- add: true
+  link: https://data.cma.cn
+  name: China Meteorological Data Service Centre
+  name_zh: 中国气象数据网
+  desc_zh: 中国气象局提供的气象数据共享服务。
+  country: CN
+  catalog_type: Open data portal
+  is_national: true
+  industries: [climate]
+  featured: true
+
+# 新增：2026-11-20 已访问，HTTP 200，页面标题"国家统计局"
+- add: true
+  link: https://www.stats.gov.cn
+  name: National Bureau of Statistics of China
+  name_zh: 国家统计局官网
+  desc_zh: 统计公报、统计年鉴、数据解读等统计信息发布。
+  country: CN
+  catalog_type: Indicators catalog
+  is_national: true
+  industries: [statistics, economy, population]
+
+# ───────────── 国际高质量门户 ─────────────
+- link: https://data.worldbank.org
+  name_zh: 世界银行开放数据
+  industries: [economy, statistics, population]
+  featured: true
+
+- link: https://data.europa.eu
+  name_zh: 欧盟开放数据门户
+  industries: [government]
+  featured: true
+
+- link: https://catalog.data.gov
+  name_zh: 美国政府开放数据 Data.gov
+  industries: [government]
+  featured: true
+
+- link: https://www.zenodo.org
+  name_zh: Zenodo 科研数据仓库
+  industries: [science]
+  featured: true
+
+- link: https://data.un.org
+  name_zh: 联合国数据 UNData
+  industries: [statistics, economy, population]
+  featured: true
+
+- link: https://data-explorer.oecd.org
+  name_zh: OECD 数据浏览器
+  industries: [economy, statistics]
+  featured: true
+
+- link: https://data.imf.org
+  name_zh: 国际货币基金组织 IMF 数据
+  industries: [finance, economy]
+  featured: true
+
+- link: https://ec.europa.eu/eurostat/en/web/main/data
+  name_zh: 欧盟统计局 Eurostat 数据
+  industries: [statistics, economy, population]
+  featured: true
+
+- link: https://fred.stlouisfed.org
+  name_zh: FRED 美联储经济数据
+  industries: [economy, finance]
+  featured: true
+
+- link: https://ourworldindata.org
+  name_zh: Our World in Data 世界数据
+  industries: [statistics, population, health, environment]
+  featured: true
+
+- link: https://data.humdata.org
+  name_zh: 人道主义数据交换 HDX
+  industries: [government, population]
+
+- link: https://kaggle.com/datasets
+  name_zh: Kaggle 数据集
+  industries: [ml]
+  featured: true
+
+- link: https://huggingface.co/datasets/
+  name_zh: Hugging Face 数据集
+  industries: [ml]
+  featured: true
+
+- link: https://dataverse.harvard.edu
+  name_zh: 哈佛 Dataverse
+  industries: [science]
+
+- link: https://search.earthdata.nasa.gov
+  name_zh: NASA Earthdata 数据检索
+  industries: [geospatial, climate, environment]
+  featured: true
+
+- link: https://www.ncei.noaa.gov/access/search/dataset-search
+  name_zh: NOAA NCEI 数据集检索
+  industries: [climate, ocean, environment]
+
+- link: https://data.census.gov/
+  name_zh: 美国人口普查局数据
+  industries: [population, statistics]
+
+- link: https://data.gov.sg
+  name_zh: 新加坡开放数据
+  industries: [government]
+
+- link: https://open.canada.ca
+  name_zh: 加拿大开放政府门户
+  industries: [government]
+
+- link: https://data.gov.au
+  name_zh: 澳大利亚政府数据
+  industries: [government]
+
+- link: https://govdata.de
+  name_zh: 德国政府开放数据 GovData
+  industries: [government]

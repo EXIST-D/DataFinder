@@ -12,6 +12,7 @@ import httpx
 
 from . import __version__
 from .config import USER_AGENT, data_dir
+from .store import connect, db_path, get_meta, portal_count
 
 Status = Literal["ok", "warn", "fail"]
 
@@ -38,6 +39,22 @@ def check_data_dir() -> Check:
     if path.exists():
         return Check("数据目录", "ok", str(path))
     return Check("数据目录", "ok", f"{path}（尚未创建，首次 sync 时自动创建）")
+
+
+def check_portals() -> Check:
+    path = db_path()
+    if not path.exists():
+        return Check("门户库", "warn", "尚未同步，请运行：datafinder sync")
+    conn = connect(path)
+    try:
+        count = portal_count(conn)
+        if count == 0:
+            return Check("门户库", "warn", "为空，请运行：datafinder sync")
+        synced = (get_meta(conn, "synced_at") or "未知")[:10]
+        ref = get_meta(conn, "registry_ref") or "未知"
+        return Check("门户库", "ok", f"{count} 条（Dateno {ref}，同步于 {synced}）")
+    finally:
+        conn.close()
 
 
 def check_network(timeout: float = 8.0) -> Check:
@@ -70,7 +87,12 @@ def check_dataseek(timeout: float = 10.0) -> Check:
 
 
 def run_checks(*, offline: bool = False) -> list[Check]:
-    checks = [Check("DataFinder", "ok", __version__), check_python(), check_data_dir()]
+    checks = [
+        Check("DataFinder", "ok", __version__),
+        check_python(),
+        check_data_dir(),
+        check_portals(),
+    ]
     if not offline:
         checks.append(check_network())
     checks.append(check_dataseek())

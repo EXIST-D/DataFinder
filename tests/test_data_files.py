@@ -1,0 +1,42 @@
+"""数据文件完整性：词表/行业/地区/精选清单加一行就能生效，所以要防止写错。"""
+
+from datafinder.portals.tag import load_config
+from datafinder.query.lexicon import load_lexicon
+from datafinder.resources import load_yaml
+
+
+def test_lexicon_loads_and_has_core_entries():
+    lex = load_lexicon()
+    assert len(lex.zh2en) >= 300
+    assert "人口普查" in lex.zh2en and "population census" in lex.zh2en["人口普查"]
+    assert "数据" in lex.weak and "的" in lex.stop
+    # 键必须是字符串（YAML 的 NO/ON/YES 陷阱）
+    assert all(isinstance(k, str) and k for k in lex.zh2en)
+    assert all(vals and all(isinstance(v, str) for v in vals) for vals in lex.zh2en.values())
+
+
+def test_regions_keys_are_strings():
+    regions = load_yaml("regions.yaml")
+    assert "NO" in regions["countries"]
+    assert all(isinstance(k, str) for k in regions["countries"])
+    assert len(regions["provinces"]) == 31
+
+
+def test_industry_references_are_valid():
+    cfg = load_config()
+    valid = set(cfg.industries)
+    for topic, inds in cfg.topic_map.items():
+        assert set(inds) <= valid, topic
+    for entry in load_yaml("curated", "portals.yaml"):
+        assert set(entry.get("industries", [])) <= valid, entry["link"]
+
+
+def test_curated_entries_are_well_formed():
+    entries = load_yaml("curated", "portals.yaml")
+    links = [e["link"] for e in entries]
+    assert len(links) == len(set(links)), "精选清单里有重复链接"
+    for e in entries:
+        assert e["link"].startswith("http")
+        assert e.get("name_zh"), e["link"]
+        if e.get("add"):
+            assert {"name", "country", "catalog_type"} <= set(e), e["link"]

@@ -1,135 +1,220 @@
+import json
+from pathlib import Path
 
 import pytest
 
 from datafinder import service
+from datafinder.catalog import Catalog
+from datafinder.catalog.adapters import Adapter, register_adapter
 from datafinder.service import ServiceError
-from datafinder.tables import Table
+from datafinder.tables import Table, exports_dir
+
+pytestmark = pytest.mark.usefixtures("ready")
+
+IND = "nbs:indicator:6/c1/i1"
+TABLE_JPG = "yb.sd:table:2025/14-08"
+SERIES = "yb.sd:series:CN-SD"
 
 
-def test_plan_sources_hebei_industry_picks_region_and_domain_portals(portals):
-    plan = service.plan_sources("河北省工业质量体系评价")
+# ───────────── 目录没建好 ─────────────
+
+
+async def test_empty_catalog_gives_actionable_error(tmp_path, monkeypatch):
+    monkeypatch.setenv("DATAFINDER_HOME", str(tmp_path / "empty"))
+    with pytest.raises(ServiceError) as e:
+        await service.search("工业")
+    assert e.value.code == "INDEX_NOT_READY" and "index build" in str(e.value)
+    assert e.value.to_dict()["error"]["next_action"] == "datafinder index build"
+
+
+# ───────────── 检索 / 分面 / 来源 ─────────────
+
+
+async def test_search_returns_catalog_results_portals_and_never_downloads(portals):
+    r = await service.search("工业增加值", region_ids=["河北"], kinds_=["indicator"])
+    assert r["results"][0]["resource_id"] == IND and r["results"][0]["delivery"] == "generate"
+    assert r["is_complete"] and "facets" in r and isinstance(r["portals"], list)
+    assert not list(exports_dir().glob("*"))  # 检索不会产生任何文件
+
+
+async def test_search_translates_invalid_facets_to_coded_errors():
+    with pytest.raises(ServiceError) as e:
+        await service.search("工业", topic_ids=["cnstat.nope"])
+    assert e.value.code == "INVALID_FACET_ID" and "facets" in e.value.next_action
+
+
+async def test_portals_are_listed_separately_and_filtered_by_region(portals):
+    r = await service.search("统计局", region_ids=["CN-HE"])
+    names = [p["title"] for p in r["portals"]]
+    assert "河北省统计局" in names and all(p["delivery"] == "link" for p in r["portals"])
+    assert r["portals"] == [] or all(p["region"] in (None, "河北") for p in r["portals"])
+
+
+def test_facets_vocabulary_has_topic_tree_regions_kinds_and_delivery():
+    f = service.facets()
+    ids = {t["id"]: t for t in f["topics"]}
+    assert ids["cnstat.industry"]["count"] >= 3 and ids["cnstat.industry.value_added"]["level"] == 2
+    assert "cnstat.quality" not in ids  # 预留主题不出现在分面里
+    assert {"indicator", "table", "series"} <= {k["id"] for k in f["kinds"]} and "category" not in {k["id"] for k in f["kinds"]}
+    assert {d["id"] for d in f["delivery"]} == {"download", "generate", "link"}
+    assert service.facets("no_such_domain")["topics"] == []
+
+
+def test_sources_and_status_report_capabilities_and_hints(portals):
+    s = service.sources()
+    assert {c["source_id"] for c in s["catalog_sources"]} == {"nbs", "yb.sd"} and "zenodo" in {x["id"] for x in s["live_sources"]}
+    st = service.status()
+    assert st["catalog"]["resources"] == 9 and st["portals"] == 3 and st["hints"] == []
+
+
+# ───────────── 检视 ─────────────
+
+
+def test_inspect_shows_parents_children_distributions_and_how_to_get():
+    ind = service.inspect(IND)
+    assert [p["title"] for p in ind["parents"]] == ["分省年度数据", "地区生产总值"]
+    assert ind["how_to_get"]["tool"] == "fetch" and ind["how_to_get"]["needs"] == ["regions"]
+    ds = service.inspect("nbs:dataset:6/c1")
+    assert ds["how_to_get"]["needs"] == ["indicators", "regions"] and [c["title"] for c in ds["children"]] == ["工业增加值", "第二产业增加值"]
+    t = service.inspect(TABLE_JPG)
+    assert t["how_to_get"]["tool"] == "download" and t["distributions"][0]["usability"] == "image"
+    assert service.inspect(SERIES)["how_to_get"]["tool"] is None  # 只有链接
+
+
+def test_inspect_unknown_resource_is_not_found():
+    with pytest.raises(ServiceError) as e:
+        service.inspect("nbs:indicator:nope")
+    assert e.value.code == "NOT_FOUND"
+
+
+# ───────────── 获取：默认只预览，confirm 才执行 ─────────────
+
+
+class FakeAdapter(Adapter):
+    id = "fake-nbs"
+    domain_id = "official_statistics_cn"
+    capabilities = frozenset({"fetch"})
+    calls: list = []
+
+    async def fetch(self, cat, entry, params):
+        FakeAdapter.calls.append((entry.resource_id, params))
+        rows = [["2023年", "2023YY", "河北省", "工业增加值", 100.0, "亿元"], ["2024年", "2024YY", "河北省", "工业增加值", 110.0, "亿元"],
+                ["2024年", "2024YY", "北京市", "工业增加值", 50.0, "亿元"]]
+        return Table("工业增加值（河北省、北京市）", rows, meta={"网址": "https://x/p", "expected": {
+            "regions": ["河北省", "北京市"], "indicators": ["工业增加值"]}})
+
+
+@pytest.fixture
+def fake_adapter(monkeypatch):
+    FakeAdapter.calls = []
+    register_adapter(FakeAdapter())
+    with Catalog.open() as cat:
+        cat.conn.execute("UPDATE sources SET adapter_id='fake-nbs' WHERE source_id='nbs'")
+        cat.conn.commit()
+    return FakeAdapter
+
+
+async def test_fetch_without_confirm_only_previews_and_touches_nothing(fake_adapter):
+    plan = await service.fetch(IND, regions=["河北"])
+    assert plan["status"] == "plan" and plan["confirm_required"] and "confirm" in plan["next_action"]
+    assert fake_adapter.calls == [] and not list(exports_dir().glob("*"))
+
+
+async def test_fetch_with_confirm_writes_file_manifest_stats_and_coverage(fake_adapter):
+    r = await service.fetch(IND, regions=["河北", "北京"], start="2023", end="2024", confirm=True)
+    saved = Path(r["saved_to"])
+    assert r["status"] == "done" and saved.exists() and saved.parent == exports_dir() and r["row_count"] == 3
+    m = json.loads(Path(str(saved) + ".manifest.json").read_text(encoding="utf-8"))
+    assert m["resource_id"] == IND and m["kind"] == "generated" and len(m["sha256"]) == 64 and m["request"]["regions"] == ["河北", "北京"]
+    cov = r["coverage"]
+    assert cov["period_basis"] == "explicit" and cov["expected_cells"] == 4 and cov["missing_cells"] == 1
+    assert cov["missing_sample"] == [{"region": "北京市", "indicator": "工业增加值", "period": "2023YY"}] and cov["status"] == "partial"
+    assert r["describe"]["series"]  # 描述统计一并给出
+    assert fake_adapter.calls[0][1].start == "2023"
+
+
+async def test_fetch_rejects_resources_that_are_not_generated():
+    for rid, hint in ((TABLE_JPG, "download"), (SERIES, "只有链接")):
+        with pytest.raises(ServiceError) as e:
+            await service.fetch(rid, confirm=True)
+        assert e.value.code == "UNSUPPORTED" and hint in str(e.value)
+
+
+async def test_untrusted_callers_cannot_write_outside_exports_dir(fake_adapter, tmp_path):
+    with pytest.raises(ServiceError, match="只能写入导出目录"):
+        await service.fetch(IND, regions=["河北"], path=str(tmp_path / "x.csv"), confirm=True)
+    ok = await service.fetch(IND, regions=["河北"], path=str(tmp_path / "mine.csv"), confirm=True, trusted=True)
+    assert Path(ok["saved_to"]) == tmp_path / "mine.csv"
+
+
+def test_download_preview_names_format_usability_and_other_options():
+    p = service.download(TABLE_JPG)
+    assert p["status"] == "plan" and p["file_format"] == "jpg" and p["usability"] == "image" and "OCR" in p["warning"]
+    assert p["confirm_required"] and p["license"].startswith("许可未知")
+
+
+def test_download_with_confirm_saves_file_and_manifest(monkeypatch):
+    def fake(url, dest_dir, *, hint, transport=None):
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        f = dest_dir / "14-08.jpg"
+        f.write_bytes(b"\xff\xd8fake")
+        return f, 6
+
+    monkeypatch.setattr("datafinder.service.acquire.download_file", fake)
+    r = service.download(TABLE_JPG, confirm=True)
+    saved = Path(r["saved_to"])
+    assert r["status"] == "done" and r["size_bytes"] == 6 and saved.parent == exports_dir() / "downloads"
+    m = json.loads(Path(str(saved) + ".manifest.json").read_text(encoding="utf-8"))
+    assert m["kind"] == "downloaded" and m["usability"] == "image" and m["source_url"].endswith("14-08.jpg")
+
+
+def test_download_unavailable_and_bad_index_are_coded_errors():
+    with pytest.raises(ServiceError) as e:
+        service.download(IND)
+    assert e.value.code == "DOWNLOAD_UNAVAILABLE"
+    with pytest.raises(ServiceError) as e:
+        service.download(TABLE_JPG, distribution_index=5)
+    assert e.value.code == "INVALID_ARGUMENT"
+
+
+async def test_get_dispatches_by_delivery(fake_adapter):
+    assert (await service.get(SERIES))["status"] == "link"
+    assert (await service.get(TABLE_JPG))["delivery"] == "download"
+    assert (await service.get(IND, regions=["河北"]))["delivery"] == "generate"
+
+
+# ───────────── 找数方案 / 索引 ─────────────
+
+
+def test_plan_sources_groups_by_kind_with_fetch_hints_and_no_domain_words(portals):
+    plan = service.plan_sources("河北省工业增加值", None)
     u = plan["understanding"]
-    assert u["region_codes"] == ["CN-HE"] and "industry" in u["domains"] and u["country"] == "CN"
-    regional = [p["name"] for p in plan["sources"]["regional_portals"]["items"]]
-    assert "河北省统计局" in regional
-    official = [p["name"] for p in plan["sources"]["official_portals"]["items"]]
-    assert "工业和信息化部" in official and "US Industry" not in official  # 中文主题默认只看中国
-    assert plan["sources"]["direct"]["hint"]  # 没建索引：如实说明，不假装有指标
-    assert any("评价" in h or "指标体系" in h for h in plan["analysis_hints"])  # 评价类题目有专门建议
-    assert plan["caveats"]
+    assert u["region_codes"] == ["CN-HE"] and u["country"] == "CN"
+    ind = {i["resource_id"]: i for i in plan["sources"]["indicators"]["items"]}
+    assert ind[IND]["fetch"] == {"tool": "fetch", "args": {"resource_id": IND, "regions": ["河北"]}}
+    assert "nbs:indicator:3/c9/i1" in ind  # 全国口径也给（做地区研究要和全国对照）
+    assert plan["sources"]["tables"]["items"] == []  # 目录里没有河北的年鉴表：如实为空，不拿山东的冒充
+    assert plan["analysis_hints"] and plan["caveats"]
+    assert "河北省统计局" in [p["name"] for p in plan["sources"]["regional_portals"]["items"]]
+    sd = service.plan_sources("山东省规模以上工业增加值")["sources"]["tables"]["items"]
+    assert sd and sd[0]["resource_id"] == TABLE_JPG and sd[0]["versions"] == [2025, 2024]
 
 
-def test_plan_sources_with_index_gives_fetch_args(portals):
-    from datafinder.domains.official_statistics_cn.nbs import index as nbs_index
-
-    conn = nbs_index.connect_index()
-    conn.execute("INSERT INTO ind VALUES ('6', ?, ?, '分省年度数据 › 工业', ?, '规模以上工业企业利润总额', '亿元', NULL)",
-                 ("c" * 32, "r" * 32, "i" * 32))
-    conn.commit()
-    conn.close()
-    plan = service.plan_sources("河北省工业企业利润")
-    (item,) = [i for i in plan["sources"]["direct"]["items"] if i["db"] == "6"]
-    assert item["fetch"] == {"tool": "nbs_fetch", "args": {"db": "6", "cid": "c" * 32, "indicators": ["i" * 32], "regions": ["河北"]}}
-
-
-def test_plan_sources_errors_are_actionable():
-    with pytest.raises(ServiceError, match="datafinder sync"):
-        service.plan_sources("工业")
-    with pytest.raises(ServiceError, match="不能为空"):
+def test_plan_sources_validates_input():
+    with pytest.raises(ServiceError) as e:
         service.plan_sources("  ")
+    assert e.value.code == "INVALID_ARGUMENT"
 
 
-def test_portals_list_filters(portals):
-    r = service.portals_list(label="ministry")
-    assert r["total"] == 1 and r["portals"][0]["name"] == "工业和信息化部"
-    assert service.portals_list(region="CN-HE")["portals"][0]["verify"] == "unverified"
+async def test_index_build_validates_adapter_params_with_coded_error():
+    with pytest.raises(ServiceError) as e:
+        await service.index.build(["nbs"], params={"db": "99"})
+    assert e.value.code == "INVALID_ARGUMENT" and "未知数据库代码" in str(e.value)
+    with pytest.raises(ServiceError) as e:
+        await service.index.build(["nope"])
+    assert e.value.code == "UNSUPPORTED"
 
 
-async def test_nbs_fetch_end_to_end_with_stub_client(monkeypatch):
-    from contextlib import asynccontextmanager
-
-    class Stub:
-        async def indicators(self, cid):
-            return [{"id": "a" * 32, "name": "工业增加值", "unit": "亿元", "mark": None}]
-
-        async def regions(self, cid):
-            return {"catalogs": [{"id": "x", "name": "全部地区"}],
-                    "regions": [{"text": "河北省", "value": "130000000000"}, {"text": "北京市", "value": "110000000000"}]}
-
-        async def tree(self, db, pid=""):
-            return [{"id": "dbnode", "name": "分省年度数据", "is_leaf": False, "root_id": "a" * 32}]
-
-        async def table(self, **kw):
-            assert kw["root_id"] == "a" * 32 and [a["text"] for a in kw["areas"]] == ["河北省"]
-            return [{"期别": "2023年", "期别代码": "2023YY", "地区": "河北省", "指标": "工业增加值", "数值": "100", "单位": "亿元"},
-                    {"期别": "2024年", "期别代码": "2024YY", "地区": "河北省", "指标": "工业增加值", "数值": "110", "单位": "亿元"}]
-
-    @asynccontextmanager
-    async def fake():
-        yield Stub()
-
-    monkeypatch.setattr("datafinder.service.nbs._nbs", fake)
-    t = await service.nbs_fetch("6", "c" * 32, ["工业增加值"], ["河北"])
-    assert isinstance(t, Table) and t.rows[0][4] == 100.0 and "国家统计局" in t.meta["来源"]
-    out = service.table_result(t, fmt="csv")
-    assert out["saved_to"].endswith(".csv") and out["describe"]["series"][0]["cagr"] == pytest.approx(0.1)
-    with pytest.raises(ServiceError, match="需要指定 regions"):
-        await service.nbs_fetch("6", "c" * 32, ["工业增加值"], None)
-
-
-async def test_nbs_fetch_validates_before_any_network(monkeypatch):
-    def boom():
-        raise AssertionError("不该联网")
-
-    monkeypatch.setattr("datafinder.service.nbs._nbs", boom)
-    with pytest.raises(ServiceError, match="未知数据库"):
-        await service.nbs_fetch("99", "c" * 32, ["x"], ["北京"])
-    with pytest.raises(ServiceError, match="cid 格式"):
-        await service.nbs_fetch("6", "bad", ["x"], ["北京"])
-    with pytest.raises(ServiceError, match="不能为空"):
-        await service.nbs_fetch("6", "c" * 32, [], ["北京"])
-
-
-# ───────────── 年鉴 ─────────────
-
-
-def _fill_yearbooks():
-    from datafinder.domains.official_statistics_cn.yearbook import index as yb
-    from datafinder.domains.official_statistics_cn.yearbook.parse import TocEntry
-
-    conn = yb.connect_index()
-    yb.replace_edition(conn, "CN-HE", 2025, status="ok", toc_url="u", entries=[
-        TocEntry("第十四章 工业", "14-1", "规模以上工业企业主要经济指标(2024年)", "https://x/14-1.jpg", "jpg", "table")])
-    yb.replace_edition(conn, "CN-HE", 2024, status="ok", toc_url="u", entries=[
-        TocEntry("第十四章 工业", "14-1", "规模以上工业企业主要经济指标(2023年)", "https://x/14-1b.jpg", "jpg", "table")])
-    conn.close()
-
-
-def test_yearbook_find_requires_index_and_validates_input():
-    with pytest.raises(ServiceError, match="datafinder yearbook index"):
-        service.yearbook_find("工业")
-    _fill_yearbooks()
-    with pytest.raises(ServiceError, match="不能为空"):
-        service.yearbook_find(" ")
-
-
-def test_yearbook_find_and_catalog():
-    _fill_yearbooks()
-    r = service.yearbook_find("河北 规模以上工业企业")
-    assert r["tables"][0]["years"] == [2025, 2024] and r["indexed"]["CN-HE"]["years"] == [2024, 2025]
-    assert "nbs_fetch" in r["note"]
-    cat = service.yearbook_catalog()
-    assert next(s for s in cat["series"] if s["series"] == "CN-HE")["years_ok"] == [2024, 2025]
-
-
-def test_plan_sources_includes_yearbook_tables_for_the_region(portals):
-    _fill_yearbooks()
-    plan = service.plan_sources("河北省规模以上工业企业")
-    items = plan["sources"]["yearbooks"]["items"]
-    assert items and items[0]["series"] == "CN-HE"
-    assert plan["sources"]["yearbooks"]["hint"] is None
-
-
-def test_plan_sources_explains_missing_yearbook_index(portals):
-    plan = service.plan_sources("河北省工业")
-    assert "yearbook index" in plan["sources"]["yearbooks"]["hint"]
+def test_index_migrate_without_legacy_reports_not_migrated():
+    out = service.index.migrate()
+    assert {o["adapter"] for o in out} == {"nbs", "yearbook"} and all(o["migrated"] is False for o in out)

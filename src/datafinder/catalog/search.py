@@ -17,6 +17,7 @@ from .query import DELIVERY_BY_RANK, InvalidFacet, SearchRequest, Where, deliver
 from .repository import Catalog
 from .text import norm_title
 
+CANDIDATE_CAP = 6000  # 打分前的候选上限：关键词命中太多时（如"工业增加值"5 万条）按 FTS 相关度先取前一批
 PER_PARENT = 2  # 同一父级（数据集）下最多出几个指标：避免同模板指标刷屏
 KIND_PREFERENCE = {
     "indicator": 0.0, "table": 0.0, "dataset": -0.02, "bulletin": -0.02, "database": -0.04,
@@ -121,7 +122,7 @@ def search(cat: Catalog, request: SearchRequest) -> SearchResponse:
     total = cat.conn.execute(f"SELECT COUNT(*) FROM resources r WHERE {clause}", args).fetchone()[0]
 
     if units:
-        results = _materialize(cat, _page(_rank(cat, clause, args, units, req), req), units, req)
+        results = _materialize(cat, _page(_rank(cat, where, units, req), req), units, req)
     else:  # 纯分面浏览：SQL 直接排序分页
         rows = cat.conn.execute(
             f"SELECT r.* FROM resources r WHERE {clause} ORDER BY r.kind, r.title LIMIT ? OFFSET ?",
@@ -147,9 +148,16 @@ class _Cand:
     versions: list[sqlite3.Row] = field(default_factory=list)
 
 
-def _rank(cat: Catalog, clause: str, args: list, units: list[Unit], req: SearchRequest) -> list[_Cand]:
+def _rank(cat: Catalog, where: Where, units: list[Unit], req: SearchRequest) -> list[_Cand]:
+    # 候选按 FTS 相关度（bm25）排序后封顶，再用检索单元精细打分；总数与分面计数不受封顶影响
+    clause, args = where.sql(skip=("text",))
+    rows = cat.conn.execute(
+        "SELECT r.* FROM resources_fts f JOIN resources r ON r.rowid = f.rowid"
+        f" WHERE resources_fts MATCH ? AND {clause} ORDER BY bm25(resources_fts) LIMIT {CANDIDATE_CAP}",
+        [where.match, *args],
+    )
     cands: list[_Cand] = []
-    for row in cat.conn.execute(f"SELECT r.* FROM resources r WHERE {clause}", args):
+    for row in rows:
         vec = unit_scores(units, row["title"], row["path"] or "")
         s = combine(units, vec)
         if s > 0:

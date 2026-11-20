@@ -94,3 +94,52 @@ def test_load_table_confined_to_exports_dir(tmp_path):
     assert len(load_table(inside.name).rows) == 6  # 相对名解析到导出目录
     with pytest.raises(ServiceError, match="导出目录"):
         load_table("../../../etc/hosts")
+
+
+# ───────────── 覆盖检查与清单 ─────────────
+
+
+def _table(rows, expected):
+    return Table("t", rows, meta={"expected": expected})
+
+
+def test_coverage_counts_expected_vs_observed_cells_and_names_the_gaps():
+    from datafinder.tables import coverage
+
+    rows = [["2023年", "2023YY", "河北", "工业增加值", 1.0, "亿元"], ["2024年", "2024YY", "河北", "工业增加值", 2.0, "亿元"],
+            ["2024年", "2024YY", "北京", "工业增加值", 3.0, "亿元"], ["2023年", "2023YY", "北京", "工业增加值", "—", "亿元"]]
+    cov = coverage(_table(rows, {"regions": ["河北", "北京"], "indicators": ["工业增加值"]}))
+    assert cov["period_basis"] == "observed_union" and cov["expected_cells"] == 4
+    assert cov["missing_cells"] == 1 and cov["missing_by_region"] == {"北京": 1} and cov["status"] == "partial"
+    assert cov["coverage_ratio"] == 0.75  # 非数值（"—"）不算有效观测
+
+
+def test_coverage_with_explicit_periods_flags_years_nobody_has():
+    from datafinder.tables import coverage
+
+    rows = [["2024年", "2024YY", "河北", "A", 1.0, ""]]
+    cov = coverage(_table(rows, {"regions": ["河北"], "indicators": ["A"]}), periods=["2023YY", "2024YY"])
+    assert cov["period_basis"] == "explicit" and cov["missing_by_period"] == {"2023YY": 1} and cov["coverage_ratio"] == 0.5
+
+
+def test_coverage_complete_none_and_unknown_expectations():
+    from datafinder.tables import coverage
+
+    full = coverage(_table([["2024年", "2024YY", "河北", "A", 1.0, ""]], {"regions": ["河北"], "indicators": ["A"]}))
+    assert full["status"] == "complete" and full["missing_cells"] == 0
+    empty = coverage(_table([], {"regions": ["河北"], "indicators": ["A"]}), periods=["2024YY"])
+    assert empty["status"] == "none" and empty["coverage_ratio"] == 0.0
+    assert coverage(Table("t", [["x"]], columns=["a"])) is None and coverage(_table([], {})) is None  # 没有期望就不下结论
+
+
+def test_manifest_records_hash_size_and_request(tmp_path):
+    import hashlib
+    import json
+
+    from datafinder.tables import write_manifest
+
+    f = tmp_path / "a.csv"
+    f.write_bytes(b"abc")
+    m = json.loads(write_manifest(f, resource_id="r", request={"x": 1}).read_text(encoding="utf-8"))
+    assert m["sha256"] == hashlib.sha256(b"abc").hexdigest() and m["size_bytes"] == 3 and m["request"] == {"x": 1}
+    assert f.with_name("a.csv.manifest.json").exists()

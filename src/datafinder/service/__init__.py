@@ -1,47 +1,27 @@
-"""服务层：MCP、命令行（后续可含网页）共用的"找数 + 取数"能力。
+"""服务层：MCP、命令行、网页共用的"找数 + 取数"能力。与领域无关——领域通过适配器与词典接入。
 
-模块划分：
-- errors     ServiceError
-- status     整体状态
-- nbs        国家统计局：浏览 / 找指标 / 取数
-- export     取数结果保存与读回
-- discovery  门户浏览、数据集检索
-- yearbook   统计年鉴目录
-- plan       找数方案
-所有函数返回可 JSON 序列化的 dict/list（或 Table）。
+模块：
+- errors     ServiceError（稳定错误码 + 下一步）与异常翻译
+- discover   检索、分面词表、来源列表（search / facets / sources）
+- detail     检视一个资源：层级、分发入口、怎么获取（inspect）
+- acquire    获取：fetch（需要生成）/ download（可直接下载）/ get（自动分流），默认只预览
+- plan       找数方案（基于通用检索）
+- index      目录的抓取与旧索引迁移
+- export     取数结果的保存、读回与描述统计
+- overview   整体状态（status）
+所有函数返回可 JSON 序列化的 dict/list。
 """
 
-from .discovery import datasets_search, portals_list
-from .errors import ServiceError
+from . import index
+from .acquire import download, fetch, get
+from .detail import inspect
+from .discover import facets, search, sources
+from .errors import ServiceError, guard, translate
 from .export import load_table, table_result
-from .nbs import (
-    nbs_browse,
-    nbs_databases,
-    nbs_fetch,
-    nbs_find,
-    nbs_indicators,
-    nbs_search_national,
-    resolve_regions,
-)
+from .overview import status
 from .plan import plan_sources
-from .status import status
-from .yearbook import yearbook_catalog, yearbook_find
 
 __all__ = [
-    "ServiceError",
-    "datasets_search",
-    "load_table",
-    "nbs_browse",
-    "nbs_databases",
-    "nbs_fetch",
-    "nbs_find",
-    "nbs_indicators",
-    "nbs_search_national",
-    "plan_sources",
-    "portals_list",
-    "resolve_regions",
-    "status",
-    "table_result",
-    "yearbook_catalog",
-    "yearbook_find",
+    "ServiceError", "download", "facets", "fetch", "get", "guard", "index", "inspect", "load_table", "plan_sources",
+    "search", "sources", "status", "table_result", "translate",
 ]

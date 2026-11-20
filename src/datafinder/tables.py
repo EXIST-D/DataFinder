@@ -247,3 +247,66 @@ def describe_markdown(result: dict[str, Any]) -> str:
         lines.append("；".join(f"{r['rank']}. {r['region']} {num(r['value'])}" for r in c["ranking"]))
     lines += ["", f"> {result['note']}"]
     return "\n".join(lines)
+
+
+# ───────────── 产物清单与覆盖检查 ─────────────
+
+
+def sha256_of(path: Path) -> str:
+    import hashlib
+
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def write_manifest(artifact: Path, **info: Any) -> Path:
+    """在产物旁写 `<文件名>.manifest.json`：来源、请求参数、取数/下载时间、体积、sha256、许可。"""
+    import json
+
+    manifest = artifact.with_name(artifact.name + ".manifest.json")
+    data = {
+        "file": artifact.name, "size_bytes": artifact.stat().st_size, "sha256": sha256_of(artifact),
+        "created_at": datetime.now().isoformat(timespec="seconds"), **info,
+    }
+    manifest.write_text(json.dumps(data, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    return manifest
+
+
+def coverage(table: Table, *, periods: list[str] | None = None) -> dict[str, Any] | None:
+    """取数后的覆盖检查：期望的 地区×指标×期别 单元里，实际取到有效数值的有多少、缺哪些。
+
+    期望的地区与指标由适配器写在 table.meta["expected"]（用户请求的那些）；期别为 `periods`（如明确给了
+    起止年），否则用"实际出现过的期别并集"——这样只能发现"某个地区/指标缺了别人有的期"，不会假装知道应有多少期。
+    没有 expected 就不给结论（返回 None）。
+    """
+    expected = table.meta.get("expected")
+    if not expected:
+        return None
+    cols = {c: i for i, c in enumerate(table.columns)}
+    if any(c not in cols for c in ("期别代码", "地区", "指标", "数值")):
+        return None
+    got = {
+        (r[cols["地区"]], r[cols["指标"]], r[cols["期别代码"]])
+        for r in table.rows
+        if isinstance(r[cols["数值"]], float)
+    }
+    period_basis = "explicit" if periods else "observed_union"
+    per = periods or sorted({k[2] for k in got})
+    cells = [(g, i, p) for g in expected["regions"] for i in expected["indicators"] for p in per]
+    missing = [c for c in cells if c not in got]
+    by = lambda idx: {  # noqa: E731
+        k: sum(1 for m in missing if m[idx] == k) for k in {m[idx] for m in missing}
+    }
+    return {
+        "period_basis": period_basis,
+        "expected_cells": len(cells),
+        "observed_cells": len(cells) - len(missing),
+        "missing_cells": len(missing),
+        "coverage_ratio": round((len(cells) - len(missing)) / len(cells), 4) if cells else None,
+        "missing_by_region": by(0), "missing_by_indicator": by(1), "missing_by_period": by(2),
+        "missing_sample": [{"region": g, "indicator": i, "period": p} for g, i, p in missing[:30]],
+        "status": "complete" if cells and not missing else ("partial" if len(missing) < len(cells) else "none"),
+    }

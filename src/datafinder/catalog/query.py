@@ -187,6 +187,12 @@ class Where:
         )
         return f"(EXISTS ({base}) OR {unknown})", [g]
 
+    @property
+    def match(self) -> str | None:
+        """关键词的 FTS 查询串（没有关键词时为 None）。"""
+        block = self.blocks.get("text")
+        return block[1][0] if block else None
+
     def sql(self, skip: tuple[str, ...] = ()) -> tuple[str, list]:
         parts = [(s, a) for name, (s, a) in self.blocks.items() if name not in skip]
         return " AND ".join(s for s, _ in parts) or "1=1", [x for _, a in parts for x in a]

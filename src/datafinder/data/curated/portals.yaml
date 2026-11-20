@@ -670,3 +670,288 @@
 - link: https://govdata.de
   name_zh: 德国政府开放数据 GovData
   industries: [government]
+
+# ───────────── 国家部委与行业机构（注册表缺失，2026-11-20 逐个访问核验）─────────────
+# labels: [ministry]；verify 含义同上。这些站点首页并不都直接提供下载，但它们是对应行业的权威发布方。
+
+- add: true
+  link: https://www.miit.gov.cn
+  name: Ministry of Industry and Information Technology
+  name_zh: 工业和信息化部
+  desc_zh: 发布工业和信息化领域的运行情况、政策文件与统计信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [industry, economy]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.samr.gov.cn
+  name: State Administration for Market Regulation
+  name_zh: 国家市场监督管理总局
+  desc_zh: 发布产品质量监督抽查、市场主体、标准化、认证认可等监管信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [industry, law, trade_market]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://openstd.samr.gov.cn
+  name: National Standards Full-text Disclosure System
+  name_zh: 国家标准全文公开系统
+  desc_zh: 在线公开国家标准文本与标准目录。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [industry]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://std.samr.gov.cn
+  name: National Public Service Platform for Standards Information
+  name_zh: 全国标准信息公共服务平台
+  desc_zh: 国家标准、行业标准、地方标准与团体标准信息查询。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [industry]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.caq.org.cn
+  name: China Association for Quality
+  name_zh: 中国质量协会
+  desc_zh: 质量领域行业组织，发布质量管理、质量奖与质量调查相关信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Civil society
+  is_national: true
+  industries: [industry]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.nea.gov.cn
+  name: National Energy Administration
+  name_zh: 国家能源局
+  desc_zh: 发布能源行业统计、电力与新能源运行等信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [energy]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.mee.gov.cn
+  name: Ministry of Ecology and Environment
+  name_zh: 生态环境部
+  desc_zh: 发布生态环境质量、污染防治与环境统计公报等信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [environment, climate]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.moa.gov.cn
+  name: Ministry of Agriculture and Rural Affairs
+  name_zh: 农业农村部
+  desc_zh: 发布农业农村统计、农产品市场与监测信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [agriculture]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: http://www.moe.gov.cn/jyb_sjzl/
+  name: Ministry of Education - Statistics
+  name_zh: 教育部·教育统计数据
+  desc_zh: 教育事业统计、教育经费等公开数据。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [education]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.mot.gov.cn
+  name: Ministry of Transport
+  name_zh: 交通运输部
+  desc_zh: 发布交通运输行业统计公报与运行数据。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [transport]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.cnipa.gov.cn
+  name: China National Intellectual Property Administration
+  name_zh: 国家知识产权局
+  desc_zh: 发布专利、商标等知识产权统计数据。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [science, law]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.ndrc.gov.cn
+  name: National Development and Reform Commission
+  name_zh: 国家发展和改革委员会
+  desc_zh: 发布宏观经济运行、价格监测与发展规划等信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [economy]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.mof.gov.cn
+  name: Ministry of Finance
+  name_zh: 财政部
+  desc_zh: 发布财政收支、预算决算等财政数据。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [economy, finance]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.csrc.gov.cn
+  name: China Securities Regulatory Commission
+  name_zh: 中国证券监督管理委员会
+  desc_zh: 发布证券期货市场统计与监管信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [finance]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.nfra.gov.cn
+  name: National Financial Regulatory Administration
+  name_zh: 国家金融监督管理总局
+  desc_zh: 发布银行业保险业统计数据与监管信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [finance]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.most.gov.cn
+  name: Ministry of Science and Technology
+  name_zh: 科学技术部
+  desc_zh: 发布科技统计、科技经费投入等信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [science]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.mem.gov.cn
+  name: Ministry of Emergency Management
+  name_zh: 应急管理部
+  desc_zh: 发布安全生产、自然灾害等应急管理统计信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [government]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: https://www.nda.gov.cn
+  name: National Data Administration
+  name_zh: 国家数据局
+  desc_zh: 数据要素、公共数据开放等政策与动态。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [government]
+  featured: true
+  labels: [ministry]
+  verify: ok
+
+- add: true
+  link: http://www.nhc.gov.cn/mohwsbwstjxxzx/
+  name: National Health Commission - Statistics
+  name_zh: 国家卫生健康委员会·统计信息
+  desc_zh: 卫生健康统计公报与统计数据发布。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [health]
+  featured: true
+  labels: [ministry]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: https://www.mohurd.gov.cn
+  name: Ministry of Housing and Urban-Rural Development
+  name_zh: 住房和城乡建设部
+  desc_zh: 发布城乡建设统计与住房相关信息。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [housing]
+  featured: true
+  labels: [ministry]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名收录。

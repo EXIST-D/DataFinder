@@ -1,0 +1,42 @@
+# ── 开发文档与规划（不进入公开仓库）──
+docs/
+
+# ── 敏感信息 ──
+.env
+.env.*
+!.env.example
+credentials*
+*.pem
+*.key
+secrets/
+
+# ── 本地数据与缓存 ──
+*.db
+*.sqlite
+*.sqlite3
+*.parquet
+*.duckdb
+data/cache/
+.datafinder/
+bench/out/
+logs/
+*.log
+
+# ── Python ──
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ── 编辑器 / 系统 ──
+.DS_Store
+.cursor/
+.idea/
+.vscode/

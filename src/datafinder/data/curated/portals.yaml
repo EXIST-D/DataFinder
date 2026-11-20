@@ -955,3 +955,18 @@
   labels: [ministry]
   verify: unverified
   note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名收录。
+
+# 新增：2026-11-20 已访问，HTTP 200，页面标题"中华人民共和国文化和旅游部"
+- add: true
+  link: https://www.mct.gov.cn
+  name: Ministry of Culture and Tourism
+  name_zh: 文化和旅游部
+  desc_zh: 发布文化和旅游统计公报、旅游市场与文化事业相关数据。
+  country: CN
+  catalog_type: Indicators catalog
+  owner_type: Central government
+  is_national: true
+  industries: [culture]
+  featured: true
+  labels: [ministry]
+  verify: ok

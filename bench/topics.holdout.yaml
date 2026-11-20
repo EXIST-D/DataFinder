@@ -1,0 +1,75 @@
+# 留出集：写这些选题和期望时，**还没看过检索结果**，调词表/排序时不许参考它。
+# 用途是估计"没调过的新选题"上的真实命中率；开发集（topics.yaml）调参后分数会偏高。
+# 发现的缺口可以修，但修完要换一批新的留出题，不要拿同一批反复调。
+# 期望的写法见 topics.yaml 顶部说明。
+
+topics:
+  - id: jjj-industry-transfer
+    topic: 京津冀协同发展与产业转移
+    expect:
+      portals: [国家统计局, 国家发展和改革委员会]
+      indicators: [[地区生产总值, 国内生产总值], [工业增加值, 第二产业增加值, 固定资产投资]]
+      yearbooks: [[地区生产总值, 固定资产投资, 工业]]
+
+  - id: digital-employment
+    topic: 数字经济发展与就业结构变化
+    expect:
+      portals: [国家统计局, 工业和信息化部]
+      indicators: [就业人员, [互联网, 邮电业务, 信息传输]]
+      yearbooks: [[就业人员, 互联网, 信息传输]]
+
+  - id: rural-consumption
+    topic: 乡村振兴背景下农村居民消费升级
+    expect:
+      portals: [农业农村部, 国家统计局]
+      indicators: [农村居民, [消费支出, 社会消费品零售总额]]
+      yearbooks: [[农村居民]]
+
+  - id: nev-transport
+    topic: 新能源汽车普及与交通能耗
+    expect:
+      portals: [交通运输部, 国家能源局]
+      indicators: [民用汽车, [能源消费, 能源]]
+      yearbooks: [[民用汽车, 汽车, 交通运输]]
+
+  - id: property-market
+    topic: 房地产开发投资与商品房销售
+    expect:
+      portals: [国家统计局]
+      indicators: [商品房, [房地产开发, 固定资产投资]]
+      yearbooks: [[商品房, 房地产]]
+
+  - id: graduates-employment
+    topic: 高校毕业生规模与就业压力
+    expect:
+      portals: [教育部, 国家统计局]
+      indicators: [毕业生, [就业人员, 失业]]
+      yearbooks: [[毕业生], [就业, 失业]]
+
+  - id: fiscal-social-security
+    topic: 财政支出结构与社会保障水平
+    expect:
+      portals: [财政部, 国家统计局]
+      indicators: [财政支出, [养老保险, 社会保障]]
+      yearbooks: [[财政支出, 财政], [养老保险, 社会保险]]
+
+  - id: patents-regional
+    topic: 区域创新产出与专利授权
+    expect:
+      portals: [国家知识产权局, 国家统计局]
+      indicators: [专利, [研究与试验发展, R&D]]
+      yearbooks: [[专利]]
+
+  - id: fertility
+    topic: 人口出生率下降与生育政策
+    expect:
+      portals: [国家统计局, 国家卫生健康委员会]
+      indicators: [出生率, 人口]
+      yearbooks: [[出生率, 人口出生]]
+
+  - id: inbound-tourism
+    topic: 入境旅游与旅游业发展
+    expect:
+      portals: [国家统计局, 文化和旅游部]
+      indicators: [入境游客, 旅游]
+      yearbooks: [[入境旅游, 旅游, 入境游客]]

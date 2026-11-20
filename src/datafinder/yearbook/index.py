@@ -8,9 +8,11 @@ from typing import Any
 
 from ..config import data_dir
 from ..query.plan import parse
-from ..query.tokenize import tokenize
+from ..query.units import balanced_pick, build_units, combine, prefilter_terms, unit_scores
 from .parse import norm_title
 from .registry import load_series
+
+PER_CHAPTER = 3
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS edition (
@@ -82,15 +84,6 @@ def coverage(conn: sqlite3.Connection) -> list[dict[str, Any]]:
     return out
 
 
-def _grams(query: str, region_names: list[str]) -> set[str]:
-    text = query
-    for n in region_names:
-        text = text.replace(n, " ")
-    for w in ("统计年鉴", "年鉴", "数据", "表格", "各省", "分省", "近", "年"):
-        text = text.replace(w, " ")
-    return set(tokenize(text))
-
-
 def search(
     conn: sqlite3.Connection,
     query: str,
@@ -107,12 +100,14 @@ def search(
     """
     plan = parse(query)
     regions = [region] if region else list(plan.regions)
-    grams = _grams(query, plan.location_zh)
-    if not grams:
+    units = build_units(query, strip=["统计年鉴", "年鉴", "表格"])
+    terms = prefilter_terms(units)
+    if not units or not terms:
         return []
     names = {s.id: s for s in load_series()}
-    sql = "SELECT * FROM ytable WHERE kind='table'"
-    args: list[Any] = []
+    like = " OR ".join(["title LIKE ? OR chapter LIKE ?"] * len(terms))
+    args: list[Any] = [x for t in terms for x in (f"%{t}%", f"%{t}%")]
+    sql = f"SELECT * FROM ytable WHERE kind='table' AND ({like})"
     if series:
         sql += " AND series=?"
         args.append(series)
@@ -129,12 +124,10 @@ def search(
 
     groups: dict[tuple[str, str], dict[str, Any]] = {}
     for r in conn.execute(sql, args):
-        t_g = set(tokenize(r["title"]))
-        hit = len(grams & t_g)
-        c_hit = len(grams & set(tokenize(r["chapter"]))) if hit == 0 else 0
-        if hit == 0 and c_hit == 0:
+        vec = unit_scores(units, r["title"], r["chapter"])
+        score = combine(units, vec)
+        if score <= 0:
             continue
-        score = (2 * hit + c_hit) / (2 * len(grams))
         key = (r["series"], r["norm"])
         g = groups.setdefault(
             key,
@@ -145,10 +138,12 @@ def search(
                 "title": r["title"],
                 "chapter": r["chapter"],
                 "score": score,
+                "vec": vec,
                 "editions": [],
             },
         )
         g["score"] = max(g["score"], score)
+        g["vec"] = [max(a, b) for a, b in zip(g["vec"], vec, strict=True)]
         g["editions"].append({"year": r["year"], "no": r["no"], "url": r["url"], "fmt": r["fmt"], "title": r["title"]})
     # 排序：标题覆盖度为主；点名了地区时该省年鉴优先；同等条件下新版次优先（数据更新、表名更接近现状）
     def rank_key(g: dict[str, Any]) -> float:
@@ -157,12 +152,22 @@ def search(
         return g["score"] + bonus + 0.1 * (newest - 2005) / 20
 
     ranked = sorted(groups.values(), key=lambda g: -rank_key(g))
+    # 多样性：同一系列同一章节最多 3 张表，免得一个主题（如"养老保险"）把结果占满
+    per_chapter: dict[tuple[str, str], int] = {}
+    diverse = []
     for g in ranked:
+        k = (g["series"], g["chapter"])
+        per_chapter[k] = per_chapter.get(k, 0) + 1
+        if per_chapter[k] <= PER_CHAPTER:
+            diverse.append(g)
+    ranked = balanced_pick(diverse, [g["vec"] for g in diverse], limit)
+    for g in ranked:
+        g.pop("vec", None)
         g["editions"].sort(key=lambda e: -e["year"])
         g["title"] = g["editions"][0]["title"]  # 用最新版次的写法
         g["years"] = [e["year"] for e in g["editions"]]
         g["score"] = round(g["score"], 3)
-    return ranked[:limit]
+    return ranked
 
 
 def replace_edition(

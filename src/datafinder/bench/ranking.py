@@ -32,12 +32,12 @@ import yaml
 from rich.console import Console
 from rich.table import Table
 
-from .engine.dedup import identity_keys
-from .engine.http import Http
-from .finder import MIN_INTERVAL, rank_with, retrieve
-from .models import Dataset
-from .sources.base import Ctx, SourceSpec
-from .sources.dataseek import DataseekSource
+from ..engine.dedup import identity_keys
+from ..engine.http import Http
+from ..finder import MIN_INTERVAL, rank_with, retrieve
+from ..models import Dataset
+from ..sources.base import Ctx, SourceSpec
+from ..sources.dataseek import DataseekSource
 
 console = Console()
 err = Console(stderr=True)  # 进度信息走 stderr，保证 --json 的 stdout 干净

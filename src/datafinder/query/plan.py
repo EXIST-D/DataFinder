@@ -185,6 +185,20 @@ def _industry_keywords() -> dict[str, tuple[str, ...]]:
     return {k: tuple(v) for k, v in out.items()}
 
 
+def industries_in(text: str) -> list[str]:
+    """文本里出现了哪些行业的中文关键词（子串匹配，如"能源消费"含"能源"），按命中数排序。
+
+    与 `parse().industries` 的区别：后者只认整词，且影响门户排序；这里更宽松，只给"找数方案"
+    推断领域用（挑对口部委等），不参与任何排序评测。
+    """
+    hits: dict[str, int] = {}
+    for kw, inds in _industry_keywords().items():
+        if len(kw) >= 2 and has_cjk(kw) and kw in text:
+            for ind in inds:
+                hits[ind] = hits.get(ind, 0) + 1
+    return sorted(hits, key=lambda i: -hits[i])
+
+
 def _parse_cn_int(text: str) -> int | None:
     if text.isdigit():
         return int(text)

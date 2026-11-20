@@ -11,7 +11,6 @@
 
 from __future__ import annotations
 
-import re
 import sqlite3
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -19,8 +18,7 @@ from pathlib import Path
 
 from ..config import data_dir
 from ..engine.errors import SourceError
-from ..query.plan import parse
-from ..query.tokenize import tokenize
+from ..query.units import balanced_pick, build_units, combine, prefilter_terms, unit_scores
 from .client import DATABASES, NbsClient
 
 # 默认索引的库：年度、分省年度、主要城市年度（论文最常用）；其余库可用 --db 追加
@@ -37,13 +35,6 @@ CREATE INDEX IF NOT EXISTS ind_db ON ind(db);
 CREATE TABLE IF NOT EXISTS done (db TEXT NOT NULL, cid TEXT NOT NULL, PRIMARY KEY (db, cid));
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
 """
-
-# 查询里没有区分度的词：地区范围、时间、"评价/分析"等泛词
-_GENERIC = re.compile(
-    r"(各省|分省|全国|各地|地区|省份|城市|各市|近[0-9一二三四五六七八九十]+年|历年|年度|评价|体系|分析|研究|情况|水平|"
-    r"数据|指标|统计|论文|的|与|和|及)"
-)
-
 
 def index_path() -> Path:
     return data_dir() / "nbs_index.db"
@@ -156,18 +147,7 @@ async def build(
 
 # ───────────── 查询 ─────────────
 
-
-def _query_grams(query: str) -> tuple[set[str], list[str]]:
-    plan = parse(query)
-    text = query
-    for name in plan.location_zh:  # 地名不属于指标名
-        text = text.replace(name, " ")
-    for r in plan.regions:
-        text = text.replace(r, " ")
-    text = _GENERIC.sub(" ", text)
-    grams = {g for g in tokenize(text) if len(g) == 2 or len(g) == 1}
-    words = [c.zh for c in plan.concepts if c.zh and not c.dimension and not c.weak]
-    return grams, [w for w in words if len(w) >= 2]
+PER_DATASET = 2  # 同一个数据集（cid）最多出几个指标：避免"食品制造业/家具制造业/…"同模板指标刷屏
 
 
 def search(
@@ -177,57 +157,60 @@ def search(
     dbs: list[str] | None = None,
     regional: bool | None = None,
     limit: int = 20,
+    per_dataset: int = PER_DATASET,
 ) -> list[dict]:
-    """按名称（权重高）与分类路径（权重低）的二元组覆盖度排序。
+    """按"概念单元"（含统计术语同义词）给指标名与分类路径打分，并按数据集去重。
 
     regional=True 只看有地区维度的库（分省、城市），False 只看全国口径，None 不限。
     """
-    grams, words = _query_grams(query)
-    if not grams:
+    units = build_units(query)
+    terms = prefilter_terms(units)
+    if not units or not terms:
         return []
-    sql = "SELECT * FROM ind"
-    args: list = []
+    like = " OR ".join(["name LIKE ? OR path LIKE ?"] * len(terms))
+    args: list = [x for t in terms for x in (f"%{t}%", f"%{t}%")]
+    sql = f"SELECT * FROM ind WHERE ({like})"
     if dbs:
-        sql += f" WHERE db IN ({','.join('?' * len(dbs))})"
-        args = list(dbs)
-    out: list[tuple[float, sqlite3.Row]] = []
+        sql += f" AND db IN ({','.join('?' * len(dbs))})"
+        args += dbs
+    scored: list[tuple[float, list[float], sqlite3.Row]] = []
     for row in conn.execute(sql, args):
         if regional is True and row["db"] not in REGIONAL_DBS:
             continue
         if regional is False and row["db"] in REGIONAL_DBS:
             continue
-        name_g = set(tokenize(row["name"]))
-        hit_name = len(grams & name_g)
-        hit_path = len(grams & set(tokenize(row["path"]))) - hit_name if hit_name == 0 else 0
-        if hit_name == 0 and hit_path <= 0:
+        vec = unit_scores(units, row["name"], row["path"])
+        score = combine(units, vec)
+        if score <= 0:
             continue
-        score = (2 * hit_name + max(hit_path, 0)) / (2 * len(grams))
-        score += 0.5 * sum(1 for w in words if w in row["name"])  # 整词出现在指标名里
-        score -= 0.001 * len(row["name"])  # 同分时偏好更短、更通用的指标名
-        out.append((score, row))
-    out.sort(key=lambda x: -x[0])
+        scored.append((score - 0.001 * len(row["name"]), vec, row))  # 同分偏好更短、更通用的名称
+    scored.sort(key=lambda x: -x[0])
+    # 先按数据集去重（同模板指标刷屏），再保证每个概念都有代表
     seen: set[tuple[str, str]] = set()
-    result: list[dict] = []
-    for score, r in out:
-        key = (r["db"], r["name"])
-        if key in seen:
+    per_cid: dict[tuple[str, str], int] = {}
+    kept: list[tuple[float, list[float], sqlite3.Row]] = []
+    for item in scored:
+        r = item[2]
+        key, cid_key = (r["db"], r["name"]), (r["db"], r["cid"])
+        if key in seen or per_cid.get(cid_key, 0) >= per_dataset:
             continue
         seen.add(key)
-        result.append(
-            {
-                "database": DATABASES[r["db"]][0],
-                "db": r["db"],
-                "regional": r["db"] in REGIONAL_DBS,
-                "path": r["path"],
-                "indicator": r["name"],
-                "indicator_id": r["ind_id"],
-                "cid": r["cid"],
-                "root_id": r["root_id"],
-                "unit": r["unit"],
-                "mark": r["mark"],
-                "score": round(score, 3),
-            }
-        )
-        if len(result) >= limit:
-            break
-    return result
+        per_cid[cid_key] = per_cid.get(cid_key, 0) + 1
+        kept.append(item)
+    picked = balanced_pick(kept, [k[1] for k in kept], limit)
+    return [
+        {
+            "database": DATABASES[r["db"]][0],
+            "db": r["db"],
+            "regional": r["db"] in REGIONAL_DBS,
+            "path": r["path"],
+            "indicator": r["name"],
+            "indicator_id": r["ind_id"],
+            "cid": r["cid"],
+            "root_id": r["root_id"],
+            "unit": r["unit"],
+            "mark": r["mark"],
+            "score": round(score, 3),
+        }
+        for score, _vec, r in picked
+    ]

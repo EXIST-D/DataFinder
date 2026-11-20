@@ -13,7 +13,7 @@ industries:
   - id: economy
     zh: 宏观经济
     en: Economy
-    keywords: [economy, economic, gdp, inflation, trade, fiscal, macroeconomic, price index, business, 经济, 贸易, 财政, 物价]
+    keywords: [economy, economic, gdp, inflation, trade, fiscal, macroeconomic, price index, business, 经济, 贸易, 财政, 物价, 投资, 固定资产]
   - id: finance
     zh: 金融
     en: Finance
@@ -33,7 +33,7 @@ industries:
   - id: health
     zh: 医疗卫生
     en: Health
-    keywords: [health, medical, disease, hospital, clinical, epidemic, drug, covid, genome, biomedical, 医疗, 卫生, 健康, 疾病, 医院]
+    keywords: [health, medical, disease, hospital, clinical, epidemic, drug, covid, genome, biomedical, 医疗, 卫生, 健康, 疾病, 医院, 生育, 妇幼]
   - id: agriculture
     zh: 农业
     en: Agriculture
@@ -45,7 +45,7 @@ industries:
   - id: environment
     zh: 生态环境
     en: Environment
-    keywords: [environment, environmental, pollution, air quality, water quality, ecology, biodiversity, waste, forest, wetland, 环境, 污染, 空气质量, 生态, 生物多样性]
+    keywords: [environment, environmental, pollution, air quality, water quality, ecology, biodiversity, waste, forest, wetland, 环境, 污染, 空气质量, 生态, 生物多样性, 碳排放, 减排]
   - id: climate
     zh: 气象气候
     en: Weather & Climate

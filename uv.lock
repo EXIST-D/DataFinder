@@ -56,6 +56,7 @@ name = "datafinder"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "dataseek" },
     { name = "duckdb" },
     { name = "httpx" },
     { name = "pyyaml" },
@@ -66,20 +67,36 @@ dependencies = [
 [package.optional-dependencies]
 dev = [
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "dataseek", specifier = ">=0.10,<0.11" },
     { name = "duckdb", specifier = ">=1.0" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "rich", specifier = ">=13.7" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
     { name = "typer", specifier = ">=0.12" },
 ]
 provides-extras = ["dev"]
+
+[[package]]
+name = "dataseek"
+version = "0.10.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/76/33/fc18db256467112ca84b0e9f9c7859c92d4e5d0b5b896013792e77535305/dataseek-0.10.1.tar.gz", hash = "sha256:ebae1d91122d6d2d2b688c0f3eeccb0729ade55a82bd064238f1aed534919414", size = 254414, upload-time = "2026-10-26T13:42:03.346Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/f2/a4308388fcd3da77a85b1727b3772bac1bc8fbf59260263193acc7a0a49c/dataseek-0.10.1-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:f4fedabc479ade42c10d9029cace8e7fed33b08d74dacf373e28314434910ff0", size = 2606838, upload-time = "2026-10-26T13:41:56.052Z" },
+    { url = "https://files.pythonhosted.org/packages/3e/db/eafdc3054127e4fecb16b168ec017821818bb887c90b1904a7fe99d56814/dataseek-0.10.1-py3-none-macosx_11_0_arm64.whl", hash = "sha256:3d92fcf2669024c11d3b53d753fccc774f8ef9cada1b2d4e96041ee27471834a", size = 2483040, upload-time = "2026-10-26T13:41:57.316Z" },
+    { url = "https://files.pythonhosted.org/packages/7e/a8/16e6b60be216a0493b2950dc50864311adc928df5c979fb0ebd0ef494e26/dataseek-0.10.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:03a6051eb63600b8d343a26cbe6f76ffb2b39902070f3f49219bb7f673461aa2", size = 3791371, upload-time = "2026-10-26T13:41:58.731Z" },
+    { url = "https://files.pythonhosted.org/packages/63/62/1510f540ec0914f9be0a14fd9f1f00e45e4a937e664037837b4487111b29/dataseek-0.10.1-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:cae7169a026a1a950b7b83ce6f85f9620a0f016990029f51fe0bff73250c24af", size = 3636432, upload-time = "2026-10-26T13:42:00.312Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/a0/b34a427e75964289357ba75e7d9f4712f1140e56dd44b095c7f459ea7e9a/dataseek-0.10.1-py3-none-win_amd64.whl", hash = "sha256:a38ba591074074c01f40a958b5c435b167f71f8586e2ff83c49eeb74eaec0713", size = 2709878, upload-time = "2026-10-26T13:42:01.966Z" },
+]
 
 [[package]]
 name = "duckdb"
@@ -371,6 +388,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/79/42/bb4641652e58dedeac2ec51abc1f8cae4fee4ec63899a0999016229a0f2a/pytest-9.2.0.tar.gz", hash = "sha256:97c4f3b1f3c7414aa36465e09b8220f1d03627993bd51b1282e193753c80557b", size = 1797555, upload-time = "2026-10-27T21:30:20.728Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/39/1f5d8c8877a0fa327db959c19341d4be61660de1ab6b7391f9eb805bcd67/pytest-9.2.0-py3-none-any.whl", hash = "sha256:07acdcf88ec174f907dc01af70bf52d49b014bbab03faeeade31c96b18c2e588", size = 411776, upload-time = "2026-10-27T21:30:19.131Z" },
+]
+
+[[package]]
+name = "pytest-asyncio"
+version = "1.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2c/de/80724f9b5b9eca1a654179cae6edc51aaa0a355a9834a736e2a188b91780/pytest_asyncio-1.5.0.tar.gz", hash = "sha256:92c8fa83ca419fd0d4bd6a34df6520dae435841d3733c319343249492adf37f7", size = 146227, upload-time = "2026-11-12T16:35:49.845Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/27/2d/e600d8f47597a803641704aba367c7266cd621f86561ec36da9888f160ec/pytest_asyncio-1.5.0-py3-none-any.whl", hash = "sha256:557f255ee03cc84f84a8d5f438bc9c6e0f714bf86970ae743c7ecb5a38d7e07d", size = 17215, upload-time = "2026-11-12T16:35:48.446Z" },
 ]
 
 [[package]]

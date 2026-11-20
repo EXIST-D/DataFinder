@@ -21,7 +21,27 @@ class Lexicon:
     zh2en: dict[str, tuple[str, ...]]
     weak: frozenset[str]
     stop: frozenset[str]
+    dimension: frozenset[str]
     max_len: int
+
+    def zh_keys_for_en(self, word: str) -> list[str]:
+        """英文词 → 所有把它当首选说法的中文词（gdp → 国内生产总值），给英文概念补中文说法。"""
+        word = normalize(word)
+        return [
+            zh for zh, ens in self.zh2en.items() if not zh.isascii() and normalize(ens[0]) == word
+        ]
+
+    def zh_for_en(self, word: str) -> str | None:
+        """英文词 → 对应的中文词（如 gdp → 国内生产总值），给中文来源构造检索词用。"""
+        word = normalize(word)
+        best: str | None = None
+        for zh, ens in self.zh2en.items():
+            if zh.isascii() or word not in (normalize(e) for e in ens):
+                continue
+            if normalize(ens[0]) == word:
+                return zh
+            best = best or zh
+        return best
 
 
 @dataclass(frozen=True)
@@ -35,9 +55,10 @@ def load_lexicon() -> Lexicon:
     raw = load_yaml("lexicon.zh-en.yaml")
     weak = frozenset(normalize(w) for w in raw.pop("weak", []))
     stop = frozenset(normalize(w) for w in raw.pop("stop", []))
+    dimension = frozenset(normalize(w) for w in raw.pop("dimension", []))
     zh2en = {normalize(k): tuple(str(v) for v in vals) for k, vals in raw.items()}
     longest = max([len(k) for k in zh2en] + [len(w) for w in weak | stop] + [1])
-    return Lexicon(zh2en=zh2en, weak=weak, stop=stop, max_len=longest)
+    return Lexicon(zh2en=zh2en, weak=weak, stop=stop, dimension=dimension, max_len=longest)
 
 
 def segment(text: str, lex: Lexicon | None = None) -> list[Piece]:

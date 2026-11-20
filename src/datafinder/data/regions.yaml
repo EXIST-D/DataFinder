@@ -35,7 +35,8 @@ provinces:
   CN-XJ: {zh: 新疆, aliases: [新疆维吾尔自治区]}
 
 countries:
-  CN: {zh: 中国, en: [china, chinese, prc], aliases: [中华人民共和国, 全国, 国内, 我国]}
+  # CN 的别名里不放 国内/全国：会误伤“国内生产总值”这类普通词
+  CN: {zh: 中国, en: [china, chinese, prc], aliases: [中华人民共和国, 我国]}
   HK: {zh: 香港, en: [hong kong]}
   MO: {zh: 澳门, en: [macao, macau]}
   TW: {zh: 台湾, en: [taiwan]}

@@ -64,6 +64,9 @@ class Concept:
     alts: tuple[Phrase, ...]  # 每个 alt 是一个 token 短语；第 0 个是原词
     weak: bool = False
     industries: tuple[str, ...] = ()  # 该概念所属行业：门户带有这些行业标签也算命中
+    dimension: bool = False  # 范围/粒度/时间类词（各省、年度…）：不当 API 检索词，排序权重很低
+    zh: str | None = None  # 中文原词（用户写的是中文时）
+    en: tuple[str, ...] = ()  # 原始英文说法（词表扩展，或用户直接写的英文），用于构造英文检索词
 
 
 @dataclass
@@ -76,6 +79,41 @@ class QueryPlan:
     industries: list[str] = field(default_factory=list)
     formats: list[str] = field(default_factory=list)
     years: tuple[int, int] | None = None
+    location_zh: list[str] = field(default_factory=list)  # 识别到的地点（中文名）
+    location_en: list[str] = field(default_factory=list)  # 识别到的地点（英文名，用于英文检索）
+
+    def _searchable(self) -> list[Concept]:
+        real = [c for c in self.concepts if not c.dimension]
+        return real or self.concepts
+
+    def query_en(self, max_terms: int = 4) -> str:
+        """给英文来源用的检索词：每个概念取首选英文说法，最多 max_terms 个，附上国家名。"""
+        words: list[str] = []
+        for c in self._searchable():
+            if len(words) >= max_terms:
+                break
+            term = c.en[0] if c.en else None
+            if term and term.lower() not in (w.lower() for w in words):
+                words.append(term)
+        if self.location_en and words:
+            first = self.location_en[0]
+            if first.lower() not in (w.lower() for w in words):
+                words.append(first)
+        return " ".join(words)
+
+    def zh_terms(self, lex: Lexicon | None = None, max_terms: int = 3) -> list[str]:
+        """给中文来源用的检索词列表（每个概念一条）。纯英文概念会反查词表（gdp→国内生产总值）。"""
+        lex = lex or load_lexicon()
+        terms: list[str] = []
+        for c in self._searchable():
+            term = c.zh
+            if term is None and c.en:
+                term = lex.zh_for_en(c.en[0])
+            if term and term not in terms:
+                terms.append(term)
+            if len(terms) >= max_terms:
+                break
+        return terms
 
     def fts_match(self) -> str | None:
         """生成 FTS5 MATCH 表达式：所有概念的所有说法用 OR 连接，每个说法是一个短语。"""
@@ -95,6 +133,7 @@ class _Locations:
     zh: tuple[tuple[str, str, str], ...]
     en: tuple[tuple[re.Pattern[str], str], ...]
     country_zh: dict[str, str]
+    country_en: dict[str, str]
     province_zh: dict[str, str]
 
 
@@ -104,6 +143,7 @@ def _locations() -> _Locations:
     zh: list[tuple[str, str, str]] = []
     en: list[tuple[re.Pattern[str], str]] = []
     country_zh: dict[str, str] = {}
+    country_en: dict[str, str] = {}
     province_zh: dict[str, str] = {}
     for code, info in raw["provinces"].items():
         province_zh[code] = info["zh"]
@@ -111,17 +151,23 @@ def _locations() -> _Locations:
             zh.append((normalize(name), "region", code))
     for code, info in raw["countries"].items():
         country_zh[code] = info["zh"]
+        if info.get("en"):
+            country_en[code] = info["en"][0]
         for name in [info["zh"], *info.get("aliases", [])]:
             zh.append((normalize(name), "country", code))
         for name in info.get("en", []):
             en.append((re.compile(rf"(?<![a-z]){re.escape(name)}(?![a-z])"), code))
     zh.sort(key=lambda t: -len(t[0]))
     en.sort(key=lambda t: -len(t[0].pattern))
-    return _Locations(tuple(zh), tuple(en), country_zh, province_zh)
+    return _Locations(tuple(zh), tuple(en), country_zh, country_en, province_zh)
 
 
 def country_zh_name(code: str) -> str | None:
     return _locations().country_zh.get(code)
+
+
+def country_en_name(code: str) -> str | None:
+    return _locations().country_en.get(code)
 
 
 def province_zh_name(code: str) -> str | None:
@@ -240,6 +286,12 @@ def parse(query: str, *, today: date | None = None, lex: Lexicon | None = None) 
                 phrase = tuple(tokenize(en))
                 if phrase and phrase not in alts:
                     alts.append(phrase)
+        if piece.kind == "latin":
+            # 用户直接写英文（如 GDP）：补上中文说法，这样中文记录（国内生产总值）也能命中
+            for zh in lex.zh_keys_for_en(label):
+                phrase = tuple(tokenize(zh))
+                if phrase and phrase not in alts:
+                    alts.append(phrase)
         if not alts:
             continue
         concept_inds: list[str] = []
@@ -247,11 +299,15 @@ def parse(query: str, *, today: date | None = None, lex: Lexicon | None = None) 
             for ind in ind_kw.get(normalize(key), ()):
                 if ind not in concept_inds:
                     concept_inds.append(ind)
+        is_cjk = piece.kind != "latin"
         concept = Concept(
             label=label,
             alts=tuple(alts),
             weak=piece.kind == "weak",
             industries=tuple(sorted(concept_inds)),
+            dimension=label in lex.dimension,
+            zh=label if is_cjk else None,
+            en=tuple(lex.zh2en.get(label, ())) if is_cjk else (label,),
         )
         (weak if concept.weak else strong).append(concept)
         for ind in concept_inds:
@@ -260,4 +316,9 @@ def parse(query: str, *, today: date | None = None, lex: Lexicon | None = None) 
 
     plan.concepts = strong or weak  # 有实义词时丢弃泛化词
     plan.industries = industries
+    plan.location_zh = [
+        *(n for r in plan.regions if (n := province_zh_name(r))),
+        *(n for c in plan.countries if (n := country_zh_name(c))),
+    ]
+    plan.location_en = [n for c in plan.countries if (n := country_en_name(c))]
     return plan

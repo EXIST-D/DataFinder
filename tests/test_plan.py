@@ -71,3 +71,36 @@ def test_english_query():
 def test_fts_match_quotes_phrases():
     match = parse("人口", today=TODAY).fts_match()
     assert '"人口"' in match and '"population"' in match and " OR " in match
+
+
+def test_gdp_in_chinese_is_not_swallowed_by_a_location_alias():
+    # “国内”曾是中国的别名，会把“国内生产总值”剥成“生产总值”
+    plan = parse("国内生产总值", today=TODAY)
+    assert labels(plan) == ["国内生产总值"]
+    assert plan.countries == []
+    assert plan.query_en() == "gdp"
+
+
+def test_latin_concept_gets_chinese_alternatives():
+    plan = parse("GDP", today=TODAY)
+    alts = [" ".join(a) for a in plan.concepts[0].alts]
+    assert "国内 内生 生产 产总 总值" in alts  # gdp → 国内生产总值，中文记录才能被命中
+
+
+def test_dimension_words_are_flagged_and_left_out_of_api_queries():
+    plan = parse("中国各省人口 GDP", today=TODAY)
+    assert [c.label for c in plan.concepts if c.dimension] == ["各省"]
+    assert plan.query_en() == "population gdp china"
+    assert "各省" not in plan.zh_terms()
+
+
+def test_query_builders_cap_terms_and_add_location():
+    plan = parse("中国各省近十年人口 GDP 城镇化率 CSV", today=TODAY)
+    assert plan.query_en(max_terms=2) == "population gdp china"
+    assert plan.query_en(max_terms=1) == "population china"
+    assert plan.zh_terms() == ["人口", "国内生产总值", "城镇化率"]
+
+
+def test_english_only_query_has_no_chinese_terms_unless_mappable():
+    assert parse("zebra giraffe", today=TODAY).zh_terms() == []
+    assert parse("population", today=TODAY).zh_terms() == ["人口"]

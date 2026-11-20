@@ -6,10 +6,11 @@ import pytest
 
 from datafinder.engine.cache import Cache
 from datafinder.engine.http import Http
-from datafinder.service import ServiceError, _resolve_indicators, resolve_regions
-from datafinder.sources.nbs_tree import NbsClient, explicit_window, parse_tidy
+from datafinder.nbs.client import NbsClient, explicit_window, parse_tidy
+from datafinder.service import ServiceError, resolve_regions
+from datafinder.service.nbs import _resolve_indicators
 
-FIX = json.loads((Path(__file__).parent / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
+FIX = json.loads((Path(__file__).parents[1] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
 REGIONS = [
     {"text": "北京市", "value": "110000000000"},
     {"text": "内蒙古自治区", "value": "150000000000"},
@@ -94,7 +95,7 @@ async def test_table_sends_one_request_per_indicator_and_keeps_all_rows(tmp_path
 
 
 def testclean_name_strips_only_matching_unit():
-    from datafinder.sources.nbs_tree import clean_name
+    from datafinder.nbs.client import clean_name
 
     assert clean_name("工业增加值 (亿元) ", "亿元") == "工业增加值"
     assert clean_name("城镇化率 (%)", "%") == "城镇化率"

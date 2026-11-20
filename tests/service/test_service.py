@@ -1,36 +1,9 @@
-import json
 
 import pytest
 
 from datafinder import service
-from datafinder.mcp_server import build_server
-from datafinder.portals.sync import Portal, write_db
 from datafinder.service import ServiceError
-from datafinder.store import connect
 from datafinder.tables import Table
-
-
-def P(id, name, **kw):
-    kw.setdefault("source", "dateno")
-    kw.setdefault("url", f"https://{id}.example.org")
-    return Portal(id=id, name=name, **kw)
-
-
-@pytest.fixture
-def portals():
-    conn = connect()
-    write_db(
-        conn,
-        [
-            P("miit", "MIIT", name_zh="工业和信息化部", country="CN", owner_type="Central government",
-              industries=["industry"], labels=["ministry"], featured=True, is_national=True, verify="ok"),
-            P("hebei", "Hebei Stats", name_zh="河北省统计局", country="CN", region="CN-HE", owner_type="Regional government",
-              catalog_type="Indicators catalog", industries=["statistics"], labels=["stats_bureau"], verify="unverified"),
-            P("us", "US Industry", country="US", owner_type="Central government", industries=["industry"]),
-        ],
-        meta={},
-    )
-    conn.close()
 
 
 def test_plan_sources_hebei_industry_picks_region_and_domain_portals(portals):
@@ -47,7 +20,7 @@ def test_plan_sources_hebei_industry_picks_region_and_domain_portals(portals):
 
 
 def test_plan_sources_with_index_gives_fetch_args(portals):
-    from datafinder import nbs_index
+    from datafinder.nbs import index as nbs_index
 
     conn = nbs_index.connect_index()
     conn.execute("INSERT INTO ind VALUES ('6', ?, ?, '分省年度数据 › 工业', ?, '规模以上工业企业利润总额', '亿元', NULL)",
@@ -95,7 +68,7 @@ async def test_nbs_fetch_end_to_end_with_stub_client(monkeypatch):
     async def fake():
         yield Stub()
 
-    monkeypatch.setattr(service, "_nbs", fake)
+    monkeypatch.setattr("datafinder.service.nbs._nbs", fake)
     t = await service.nbs_fetch("6", "c" * 32, ["工业增加值"], ["河北"])
     assert isinstance(t, Table) and t.rows[0][4] == 100.0 and "国家统计局" in t.meta["来源"]
     out = service.table_result(t, fmt="csv")
@@ -108,39 +81,10 @@ async def test_nbs_fetch_validates_before_any_network(monkeypatch):
     def boom():
         raise AssertionError("不该联网")
 
-    monkeypatch.setattr(service, "_nbs", boom)
+    monkeypatch.setattr("datafinder.service.nbs._nbs", boom)
     with pytest.raises(ServiceError, match="未知数据库"):
         await service.nbs_fetch("99", "c" * 32, ["x"], ["北京"])
     with pytest.raises(ServiceError, match="cid 格式"):
         await service.nbs_fetch("6", "bad", ["x"], ["北京"])
     with pytest.raises(ServiceError, match="不能为空"):
         await service.nbs_fetch("6", "c" * 32, [], ["北京"])
-
-
-# ───────────── MCP 层 ─────────────
-
-
-async def test_mcp_exposes_expected_tools_and_prompt():
-    mcp = build_server()
-    names = {t.name for t in await mcp.list_tools()}
-    assert {"plan_data_sources", "nbs_fetch", "nbs_find", "nbs_browse", "datasets_search", "portals_list",
-            "describe_table", "datafinder_status", "nbs_indicators", "nbs_databases", "nbs_search_national"} <= names
-    prompts = await mcp.list_prompts()
-    assert [p.name for p in prompts] == ["research_data_plan"]
-    msg = await mcp.get_prompt("research_data_plan", {"topic": "工业质量", "region": "河北省"})
-    assert "工业质量" in str(msg) and "河北省" in str(msg)
-
-
-async def test_mcp_tool_call_returns_plan(portals):
-    mcp = build_server()
-    result = await mcp.call_tool("plan_data_sources", {"topic": "河北省工业质量体系评价"})
-    text = json.dumps(result.model_dump() if hasattr(result, "model_dump") else str(result), ensure_ascii=False, default=str)
-    assert "河北省统计局" in text
-
-
-async def test_mcp_tool_errors_carry_actionable_message():
-    from mcp.server.mcpserver.exceptions import ToolError
-
-    mcp = build_server()
-    with pytest.raises(ToolError, match="datafinder sync"):  # 门户库为空：助手要能读到怎么办
-        await mcp.call_tool("plan_data_sources", {"topic": "工业"})

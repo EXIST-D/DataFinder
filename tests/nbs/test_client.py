@@ -8,7 +8,7 @@ import pytest
 from datafinder.engine.cache import Cache
 from datafinder.engine.errors import SourceError
 from datafinder.engine.http import Http
-from datafinder.sources.nbs_tree import (
+from datafinder.nbs.client import (
     DATABASES,
     NbsClient,
     dts_window,
@@ -17,7 +17,7 @@ from datafinder.sources.nbs_tree import (
     valid_id,
 )
 
-FIX = json.loads((Path(__file__).parent / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
+FIX = json.loads((Path(__file__).parents[1] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
 TODAY = date(2026, 11, 20)
 WZWS = "<html><body><h1>Please enable JavaScript and refresh the page.</h1><script>WZWS</script></body></html>"
 

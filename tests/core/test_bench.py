@@ -11,7 +11,7 @@ from datafinder.bench import (
 )
 from datafinder.models import Dataset
 
-BENCH = Path(__file__).parent.parent / "bench"
+BENCH = Path(__file__).parents[2] / "bench"
 
 
 def test_ndcg_is_one_for_ideal_order_and_zero_without_relevant_items():

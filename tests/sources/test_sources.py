@@ -17,7 +17,7 @@ from datafinder.sources.nbs import to_dataset as nbs_to_dataset
 from datafinder.sources.registry import build_sources, load_specs
 from datafinder.sources.zenodo import ZenodoSource
 
-FIX = Path(__file__).parent / "fixtures"
+FIX = Path(__file__).parents[1] / "fixtures"
 
 
 def fixture(name):

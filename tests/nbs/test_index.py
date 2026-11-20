@@ -1,7 +1,7 @@
 import pytest
 
-from datafinder import nbs_index
 from datafinder.engine.errors import SourceError
+from datafinder.nbs import index as nbs_index
 
 
 class FakeClient:

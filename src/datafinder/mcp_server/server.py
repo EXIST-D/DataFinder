@@ -14,8 +14,8 @@ from typing import Any
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
-from . import service
-from .service import ServiceError
+from .. import service
+from ..service import ServiceError
 
 INSTRUCTIONS = """\
 DataFinder：中文优先的找数与取数工具，数据以中国官方来源为主。
@@ -180,7 +180,7 @@ def build_server() -> MCPServer:
     @tool()
     def describe_table(file: str) -> dict[str, Any]:
         """对 nbs_fetch 导出的文件（csv/xlsx，位于导出目录）重新计算描述统计：各指标×地区的均值、中位数、标准差、变异系数、增速，以及最新一期的地区排名。"""
-        from .tables import describe, describe_markdown
+        from ..tables import describe, describe_markdown
 
         result = describe(service.load_table(file))
         return {**result, "markdown": describe_markdown(result)}

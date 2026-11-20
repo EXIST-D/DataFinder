@@ -11,18 +11,18 @@ from rich.console import Console
 from rich.progress import BarColumn, DownloadColumn, Progress, TextColumn, TransferSpeedColumn
 from rich.table import Table
 
-from . import __version__
-from .bench import bench_app
-from .cli_data import register as register_data_commands
-from .doctor import run_checks
-from .finder import search_datasets
-from .models import Dataset
-from .portals.search import PortalHit, search_portals
-from .portals.sync import sync as run_sync
-from .portals.tag import industry_zh, load_config
-from .query.plan import country_zh_name
-from .sources.registry import load_specs
-from .store import connect, db_path, portal_count
+from .. import __version__
+from ..bench import bench_app
+from ..doctor import run_checks
+from ..finder import search_datasets
+from ..models import Dataset
+from ..portals.search import PortalHit, search_portals
+from ..portals.sync import sync as run_sync
+from ..portals.tag import industry_zh, load_config
+from ..query.plan import country_zh_name
+from ..sources.registry import load_specs
+from ..store import connect, db_path, portal_count
+from .data import register as register_data_commands
 
 app = typer.Typer(
     help="DataFinder：中文优先的找数入口。",
@@ -390,7 +390,7 @@ class _null:
 @app.command()
 def sources() -> None:
     """列出数据集来源及其状态。"""
-    from .sources.dataseek import find_executable
+    from ..sources.dataseek import find_executable
 
     table = Table(show_header=True, header_style="bold", box=None, pad_edge=False)
     for col in ("id", "名称", "协议", "状态", "官方", "语言"):
@@ -421,7 +421,7 @@ def serve(
 
     import uvicorn
 
-    from .server.app import create_app
+    from ..server.app import create_app
 
     with socket.socket() as probe:
         if probe.connect_ex(("127.0.0.1", port)) == 0:

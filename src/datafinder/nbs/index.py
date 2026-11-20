@@ -17,11 +17,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from .config import data_dir
-from .engine.errors import SourceError
-from .query.plan import parse
-from .query.tokenize import tokenize
-from .sources.nbs_tree import DATABASES, NbsClient
+from ..config import data_dir
+from ..engine.errors import SourceError
+from ..query.plan import parse
+from ..query.tokenize import tokenize
+from .client import DATABASES, NbsClient
 
 # 默认索引的库：年度、分省年度、主要城市年度（论文最常用）；其余库可用 --db 追加
 DEFAULT_DBS = ["3", "6", "8"]

@@ -39,11 +39,11 @@ from ..enrich import enrich, lookup_portal
 from ..finder import MIN_INTERVAL, SearchResult, stream_search
 from ..links import build_links
 from ..models import Dataset
+from ..nbs.client import DATABASES, MAX_AREAS, NbsClient, valid_area, valid_id
 from ..portals.browse import Filters, browse, facets, portal_dict
 from ..portals.search import search_portals
 from ..sources.base import SourceSpec
 from ..sources.dataseek import find_executable, inspect_url
-from ..sources.nbs_tree import DATABASES, MAX_AREAS, NbsClient, valid_area, valid_id
 from ..sources.registry import load_specs
 from ..store import connect, get_meta, portal_count
 

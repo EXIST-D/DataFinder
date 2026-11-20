@@ -15,13 +15,14 @@ import typer
 from rich.console import Console
 from rich.table import Table as RichTable
 
-from . import nbs_index, service
-from .engine.cache import Cache
-from .engine.http import Http
-from .finder import MIN_INTERVAL
-from .service import ServiceError
-from .sources.nbs_tree import DATABASES, NbsClient
-from .tables import describe, describe_markdown
+from .. import service
+from ..engine.cache import Cache
+from ..engine.http import Http
+from ..finder import MIN_INTERVAL
+from ..nbs import index as nbs_index
+from ..nbs.client import DATABASES, NbsClient
+from ..service import ServiceError
+from ..tables import describe, describe_markdown
 
 console = Console()
 err = Console(stderr=True)
@@ -276,7 +277,7 @@ def mcp_cmd(
         cfg = {"mcpServers": {"datafinder": {"command": exe, "args": ["mcp"]}}}
         typer.echo(json.dumps(cfg, ensure_ascii=False, indent=2))
         return
-    from .mcp_server import run
+    from ..mcp_server import run
 
     run()
 

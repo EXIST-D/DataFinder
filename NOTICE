@@ -1,0 +1,24 @@
+DataFinder
+Copyright (c) 2026 EXIST-D, MIT License (see LICENSE)
+
+本项目的检索引擎是用 Python 独立实现的，**没有复制下列项目的源代码**；
+它的算法设计与各来源接口的"坑"参考了这些项目公开的设计文档、源码注释与实测行为，在此致谢：
+
+- Dataseek (https://github.com/lmarkmann/dataseek) — Apache-2.0 OR MIT
+  参考：并发截止与"法定人数"算法、来源故障标记与降级缓存、去重身份键（DOI / 规范化 URL /
+  标题+发布方）、RRF 融合与 IDF 加权覆盖度排序、按协议写适配器的组织方式，以及 Zenodo
+  每页 25 条、DataCite 需 sort=relevance、CKAN 查询里冒号需清除等接口经验。
+  同时作为可选的长尾来源，以独立进程调用（见 sources/dataseek.py）。
+- data-aggregator-mcp (https://github.com/musharna/data-aggregator-mcp) — MIT
+  参考：httpx 重试与 Retry-After 解析、"绝不把失败当成 0 条结果"的错误隔离思路。
+- ckan-mcp-server (https://github.com/ondata/ckan-mcp-server) — MIT
+  参考：CKAN 兼容性经验（HTTP 200 但 success=false、多语言标题字段等）。
+
+数据来源与署名：
+
+- 数据门户目录：Dateno dataportals-registry (https://github.com/datenoio/dataportals-registry)
+  数据采用 CC BY 4.0 许可。本仓库不包含该数据；`datafinder sync` 在用户本机下载。
+- 国家统计局数据发布库 (https://data.stats.gov.cn)：仅按其公开接口检索元数据与最新值，
+  数据版权归国家统计局，请以官网为准。
+- 各数据集的许可与使用条款以其原站声明为准；本工具显示的许可信息来自上游元数据，
+  "许可未知"不代表可以随意使用。

@@ -1,0 +1,402 @@
+{
+ "hits": {
+  "hits": [
+   {
+    "created": "2026-11-16T11:54:37.437075+00:00",
+    "modified": "2026-11-16T11:54:37.816965+00:00",
+    "id": 24276674,
+    "conceptrecid": "21991106",
+    "doi": "10.5281/zenodo.24276674",
+    "conceptdoi": "10.5281/zenodo.21991106",
+    "doi_url": "https://doi.org/10.5281/zenodo.24276674",
+    "metadata": {
+     "title": "Population size, age structure, and ageing of Chinese cities from 2000 to 2100",
+     "doi": "10.5281/zenodo.24276674",
+     "publication_date": "2026-11-16",
+     "description": "<p>City-scale data on population size and age structure are essential for urban planning, public service provision, and disaster risk assessment. However, existing population datasets for China are mainly available at national or administrative-unit scales, while data for individual cities remain limited. Here, we developed a dataset of population size, age structure, and population ageing for 342 major Chinese cities from 2000 to 2100. Historical urban population data were derived by aggregating age- and sex-specific population grids within urban built-up areas after calibration to census data using iterative proportional fitting. Taking 2020 as the baseline year, future populations were projected using the cohort-component method under five population scenarios based on the Shared Socioeconomic Pathways (SSPs), with projections provided annually from 2021 to 2025 and at five-year intervals from 2030 to 2100. Historical backcasting showed that the mean absolute percentage errors (MAPE) for simulated total population and the population aged 65 years and older in 2020 were both below 10%, while the mean absolute error in the simulated share of the population aged 65 years and older was below 1 percentage point. The dataset also showed good agreement with existing population datasets, and its future projections were broadly consistent with existing population projection products in terms of regional ageing patterns. This dataset provides a basis for investigating urban population growth and shrinkage, population ageing, and regional demographic transitions in China, and can also support studies of urban disaster risk, public service demand, and sustainable urban development. Given China's rapid urbanization and continuing population ageing, the long-term demographic trajectories of its cities also provide useful evidence for understanding global urban demographic transitions and their social and environmental implications.</p>\n<p>This dataset contains age- and sex-specific population data for 342 Chinese cities, together with the principal R modules documenting the data-production workflow. The dataset includes historical population data for 2000, 2010, and 2020, a simulated population for 2020, and population projections under five SSP scenarios. The main historical and projected series use the fixed 2020 urban boundaries from the GHSL Urban Centre Database (GHS-UCDB R2024A). This keeps the geographic area consistent for comparisons over time. Urban expansion and contraction are outside the scope of the main series. The reporting unit is the urban built-up area within the specified boundary, distinct from the associated prefecture-level administrative area. In addition to the main series, the dataset provides historical reference estimates for 2000 and 2010, each covering the population within the GHS-UCDB urban boundaries for that year.</p>",
+     "access_right": "open",
+     "creators": [
+      {
+       "name": "Zhao, Kaiyu",
+       "affiliation": "Beijing Normal University",
+       "orcid": "0009-0001-7503-9845"
+      },
+      {
+       "name": "He, Chunyang",
+       "affiliation": "Beijing Normal University",
+       "orcid": "0000-0002-8440-5536"
+      },
+      {
+       "name": "Li, Lei",
+       "affiliation": "Beijing Normal University",
+       "orcid": "0000-0002-0889-3865"
+      },
+      {
+       "name": "Zhao, Yixuan",
+       "affiliation": "Beijing Normal University"
+      },
+      {
+       "name": "Wang, Hao",
+       "affiliation": "Beijing Normal University"
+      }
+     ],
+     "keywords": [
+      "Cities",
+      "Population",
+      "Population ageing",
+      "China",
+      "Cohort-component method"
+     ],
+     "version": "v2.0",
+     "language": "eng",
+     "resource_type": {
+      "title": "Dataset",
+      "type": "dataset"
+     },
+     "license": {
+      "id": "cc-by-4.0"
+     },
+     "relations": {
+      "version": [
+       {
+        "index": 1,
+        "is_last": true,
+        "parent": {
+         "pid_type": "recid",
+         "pid_value": "21991106"
+        }
+       }
+      ]
+     }
+    },
+    "title": "Population size, age structure, and ageing of Chinese cities from 2000 to 2100",
+    "links": {
+     "self": "https://zenodo.org/api/records/24276674",
+     "self_html": "https://zenodo.org/records/24276674",
+     "preview_html": "https://zenodo.org/records/24276674?preview=1",
+     "doi": "https://doi.org/10.5281/zenodo.24276674",
+     "self_doi": "https://doi.org/10.5281/zenodo.24276674",
+     "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.24276674",
+     "reserve_doi": "https://zenodo.org/api/records/24276674/draft/pids/doi",
+     "parent": "https://zenodo.org/api/records/21991106",
+     "parent_html": "https://zenodo.org/records/21991106",
+     "parent_doi": "https://doi.org/10.5281/zenodo.21991106",
+     "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.21991106",
+     "self_iiif_manifest": "https://zenodo.org/api/iiif/record:24276674/manifest",
+     "self_iiif_sequence": "https://zenodo.org/api/iiif/record:24276674/sequence/default",
+     "files": "https://zenodo.org/api/records/24276674/files",
+     "media_files": "https://zenodo.org/api/records/24276674/media-files",
+     "latest": "https://zenodo.org/api/records/24276674/versions/latest",
+     "latest_html": "https://zenodo.org/records/24276674/latest",
+     "versions": "https://zenodo.org/api/records/24276674/versions",
+     "draft": "https://zenodo.org/api/records/24276674/draft",
+     "access_links": "https://zenodo.org/api/records/24276674/access/links",
+     "access_grants": "https://zenodo.org/api/records/24276674/access/grants",
+     "access_users": "https://zenodo.org/api/records/24276674/access/users",
+     "access_request": "https://zenodo.org/api/records/24276674/access/request",
+     "access": "https://zenodo.org/api/records/24276674/access",
+     "communities": "https://zenodo.org/api/records/24276674/communities",
+     "communities-suggestions": "https://zenodo.org/api/records/24276674/communities-suggestions",
+     "request_deletion": "https://zenodo.org/api/records/24276674/request-deletion",
+     "file_modification": "https://zenodo.org/api/records/24276674/file-modification",
+     "quota_increase": "https://zenodo.org/api/records/24276674/quota-increase",
+     "requests": "https://zenodo.org/api/records/24276674/requests"
+    },
+    "updated": "2026-11-16T11:54:37.816965+00:00",
+    "recid": "24276674",
+    "revision": 4,
+    "files": [
+     {
+      "id": "fa0528c9-1e76-4194-a16e-ce425941d894",
+      "key": "Share_of_elderly_people.zip",
+      "size": 316902,
+      "checksum": "md5:2c14008b987bc9ed8673e580a44b9467",
+      "links": {
+       "self": "https://zenodo.org/api/records/24276674/files/Share_of_elderly_people.zip/content"
+      }
+     },
+     {
+      "id": "cba296c5-6545-44ad-b3c9-e654ea19ac4d",
+      "key": "City_boundary.zip",
+      "size": 791439,
+      "checksum": "md5:c380976c0c2b71fc290dc34d214692b1",
+      "links": {
+       "self": "https://zenodo.org/api/records/24276674/files/City_boundary.zip/content"
+      }
+     },
+     {
+      "id": "2a864e1d-5579-4478-a342-a5ad8ca2d3e4",
+      "key": "Code.zip",
+      "size": 9481,
+      "checksum": "md5:a9944a2e58be50fd94c902d996e1b61b",
+      "links": {
+       "self": "https://zenodo.org/api/records/24276674/files/Code.zip/content"
+      }
+     },
+     {
+      "id": "4c0e8253-53b6-4461-ac87-c5aa189591ea",
+      "key": "Population.zip",
+      "size": 8121510,
+      "checksum": "md5:a0ae161c5c242a67935757341ab5c4b4",
+      "links": {
+       "self": "https://zenodo.org/api/records/24276674/files/Population.zip/content"
+      }
+     },
+     {
+      "id": "cdcb76d5-34be-4301-8a1c-4162ab313235",
+      "key": "READMEV2.md",
+      "size": 8422,
+      "checksum": "md5:1f0280d7b92440c30f225b7e9ad51530",
+      "links": {
+       "self": "https://zenodo.org/api/records/24276674/files/READMEV2.md/content"
+      }
+     }
+    ],
+    "swh": null,
+    "owners": [
+     {
+      "id": "1834179"
+     }
+    ],
+    "status": "published",
+    "stats": {
+     "downloads": 183,
+     "unique_downloads": 162,
+     "views": 180,
+     "unique_views": 159,
+     "version_downloads": 30,
+     "version_unique_downloads": 30,
+     "version_unique_views": 14,
+     "version_views": 18
+    },
+    "state": "done",
+    "submitted": true
+   },
+   {
+    "created": "2021-03-02T20:01:41.992972+00:00",
+    "modified": "2023-08-18T22:15:31.712309+00:00",
+    "id": 4574455,
+    "conceptrecid": "4574454",
+    "doi": "10.5061/dryad.0rxwdbrwf",
+    "doi_url": "https://doi.org/10.5061/dryad.0rxwdbrwf",
+    "metadata": {
+     "title": "Rapid and strong population genetic differentiation and genomic signatures of climatic adaptation in an invasive mealybug",
+     "doi": "10.5061/dryad.0rxwdbrwf",
+     "publication_date": "2021-03-02",
+     "description": "<p><b>Aim</b>: A growing number of studies suggest that adaptation of invasive species play key roles in their successful establishment in novel environments. However, adaptation of invasive species to climatic conditions remains poorly characterized. This study aimed to understand the population genetic structure produced by the cotton mealybug <i>Phenacoccus</i><i> solenopsis</i> invasion and to identify preliminary signals of selection during its range expansion.</p>\n\n<p><b>Location</b>: China.</p>\n\n<p><b>Methods</b>: We examined genetic structure of 11 population across China using SNPs, microsatellites and a segment of mitochondrial <i>cox1</i> gene. ADMIXTURE, STRUCTURE and DAPC were used to infer population genetic structure; the dispersal routes were reconstructed by the DIYABC; SNPs potentially related to climate adaptation were identified by using four population differentiation methods and three environmental association methods.</p>\n\n<p><b>Results</b>: Strong genetic differentiation was found among populations with F<sub>ST</sub> values ranging from 0.097 to 0.640 based on SNPs. Populations located at the northern-expansion edge exhibited the highest genetic differentiation and the lowest genetic diversity. Demographic analyses indicated that all populations were introduced from a single source population with small effective size and low recent gene flow. RDA analysis showed that climatic variables explained a higher proportion of genetic variance (43%) compared to population structure variables (15%). The top climatic variables associated with genetic differentiation were precipitation of the mean temperature of warmest quarter, mean temperature of driest quarter and isothermality. Genes related to climate candidate SNPs were mainly enriched to pathways of development, energy, and xenobiotic metabolisms.</p>\n\n<p><b>Main conclusions</b>: We found that extremely rapid and strong population genetic differentiation among populations appears to have developed after introduction in the cotton mealybug. Our study points to rapid neutral evolution and suggests possible climatic adaptation despite low genetic diversity in this invasive species.</p>",
+     "access_right": "open",
+     "creators": [
+      {
+       "name": "Wei, Shu-Jun",
+       "affiliation": "Beijing Academy of Agricultural and Forestry Sciences",
+       "orcid": "0000-0001-7398-0968"
+      },
+      {
+       "name": "Ma, Ling",
+       "affiliation": "Beijing Academy of Agricultural and Forestry Sciences"
+      },
+      {
+       "name": "Cao, Li-Jun",
+       "affiliation": "Beijing Academy of Agricultural and Forestry Sciences"
+      },
+      {
+       "name": "Hoffmann, Ary A.",
+       "affiliation": "The University of Melbourne"
+      },
+      {
+       "name": "Gong, Ya-Jun",
+       "affiliation": "Beijing Academy of Agricultural and Forestry Sciences"
+      },
+      {
+       "name": "Chen, Jin-Cui",
+       "affiliation": "Academy of Agricultural and Forestry Sciences"
+      },
+      {
+       "name": "Chen, Hong-Song",
+       "affiliation": "Guangxi Academy of Agricultural Science"
+      },
+      {
+       "name": "Wang, Xu-Bo",
+       "affiliation": "Southwest Forestry University"
+      },
+      {
+       "name": "Zhou, Zhong-Shi",
+       "affiliation": "Chinese Academy of Agricultural Sciences"
+      }
+     ],
+     "keywords": [
+      "population turnover",
+      "Phenacoccus solenopsis",
+      "China"
+     ],
+     "resource_type": {
+      "title": "Dataset",
+      "type": "dataset"
+     },
+     "license": {
+      "id": "cc-zero"
+     },
+     "communities": [
+      {
+       "id": "dryad"
+      }
+     ],
+     "relations": {
+      "version": [
+       {
+        "index": 0,
+        "is_last": true,
+        "parent": {
+         "pid_type": "recid",
+         "pid_value": "4574454"
+        }
+       }
+      ]
+     },
+     "notes": "<p>Funding provided by: National Key Research and Development Program of China<br>Crossref Funder Registry ID: http://dx.doi.org/10.13039/501100012166<br>Award Number: 2016YFC1202100</p><p>Funding provided by: Natural Science Foundation of Beijing Municipality<br>Crossref Funder Registry ID: http://dx.doi.org/10.13039/501100004826<br>Award Number: 6184037, 6162010</p><p>Funding provided by: Beijing Key Laboratory of Environmentally Friendly Pest Management on Northern Fruits<br>Crossref Funder Registry ID: <br>Award Number: BZ0432</p><p>Funding provided by: BAAFS-UOM Joint Laboratory on Pest Control Research<br>Crossref Funder Registry ID: <br>Award Number: </p>"
+    },
+    "title": "Rapid and strong population genetic differentiation and genomic signatures of climatic adaptation in an invasive mealybug",
+    "links": {
+     "self": "https://zenodo.org/api/records/4574455",
+     "self_html": "https://zenodo.org/records/4574455",
+     "preview_html": "https://zenodo.org/records/4574455?preview=1",
+     "doi": "https://doi.org/10.5061/dryad.0rxwdbrwf",
+     "self_doi": "https://doi.org/10.5061/dryad.0rxwdbrwf",
+     "self_doi_html": "https://zenodo.org/doi/10.5061/dryad.0rxwdbrwf",
+     "reserve_doi": "https://zenodo.org/api/records/4574455/draft/pids/doi",
+     "parent": "https://zenodo.org/api/records/4574454",
+     "parent_html": "https://zenodo.org/records/4574454",
+     "self_iiif_manifest": "https://zenodo.org/api/iiif/record:4574455/manifest",
+     "self_iiif_sequence": "https://zenodo.org/api/iiif/record:4574455/sequence/default",
+     "files": "https://zenodo.org/api/records/4574455/files",
+     "media_files": "https://zenodo.org/api/records/4574455/media-files",
+     "latest": "https://zenodo.org/api/records/4574455/versions/latest",
+     "latest_html": "https://zenodo.org/records/4574455/latest",
+     "versions": "https://zenodo.org/api/records/4574455/versions",
+     "draft": "https://zenodo.org/api/records/4574455/draft",
+     "access_links": "https://zenodo.org/api/records/4574455/access/links",
+     "access_grants": "https://zenodo.org/api/records/4574455/access/grants",
+     "access_users": "https://zenodo.org/api/records/4574455/access/users",
+     "access_request": "https://zenodo.org/api/records/4574455/access/request",
+     "access": "https://zenodo.org/api/records/4574455/access",
+     "communities": "https://zenodo.org/api/records/4574455/communities",
+     "communities-suggestions": "https://zenodo.org/api/records/4574455/communities-suggestions",
+     "request_deletion": "https://zenodo.org/api/records/4574455/request-deletion",
+     "file_modification": "https://zenodo.org/api/records/4574455/file-modification",
+     "quota_increase": "https://zenodo.org/api/records/4574455/quota-increase",
+     "requests": "https://zenodo.org/api/records/4574455/requests"
+    },
+    "updated": "2023-08-18T22:15:31.712309+00:00",
+    "recid": "4574455",
+    "revision": 4,
+    "files": [
+     {
+      "id": "362f1318-4e1d-43c5-8809-ca3919ca7490",
+      "key": "scripts.bayescan.txt",
+      "size": 185,
+      "checksum": "md5:da5a54f9a93a866cb2801162572a47ef",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/scripts.bayescan.txt/content"
+      }
+     },
+     {
+      "id": "8f213fcc-4a2d-45e8-a859-fec1e60b95b6",
+      "key": "scripts.admixture.txt",
+      "size": 569,
+      "checksum": "md5:e2eb8f15b530de1c49d94acc138a80e4",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/scripts.admixture.txt/content"
+      }
+     },
+     {
+      "id": "5b1cb725-178d-48fd-b325-51c23adf1b8f",
+      "key": "all.SNP.ps.19634.203.gen",
+      "size": 28154642,
+      "checksum": "md5:7f8def94e5a45e5ce804715814fa724e",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/all.SNP.ps.19634.203.gen/content"
+      }
+     },
+     {
+      "id": "89ca93a1-850c-4f07-a700-859ae2641cb0",
+      "key": "scripts.rda.R",
+      "size": 12648,
+      "checksum": "md5:3ba610efadcc39ec0e22549f269cad3b",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/scripts.rda.R/content"
+      }
+     },
+     {
+      "id": "cd9132a0-3c11-44ff-99a5-724b8368929e",
+      "key": "scripts.baypass.txt",
+      "size": 12503,
+      "checksum": "md5:5ad9ac0d8e9bad524d80c29f3206360a",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/scripts.baypass.txt/content"
+      }
+     },
+     {
+      "id": "e3c45d8d-fa2c-4996-b239-489302a18672",
+      "key": "scripts.pcadapt.r",
+      "size": 3401,
+      "checksum": "md5:06f433d904141eb9ef773f2417924912",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/scripts.pcadapt.r/content"
+      }
+     },
+     {
+      "id": "21082769-b41e-4d5f-bfc5-b0f864d1c2bb",
+      "key": "all.SNP.ps.11pop.19634.vcf",
+      "size": 144832394,
+      "checksum": "md5:ffcc6d57edfac3b95baf9a8e56162a90",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/all.SNP.ps.11pop.19634.vcf/content"
+      }
+     },
+     {
+      "id": "37f78a31-6fbf-458e-a3b7-ee44c95d0179",
+      "key": "all.SSR.ps.11pop.gen",
+      "size": 40735,
+      "checksum": "md5:84f2c142c33b3da00dc5bf94a67172b5",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/all.SSR.ps.11pop.gen/content"
+      }
+     },
+     {
+      "id": "48de91d3-08b0-4b81-9edb-acdf3d878e94",
+      "key": "scripts.dapc.R",
+      "size": 4814,
+      "checksum": "md5:082248a8cf65670ef94a63d173386647",
+      "links": {
+       "self": "https://zenodo.org/api/records/4574455/files/scripts.dapc.R/content"
+      }
+     }
+    ],
+    "swh": null,
+    "owners": [
+     {
+      "id": "90070"
+     }
+    ],
+    "status": "published",
+    "stats": {
+     "downloads": 454,
+     "unique_downloads": 418,
+     "views": 169,
+     "unique_views": 167,
+     "version_downloads": 453,
+     "version_unique_downloads": 417,
+     "version_unique_views": 167,
+     "version_views": 169
+    },
+    "state": "done",
+    "submitted": true
+   }
+  ],
+  "total": 47897
+ },
+ "links": {
+  "self": "https://zenodo.org/api/records?page=1&q=china+population&size=2&sort=bestmatch&type=dataset",
+  "next": "https://zenodo.org/api/records?page=2&q=china+population&size=2&sort=bestmatch&type=dataset"
+ }
+}

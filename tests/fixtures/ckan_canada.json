@@ -1,0 +1,178 @@
+{
+ "help": "https://open.canada.ca/data/api/3/action/help_show?name=package_search",
+ "success": true,
+ "result": {
+  "count": 5983,
+  "facet_ranges": {
+   "portal_release_date": {
+    "counts": [
+     "1926-11-20T00:00:00Z",
+     3196
+    ],
+    "gap": "+100YEARS",
+    "start": "1926-11-20T00:00:00Z",
+    "end": "2126-11-20T00:00:00Z"
+   }
+  },
+  "facet_queries": {},
+  "results": [
+   {
+    "association_type": [],
+    "audience": [],
+    "author": null,
+    "author_email": "infostats@statcan.gc.ca",
+    "collection": "primary",
+    "contributor": {},
+    "creator_user_id": "6b600515-c266-4584-a219-d084c980fd47",
+    "data_series_issue_identification": {
+     "fr": "Tableau 32100397",
+     "en": "Table 32100397"
+    },
+    "data_series_name": {
+     "fr": "Tableau",
+     "en": "Table"
+    },
+    "date_published": "2023-08-25 08:30:00",
+    "display_flags": [],
+    "frequency": "as_needed",
+    "geographic_region": [],
+    "id": "46615d41-2be3-46ff-85ca-57e7fa940c87",
+    "imso_approval": "true",
+    "isopen": false,
+    "jurisdiction": "federal",
+    "keywords": {
+     "fr": [
+      "agriculture et alimentation",
+      "population agricole",
+      "tableau"
+     ],
+     "en": [
+      "agriculture and food",
+      "farm population",
+      "table"
+     ]
+    },
+    "license_id": "ca-ogl-lgo",
+    "license_title": "Open Government Licence - Canada",
+    "license_url": "https://open.canada.ca/en/open-government-licence-canada",
+    "maintainer": null,
+    "maintainer_contact_form": {},
+    "maintainer_email": "infostats@statcan.gc.ca",
+    "metadata_contact": {},
+    "metadata_created": "2023-09-18T14:20:22.010921",
+    "metadata_modified": "2023-09-18T14:20:22.010933",
+    "name": "46615d41-2be3-46ff-85ca-57e7fa940c87",
+    "notes": "Agriculture–Population Linkage, 2021. Farm population and total population classified by religion.<br>",
+    "notes_translated": {
+     "fr": "Couplage Agriculture–Population, 2021. Population agricole et population totale classées selon la religion.<br>",
+     "en": "Agriculture–Population Linkage, 2021. Farm population and total population classified by religion.<br>"
+    },
+    "num_resources": 5,
+    "num_tags": 0,
+    "org_section": {},
+    "org_title_at_publication": {
+     "fr": "Statistique Canada",
+     "en": "Statistics Canada"
+    },
+    "organization": {
+     "id": "A0F0FCFC-BC3B-4696-8B6D-E7E411D55BAC",
+     "name": "statcan",
+     "title": "Statistics Canada | Statistique Canada",
+     "type": "organization",
+     "description": "",
+     "image_url": "",
+     "created": "2016-09-23T17:26:15.123077",
+     "is_organization": true,
+     "approval_status": "approved",
+     "state": "active"
+    },
+    "owner_org": "A0F0FCFC-BC3B-4696-8B6D-E7E411D55BAC",
+    "place_of_publication": [],
+    "position_name": {},
+    "private": false,
+    "program_page_url": {},
+    "ready_to_publish": "true",
+    "restrictions": "unrestricted",
+    "spatial_representation_type": [],
+    "state": "active",
+    "subject": [
+     "agriculture"
+    ],
+    "title": "Farm population and total population classified by religion, Agriculture–Population Linkage, 2021",
+    "title_translated": {
+     "fr": "Population agricole et population totale classées selon la religion, Couplage Agriculture–Population, 2021",
+     "en": "Farm population and total population classified by religion, Agriculture–Population Linkage, 2021"
+    },
+    "topic_category": [],
+    "type": "dataset",
+    "url": "{u'fr': u'http://www5.statcan.gc.ca/cansim/home-accueil?lang=fra', u'en': u'http://www5.statcan.gc.ca/cansim/home-accueil?lang=eng'}",
+    "version": null,
+    "resources": [
+     {
+      "cache_last_updated": null,
+      "cache_url": null,
+      "created": "2023-09-18T14:20:22.038668",
+      "data_quality": [],
+      "datastore_active": false,
+      "description": null,
+      "format": "CSV",
+      "hash": "",
+      "id": "48d70f81-85b3-4d25-9529-6618769a2616",
+      "language": [
+       "fr"
+      ],
+      "last_modified": null,
+      "metadata_modified": "2023-09-18T14:20:21.969104",
+      "mimetype": null,
+      "mimetype_inner": null,
+      "name": "Dataset",
+      "name_translated": {
+       "fr": "Ensembles de données",
+       "en": "Dataset"
+      },
+      "package_id": "46615d41-2be3-46ff-85ca-57e7fa940c87",
+      "position": 0,
+      "resource_type": "dataset",
+      "state": "active",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/32100397-fra.zip",
+      "url_type": null
+     },
+     {
+      "cache_last_updated": null,
+      "cache_url": null,
+      "created": "2023-09-18T14:20:22.038676",
+      "data_quality": [],
+      "datastore_active": false,
+      "description": null,
+      "format": "CSV",
+      "hash": "",
+      "id": "131f628f-e601-40be-b353-415b797d1969",
+      "language": [
+       "en"
+      ],
+      "last_modified": null,
+      "metadata_modified": "2023-09-18T14:20:21.969785",
+      "mimetype": null,
+      "mimetype_inner": null,
+      "name": "Dataset",
+      "name_translated": {
+       "fr": "Ensembles de données",
+       "en": "Dataset"
+      },
+      "package_id": "46615d41-2be3-46ff-85ca-57e7fa940c87",
+      "position": 1,
+      "resource_type": "dataset",
+      "state": "active",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/32100397-eng.zip",
+      "url_type": null
+     }
+    ],
+    "tags": [],
+    "groups": [],
+    "relationships_as_subject": [],
+    "relationships_as_object": []
+   }
+  ],
+  "sort": "score desc, metadata_modified desc"
+ }
+}

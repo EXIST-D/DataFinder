@@ -1,0 +1,186 @@
+{
+ "data": [
+  {
+   "id": "10.14457/nida.the.2021.61",
+   "type": "dois",
+   "attributes": {
+    "doi": "10.14457/nida.the.2021.61",
+    "identifiers": [],
+    "creators": [
+     {
+      "nameType": "Personal",
+      "affiliation": [],
+      "givenName": "Xiao",
+      "familyName": "Qi",
+      "name": "Qi, Xiao",
+      "nameIdentifiers": []
+     }
+    ],
+    "titles": [
+     {
+      "title": "The impact of population aging on consumption structure: a case of Southwest and South China"
+     }
+    ],
+    "publisher": "National Institute of Development Administration",
+    "container": {},
+    "publicationYear": 2021,
+    "subjects": [
+     {
+      "subject": "Consumption (Economics) -- China"
+     },
+     {
+      "subject": "Aging -- China"
+     },
+     {
+      "subject": "China -- Population"
+     }
+    ],
+    "contributors": [
+     {
+      "affiliation": [],
+      "name": "Athakrit Thepmongkol",
+      "nameIdentifiers": [],
+      "contributorType": "Researcher"
+     }
+    ],
+    "dates": [
+     {
+      "date": "2021",
+      "dateType": "Issued"
+     }
+    ],
+    "language": null,
+    "types": {
+     "schemaOrg": "Dataset",
+     "resourceTypeGeneral": "Dataset",
+     "citeproc": "dataset",
+     "bibtex": "misc",
+     "ris": "DATA",
+     "resourceType": "Dataset"
+    },
+    "relatedIdentifiers": [],
+    "relatedItems": [],
+    "sizes": [],
+    "formats": [],
+    "version": null,
+    "rightsList": [],
+    "descriptions": [],
+    "geoLocations": [],
+    "fundingReferences": [],
+    "url": "http://doi.nrct.go.th/?page=resolve_doi&resolve_doi=10.14457/NIDA.the.2021.61",
+    "contentUrl": null,
+    "metadataVersion": 0,
+    "schemaVersion": "http://datacite.org/schema/kernel-3",
+    "source": "mds",
+    "isActive": true,
+    "state": "findable",
+    "reason": null,
+    "viewCount": 0,
+    "downloadCount": 0,
+    "referenceCount": 0,
+    "citationCount": 0,
+    "partCount": 0,
+    "partOfCount": 0,
+    "versionCount": 0,
+    "versionOfCount": 0,
+    "created": "2023-06-05T00:15:45Z",
+    "registered": "2023-06-05T00:15:45Z",
+    "published": null,
+    "updated": "2023-06-05T00:15:45Z"
+   },
+   "relationships": {
+    "client": {
+     "data": {
+      "id": "nrct.db1",
+      "type": "clients"
+     }
+    }
+   }
+  },
+  {
+   "id": "10.7910/dvn/xnwzkd/jjisgu",
+   "type": "dois",
+   "attributes": {
+    "doi": "10.7910/dvn/xnwzkd/jjisgu",
+    "identifiers": [],
+    "creators": [
+     {
+      "affiliation": [],
+      "name": "Department Of Population Statistics (China State Statistical Bureau)",
+      "nameIdentifiers": []
+     }
+    ],
+    "titles": [
+     {
+      "title": "DTA607.file0021.RE02LN.DATA.CN"
+     }
+    ],
+    "publisher": "Harvard Dataverse",
+    "container": {},
+    "publicationYear": 2016,
+    "subjects": [],
+    "contributors": [],
+    "dates": [
+     {
+      "date": "2016",
+      "dateType": "Issued"
+     }
+    ],
+    "language": null,
+    "types": {
+     "schemaOrg": "Dataset",
+     "resourceTypeGeneral": "Dataset",
+     "citeproc": "dataset",
+     "bibtex": "misc",
+     "ris": "DATA"
+    },
+    "relatedIdentifiers": [],
+    "relatedItems": [],
+    "sizes": [],
+    "formats": [],
+    "version": null,
+    "rightsList": [],
+    "descriptions": [],
+    "geoLocations": [],
+    "fundingReferences": [],
+    "url": "https://dataverse.harvard.edu/file.xhtml?persistentId=doi:10.7910/DVN/XNWZKD/JJISGU",
+    "contentUrl": null,
+    "metadataVersion": 1,
+    "schemaVersion": "http://datacite.org/schema/kernel-4",
+    "source": "mds",
+    "isActive": true,
+    "state": "findable",
+    "reason": null,
+    "viewCount": 0,
+    "downloadCount": 0,
+    "referenceCount": 0,
+    "citationCount": 0,
+    "partCount": 0,
+    "partOfCount": 1,
+    "versionCount": 0,
+    "versionOfCount": 0,
+    "created": "2018-08-24T22:24:33Z",
+    "registered": "2018-08-24T22:25:34Z",
+    "published": null,
+    "updated": "2024-10-21T22:23:26Z"
+   },
+   "relationships": {
+    "client": {
+     "data": {
+      "id": "gdcc.harvard-dv",
+      "type": "clients"
+     }
+    }
+   }
+  }
+ ],
+ "meta": {
+  "total": 4472,
+  "totalPages": 2236,
+  "page": 1
+ },
+ "links": {
+  "self": "https://api.datacite.org/dois?query=china%20population&resource-type-id=dataset&page%5Bsize%5D=2&sort=relevance",
+  "next": "https://api.datacite.org/dois?page%5Bnumber%5D=2&page%5Bsize%5D=2&query=china+population&resource-type-id=dataset"
+ }
+}

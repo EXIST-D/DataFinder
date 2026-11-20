@@ -1,0 +1,79 @@
+{
+ "data": {
+  "types": [
+   {
+    "name": "月度数据",
+    "code": "1",
+    "dtType": "MM"
+   },
+   {
+    "name": "年度数据",
+    "code": "3",
+    "dtType": "YY"
+   }
+  ],
+  "data": [
+   {
+    "explain": null,
+    "indic_id": "65ef6ec0de6c416cb6cd84b065a23fb2",
+    "ek": "601020100002|fd645f085ac24732b78f2bc009206806",
+    "type_text": "年度数据",
+    "show_name": "人口数 (人口抽样调查) (人) ",
+    "i": "fd645f085ac24732b78f2bc009206806",
+    "type_value": "3",
+    "da_name": "全国",
+    "dt": "2024",
+    "dt_name": "2024年",
+    "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.884c062607104a91967b22742537f44f.040faf60f9b64535957e242e62a18a85.ee90d58b5d524bfa868e13a266c7451c.16f09026c6b34e688b307c4b7c9f4633",
+    "i_name": "年末总人口",
+    "dt_type": "YY",
+    "da": "000000000000",
+    "value": "1447437",
+    "ek_name": "年末总人口_人口抽样调查",
+    "cid": "16f09026c6b34e688b307c4b7c9f4633"
+   },
+   {
+    "explain": null,
+    "indic_id": "d5078be9ee9341c684ea4450c6325ea8",
+    "ek": "107990200001-601020100002|fd645f085ac24732b78f2bc009206806",
+    "type_text": "年度数据",
+    "show_name": "男性人口数 (人口抽样调查) (人) ",
+    "i": "fd645f085ac24732b78f2bc009206806",
+    "type_value": "3",
+    "da_name": "全国",
+    "dt": "2024",
+    "dt_name": "2024年",
+    "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.884c062607104a91967b22742537f44f.040faf60f9b64535957e242e62a18a85.ee90d58b5d524bfa868e13a266c7451c.0dcabfd7cd074300a28677825cd00217",
+    "i_name": "年末总人口",
+    "dt_type": "YY",
+    "da": "000000000000",
+    "value": "738153",
+    "ek_name": "年末总人口_男_人口抽样调查",
+    "cid": "0dcabfd7cd074300a28677825cd00217"
+   },
+   {
+    "explain": null,
+    "indic_id": "f35fb09167e2417aa3e332ca4f540b26",
+    "ek": "107990200002-601020100002|fd645f085ac24732b78f2bc009206806",
+    "type_text": "年度数据",
+    "show_name": "女性人口数 (人口抽样调查) (人) ",
+    "i": "fd645f085ac24732b78f2bc009206806",
+    "type_value": "3",
+    "da_name": "全国",
+    "dt": "2024",
+    "dt_name": "2024年",
+    "treeinfo_globalid": "69c574ab128a44e595cc0b24502b771b.884c062607104a91967b22742537f44f.040faf60f9b64535957e242e62a18a85.ee90d58b5d524bfa868e13a266c7451c.8e796f1413004b9fac67b1d709c87483",
+    "i_name": "年末总人口",
+    "dt_type": "YY",
+    "da": "000000000000",
+    "value": "709284",
+    "ek_name": "年末总人口_女_人口抽样调查",
+    "cid": "8e796f1413004b9fac67b1d709c87483"
+   }
+  ],
+  "count": 410
+ },
+ "success": true,
+ "state": 20000,
+ "message": "成功"
+}

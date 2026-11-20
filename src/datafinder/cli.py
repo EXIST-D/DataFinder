@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import sqlite3
 
@@ -12,10 +13,13 @@ from rich.table import Table
 
 from . import __version__
 from .doctor import run_checks
+from .finder import search_datasets
+from .models import Dataset
 from .portals.search import PortalHit, search_portals
 from .portals.sync import sync as run_sync
 from .portals.tag import industry_zh, load_config
 from .query.plan import country_zh_name
+from .sources.registry import load_specs
 from .store import connect, db_path, portal_count
 
 app = typer.Typer(
@@ -212,6 +216,191 @@ def portals(
         f"\n[dim]共显示 {len(hits)} 条 · 门户目录来自 Dateno 注册表（CC BY 4.0），"
         "收录不代表已实时核验，请以原站为准。[/dim]"
     )
+
+
+# ───────────── 数据集检索 ─────────────
+
+_STATUS_ICON = {
+    "ok": "[green]✓[/green]",
+    "cached": "[green]✓[/green]",
+    "stale": "[yellow]≈[/yellow]",
+    "skipped": "[dim]–[/dim]",
+    "resting": "[yellow]z[/yellow]",
+    "error": "[red]✗[/red]",
+    "timeout": "[red]✗[/red]",
+    "not_waited": "[yellow]…[/yellow]",
+}
+
+
+def _fmt_size(n: int | None) -> str | None:
+    if not n:
+        return None
+    for unit in ("B", "KB", "MB", "GB"):
+        if n < 1024 or unit == "GB":
+            return f"{n:.0f}{unit}" if unit == "B" else f"{n:.1f}{unit}"
+        n /= 1024
+    return None
+
+
+def _print_dataset(
+    rank: int, d: Dataset, titles: dict[str, str], *, explain: bool, resources: bool
+) -> None:
+    where = "、".join(titles.get(s, s) for s in d.sources) or titles.get(d.source, d.source)
+    console.print(f"[bold]{rank:>2}. {d.title}[/bold]")
+    facts = [
+        f"[cyan]{where}[/cyan]",
+        d.license or "[yellow]许可未知[/yellow]",
+    ]
+    if d.publisher and d.publisher not in where:
+        facts.append(d.publisher[:40])
+    if d.period:
+        facts.append(f"数据期 {d.period}")
+    if d.updated:
+        facts.append(f"更新 {d.updated}")
+    if d.formats:
+        facts.append("/".join(d.formats[:5]))
+    console.print("    " + " · ".join(facts))
+    if d.description:
+        text = d.description if len(d.description) <= 110 else d.description[:109] + "…"
+        console.print(f"    {text}")
+    console.print(f"    [blue]{d.url}[/blue]")
+    if resources:
+        if not d.resources:
+            console.print("    [dim]资源：上游未提供文件/接口列表[/dim]")
+        for r in d.resources[:6]:
+            extra = " · ".join(x for x in (r.format, _fmt_size(r.size_bytes)) if x)
+            console.print(
+                f"    [dim]- {r.name}（{r.kind}{' · ' + extra if extra else ''}）[/dim] {r.url}"
+            )
+            if r.note:
+                console.print(f"      [dim]{r.note}[/dim]")
+    if explain:
+        parts = " ".join(f"{k}={v:.3g}" for k, v in d.explain.items())
+        console.print(f"    [dim]得分 {d.score:.4f}：{parts}[/dim]")
+
+
+def _dataset_json(d: Dataset) -> dict:
+    out = d.to_dict()
+    out["score"] = round(d.score, 6)
+    return out
+
+
+@app.command()
+def search(
+    query: str = typer.Argument(..., help="关键词或一句话，如 “中国各省近十年人口 GDP 城镇化率”"),
+    limit: int = typer.Option(10, "--limit", "-n", min=1, max=50, help="返回条数"),
+    source: str | None = typer.Option(
+        None, "--source", "-s", help="只查这些来源，逗号分隔（见 sources 命令）"
+    ),
+    exclude: str | None = typer.Option(None, "--exclude", "-x", help="排除这些来源，逗号分隔"),
+    resources: bool = typer.Option(False, "--resources", "-r", help="显示每条的下载/API 资源"),
+    portals_n: int = typer.Option(3, "--portals", help="同时列出相关门户的条数，0 表示不列"),
+    refresh: bool = typer.Option(False, "--refresh", help="忽略缓存，重新查询"),
+    timeout: float = typer.Option(20.0, "--timeout", min=3, max=120, help="总截止时间（秒）"),
+    as_json: bool = typer.Option(False, "--json", help="输出 JSON"),
+    explain: bool = typer.Option(False, "--explain", help="显示排序依据与查询计划"),
+) -> None:
+    """查找数据集：一次查多个来源，合并去重，给出原站链接与下载/API 资源。"""
+    only = {x.strip() for x in source.split(",") if x.strip()} if source else None
+    skip = {x.strip() for x in exclude.split(",") if x.strip()} if exclude else None
+    try:
+        with console.status("正在查询各来源…", spinner="dots") if not as_json else _null():
+            result = asyncio.run(
+                search_datasets(
+                    query, limit=limit, only=only, exclude=skip, refresh=refresh, deadline=timeout
+                )
+            )
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    titles = {s.id: s.title for s in load_specs()}
+    portal_hits = []
+    if portals_n and not as_json:
+        conn = connect()
+        if portal_count(conn):
+            _, portal_hits = search_portals(conn, query, limit=portals_n)
+    if as_json:
+        typer.echo(
+            json.dumps(
+                {
+                    "query": query,
+                    "complete": result.complete,
+                    "datasets": [_dataset_json(d) for d in result.datasets],
+                    "sources": [
+                        {
+                            "id": s.id,
+                            "status": s.status,
+                            "elapsed_ms": s.elapsed_ms,
+                            "count": s.count,
+                            "message": s.message,
+                        }
+                        for s in result.statuses
+                    ],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return
+
+    if explain:
+        p = result.plan
+        console.print(
+            f"[dim]查询计划：概念 {[c.label for c in p.concepts]} · 英文检索词 {p.query_en()!r}"
+            f" · 中文检索词 {p.zh_terms()} · 地点 {p.location_zh} · 格式 {p.formats} · 年份 {p.years}[/dim]\n"
+        )
+    if not result.datasets:
+        console.print("没有找到匹配的数据集。可以换个说法、去掉格式词，或用 --source 指定来源。")
+    for i, d in enumerate(result.datasets, start=1):
+        _print_dataset(i, d, titles, explain=explain, resources=resources)
+
+    status_line = "  ".join(
+        f"{_STATUS_ICON[s.status]}{s.title}{f' {s.count}' if s.answered else ''}"
+        for s in result.statuses
+    )
+    console.print(f"\n[dim]来源：[/dim]{status_line}")
+    for s in result.statuses:
+        if s.status in ("error", "timeout", "resting", "stale", "not_waited") and s.message:
+            console.print(f"  [dim]{s.title}：{s.message}[/dim]")
+    if not result.complete:
+        console.print("[yellow]部分来源没有返回，结果可能不完整。[/yellow]")
+    if portal_hits:
+        console.print("\n[bold]相关门户[/bold]（可以去这些网站自己找）")
+        for h in portal_hits:
+            row = h.row
+            console.print(f"  · {row['name_zh'] or row['name']}  [blue]{row['url']}[/blue]")
+    if any(d.license is None for d in result.datasets):
+        console.print("[dim]许可未知不代表可随意使用，请以原站声明为准。[/dim]")
+
+
+class _null:
+    def __enter__(self) -> None:
+        return None
+
+    def __exit__(self, *exc: object) -> None:
+        return None
+
+
+@app.command()
+def sources() -> None:
+    """列出数据集来源及其状态。"""
+    from .sources.dataseek import find_executable
+
+    table = Table(show_header=True, header_style="bold", box=None, pad_edge=False)
+    for col in ("id", "名称", "协议", "状态", "官方", "语言"):
+        table.add_column(col)
+    for s in load_specs():
+        status = {
+            "active": "[green]启用[/green]",
+            "experimental": "[yellow]实验性[/yellow]",
+            "disabled": "[dim]停用[/dim]",
+        }[s.status]
+        table.add_row(
+            s.id, s.title, s.protocol, status, "是" if s.official else "", "/".join(s.langs)
+        )
+    console.print(table)
+    exe = find_executable()
+    console.print(f"\n[dim]Dataseek 桥接：{exe or '未安装（可选）'}[/dim]")
 
 
 def main() -> None:

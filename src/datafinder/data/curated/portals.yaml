@@ -133,6 +133,17 @@
   is_national: true
   industries: [statistics, economy, population]
 
+# 新增：2026-11-20 已访问，HTTP 200。首页显示：数据目录共 64 个条目、20 个分类
+# （上市公司、宏观与区域经济、政府与司法、企业工商、专利等），带 API 商店；使用需注册登录。
+- add: true
+  link: https://www.cnopendata.com
+  name: CnOpenData
+  name_zh: CnOpenData 中国开放数据平台
+  desc_zh: 数据目录含上市公司、宏观与区域经济、政府与司法、企业工商、专利等分类，设有 API 商店；使用需注册登录，部分数据可能收费。
+  country: CN
+  catalog_type: Indicators catalog
+  industries: [economy, finance, law]
+
 # ───────────── 国际高质量门户 ─────────────
 - link: https://data.worldbank.org
   name_zh: 世界银行开放数据

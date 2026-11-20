@@ -1,0 +1,77 @@
+{
+ "help": "https://data.humdata.org/api/3/action/help_show?name=package_search",
+ "success": true,
+ "result": {
+  "count": 632,
+  "expanded": {},
+  "results": [
+   {
+    "id": "6e877b21-b06b-4142-818b-2a6b22a37453",
+    "license_id": "hdx-other",
+    "license_title": "Other",
+    "metadata_modified": "2025-08-26T13:29:58.957957",
+    "name": "worldpop-population-counts-for-china",
+    "notes": "<b>WorldPop produces different types of gridded population count datasets, depending on the methods used and end application. \r\nPlease make sure you have read our <a href=\"https://www.worldpop.org/methods/populations\" target=\"_blank\">Mapping Populations</a> overview page before choosing and downloading a dataset.</b> \r\n<br/><br/>   \r\nBespoke methods used to produce datasets for specific individual countries are available through the <b>WorldPop Open Population Repository (WOPR)</b> link below. \r\nThese are 100m resolution gridded population estimates using customized methods (\"<a href=\"https://www.worldpop.org/methods/populations\" target=\"_blank\">bottom-up</a>\" and/or \"<a href=\"https://www.worldpop.org/methods/populations\" target=\"_blank\">top-down</a>\") developed for the latest data available from each country. \r\nThey can also be visualised and explored through the <a href=\"https://apps.worldpop.org/woprVision/\" target=\"_blank\">woprVision App</a>.\r\n<br/>\r\nThe remaining datasets in the links below are produced using the \"<a href=\"https://www.worldpop.org/methods/populations\" target=\"_blank\">top-down</a>\" method, \r\nwith either the unconstrained or constrained top-down disaggregation method used. \r\nPlease make sure you read the <a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">Top-down estimation modelling overview page</a> to decide on which datasets best meet your needs. \r\nDatasets are available to download in Geotiff and ASCII XYZ format at a <u>resolution of 3 and 30 arc-seconds (approximately 100m and 1km at the equator, respectively)</u>:\r\n<br/><br/>\r\n- Unconstrained individual countries 2000-2020  ( 1km resolution ): Consistent 1km resolution population count datasets created using \r\n<a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">unconstrained top-down methods</a> for all countries of the World for each year 2000-2020. \r\n<br/>\r\n- Unconstrained individual countries 2000-2020 ( 100m resolution ): Consistent 100m resolution population count datasets created using \r\n<a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">unconstrained top-down methods</a> for all countries of the World for each year 2000-2020. \r\n<br/>\r\n- Unconstrained individual countries 2000-2020 UN adjusted ( 100m resolution ): Consistent 100m resolution population count datasets created using \r\n<a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">unconstrained top-down methods</a> for all countries of the World for each year 2000-2020 and adjusted to match United Nations national population estimates (UN 2019)\r\n<br/>\r\n-Unconstrained individual countries 2000-2020 UN adjusted ( 1km resolution ): Consistent 1km resolution population count datasets created using \r\n<a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">unconstrained top-down methods</a> for all countries of the World for each year 2000-2020 and adjusted to match United Nations national population estimates (UN 2019).\r\n<br/>\r\n-Unconstrained global mosaics 2000-2020 ( 1km resolution ): Mosaiced 1km resolution versions of the \"Unconstrained individual countries 2000-2020\" datasets.\r\n<br/>\r\n-Constrained individual countries 2020 ( 100m resolution ): Consistent 100m resolution population count datasets created using \r\n<a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">constrained top-down methods</a> for all countries of the World for 2020.\r\n<br/>\r\n-Constrained individual countries 2020 UN adjusted ( 100m resolution ): Consistent 100m resolution population count datasets created using \r\n<a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\" target=\"_blank\">constrained top-down methods</a> for all countries of the World for 2020 and adjusted to match United Nations national \r\npopulation estimates (UN 2019).\r\n<br/>\r\n<br/>\r\nOlder datasets produced for specific individual countries and continents, using a set of tailored geospatial inputs and differing \"top-down\" methods and time periods are still available for download here: <a href=\"https://www.worldpop.org/geodata/listing?id=16\">Individual countries</a> and <a href=\"https://www.worldpop.org/geodata/listing?id=17\">Whole Continent</a>.\r\n  \nData for earlier dates is available directly from WorldPop.  \n  \nWorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton; Department of Geography and Geosciences, University of Louisville; Departement de Geographie, Universite de Namur) and Center for International Earth Science Information Network (CIESIN), Columbia University (2018). Global High Resolution Population Denominators Project - Funded by The Bill and Melinda Gates Foundation (OPP1134076). https://dx.doi.org/10.5258/SOTON/WP00645",
+    "organization": {
+     "title": "WorldPop"
+    },
+    "title": "China - Population Counts",
+    "resources": [
+     {
+      "name": "chn_ppp_2020.tif",
+      "url": "https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/CHN/chn_ppp_2020.tif",
+      "format": "GeoTIFF",
+      "size": 4977455348
+     },
+     {
+      "name": "chn_ppp_2019.tif",
+      "url": "https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/CHN/chn_ppp_2019.tif",
+      "format": "GeoTIFF",
+      "size": 4976653755
+     },
+     {
+      "name": "chn_ppp_2018.tif",
+      "url": "https://data.worldpop.org/GIS/Population/Global_2000_2020/2018/CHN/chn_ppp_2018.tif",
+      "format": "GeoTIFF",
+      "size": 4985471058
+     }
+    ]
+   },
+   {
+    "id": "37269dc3-abbe-4a6b-bee1-b98820437c06",
+    "license_id": "hdx-other",
+    "license_title": "Other",
+    "metadata_modified": "2025-08-26T12:28:10.474507",
+    "name": "worldpop-population-density-for-china",
+    "notes": "<b>WorldPop produces different types of gridded population count datasets, depending on the methods used and end application. \r\nPlease make sure you have read our <a href=\"https://www.worldpop.org/methods/populations\" target=\"_blank\">Mapping Populations</a> overview page before choosing and downloading a dataset.</b> \r\n<br/><br/>\r\nDatasets are available to download in Geotiff and ASCII XYZ format at a <u>resolution of 30 arc-seconds (approximately 1km at the equator)</u>\r\n<br/> \r\n\r\n-Unconstrained individual countries 2000-2020: Population density datasets for all countries of the World for each year 2000-2020 – derived from the corresponding \r\n<a href=\"https://www.worldpop.org/geodata/listing?id=29\">Unconstrained individual countries 2000-2020 population count datasets</a> by dividing the number of people in each pixel by the pixel surface area. \r\nThese are produced using the <a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\">unconstrained top-down modelling method</a>.\r\n<br/> \r\n-Unconstrained individual countries 2000-2020 UN adjusted: Population density datasets for all countries of the World for each year 2000-2020 – derived from the corresponding \r\n<a href=\"https://www.worldpop.org/geodata/listing?id=69\">Unconstrained individual countries 2000-2020 population UN adjusted count datasets</a> by dividing the number of people in each pixel, \r\nadjusted to match the country total from the official United Nations population estimates (UN 2019), by the pixel surface area. \r\nThese are produced using the <a href=\"https://www.worldpop.org/methods/top_down_constrained_vs_unconstrained\">unconstrained top-down modelling method</a>.\r\n  \nData for earlier dates is available directly from WorldPop.  \n  \nWorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton; Department of Geography and Geosciences, University of Louisville; Departement de Geographie, Universite de Namur) and Center for International Earth Science Information Network (CIESIN), Columbia University (2018). Global High Resolution Population Denominators Project - Funded by The Bill and Melinda Gates Foundation (OPP1134076). https://dx.doi.org/10.5258/SOTON/WP00674",
+    "organization": {
+     "title": "WorldPop"
+    },
+    "title": "China - Population Density",
+    "resources": [
+     {
+      "name": "chn_pd_2020_1km_ASCII_XYZ.zip",
+      "url": "https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km/2020/CHN/chn_pd_2020_1km_ASCII_XYZ.zip",
+      "format": "GeoTIFF",
+      "size": 168822056
+     },
+     {
+      "name": "chn_pd_2020_1km.tif",
+      "url": "https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km/2020/CHN/chn_pd_2020_1km.tif",
+      "format": "GeoTIFF",
+      "size": 48862953
+     },
+     {
+      "name": "chn_pd_2020_1km_UNadj_ASCII_XYZ.zip",
+      "url": "https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km_UNadj/2020/CHN/chn_pd_2020_1km_UNadj_ASCII_XYZ.zip",
+      "format": "GeoTIFF",
+      "size": 168881934
+     }
+    ]
+   }
+  ],
+  "sort": "score desc, last_modified desc",
+  "facet_pivot": {},
+  "facet_queries": {}
+ }
+}

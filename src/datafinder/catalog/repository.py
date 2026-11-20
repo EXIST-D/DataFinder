@@ -138,6 +138,14 @@ class Catalog:
             )
             return self.conn.execute("DELETE FROM resources WHERE source_id=?", (source_id,)).rowcount
 
+    def delete_children(self, parent_id: str) -> int:
+        """删除某资源的直接子资源（重抓一个版次/数据集前先清掉旧子项）。"""
+        with self.conn:
+            self.conn.execute(
+                "DELETE FROM resources_fts WHERE rowid IN (SELECT rowid FROM resources WHERE parent_id=?)", (parent_id,)
+            )
+            return self.conn.execute("DELETE FROM resources WHERE parent_id=?", (parent_id,)).rowcount
+
     # ── 读取 ──
     def get(self, resource_id: str) -> Entry | None:
         row = self.conn.execute("SELECT * FROM resources WHERE resource_id=?", (resource_id,)).fetchone()

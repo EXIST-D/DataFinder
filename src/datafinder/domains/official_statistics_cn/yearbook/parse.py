@@ -21,9 +21,6 @@ _TOKEN = re.compile(
 _TAGS = re.compile(r"<[^>]+>")
 _NUMBERED = re.compile(r"^(?:表\s*)?(\d+(?:[-.．]\d+)+)\s*(.+)$")
 _SPACES = re.compile(r"[\s\u3000\xa0]+")
-_PAREN = re.compile(r"[（(][^（）()]*[)）]")
-# 标题里的年份：'2010-2024年规模以上工业增加值'、'……(2024年底)'、'2019年' 等，跨版次对齐时不应算作区别
-_YEARS = re.compile(r"\d{4}(?:\s*[-—~～至]\s*\d{4})?\s*年(?:底|末|度)?")
 _FORMATS = {"xls": "xls", "xlsx": "xlsx", "htm": "html", "html": "html", "jpg": "jpg", "jpeg": "jpg",
             "png": "png", "gif": "gif", "pdf": "pdf", "doc": "doc", "docx": "docx", "csv": "csv"}
 
@@ -46,12 +43,6 @@ def fmt_of(url: str) -> str:
     path = url.split("?")[0].split("#")[0]
     ext = path.rsplit(".", 1)[-1].lower() if "." in path.rsplit("/", 1)[-1] else ""
     return _FORMATS.get(ext, ext or "other")
-
-
-def norm_title(title: str) -> str:
-    """跨年份对齐同一张表：去掉括号里的年份/说明、空白与标点。"""
-    t = _YEARS.sub("", _PAREN.sub("", title))
-    return re.sub(r"[\s\u3000，,、:：]+", "", t)
 
 
 def decode(content: bytes) -> str:

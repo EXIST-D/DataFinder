@@ -4,15 +4,15 @@ from pathlib import Path
 import httpx
 import pytest
 
+from datafinder.catalog.adapters import AdapterError
 from datafinder.domains.official_statistics_cn.nbs.client import (
     NbsClient,
     explicit_window,
     parse_tidy,
 )
+from datafinder.domains.official_statistics_cn.nbs.fetch import resolve_indicators, resolve_regions
 from datafinder.engine.cache import Cache
 from datafinder.engine.http import Http
-from datafinder.service import ServiceError, resolve_regions
-from datafinder.service.nbs import _resolve_indicators
 
 FIX = json.loads((Path(__file__).parents[3] / "fixtures" / "nbs_tree.json").read_text(encoding="utf-8"))
 REGIONS = [
@@ -136,19 +136,19 @@ def test_resolve_regions_accepts_short_names_and_codes(name, code):
 def test_resolve_regions_all_excludes_national_and_unknown_is_helpful():
     got = resolve_regions(REGIONS, ["全部"])
     assert len(got) == 4 and all(r["value"] != "000000000000" for r in got)
-    with pytest.raises(ServiceError, match="没有地区「火星」"):
+    with pytest.raises(AdapterError, match="没有地区「火星」"):
         resolve_regions(REGIONS, ["火星"])
-    with pytest.raises(ServiceError, match="不支持地区代码"):
+    with pytest.raises(AdapterError, match="不支持地区代码"):
         resolve_regions(REGIONS, ["999999999999"])
-    with pytest.raises(ServiceError, match="不能为空"):
+    with pytest.raises(AdapterError, match="不能为空"):
         resolve_regions(REGIONS, [])
 
 
-def test_resolve_indicators_by_id_name_and_ambiguity():
+def testresolve_indicators_by_id_name_and_ambiguity():
     cat = [{"id": "a" * 32, "name": "工业增加值"}, {"id": "b" * 32, "name": "工业总产值"}, {"id": "c" * 32, "name": "工业总产值指数"}]
-    assert [i["id"] for i in _resolve_indicators(cat, ["工业增加值", "b" * 32])] == ["a" * 32, "b" * 32]
-    assert _resolve_indicators(cat, ["工业总产值"])[0]["id"] == "b" * 32  # 精确优先于模糊
-    with pytest.raises(ServiceError, match="匹配多个"):
-        _resolve_indicators(cat, ["工业总"])
-    with pytest.raises(ServiceError, match="没有名为"):
-        _resolve_indicators(cat, ["不存在"])
+    assert [i["id"] for i in resolve_indicators(cat, ["工业增加值", "b" * 32])] == ["a" * 32, "b" * 32]
+    assert resolve_indicators(cat, ["工业总产值"])[0]["id"] == "b" * 32  # 精确优先于模糊
+    with pytest.raises(AdapterError, match="匹配多个"):
+        resolve_indicators(cat, ["工业总"])
+    with pytest.raises(AdapterError, match="没有名为"):
+        resolve_indicators(cat, ["不存在"])

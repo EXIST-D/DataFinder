@@ -47,7 +47,7 @@ class Table:
 
 
 def to_number(value: Any) -> float | str:
-    """国家统计局的数值是字符串；能转就转成 float，不能转（如"—"）保持原样。"""
+    """来源的数值常是字符串；能转就转成 float，不能转（如"—"）保持原样。"""
     if isinstance(value, bool):
         return str(value)
     if isinstance(value, int | float):
@@ -219,7 +219,7 @@ def describe(table: Table) -> dict[str, Any]:
         "skipped_non_numeric": skipped,
         "series": series,
         "cross_section": cross,
-        "note": "仅为描述性统计；国家统计局数据有口径调整与修订，跨年比较前请核对统计口径。",
+        "note": "仅为描述性统计；统计数据常有口径调整与修订，跨年比较前请核对统计口径。",
     }
 
 

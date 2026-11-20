@@ -1,7 +1,7 @@
 """地域分面：区域节点、多种代码与名称的互认、上下级关系。
 
 区域 id 沿用仓库已有的 ISO 风格标识（`CN`、`CN-HE`），不另造一套；
-同时登记国家标准行政区划码（6 位 gb）与国家统计局发布库使用的 12 位码（gb + "000000"）。
+同时登记国家标准行政区划码（6 位 gb）与统计用区划代码（12 位，gb + "000000"，统计数据库常用）。
 数据见 data/regions.yaml。
 """
 
@@ -25,7 +25,7 @@ class Region:
     parent_id: str | None
     aliases: tuple[str, ...] = ()
     gb: str | None = None  # 6 位行政区划码
-    stat12: str | None = None  # 国家统计局 12 位码
+    stat12: str | None = None  # 统计用区划代码（12 位）
 
 
 @lru_cache(maxsize=1)

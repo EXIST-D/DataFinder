@@ -78,7 +78,7 @@ async def fetch(
     describe: bool = True,
     trusted: bool = False,
 ) -> dict[str, Any]:
-    """对"需要生成"的资源实时取数（国家统计局等）。不带 confirm 只返回将要做什么与还缺什么参数。"""
+    """对"需要生成"的资源实时取数（通过适配器调用来源接口）。不带 confirm 只返回将要做什么与还缺什么参数。"""
     with guard(), open_catalog() as cat:
         e = _entry(cat, resource_id)
         if e.delivery != "generate":

@@ -9,7 +9,7 @@ async def test_mcp_exposes_expected_tools_and_prompt():
     mcp = build_server()
     names = {t.name for t in await mcp.list_tools()}
     assert {"plan_data_sources", "nbs_fetch", "nbs_find", "nbs_browse", "datasets_search", "portals_list",
-            "describe_table", "datafinder_status", "nbs_indicators", "nbs_databases", "nbs_search_national"} <= names
+            "describe_table", "datafinder_status", "nbs_indicators", "nbs_databases", "nbs_search_national", "yearbook_find", "yearbook_catalog"} <= names
     prompts = await mcp.list_prompts()
     assert [p.name for p in prompts] == ["research_data_plan"]
     msg = await mcp.get_prompt("research_data_plan", {"topic": "工业质量", "region": "河北省"})

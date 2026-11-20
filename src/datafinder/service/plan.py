@@ -10,6 +10,7 @@ from ..portals.browse import Filters, browse, portal_dict
 from ..query.plan import parse, province_zh_name
 from ..query.tokenize import has_cjk
 from ..store import connect, portal_count
+from ..yearbook import index as yb_index
 from .errors import ServiceError
 
 # ───────────── 找数方案（旗舰能力）─────────────
@@ -98,6 +99,17 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
             index_hint = "尚未建立国家统计局指标索引，无法直接列出可取表的指标：运行 `datafinder nbs index` 后重试；或用 nbs_browse 逐级浏览。"
     finally:
         idx.close()
+    # 统计年鉴里的相关数据表（带"有哪些年份可查"）
+    yearbooks: list[dict] = []
+    yb_hint = None
+    yb = yb_index.connect_index()
+    try:
+        if yb_index.stats(yb)["tables"]:
+            yearbooks = yb_index.search(yb, topic, region=region_codes[0] if region_codes else None, limit=per_group)
+        else:
+            yb_hint = "尚未建立年鉴目录：运行 `datafinder yearbook index` 后重试。"
+    finally:
+        yb.close()
     region_names = [province_zh_name(c) or c for c in region_codes]
     for item in direct:
         item["fetch"] = {
@@ -122,6 +134,8 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
     steps = []
     if direct:
         steps.append("对 direct 里的指标调用 nbs_fetch 取表（会自动保存 CSV 并给出描述统计）。")
+    if yearbooks:
+        steps.append("yearbooks 给出年鉴数据表的各版次链接（多为图片/网页表格）；要可直接分析的数值优先用 direct 里的指标 + nbs_fetch。")
     steps.append("用 portals_list 按领域/地区继续浏览官方门户；统计年鉴、公报类数据通常在统计局官网。")
     steps.append("需要更多文件型数据时，用 datasets_search 搜科研与开放数据平台。")
     return {
@@ -136,6 +150,11 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
         },
         "sources": {
             "direct": {"title": "可直接取表的国家统计局指标", "items": direct, "hint": index_hint},
+            "yearbooks": {
+                "title": "统计年鉴里的相关数据表（可按年份版次查）",
+                "items": yearbooks,
+                "hint": yb_hint,
+            },
             "regional_portals": {"title": "目标地区的官方入口", "items": _dedupe_portals(regional)[:per_group]},
             "official_portals": {"title": "相关领域的官方/权威门户", "items": _dedupe_portals(national)[: per_group + 4]},
             "search_entries": {"title": "继续检索的入口", "items": entries},

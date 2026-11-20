@@ -88,3 +88,48 @@ async def test_nbs_fetch_validates_before_any_network(monkeypatch):
         await service.nbs_fetch("6", "bad", ["x"], ["北京"])
     with pytest.raises(ServiceError, match="不能为空"):
         await service.nbs_fetch("6", "c" * 32, [], ["北京"])
+
+
+# ───────────── 年鉴 ─────────────
+
+
+def _fill_yearbooks():
+    from datafinder.yearbook import index as yb
+    from datafinder.yearbook.parse import TocEntry
+
+    conn = yb.connect_index()
+    yb.replace_edition(conn, "CN-HE", 2025, status="ok", toc_url="u", entries=[
+        TocEntry("第十四章 工业", "14-1", "规模以上工业企业主要经济指标(2024年)", "https://x/14-1.jpg", "jpg", "table")])
+    yb.replace_edition(conn, "CN-HE", 2024, status="ok", toc_url="u", entries=[
+        TocEntry("第十四章 工业", "14-1", "规模以上工业企业主要经济指标(2023年)", "https://x/14-1b.jpg", "jpg", "table")])
+    conn.close()
+
+
+def test_yearbook_find_requires_index_and_validates_input():
+    with pytest.raises(ServiceError, match="datafinder yearbook index"):
+        service.yearbook_find("工业")
+    _fill_yearbooks()
+    with pytest.raises(ServiceError, match="不能为空"):
+        service.yearbook_find(" ")
+
+
+def test_yearbook_find_and_catalog():
+    _fill_yearbooks()
+    r = service.yearbook_find("河北 规模以上工业企业")
+    assert r["tables"][0]["years"] == [2025, 2024] and r["indexed"]["CN-HE"]["years"] == [2024, 2025]
+    assert "nbs_fetch" in r["note"]
+    cat = service.yearbook_catalog()
+    assert next(s for s in cat["series"] if s["series"] == "CN-HE")["years_ok"] == [2024, 2025]
+
+
+def test_plan_sources_includes_yearbook_tables_for_the_region(portals):
+    _fill_yearbooks()
+    plan = service.plan_sources("河北省规模以上工业企业")
+    items = plan["sources"]["yearbooks"]["items"]
+    assert items and items[0]["series"] == "CN-HE"
+    assert plan["sources"]["yearbooks"]["hint"] is None
+
+
+def test_plan_sources_explains_missing_yearbook_index(portals):
+    plan = service.plan_sources("河北省工业")
+    assert "yearbook index" in plan["sources"]["yearbooks"]["hint"]

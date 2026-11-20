@@ -121,6 +121,27 @@ def build_server() -> MCPServer:
         )
 
     @tool()
+    def yearbook_find(
+        query: str,
+        region: str | None = None,
+        year: int | None = None,
+        series: str | None = None,
+        fmt: str | None = None,
+        limit: int = 15,
+    ) -> dict[str, Any]:
+        """在统计年鉴目录里按关键词找数据表（中国统计年鉴 2005–2025，以及已收录的省级年鉴），并给出每张表有哪些年份版次、各版次的链接与文件格式。
+
+        query 里的省份名会自动限定到该省年鉴 + 全国年鉴；也可显式传 region（如 CN-HE）、series、year、fmt（html/jpg/xls/pdf）。
+        注意：多数版次的表格是图片或网页表格，不是可直接分析的数值；要数值请优先用 nbs_find + nbs_fetch。需先在终端运行 `datafinder yearbook index`。
+        """
+        return service.yearbook_find(query, region=region, year=year, series=series, fmt=fmt, limit=limit)
+
+    @tool()
+    def yearbook_catalog() -> dict[str, Any]:
+        """各年鉴系列的收录情况：已建目录的年份、缺失/失败的版次、是否可抓取，以及给人看的年鉴入口（home）。"""
+        return service.yearbook_catalog()
+
+    @tool()
     def nbs_databases() -> list[dict[str, Any]]:
         """国家统计局数据发布库的 13 个数据库（月度/季度/年度、分省、主要城市、港澳台、国际）。regional=true 表示有地区维度。"""
         return service.nbs_databases()

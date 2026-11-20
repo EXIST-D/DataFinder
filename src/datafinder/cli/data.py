@@ -23,6 +23,7 @@ from ..nbs import index as nbs_index
 from ..nbs.client import DATABASES, NbsClient
 from ..service import ServiceError
 from ..tables import describe, describe_markdown
+from .yearbook import yearbook_app
 
 console = Console()
 err = Console(stderr=True)
@@ -79,6 +80,16 @@ def plan(
         console.print("  [dim]取表：datafinder nbs get --db … --cid … -i 指标 -r 地区（也可用 plan --json 拿完整参数）[/dim]")
     else:
         console.print(f"  [yellow]{direct['hint'] or '没有命中指标'}[/yellow]")
+    yb = src.get("yearbooks", {})
+    if yb.get("items") or yb.get("hint"):
+        console.print(f"\n[bold]{yb['title']}[/bold]")
+        for h in yb["items"][:6]:
+            yrs = h["years"]
+            span = f"{min(yrs)}–{max(yrs)}（{len(yrs)} 版）" if len(yrs) > 1 else f"{yrs[0]} 版"
+            console.print(f"  · {h['title']}  [dim]{h['yearbook']} · {span}[/dim]")
+            console.print(f"    [blue]{h['editions'][0]['url']}[/blue]")
+        if not yb["items"]:
+            console.print(f"  [yellow]{yb['hint']}[/yellow]")
     for key in ("regional_portals", "official_portals"):
         group = src[key]
         if not group["items"]:
@@ -284,6 +295,7 @@ def mcp_cmd(
 
 def register(app: typer.Typer) -> None:
     app.add_typer(nbs_app, name="nbs")
+    app.add_typer(yearbook_app, name="yearbook")
     app.command("plan")(plan)
     app.command("describe")(describe_cmd)
     app.command("mcp")(mcp_cmd)

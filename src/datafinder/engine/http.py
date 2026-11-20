@@ -134,6 +134,45 @@ class Http:
         assert last is not None
         raise last
 
+    async def get_bytes(
+        self, url: str, *, headers: dict[str, str] | None = None, timeout: float = 20.0
+    ) -> tuple[int, bytes]:
+        """取原始字节（网页、文件）。返回 (状态码, 内容)；404/410 当作"这个地址没有东西"正常返回，
+        其余错误（超时、拒绝、限流、5xx、验证页）按类型抛 SourceError。"""
+        last: SourceError | None = None
+        for attempt in range(2):
+            await self._throttle(url)
+            try:
+                resp = await self._client.get(url, headers=headers, timeout=timeout)
+            except httpx.TimeoutException as exc:
+                last = SourceError("timeout", f"请求超时：{type(exc).__name__}")
+            except httpx.TransportError as exc:
+                last = SourceError("down", f"无法连接：{type(exc).__name__}")
+            else:
+                code = resp.status_code
+                if code in (404, 410):
+                    return code, b""
+                if code == 429:
+                    raise SourceError("rate_limited", "被限流（HTTP 429）", status=429)
+                if code in (401, 403, 412, 418):
+                    raise SourceError("blocked", f"被拒绝（HTTP {code}）", status=code)
+                if code >= 500:
+                    last = SourceError("http", f"服务端错误（HTTP {code}）", status=code)
+                elif code >= 400:
+                    raise SourceError("http", f"请求失败（HTTP {code}）", status=code)
+                else:
+                    if len(resp.content) > MAX_BODY:
+                        raise ShapeError("响应体过大")
+                    if looks_like_challenge(resp.text[:4000]):
+                        raise SourceError(
+                            "rate_limited", "站点防护要求人机验证，已暂停访问，稍后再试"
+                        )
+                    return code, resp.content
+            if attempt == 0:
+                await asyncio.sleep(0.3)
+        assert last is not None
+        raise last
+
     async def get_json(self, url: str, **kw: Any) -> Any:
         return await self.request_json("GET", url, **kw)
 

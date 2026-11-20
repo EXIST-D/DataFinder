@@ -6,6 +6,7 @@
 - nbs        国家统计局：浏览 / 找指标 / 取数
 - export     取数结果保存与读回
 - discovery  门户浏览、数据集检索
+- yearbook   统计年鉴目录
 - plan       找数方案
 所有函数返回可 JSON 序列化的 dict/list（或 Table）。
 """
@@ -24,6 +25,7 @@ from .nbs import (
 )
 from .plan import plan_sources
 from .status import status
+from .yearbook import yearbook_catalog, yearbook_find
 
 __all__ = [
     "ServiceError",
@@ -40,4 +42,6 @@ __all__ = [
     "resolve_regions",
     "status",
     "table_result",
+    "yearbook_catalog",
+    "yearbook_find",
 ]

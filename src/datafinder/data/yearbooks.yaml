@@ -1,0 +1,124 @@
+# 统计年鉴系列：每个系列给出"各版次目录页"的地址模板，供 `datafinder yearbook index` 逐版次抓取目录。
+#
+# 字段：
+#   id        系列标识（全国 cn；省级用 ISO 3166-2 码，如 CN-HE）
+#   zh        年鉴名称
+#   region    地区码（全国 CN；省 CN-XX）
+#   publisher 编纂机构
+#   years     [起, 止]，版次年份范围（不存在的版次抓取时按 404 跳过并如实记录）
+#   base      版次根地址模板，{year} 会被替换；目录页为 base + toc
+#   toc       目录页文件名候选（按顺序尝试）
+#   home      年鉴列表页（给人看的入口；没有可抓取的模板时只作导航）
+#   crawl     false = 只导航不抓取（页面形态与统一模板不同）
+#
+# 地址来源：国家统计局年鉴页的版次链接（2026-11-20 实际访问）；省级来自各统计局公开的年鉴入口，
+# 只收录"页面结构与统计出版社 zk 模板一致"的系列，其余省份先只放 home，待逐个核验后再开启抓取。
+
+series:
+  - id: cn
+    zh: 中国统计年鉴
+    region: CN
+    publisher: 国家统计局
+    years: [2005, 2025]
+    base: "https://www.stats.gov.cn/sj/ndsj/{year}/"
+    toc: [left.htm]
+    home: https://www.stats.gov.cn/sj/ndsj/
+
+  - id: CN-BJ
+    zh: 北京统计年鉴
+    region: CN-BJ
+    publisher: 北京市统计局
+    years: [2015, 2025]
+    base: "https://hgk.tjj.beijing.gov.cn/{year}tjnj/tjnj/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.beijing.gov.cn/tjsj_31433/tjnj_31441/bjtjnj_31442/
+
+  - id: CN-HE
+    zh: 河北统计年鉴
+    region: CN-HE
+    publisher: 河北省统计局
+    years: [2015, 2025]
+    base: "http://tjj.hebei.gov.cn/hbstjj/tjnj/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: http://tjj.hebei.gov.cn
+
+  - id: CN-HL
+    zh: 黑龙江统计年鉴
+    region: CN-HL
+    publisher: 黑龙江省统计局
+    years: [2015, 2025]
+    base: "https://tjj.hlj.gov.cn/tjjnianjian/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.hlj.gov.cn/tjj/c106782/common_zfxxgk.shtml
+
+  - id: CN-LN
+    zh: 辽宁统计年鉴
+    region: CN-LN
+    publisher: 辽宁省统计局
+    years: [2015, 2025]
+    base: "https://tjj.ln.gov.cn/tjj/tjsj/otherpages/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.ln.gov.cn/tjj/tjsj/tjnj/lntjnj/index.shtml
+
+  - id: CN-SD
+    zh: 山东统计年鉴
+    region: CN-SD
+    publisher: 山东省统计局
+    years: [2015, 2025]
+    base: "http://tjj.shandong.gov.cn/tjnj/nj{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: http://tjj.shandong.gov.cn/col/col6279/
+
+  - id: CN-SC
+    zh: 四川统计年鉴
+    region: CN-SC
+    publisher: 四川省统计局
+    years: [2015, 2025]
+    base: "https://tjj.sc.gov.cn/scstjj/tjnjnew/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.sc.gov.cn
+
+  - id: CN-HA
+    zh: 河南统计年鉴
+    region: CN-HA
+    publisher: 河南省统计局
+    years: [2015, 2025]
+    base: "https://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/{year}nj/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.henan.gov.cn
+
+  # 以下省份年鉴页面形态不同（动态页或单页列表），先只做导航
+  - id: CN-SH
+    zh: 上海统计年鉴
+    region: CN-SH
+    publisher: 上海市统计局
+    home: https://tjj.sh.gov.cn/tjnj/
+    crawl: false
+
+  - id: CN-GD
+    zh: 广东统计年鉴
+    region: CN-GD
+    publisher: 广东省统计局
+    home: http://stats.gd.gov.cn/gdtjnj/
+    crawl: false
+
+  - id: CN-JS
+    zh: 江苏统计年鉴
+    region: CN-JS
+    publisher: 江苏省统计局
+    home: http://tj.jiangsu.gov.cn/col/col85821/index.html
+    crawl: false
+
+  - id: CN-HB
+    zh: 湖北统计年鉴
+    region: CN-HB
+    publisher: 湖北省统计局
+    home: https://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/
+    crawl: false
+
+  - id: CN-NX
+    zh: 宁夏统计年鉴
+    region: CN-NX
+    publisher: 宁夏回族自治区统计局
+    home: https://data.tj.nx.gov.cn/publish.htm?cn=G01
+    crawl: false

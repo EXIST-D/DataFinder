@@ -9,6 +9,7 @@ from ..nbs import index as nbs_index
 from ..sources.dataseek import find_executable
 from ..store import connect, db_path, get_meta, portal_count
 from ..tables import exports_dir
+from ..yearbook import index as yb_index
 
 # ───────────── 状态 ─────────────
 
@@ -25,6 +26,11 @@ def status() -> dict[str, Any]:
         index = nbs_index.stats(idx)
     finally:
         idx.close()
+    yb = yb_index.connect_index()
+    try:
+        yearbooks = yb_index.stats(yb)
+    finally:
+        yb.close()
     return {
         "version": __version__,
         "portals": portals,
@@ -34,6 +40,10 @@ def status() -> dict[str, Any]:
         "nbs_index_hint": None
         if index["indicators"]
         else "国家统计局指标索引尚未建立：在终端运行 datafinder nbs index（约需十几分钟，只需一次）",
+        "yearbook_index": yearbooks,
+        "yearbook_index_hint": None
+        if yearbooks["tables"]
+        else "年鉴目录尚未建立：在终端运行 datafinder yearbook index（几分钟，只需一次）",
         "dataseek": bool(find_executable()),
         "exports_dir": str(exports_dir()),
         "database": str(db_path()),

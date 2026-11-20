@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from functools import cached_property
 
 from .. import domains
 from .plan import parse
@@ -25,7 +26,7 @@ class Unit:
     alts: tuple[str, ...]  # 第一个是用户原词，其余是词表给出的相关词
     weight: float = 1.0
 
-    @property
+    @cached_property  # 每个单元对每个候选都会用到：只算一次
     def bigrams(self) -> frozenset[str]:
         return frozenset(g for a in self.alts for g in tokenize(a) if len(g) == 2)
 
@@ -111,13 +112,15 @@ def prefilter_terms(units: list[Unit]) -> list[str]:
 def unit_scores(units: list[Unit], name: str, extra: str = "") -> list[float]:
     """每个单元各自的得分（0–1）：整词在名称里 1.0，在分类/章节里 0.5，只有二元组部分重合时最多 0.3。"""
     out = []
-    name_g = frozenset(tokenize(name))
+    name_g: frozenset[str] | None = None  # 只有走到"部分重合"才需要分词，绝大多数候选整词命中，省掉这一步
     for u in units:
         if any(a in name for a in u.alts):
             out.append(1.0)
         elif extra and any(a in extra for a in u.alts):
             out.append(0.5)
         else:
+            if name_g is None:
+                name_g = frozenset(tokenize(name))
             grams = u.bigrams
             frac = len(grams & name_g) / len(grams) if grams else 0.0
             out.append(0.3 * frac if frac >= 0.5 else 0.0)

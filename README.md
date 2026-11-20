@@ -6,13 +6,20 @@
 
 ## 快速开始
 
-需要 [uv](https://docs.astral.sh/uv/)。
+需要 [uv](https://docs.astral.sh/uv/)。**一条命令安装**，无需 Docker、数据库或 Node：
 
 ```bash
-git clone https://github.com/EXIST-D/DataFinder.git
-cd DataFinder
-uv sync
+uv tool install git+https://github.com/EXIST-D/DataFinder
 
+datafinder sync                             # 首次：下载并建立本地门户库（约 7MB）
+datafinder serve                            # 打开本地网页
+datafinder search "中国各省近十年人口 GDP 城镇化率"
+```
+
+下面的示例用 `uv run datafinder …`（在源码目录里运行）；用 `uv tool install` 装好后直接写 `datafinder …` 即可。从源码运行：
+
+```bash
+git clone https://github.com/EXIST-D/DataFinder.git && cd DataFinder && uv sync
 uv run datafinder sync                      # 首次：下载并建立本地门户库（约 7MB）
 
 # 找数据集（一次查多个来源，合并去重）

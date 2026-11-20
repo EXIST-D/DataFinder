@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import platform
-import shutil
 import subprocess
 from dataclasses import dataclass
 from typing import Literal
@@ -12,6 +11,7 @@ import httpx
 
 from . import __version__
 from .config import USER_AGENT, data_dir
+from .sources.dataseek import find_executable
 from .store import connect, db_path, get_meta, portal_count
 
 Status = Literal["ok", "warn", "fail"]
@@ -74,7 +74,7 @@ def check_network(timeout: float = 8.0) -> Check:
 
 def check_dataseek(timeout: float = 10.0) -> Check:
     """Dataseek 是可选的长尾来源桥接；没装不算故障。"""
-    exe = shutil.which("dsk") or shutil.which("dataseek")
+    exe = find_executable()  # 与搜索用同一个查找逻辑：uv tool 装的 dsk 不在 PATH 上
     if exe is None:
         return Check("Dataseek 桥接", "warn", "未安装（可选，用于覆盖长尾来源）")
     try:

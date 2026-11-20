@@ -274,6 +274,8 @@ def _print_dataset(
             )
             if r.note:
                 console.print(f"      [dim]{r.note}[/dim]")
+            if r.body:
+                console.print(f"      [dim]请求体：{r.body}[/dim]")
     if explain:
         parts = " ".join(f"{k}={v:.3g}" for k, v in d.explain.items())
         console.print(f"    [dim]得分 {d.score:.4f}：{parts}[/dim]")
@@ -401,6 +403,39 @@ def sources() -> None:
     console.print(table)
     exe = find_executable()
     console.print(f"\n[dim]Dataseek 桥接：{exe or '未安装（可选）'}[/dim]")
+
+
+@app.command()
+def serve(
+    port: int = typer.Option(8787, "--port", "-p", min=1024, max=65535, help="端口"),
+    open_browser: bool = typer.Option(True, "--open/--no-open", help="启动后自动打开浏览器"),
+) -> None:
+    """启动本地网页（仅监听本机 127.0.0.1）。"""
+    import socket
+    import threading
+    import webbrowser
+
+    import uvicorn
+
+    from .server.app import create_app
+
+    with socket.socket() as probe:
+        if probe.connect_ex(("127.0.0.1", port)) == 0:
+            console.print(
+                f"[red]端口 {port} 已被占用。[/red]换一个：datafinder serve --port {port + 1}"
+            )
+            raise typer.Exit(code=1)
+    conn = connect()
+    if portal_count(conn) == 0:
+        console.print(
+            "[yellow]提示：门户库还是空的，右侧不会显示门户。运行 datafinder sync 后刷新页面。[/yellow]"
+        )
+    conn.close()
+    url = f"http://127.0.0.1:{port}"
+    console.print(f"DataFinder 网页已启动：[blue]{url}[/blue]（Ctrl+C 退出）")
+    if open_browser:
+        threading.Timer(0.8, lambda: webbrowser.open(url)).start()
+    uvicorn.run(create_app(), host="127.0.0.1", port=port, log_level="warning")
 
 
 def main() -> None:

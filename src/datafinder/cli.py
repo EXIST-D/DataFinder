@@ -12,6 +12,7 @@ from rich.progress import BarColumn, DownloadColumn, Progress, TextColumn, Trans
 from rich.table import Table
 
 from . import __version__
+from .bench import bench_app
 from .doctor import run_checks
 from .finder import search_datasets
 from .models import Dataset
@@ -28,6 +29,7 @@ app = typer.Typer(
     add_completion=False,
 )
 console = Console()
+app.add_typer(bench_app, name="bench")
 
 _ICON = {"ok": "[green]✓[/green]", "warn": "[yellow]![/yellow]", "fail": "[red]✗[/red]"}
 

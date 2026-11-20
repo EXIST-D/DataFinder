@@ -46,7 +46,7 @@ uv run datafinder doctor                    # 体检
 | 来源 | 说明 |
 |---|---|
 | 国家统计局 | 中国官方统计指标（全国级，最新值 + 可直接取时间序列的 API）。**实验性**：新版发布库 2026-03 上线、试运行、接口无正式文档 |
-| Zenodo、DataCite | 科研数据；DataCite 覆盖上千个仓库，含中国科学数据银行 ScienceDB |
+| Zenodo、DataCite | 科研数据；DataCite 覆盖上千个仓库，含中国科学数据银行 ScienceDB。中文问句会**中英文各查一次**，以召回中文记录 |
 | HDX、data.gov.uk、加拿大、澳大利亚 | 政府/人道数据（CKAN） |
 | Dataseek（可选） | 约 60 个长尾国际来源，吃我们翻译好的英文检索词 |
 
@@ -58,6 +58,10 @@ uv run datafinder doctor                    # 体检
 - **中英词表**（`src/datafinder/data/lexicon.zh-en.yaml`）：`人口普查 → population census`。中文问句会同时用中文词查中文来源、用英文词查英文来源，国际来源里的英文记录也能被中文问句召回。**词表加一行即生效。**
 - **识别意图**：地区（`辽宁`、`美国`）、格式（`CSV`、`API`）、时间（`近十年`、`2010-2020`）、行业。
 - **排序**：多来源 RRF 融合 × 概念覆盖度（IDF 加权，标题命中高于描述命中），中文问句时对官方、中文来源略加权；`--explain` 可查看每一项。
+
+## 效果评估
+
+`bench/` 里有 14 条中文找数问句和约 580 条相关性标注，`datafinder bench run` 在同一批检索结果上比较排序方案。当前完整引擎 nDCG@10 为 0.746；把中文原句直接交给 Dataseek 只有 0.242。方法、结果与**局限**（样本小、标注者是 AI）见 [bench/README.md](bench/README.md)。
 
 ## 扩展
 

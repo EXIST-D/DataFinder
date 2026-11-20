@@ -1,0 +1,597 @@
+# qid	key	grade	labeler	title
+# grade: 2 直接相关 / 1 部分相关 / 0 无关；口径见 queries.zh.yaml 的 intent
+# labeler=agent：由 AI Agent 依标题与摘要标注，非人工；仅作方向性证据
+q01	doi:10.57760/sciencedb.01297	1	agent	An analysis of the effects of anthropogenic factors on vegetation cover change i
+q01	doi:10.5281/zenodo.3974027	0	agent	Ecological and social outcomes of urbanization in farming systems
+q01	doi:10.5281/zenodo.19882732	1	agent	The per capita net income of rural residents and other data in the Yellow River 
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=2b0aa179980e41b8b636037ebae01d91&indicatorId=88bcaf76058e49b08a45b14a204b2d3d&da=000000000000	1	agent	国内生产总值环比增长速度 (%)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=28d936104e304aa191e338eb82b6dc09&indicatorId=8c5fab362d124fa7b91af833b3bd7397&da=000000000000	1	agent	国内生产总值累计值 (亿元)
+q01	doi:10.6084/m9.figshare.c.7786098	0	agent	Association of urbanization-related factors with tuberculosis incidence among 19
+q01	doi:10.57760/sciencedb.cjae.00158	2	agent	Panel Dataset of Economic and Social Development Indicators for 55 Prefecture-Le
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=28d936104e304aa191e338eb82b6dc09&indicatorId=d22612f09aeb4241bc557ef0ac61b3ba&da=000000000000	1	agent	国内生产总值当季值 (亿元)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=65ef6ec0de6c416cb6cd84b065a23fb2&da=000000000000	1	agent	人口数 (人口抽样调查) (人)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=f7fd25aaad184414875632cf2327da60&indicatorId=7dc6a2ee6c614960b7059991e0cc4d96&da=000000000000	1	agent	国内生产总值 (亿元)
+q01	doi:10.5061/dryad.cz8w9gj0c	0	agent	Continent-wide effects of urbanization on bird and mammal genetic diversity
+q01	doi:10.5281/zenodo.20643534	1	agent	Literacy rate, population density, real GDP grouth 2020-2024 in Upscale countrie
+q01	url:ourworldindata.org/grapher/urbanization-vs-gdp	1	agent	Share of population living in urban areas vs. GDP per capita (UN national defini
+q01	doi:10.5061/dryad.hm63867	0	agent	Data from: City life on fast lanes: urbanization induces an evolutionary shift t
+q01	url:catalog.ihsn.org/catalog/8189	0	agent	Migration and Urbanization Survey 2009
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=ed0b58d0d91f48e388f71550773e746d&indicatorId=708b2b06668348baae3aed637e2f2747&da=000000000000	0	agent	生活垃圾无害化处理率 (%)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=0dcabfd7cd074300a28677825cd00217&indicatorId=d5078be9ee9341c684ea4450c6325ea8&da=000000000000	1	agent	男性人口数 (人口抽样调查) (人)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=3888eac6062945a79c8a27e5f13d4953&da=000000000000	0	agent	全国城镇调查失业率 (%)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=8e796f1413004b9fac67b1d709c87483&indicatorId=f35fb09167e2417aa3e332ca4f540b26&da=000000000000	1	agent	女性人口数 (人口抽样调查) (人)
+q01	url:data.stats.gov.cn/dg/website/page.html?cid=454d8b2f971d438aa2222d9250b3bf3c&indicatorId=9731d5c15dae4e47b93d94eb0e245c97&da=000000000000	0	agent	城市婴儿死亡率 (‰)
+q01	url:data.humdata.org/dataset/who-data-for-chn	0	agent	China - Health Indicators
+q01	url:data.gov.uk/dataset/b5c8e21c-aafe-4054-9fa5-24b49dba27a2/species-point-records-from-1992-dwt-plym-estuary-littoral-survey	0	agent	Species point records from 1992 DWT Plym Estuary littoral survey
+q01	url:open.canada.ca/data/en/dataset/c30aa695-4735-466a-bc6e-fd31f1290973	0	agent	Socio-economic statistics for rural and urban Ontario
+q01	url:data.gov.au/data/dataset/agricultural-commodities-march-quarter-2018	0	agent	Agricultural commodities: March quarter 2018
+q01	doi:10.5281/zenodo.15593078	1	agent	Population and economic exposure and their driving factors under different preci
+q01	doi:10.5683/sp3/fvrsb8	1	agent	Provincial GDP by Industry and Sector, at Basic Prices, 1997-2011 [Canada]
+q01	doi:10.34894/1vzhby	0	agent	Total Gross Central Government Debt as a Percentage of GDP
+q01	url:data.europa.eu/data/datasets/gdpa_global_1-0_01_07_2013_ach34	0	agent	GDPA_Global_1.0
+q01	url:synapse.org/Synapse:syn32320834	0	agent	GDP
+q01	doi:10.5683/sp2/khrnjd	1	agent	GDP at Basic Prices by Industry, Vancouver, 1987-2018 [Excel files]
+q01	doi:10.34894/i7yziv	1	agent	The long view on economic growth: New estimates of GDP
+q01	url:data.europa.eu/data/datasets/gdpr-in-luxembourg	0	agent	GDPR in Luxembourg
+q01	doi:10.1594/pangaea.873390	0	agent	Maps of the ecosystem services, human population density and agricultural GDP es
+q01	doi:10.5683/sp3/r6ir6a	1	agent	Conference Board of Canada, GDP at Basic Prices by Industry, Toronto, 1987-2017 
+q01	doi:10.34894/weuexa	0	agent	Social Spending
+q01	doi:10.11922/sciencedb.01297	1	agent	An analysis of the effects of anthropogenic factors on vegetation cover change i
+q01	url:datasource.kapsarc.org/explore/dataset/worldbank-gender-statistics-gcc	0	agent	Gender Statistics
+q01	url:ourworldindata.org/grapher/cardiovascular-death-rate-vs-gdp-per-capita	0	agent	Death rate from cardiovascular diseases vs. GDP per capita
+q01	url:datasource.kapsarc.org/explore/dataset/saudi-arabia-population-data-1960-2015	1	agent	Population Indicators
+q01	url:huggingface.co/datasets/rodriguescarson/adaption-chart-qa-population-schooling	0	agent	rodriguescarson/adaption-chart-qa-population-schooling
+q01	url:cohesiondata.ec.europa.eu/2021-2027/Regions-by-cohesion-policy-category-2021-2027/hsqz-g45p	0	agent	Regions by cohesion policy category 2021-2027
+q01	url:cohesiondata.ec.europa.eu/2014-2020/Regions-by-cohesion-policy-category-2014-2020/b6uw-xiie	0	agent	Regions by cohesion policy category 2014-2020
+q01	url:ourworldindata.org/grapher/share-of-the-population-living-in-urban-areas-vs-gdp-per-capita	1	agent	Share of population living in cities, towns and suburbs vs. GDP per capita
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=2b0aa179980e41b8b636037ebae01d91&indicatorId=88bcaf76058e49b08a45b14a204b2d3d&da=000000000000	2	agent	国内生产总值环比增长速度 (%)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=28d936104e304aa191e338eb82b6dc09&indicatorId=8c5fab362d124fa7b91af833b3bd7397&da=000000000000	2	agent	国内生产总值累计值 (亿元)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=28d936104e304aa191e338eb82b6dc09&indicatorId=d22612f09aeb4241bc557ef0ac61b3ba&da=000000000000	2	agent	国内生产总值当季值 (亿元)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=f7fd25aaad184414875632cf2327da60&indicatorId=7dc6a2ee6c614960b7059991e0cc4d96&da=000000000000	2	agent	国内生产总值 (亿元)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=316c3f7e53b74bff80d90ffa8b6057d2&indicatorId=04882298c97c44aeb18fc5d58bd37d5c&da=000000000000	1	agent	分行业增加值构成-国内生产总值 (%)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=f36abbcdb6934935b6efa0ed906d26a1&indicatorId=c4d55295527f4449911f4e10289b8444&da=000000000000	1	agent	三次产业构成-国内生产总值 (%)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=f7fd25aaad184414875632cf2327da60&indicatorId=eb4d93f19d57495c89f98875e03e01be&da=000000000000	2	agent	人均国内生产总值 (元)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=62c3d0f73251456f99386502666158f8&indicatorId=b17a374e56ac42a1b4cd756b05f41a77&da=000000000000	1	agent	国内生产总值贡献率当季值 (%)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=62c3d0f73251456f99386502666158f8&indicatorId=d688902751dd4e6fb8031a1d3bba396f&da=000000000000	1	agent	国内生产总值贡献率累计值 (%)
+q02	url:data.stats.gov.cn/dg/website/page.html?cid=b676631776424600bdae363df047559f&indicatorId=b704155cd926437b8ee9c65fe058210d&da=000000000000	2	agent	国内生产总值 (不变价) 当季值 (亿元)
+q02	doi:10.17632/s2cswmb7kx	1	agent	Botswana trade openness and economic growth data
+q02	url:data.humdata.org/dataset/gdp-annual-growth	1	agent	GDP annual growth
+q02	url:data.gov.uk/dataset/78b0c64a-e71d-4950-96a6-b1717ade29fb/second_estimate_of_gdp	1	agent	Second Estimate of GDP
+q02	url:open.canada.ca/data/en/dataset/74993787-4f7d-4550-9e3d-06b2b4c3519f	1	agent	Gross domestic product (GDP) at basic prices, by industry
+q02	url:data.gov.au/data/dataset/annual-growth-rate-of-real-gdp-per-capita	1	agent	Annual Growth Rate of Real GDP per capita
+q02	url:data.humdata.org/dataset/unicef-econ-gvt-exp-ptgdp	0	agent	Global: Government expenditure (% GDP)
+q02	url:data.gov.uk/dataset/ab8acd08-f055-42af-b114-b15e1dfee155/hpi_-_gdp_per_capita	0	agent	HPI - GDP per capita
+q02	url:open.canada.ca/data/en/dataset/e4e2c9b1-210b-46d0-bc88-f2bed514970d	1	agent	Gross domestic product (GDP), income-based, annual, 1961 - 2011
+q02	doi:10.5281/zenodo.13819628	1	agent	"Output pathway data for ""Income and inequality pathways consistent with eradicat"
+q02	doi:10.48529/7dk1-kn47	0	agent	Financial Development and Structure 1960-2010
+q02	doi:10.5281/zenodo.15357549	0	agent	Food Loss Percentages by Commodity and Activity Groups Across Countries by Devel
+q02	doi:10.6084/m9.figshare.26172811.v1	0	agent	碳金融是否能够促进清洁能源的发展？——低碳技术创新视角
+q02	url:kaggle.com/datasets/chinafax/population-related-statistical-data-in-china	0	agent	Population related statistical data in China
+q02	url:kaggle.com/datasets/bobaaayoung/lstmdatacsv	0	agent	lstm-data-csv
+q02	url:kaggle.com/datasets/bobaaayoung/lstmdatanew	0	agent	lstm-data-new
+q02	url:kaggle.com/datasets/xiaoyuwang516/macrodataset	0	agent	Macrodataset
+q02	url:kaggle.com/datasets/bobaaayoung/last-data	0	agent	last-data
+q02	url:kaggle.com/datasets/bobaaayoung/lstm-data	0	agent	LSTM_data
+q02	doi:10.34894/1vzhby	0	agent	Total Gross Central Government Debt as a Percentage of GDP
+q02	doi:10.34894/i7yziv	1	agent	The long view on economic growth: New estimates of GDP
+q02	doi:10.34934/dvn/8mtgmb	1	agent	Historical Regional GDP and Population in Belgium, Spain and the United Kingdom
+q02	doi:10.6084/m9.figshare.14803377.v1	0	agent	Data for Tourism depedency and economic shock paper.xlsx
+q02	url:catalog.data.gov/dataset/quarterly-real-gdp-connecticut	1	agent	Quarterly Real GDP Connecticut
+q02	doi:10.5255/ukda-sn-854382	1	agent	Primary Energy Demand and GDP per Capita for most Countries of the World, 1950-2
+q02	doi:10.7289/v57p8wpx	0	agent	Establishments, employment, wages, and gross domestic product (GDP) for the Econ
+q02	doi:10.17632/874t6tv3t8.1	0	agent	Tax Revenue Forecasting Using ARIMA and VAR Models and the Implications for Fisc
+q03	doi:10.7910/dvn/p7evws	2	agent	2000 Population Census Data Assembly, TIANJIN Municipality; 天津市2000人口普查统计资料汇编
+q03	url:data.humdata.org/dataset/kyrgyzstan-population-census-2009	1	agent	Kyrgyzstan - Population Census 2009
+q03	url:data.gov.uk/dataset/846df09f-299f-4d1f-a7f1-98dc05719ceb/historical-census-population1	1	agent	Historical Census Population
+q03	url:open.canada.ca/data/en/dataset/750e6035-adf8-4426-966f-4c25b12a999e	1	agent	Census Profile, 2021 Census of Population
+q03	url:data.gov.au/data/dataset/nsw-population-projection	1	agent	Census of Population and Housing
+q03	url:data.humdata.org/dataset/populationa-and-housing-census-dataset	1	agent	Bangladesh : Population and Housing Census Dataset
+q03	url:data.gov.uk/dataset/c9ae2881-ebde-434f-9da8-6d74a8b6c5bd/2011-census-migrant-population1	1	agent	2011 Census Migrant Population
+q03	url:open.canada.ca/data/en/dataset/a0c5af15-26fa-4aae-914e-77b53ffdecbb	1	agent	Census Profile, 2011 Census (Population centres)
+q03	doi:10.5281/zenodo.6683974	1	agent	2011 Census estimates of the workplace population in England and Wales
+q03	url:data.humdata.org/dataset/kazakhstan-population-census-2009	1	agent	Kazakhstan - Population Census 2009
+q03	doi:10.5281/zenodo.15334624	1	agent	Canada's 2021 Census of Population
+q03	url:catalog.data.gov/dataset/population-by-2010-census-block	1	agent	Population by 2010 Census Block
+q03	doi:10.5281/zenodo.15344412	1	agent	Canada's 2011 Census of Population
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=589be3755d9f4f5c985369a2f8dfb3b8&indicatorId=895a08c9b42a45a788adbab2e46847b2&da=000000000000	1	agent	普米族人口数 (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=65807f2573f84d02ad48258fbf6654aa&indicatorId=7f208037dc1f4921a6c7859f6960b31a&da=000000000000	1	agent	人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=0dcabfd7cd074300a28677825cd00217&indicatorId=d5078be9ee9341c684ea4450c6325ea8&da=000000000000	1	agent	男性人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=8e796f1413004b9fac67b1d709c87483&indicatorId=f35fb09167e2417aa3e332ca4f540b26&da=000000000000	1	agent	女性人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=430fffd971854a3a9320d9769c3aa699&da=000000000000	0	agent	0-4岁人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=ee659453dc2d413f9adc0328619bc419&da=000000000000	0	agent	5-9岁人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=7715b992dfe047acac1b805612cb8fe3&da=000000000000	0	agent	15-19岁人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=dec8523f99f44e228862ae8add760f82&da=000000000000	0	agent	20-24岁人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=f26442b7441b43888e3d7798df517618&da=000000000000	0	agent	25-29岁人口数 (人口抽样调查) (人)
+q03	url:data.stats.gov.cn/dg/website/page.html?cid=16f09026c6b34e688b307c4b7c9f4633&indicatorId=170a60ae7ab84ccc910e71b824a71460&da=000000000000	0	agent	30-34岁人口数 (人口抽样调查) (人)
+q03	doi:10.5061/dryad.p96b7	0	agent	Data from: Three types of rescue can avert extinction in a changing environment
+q03	doi:10.5281/zenodo.23325480	0	agent	US Business Counts by State (17 CSVs)
+q03	url:hub.arcgis.com/datasets/b3cf8af88d9a4b419d9f695b1a8f818b	1	agent	Pop
+q03	doi:10.57841/casdc.0001418	2	agent	西南八省县级人口普查原始数据（2000年、2010年共两期）
+q03	doi:10.6084/m9.figshare.31445230.v1	0	agent	脊髓损伤患者胆石病的患病率及风险因素：横断面分析
+q03	doi:10.57841/casdc.0003031	2	agent	西南八省县级人口普查原始数据（2000年、2010年共两期）
+q03	doi:10.6084/m9.figshare.28338206.v1	0	agent	中国习 COVID-19 大流行前、期间和之后住院儿童肺炎支原体的流行病学特征
+q03	doi:10.57841/casdc.0001527	2	agent	西南八省县级人口普查原始数据（2000年、2010年共两期）
+q03	doi:10.25442/hku.13633457.v1	0	agent	Data from LANGUAGE USE, PROFICIENCY AND ATTITUDES IN HONG KONG 數據源於 香港居民語言應用、語言能
+q03	url:hub.arcgis.com/datasets/bebea0acfd1145489420a6855f10fbd2	2	agent	第七次普查人口
+q03	url:hub.arcgis.com/datasets/3649aa81509b4cde9c21cf51fcec2ea0	2	agent	中国第七次人口普查超大、特大城市情况
+q03	url:hub.arcgis.com/datasets/9f7bbe801ae7462cae46f321d0b8e6fc	2	agent	2021 年人口普查（主要屋苑統計數字及分界)
+q03	doi:10.5683/sp3/ltz88t	1	agent	Census of Population, 2016 [Canada]: Profile Series [B2020 & CSV]
+q03	url:catalog.data.gov/dataset/waofm-census-population-and-housing-2000-and-2010	1	agent	WAOFM - Census - Population and Housing, 2000 and 2010
+q03	doi:10.5683/sp3/2lvkl9	1	agent	Census of Population, 1991 [Canada]: Basic Summary Tabulations, Census Subdivisi
+q03	doi:10.5683/sp3/tcftac	1	agent	Census of Population, 1991 [Canada]: Basic Summary Tabulations, Census Tract Lev
+q03	doi:10.5683/sp3/v8oz4r	1	agent	Census of Population, 2021 [Canada]: Census Profile [B2020 & CSV]
+q03	doi:10.17026/dans-zra-h7vz	1	agent	Population census 1971
+q03	doi:10.57967/hf/7410	0	agent	gladcolor/hourly_population_US
+q03	url:kaggle.com/datasets/prasad22/mha-population-dataset	1	agent	MHA Population Census Dataset
+q04	doi:10.5281/zenodo.17457074	1	agent	Observed and simulated PM2.5 data used to study COVID-19 lockdowns' impacts on u
+q04	doi:10.5281/zenodo.20284278	1	agent	AmIAire database of PM10 and PM2.5 airborne particles in Spain
+q04	doi:10.5281/zenodo.6798975	1	agent	Geo-Harmonized PM2.5 maps over Europe for the years 2018-2020
+q04	url:data.gov.au/data/dataset/csiro-bayside-air-quality-station-aspendale-air-pollutants-co-nox-so2-o3-and-partical-size-data1	1	agent	CSIRO - Bayside Air Quality Station Aspendale - Air Pollutants CO, NOx, SO2, O3 
+q04	url:data.gov.au/data/dataset/2021-soe-air-061	1	agent	2021 SoE Air Quality Comparison of PM2.5 measured indoors with outdoor PM2.5 fro
+q04	doi:10.15139/s3/kqkjnp	1	agent	Air Quality Index (PM2.5 AQI)
+q04	doi:10.5281/zenodo.8264657	1	agent	Allegheny County PM2.5 LCS data
+q04	url:data.gov.uk/dataset/1c0ebfb7-36b4-4ba5-a794-f54bfb647d06/pm2-5-map-and-exposure-data1	1	agent	PM2.5 map and exposure data
+q04	url:data.gov.au/data/dataset/2021-air-017-air-018	1	agent	2021 SoE Air Quality Maximum 24-hour average PM2.5 concentrations for  Melbourne
+q04	doi:10.1594/pangaea.834196	1	agent	PM2.5, PM10, and PM10-associated elements in the air in Bamako, Mali (2012-2013)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=1236448f609140c2a430b102a1dcf10c&indicatorId=39ae6c8f9895469ba3ebd489ca8cdcdc&da=000000000000	0	agent	房间空气调节器产量累计增长 (%)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=1236448f609140c2a430b102a1dcf10c&indicatorId=ced8e01272b34f3c9c24ec5c1514439c&da=000000000000	0	agent	房间空气调节器产量累计值 (万台)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=1236448f609140c2a430b102a1dcf10c&indicatorId=f506a50d525d4d24a3c6c86f509bd933&da=000000000000	0	agent	房间空气调节器产量当期值 (万台)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=1236448f609140c2a430b102a1dcf10c&indicatorId=04a3379a718e4204978a85fc0c6b3d42&da=000000000000	0	agent	房间空气调节器产量同比增长 (%)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=3da0cb2e9c1a4097a8af9fd825093aee&indicatorId=aa39b562184344cbb3e0a9073ee396d1&da=000000000000	0	agent	房间空气调节器产量 (万台)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=c6fcc37fd6d94e019922a689b3f54720&indicatorId=735fa57f658640bfb88b8dc48efd421d&da=000000000000	0	agent	产品质量合格率 (%)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=1afa59232de34e008c2a6e769cd253ed&indicatorId=d4cc1178d5274fe6831f0fb570598232&da=000000000000	0	agent	民用航空货运量 (万吨)
+q04	doi:10.5281/zenodo.4326979	1	agent	air quality impacts in Western Balkans
+q04	doi:10.5281/zenodo.20416191	1	agent	Air Quality Index
+q04	url:data.humdata.org/dataset/air-quality-quito-yearly-2018-2020	1	agent	Ecuador: Yearly Air quality in Quito
+q04	url:data.gov.uk/dataset/ec792645-b485-45c8-9f3e-2a736a5feca5/air-quality-pm10-annual-mean1	1	agent	Air Quality - PM10 - Annual Mean
+q04	url:open.canada.ca/data/en/dataset/66ed8301-7f34-4a1c-b150-ff491ebf77e1	0	agent	Infographic: What is fine particulate matter (PM2.5)?
+q04	url:data.gov.au/data/dataset/recent-air-quality	1	agent	Recent Air Quality
+q04	url:hub.arcgis.com/datasets/60a63408cace4d08a5338ab1454c0a46	2	agent	空气质量_PM2.5
+q04	doi:10.21227/qwz6-sd32	2	agent	China 264 sample cities AQI, CO and NO2 and O3, PM10 and PM2.5, SO2 data set
+q04	doi:10.5281/zenodo.14275762	1	agent	LGHAP v2: Global monthly mean 1-km gap-free AOD grids (2000-2024)
+q04	url:huggingface.co/datasets/THULab/eea_pm25_forecasting	1	agent	THULab/eea_pm25_forecasting
+q04	doi:10.5683/sp3/x8onic	0	agent	Fit parameters and GEOS-Chem output for emulator of effects of meteorology on oz
+q04	url:data.europa.eu/data/datasets/68a93a15-8894-4c8b-a455-06cb2d029fe1	1	agent	Particulate matter (PM2.5)
+q04	url:ourworldindata.org/grapher/annual-pm25-emissions-from-wildfires	0	agent	Annual PM2.5 emissions from wildfires
+q04	doi:10.1594/pangaea.933765	0	agent	N2O5, ClNO2, PM2.5 chloride, and PM2.5 nitrate in Kalamazoo, Michigan, USA durin
+q04	url:synapse.org/Synapse:syn63710705	0	agent	Airway Transcriptome Networks for Ozone and PM2.5 Exposure Reveal Distinct Key D
+q04	url:huggingface.co/datasets/DeadCardassian/PM25Vision	1	agent	DeadCardassian/PM25Vision
+q04	doi:10.48529/2g2t-7k33	1	agent	Improving Indoor Air Quality for Poor Families: Controlled Experiments 2005-2006
+q04	doi:10.1594/pangaea.940302	1	agent	Air quality data of Bogotá, Santiago, and São Paulo
+q04	doi:10.1594/pangaea.940273	1	agent	Air quality data of station Tunal, Bogotá from 2014-2020
+q04	doi:10.1594/pangaea.940295	1	agent	Air quality data of station Independencia, Santiago from 2014-2020
+q04	doi:10.1594/pangaea.940288	1	agent	Air quality data of station Pudahuel, Santiago from 2014-2020
+q04	doi:10.82136/dataset/08de5cf5-c6f7-4d14-83fb-89d21562ce84	1	agent	PM2.5 Air Quality Grid Dataset (Thessaloniki)_v2
+q04	url:huggingface.co/datasets/Robeedau/airlens-live	1	agent	Robeedau/airlens-live
+q04	url:osf.io/mjq6t	1	agent	Air quality, PM2.5 and ozone, and acute deaths in California
+q04	url:catalog.data.gov/dataset/air-quality-system-aqs-ambient-observations-2007-pm2-5	1	agent	Air Quality System (AQS) ambient observations: 2007 PM2.5
+q05	doi:10.5281/zenodo.6532796	1	agent	The station-based error information of monthly snow depth, precipitation and air
+q05	doi:10.6084/m9.figshare.30488429.v1	1	agent	Integrated Multi-Source Dataset for Grassland Resilience Assessment in Northwest
+q05	doi:10.1594/pangaea.940192	2	agent	HRLT: A high-resolution (1 day, 1 km) and long-term (1961–2019) gridded dataset 
+q05	doi:10.5281/zenodo.8271546	0	agent	"Ground-based observation data from the article "" Elucidating the impacts of vari"
+q05	doi:10.5281/zenodo.13867069	1	agent	Precipitation and Temperature data from the on-site weather station at the Rüder
+q05	doi:10.5281/zenodo.10963932	2	agent	CDMet: 4 km daily gridded meteorological dataset for China from 2000 to 2020
+q05	doi:10.5281/zenodo.6424867	0	agent	2021_Fires_weather_station_data
+q05	url:open.canada.ca/data/en/dataset/0eaf158e-9c94-5416-92d1-f5ceae31b99a	0	agent	Weather Stations
+q05	doi:10.5281/zenodo.18095214	1	agent	Weather observations from Fyli weather station (Greece)
+q05	doi:10.1594/pangaea.902191	1	agent	High-spatial-resolution monthly temperature and precipitation dataset for China 
+q05	url:data.gov.uk/dataset/1b230794-6670-4085-8e9c-dbffcbf68175/m1-junction-37-observed-weather-report	1	agent	M1 junction 37 Observed weather report
+q05	url:data.gov.uk/dataset/51cd33d3-0efc-4060-a154-57942fe0125b/pontbren-automatic-weather-station-aws-dataset	1	agent	Pontbren automatic weather station (AWS) dataset
+q05	doi:10.1594/pangaea.947627	0	agent	Vehicle-based in-situ observations of the water vapor isotopic composition acros
+q05	doi:10.1594/pangaea.947606	0	agent	Vehicle-based in-situ observations of the water vapor isotopic composition acros
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=8b81611e45f345bd8860302d5c971037&indicatorId=8566685eb9564dc288dfc915b6da7d7c&da=000000000000	0	agent	地方财政国土资源气象等事务支出 (亿元)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=844094d7c9b842f8b84b2e7aebbaf97d&indicatorId=8c470345878b41e69f3440ab26949362&da=000000000000	0	agent	人民币对日元汇率 (日元=100) (元)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=6331ad868e8b4f55b8e9b6e765609ce1&indicatorId=806083491dbe46a08995783945a30b9d&da=000000000000	0	agent	年末总人口 (万人)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=cbb42baa592243dd95d5adde8ef38a5c&indicatorId=75a1d1afaaab4df59f1a1a80b9403785&da=000000000000	0	agent	电力、热力、燃气及水生产和供应业企业拥有网站数 (个)
+q05	url:data.humdata.org/dataset/daily-summaries-of-precipitation-indicators-for-china	2	agent	Daily Summaries of Precipitation Indicators for China
+q05	doi:10.57760/sciencedb.j00001.01798	2	agent	A dataset of meteorological observations at Huitong National Research Station of
+q05	doi:10.5281/zenodo.3380868	1	agent	NUS Republican China Weather Database
+q05	url:data.humdata.org/dataset/world-bank-climate-change-indicators-for-china	1	agent	China - Climate Change
+q06	doi:10.57760/sciencedb.iga.00014	2	agent	Heilongjiang Province Grain Crop Yield Dataset (1980-2019)
+q06	doi:10.57760/sciencedb.iga.00028	2	agent	Inner Mongolia Grain Crop Yield Dataset (1980-2019)
+q06	doi:10.57760/sciencedb.iga.00020	2	agent	Liaoning Province Grain Crop Yield Dataset (1980-2019)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=70551119a5104e13a5a2bbb3f36410f9&indicatorId=cea4d9e54f72420883463207c5e7f564&da=000000000000	2	agent	粮食产量 (万吨)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=d8c464ceab1f48e1ad4c39cb034344a4&indicatorId=f923207bba5547e093acb2109abfc189&da=000000000000	2	agent	人均粮食产量 (公斤)
+q06	doi:10.5061/dryad.6t1g1jx9r	0	agent	Data from: Legacy effects of alfalfa monocultures or annual crop/alfalfa mixture
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=ad33c0416d62418c8c1e16c751377af3&indicatorId=f611bdc688844cb3989243ab8926ae76&da=000000000000	2	agent	民族自治地方粮食产量 (万吨)
+q06	url:data.gov.uk/dataset/b87721bf-e01e-4f34-91a8-0ba61668190f/crop_yields_and_production_estimates_northern_ireland	1	agent	Crop Yields and Production Estimates (Northern Ireland)
+q06	doi:10.25338/b8np6j	1	agent	Integrated Crop-Livestock Systems achieve comparable crop yields to specialized 
+q06	doi:10.5281/zenodo.23089829	1	agent	WAYS TO INCREASE THE ECONOMIC EFFICIENCY OF GRAIN PRODUCTION THROUGH THE USE OF 
+q06	doi:10.7910/dvn/db5ag0	1	agent	Replication Data for: Deconstructing the Northward Shift: A Comparative Analysis
+q06	doi:10.5061/dryad.mf42f	1	agent	Data from: A global experimental dataset for assessing grain legume production
+q06	doi:10.57760/sciencedb.iga.00027	1	agent	Inner Mongolia Grain Crop Sowing Area Dataset (1980-2019)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=ebcf553b1c2642928bbc03c3d415e520&indicatorId=64e7eece61544c6f9e5856e7176d3475&da=000000000000	1	agent	农作物总播种面积 (千公顷)
+q06	doi:10.57760/sciencedb.iga.00019	1	agent	Dataset of Sowing Area of Grain Crops in Liaoning Province (1980-2019)
+q06	doi:10.5281/zenodo.19537603	0	agent	Якість зерна сорго зернового за застосування різних елементів технології вирощув
+q06	url:data.humdata.org/dataset/uganda-crop-production-in-kasese	1	agent	Uganda - Crop production in kasese
+q06	url:kaggle.com/datasets/lihangzhuo/2027crop-yield-dataset-crop-and-agricultural-data	2	agent	农产品产量数据集 农作物数据 农业数据（2027最新数据）
+q06	doi:10.15454/tkmgcq	0	agent	Robert et al. Combining crop growth modelling with trait-assisted prediction imp
+q06	url:api.worldbank.org/v2/indicator/AG.PRD.RICE.MT?source=11&format=json	1	agent	Rice production (metric tons)
+q06	url:ec.europa.eu/eurostat/databrowser/view/tag00094/default/table	1	agent	Dry pulses and protein crops for the production of grain (including seed and mix
+q07	doi:10.5061/dryad.sj3tx9677	1	agent	COVID-19 epidemic in Fiji
+q07	url:open.canada.ca/data/en/dataset/180aee19-c8bc-486e-adac-8cc865bcb6d8	1	agent	Statement from the Chief Public Health Officer of Canada on the release of natio
+q07	doi:10.17632/ctgyw85nx7.4	2	agent	COVID-19 Epidemic Dataset
+q07	doi:10.17898/adp_sled21_v1	1	agent	Monitoring the covid-19 epidemic: Sledilnik and slovenian data infrastructure, 2
+q07	doi:10.3390/mi11100912	2	agent	SARS-CoV-2-COVID-19-Epidemic-Dataset
+q07	doi:10.26303/65e6-z344	1	agent	Morphogenesis of Covid-19 Epidemic in Israel
+q07	url:data.gov.uk/dataset/a86e7b58-8ab1-4a2b-97e8-1e95aa8d83ba/learning-lessons-from-previous-pandemic-related-and-other-shocks1	0	agent	Learning lessons from previous pandemic-related and other shocks
+q07	url:open.canada.ca/data/en/dataset/37480cf4-eb9a-4da4-8b64-8a24a28c0340	0	agent	Lessons from the field: Canadian doctor offers a global perspective on the COVID
+q07	doi:10.5281/zenodo.20556164	0	agent	Dataset for the study on examining the effects of public health emergencies on r
+q07	url:kaggle.com/datasets/fplandes/covid19-granular-demographics-and-times-series	1	agent	COVID-19 - FR - Predicting/Explaining the epidemic
+q07	url:openml.org/d/43412	2	agent	COVID-19-Visualisation-and-Epidemic-Analysis-Data
+q07	doi:10.17632/77kkt2nvvp.1	0	agent	Network analysis data on emotional intelligence, stress coping strategies and an
+q07	doi:10.5281/zenodo.5020797	0	agent	pourmalek/covir2: 2.2 public release
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=91575e35984446809f7bd66a7a219158&indicatorId=bc3b66aa59844b61b516c0460c9ed37f&da=000000000000	0	agent	学会 (小计) 推广新技术、新品种数 (项)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=6331ad868e8b4f55b8e9b6e765609ce1&indicatorId=806083491dbe46a08995783945a30b9d&da=000000000000	0	agent	年末总人口 (万人)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=91575e35984446809f7bd66a7a219158&indicatorId=2a9ab43b448046b08520eb6cb6a65f67&da=000000000000	0	agent	科协 (小计) 推广新技术、新品种数 (项)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=91575e35984446809f7bd66a7a219158&indicatorId=5b6c5dd8ef7b4f7089ce4d8eec814909&da=000000000000	0	agent	全国学会推广新技术、新品种数 (项)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=91575e35984446809f7bd66a7a219158&indicatorId=2c1a9a34afe5451fa46e003148617690&da=000000000000	0	agent	省级学会推广新技术、新品种数 (项)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=bb39cf946ef04f3aab882d7db4635747&indicatorId=e13b1dc1ef3b41dc88637cf6f0c1232c&da=000000000000	0	agent	新闻和出版业新建固定资产投资 (不含农户) 比上年增长 (%)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=c8299dcbcbe748eca1cb9ad9e5bbb5ce&indicatorId=158e407d95a8401c88b4fc7a2705f502&da=000000000000	0	agent	新生儿访视率 (%)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=454d8b2f971d438aa2222d9250b3bf3c&indicatorId=5f201815954f4f38a4feacc73431344b&da=000000000000	0	agent	新生儿死亡率 (‰)
+q07	url:data.humdata.org/dataset/lshtm-covid-19-projections	2	agent	LSHTM COVID-19 Projections
+q07	url:data.gov.au/data/dataset/nsw-covid-19-clinics	1	agent	COVID-19 clinics
+q07	url:huggingface.co/datasets/souljoy/COVID-19_weibo_emotion	2	agent	souljoy/COVID-19_weibo_emotion
+q07	url:github.com/ccodwg/Covid19Canada	2	agent	ccodwg/Covid19Canada
+q07	url:osf.io/v7k23	2	agent	New York City COVID-19 Epidemic
+q07	url:data.europa.eu/data/datasets/62d821668a1d8c9a9a71b5a0	1	agent	Web collection dedicated to the Covid-19 epidemic
+q07	url:catalog.data.gov/dataset/cdc-epidemic-trends-and-rt	2	agent	CDC Epidemic Trends and Rt
+q08	url:data.gov.uk/dataset/4a7fb0d2-be86-4639-a159-1c9090a4190e/ons-vml-consumer-price-index-price-quote-cpi-rpi	1	agent	ONS VML Consumer Price Index Price Quote (CPI/RPI)
+q08	doi:10.5255/ukda-sn-9521-1	1	agent	Consumer and Retail Prices Index, 1996-2025: Secure Access
+q08	url:data.humdata.org/dataset/central-america-consumer-price-index-cpi	1	agent	Central America - Consumer Price Index (CPI)
+q08	url:open.canada.ca/data/en/dataset/563bdf8b-f59c-45c1-8b3e-ebcd515bb229	1	agent	Consumer Price Index (CPI) for selected countries
+q08	url:data.gov.au/data/dataset/consumer-price-index-cpi-16th-series	1	agent	Consumer Price Index (CPI) 17th Series
+q08	url:data.humdata.org/dataset/kenya-consumer-price-indices-cpi-and-rates-of-inflation	1	agent	Kenya - Consumer Price Indices  (CPI)  and  rates  of  inflation
+q08	url:open.canada.ca/data/en/dataset/d7d55f26-9503-40e2-b8b7-05cb3422c12b	1	agent	United States Consumer Price Index (CPI), seasonally adjusted
+q08	url:open.canada.ca/data/en/dataset/86c6bd1f-ed9d-454f-b1fe-71fd420cd212	1	agent	Consumer Price Index (CPI), 2001 basket content, monthly
+q08	url:open.canada.ca/data/en/dataset/7aef6276-ff6a-4233-89d6-e43ce5bdf864	1	agent	Consumer Price Index (CPI), 1992 basket content, monthly
+q08	doi:10.25318/1010010601-eng	1	agent	Consumer Price Index (CPI) statistics, alternative measures, unadjusted and seas
+q08	doi:10.25318/3610035001-eng	1	agent	Consumer Price Index (CPI) for selected countries
+q08	doi:10.25318/1810001201-eng	1	agent	Consumer Price Index (CPI), 1992 basket content, monthly
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=8edd9f3b6d1a4b72aceb9ed533b783cc&indicatorId=053f0281899d412ab4f7d83d26c14afc&da=000000000000	2	agent	居民消费价格指数 (1978=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=b4fad2cf9e0e4af7815b7e9e2e95c5c7&indicatorId=22c8a23165ba4946a570d34c7252803c&da=000000000000	2	agent	消费品居民消费价格指数 (上月=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=b4fad2cf9e0e4af7815b7e9e2e95c5c7&indicatorId=f3904a1f5a384d54a3944ec6e2df3d1c&da=000000000000	2	agent	居民消费价格指数 (上月=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=e5f37eced5de4d4c815f7ac5f59fc6c2&indicatorId=5e3053f110074dcdbcfa3c8428dd1367&da=000000000000	2	agent	居民消费价格指数 (上年=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=b4fad2cf9e0e4af7815b7e9e2e95c5c7&indicatorId=5cb5631c669943279cf31bf89b9b38e3&da=000000000000	2	agent	居住类居民消费价格指数 (上月=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=5c7452825c7c4dcba391db5ca7f335c5&indicatorId=61a170ad7fa44fa4b2ff60fd708e516e&da=000000000000	2	agent	消费品居民消费价格指数 (上年同月=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=8bdfe475d35f49b9aa7c7afe66d86136&indicatorId=053ea802aaad44e68699b11aed0685cf&da=000000000000	2	agent	消费品居民消费价格指数 (上年同期=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=8edd9f3b6d1a4b72aceb9ed533b783cc&indicatorId=f6a1f05237d644d4bf80af3caad96796&da=000000000000	2	agent	农村居民消费价格指数 (1985=100)
+q08	doi:10.5281/zenodo.22879694	0	agent	"Replication package for ""The Effects of Diesel Subsidy Reform and Price-Band Reg"
+q08	doi:10.5281/zenodo.8087778	0	agent	On the Determinants of Real Estate Returns
+q08	doi:10.5683/sp3/qpdsio	1	agent	Conference Board of Canada, CPI by Provinces, 1972-2018 (Millions $) [Excel file
+q08	url:ourworldindata.org/grapher/consumer-price-index	1	agent	Consumer price index
+q08	doi:10.1594/pangaea.818226	0	agent	(Table 1) n-Alkane CPI, Pr/Ph and abundance of aromatic biomarkers in sediments 
+q08	url:ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE337290	0	agent	The temporal dynamics of the immune response to neoadjuvant androgen deprivation
+q08	url:data.europa.eu/data/datasets/aril_-cpi-2024	0	agent	CPI 2024
+q08	url:ourworldindata.org/grapher/price-changes-consumer-goods-services-united-states	1	agent	Price changes in consumer goods and services in the United States
+q08	doi:10.1594/pangaea.744635	0	agent	CPI, δ¹³C, Corg and diploptene from ODP Hole 169-1034B varved sediments
+q08	doi:10.5683/sp/xowoth	0	agent	Replication Data for: Türkiye’de Enflasyon ve Enflasyon Belirsizliği İlişkisi
+q08	url:data.europa.eu/data/datasets/anagrafica_cpia_202324	0	agent	Population _CPIA_202324
+q08	doi:10.1594/pangaea.744634	0	agent	(Table 2) CPI, diploptene and carbon isotopic composition of relevant terrigenou
+q08	url:data.europa.eu/88u/dataset/ons-vml-consumer-price-index-price-quote-cpi-rpi	1	agent	ONS VML Consumer Price Index Price Quote (CPI/RPI)
+q08	doi:10.7910/dvn/zzi9c0	1	agent	"Replication Data and Code for: ""Inflation with Covid Consumption Baskets"" NBER W"
+q08	url:data.europa.eu/88u/dataset/consumer_price_indices	1	agent	Consumer Price Indices
+q08	doi:10.4232/1.14115	1	agent	Real Wage and Price Development in Germany, 1991 - 2022
+q08	url:openml.org/d/43831	1	agent	Consumer-Price-Index
+q08	url:github.com/palewire/cpi	0	agent	palewire/cpi
+q08	url:osf.io/rfaet	1	agent	UNITED STATES CONSUMER PRICE INDEX DISAGGREGATION BY INDUSTRY (1960-2020)
+q09	url:data.gov.uk/dataset/4c064b4b-e25d-4c8e-9d47-2b913ca95b92/corporate-co2-emissions1	1	agent	Corporate CO2 emissions
+q09	doi:10.5281/zenodo.23667912	1	agent	The Global Carbon Project's fossil CO2 emissions dataset
+q09	doi:10.5281/zenodo.4281271	1	agent	Global, Regional, and National Fossil-Fuel CO2 Emissions: 1751-2017
+q09	url:data.gov.uk/dataset/4707be1b-e41c-426b-8427-15a01a80e066/annual-co2-emissions-from-regulated-installation-operators	1	agent	Annual CO2 emissions from regulated installation operators
+q09	url:data.gov.uk/dataset/2f53c547-d9ee-4141-a123-b19fe178db8f/annual-co2-emissions-from-regulated-aircraft-operators	1	agent	Annual CO2 emissions from regulated aircraft operators
+q09	doi:10.5281/zenodo.21319868	1	agent	Countries Dataset 1990-2024: 214 Countries CO2 Emissions, Population, GDP
+q09	url:data.gov.uk/dataset/24849e1d-7c5a-46dd-a07b-ee1e308b03fb/co2-emissions	1	agent	CO2 Emissions
+q09	doi:10.34894/epurqh	1	agent	Total CO2 Emissions
+q09	doi:10.5281/zenodo.10607765	1	agent	Global, Regional, and National Sectoral Fossil-Fuel CO2 Emissions: CDIAC-FF
+q09	url:data.gov.uk/dataset/d230926f-6007-4213-a435-113bf7cf8f50/city-wide-co2-emissions1	1	agent	City-wide CO2 emissions
+q09	url:ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/EAA02/JSON-stat/2.0/en	1	agent	EAA02 - Sequestration of Carbon Dioxide (CO2) Emissions
+q09	doi:10.34894/9wcwsp	1	agent	CO2 Emissions per Capita
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=42e1949dd84f457e8ad1d29c65096858&indicatorId=803307ae1d604f01b8b6d445f1acc0d0&da=000000000000	0	agent	颗粒物排放量 (万吨)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=42e1949dd84f457e8ad1d29c65096858&indicatorId=3df1d29f5df04f23b9ab676dda83c901&da=000000000000	0	agent	二氧化硫排放量 (万吨)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=0845f9f14b4743488cf7d23d0629d3a8&indicatorId=17c1548d02804d88b56ce225b54912f3&da=000000000000	0	agent	磷矿石（折含五氧化二磷30％）产量当期值 (万吨)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=42e1949dd84f457e8ad1d29c65096858&indicatorId=aab3b42cbfcd459187b985e363134508&da=000000000000	0	agent	氮氧化物排放量 (万吨)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=0845f9f14b4743488cf7d23d0629d3a8&indicatorId=afd4684cbaca42ac9e59120c1ecf24ec&da=000000000000	0	agent	磷矿石（折含五氧化二磷30％）产量累计值 (万吨)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=0cbd0ce38d804893aea1ca663e248e0c&indicatorId=775b403dc6b5463abbf1c3905477a59f&da=000000000000	0	agent	总磷排放量 (万吨)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=0845f9f14b4743488cf7d23d0629d3a8&indicatorId=c1d4a3c4e8ed409581440302840df436&da=000000000000	0	agent	磷矿石（折含五氧化二磷30％）产量同比增长 (%)
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=0cbd0ce38d804893aea1ca663e248e0c&indicatorId=ce29065e9a3a43cab622f1ea43827006&da=000000000000	0	agent	总氮排放量 (万吨)
+q09	url:data.humdata.org/dataset/carbon-dioxide-emissions-in-nepal	1	agent	Nepal - Carbon dioxide emissions in Nepal
+q09	url:open.canada.ca/data/en/dataset/c2563eec-bfc4-404e-acf9-c88b3b55d094	1	agent	Orbiting Carbon Observatory 2 (OCO-2) data for quantifying power plant carbon di
+q09	url:data.gov.au/data/dataset/state-co2e-emissions-per-capita	1	agent	State and territory CO2e emissions per capita
+q09	doi:10.6084/m9.figshare.26172811.v1	0	agent	碳金融是否能够促进清洁能源的发展？——低碳技术创新视角
+q09	url:kaggle.com/datasets/pyim59/mini-datasets	0	agent	Mini datasets
+q09	url:kaggle.com/datasets/yzq0303/carbon-dioxide-emissions-dataset	1	agent	Carbon Dioxide Emissions Dataset
+q09	url:hub.arcgis.com/datasets/2c4bb3c22e5b42cc80abdb9ef75c633b	0	agent	CarbonAuditReport_FGDB
+q09	url:hub.arcgis.com/datasets/b8d371e489984895a9987e183f9cf445	0	agent	能源_form
+q09	url:hub.arcgis.com/datasets/df6d9238eb7d4b9fa953a841a26ae4d3	0	agent	能源
+q09	url:data.europa.eu/88u/dataset/corporate-co2-emissions1	1	agent	Corporate CO2 emissions
+q09	doi:10.5281/zenodo.10562476	1	agent	The Global Carbon Project's fossil CO2 emissions dataset
+q09	url:data.europa.eu/88u/dataset/f238ac37-533e-48ff-99bd-280dc6b1b688	1	agent	EAA06 - Sequestration of Carbon Dioxide (CO2) Emissions NACE Rev 2
+q09	url:data.europa.eu/88u/dataset/kpi-gcc03	1	agent	Level of CO2 emissions from council buildings and operations (tonnes of carbon d
+q09	doi:10.1594/pangaea.921107	0	agent	Simulated change in the future carbon cycle under high CO2 emission and ocean al
+q09	doi:10.3334/ornldaac/1205	1	agent	NACP MCI: CO2 Emissions Inventory, Upper Midwest Region, USA., 2007
+q09	url:kaggle.com/datasets/ravindrasinghrana/carbon-co2-emissions	1	agent	Carbon (CO2) Emissions
+q10	doi:10.5281/zenodo.14976383	1	agent	Tanzania Land Cover Classes and Sentinel 2a time series features
+q10	doi:10.5281/zenodo.21704077	1	agent	Dataset for Integrating Landscape Metrics and Directional Growth Analysis to Ass
+q10	doi:10.57702/ek18zjub	1	agent	UCMerced land use dataset
+q10	doi:10.57702/gak7tdyt	1	agent	Land Use and Land Cover Classification Dataset
+q10	doi:10.7910/dvn/h8jna2	0	agent	Mapping carbon storage in urban trees withmulti-source remote sensing data: Rela
+q10	doi:10.5281/zenodo.20732113	1	agent	WP0_K0.1_Input_Irrigable Land Use Classes - Arenales Living Lab
+q10	doi:10.17605/osf.io/kr3pe	1	agent	Evaluation of regional ecological integrity using remote sensing
+q10	url:hub.arcgis.com/datasets/c713f7020c264f07bdefaee4896ca8ae	1	agent	Land Use/Land Cover Type by HUC14
+q10	doi:10.34894/ol0xg2	1	agent	Replication Data for: Quantifying landscape-level land use intensity patterns th
+q10	doi:10.17632/nj94y9mj6y.1	0	agent	22年澳门数据集
+q10	doi:10.57745/ddp1zr	1	agent	High-resolution land use and land cover maps for the greater Mariño watershed in
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=3656370c9ad649208e5417c2ab2b5bf1&indicatorId=e5fd864cc4ba434487d1e510850d23df&da=000000000000	0	agent	地方财政城镇土地使用税 (亿元)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=6331ad868e8b4f55b8e9b6e765609ce1&indicatorId=806083491dbe46a08995783945a30b9d&da=000000000000	0	agent	年末总人口 (万人)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=f478a1d7c27a4015b6f9af06ce6f617c&indicatorId=763e9486630640c886ae0328db1b92aa&da=000000000000	0	agent	国家城镇土地使用税 (亿元)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=572e33cafa0c47028049041a9c62edb9&indicatorId=07ae17366ba046afbd5da071164e634b&da=000000000000	0	agent	房地产开发企业土地转让收入 (亿元)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=3656370c9ad649208e5417c2ab2b5bf1&indicatorId=107767dc4ed04e57b610df0241d01e54&da=000000000000	0	agent	地方财政土地增值税 (亿元)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=b024e1952d2341e4bc59a81fb0c8c37f&indicatorId=b4c9f323fb594ee7844675f71ccead9d&da=000000000000	0	agent	土地管理业其他费用固定资产投资 (不含农户) 比上年增长 (%)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=982df6fd3a4f45778a70df38f8814eea&indicatorId=b24740c5987b4b08872d7c876b8b7baa&da=000000000000	0	agent	土地管理业地方固定资产投资 (不含农户) 比上年增长 (%)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=d659b98759a24003b9ab0fd5638dd9de&indicatorId=8e88a162b9df4dbcbc936c551b974284&da=000000000000	0	agent	房地产开发企业利用外资 (亿元)
+q10	doi:10.5281/zenodo.8002595	0	agent	SVBD
+q10	url:data.humdata.org/dataset/mimu-geonode-tanintharyi-region-land-cover-improved	1	agent	Tanintharyi Region Land Cover (Improved)
+q10	url:data.gov.uk/dataset/163d456f-4f54-4599-bb21-cf526be27a92/remote-sensing-of-crops	1	agent	Remote sensing of crops
+q10	url:open.canada.ca/data/en/dataset/4d100a02-1494-452f-9f77-84258b26e1cd	0	agent	Water Quality Remote Sensing
+q10	url:data.gov.au/data/dataset/nsw-monitoring-of-sustainable-land-management-using-remotely-sensed-vegetation-cover-2010-2021	1	agent	Monitoring of sustainable land management using remotely sensed vegetation cover
+q10	url:data.europa.eu/data/datasets/wuedata-10-58160-gvfecibpndrbdizk	1	agent	Remote Sensing Indicators: Land Surface Albedo
+q10	doi:10.57760/sciencedb.08321	2	agent	Response of spatial and temporal evolution of NDVI of vegetation with different 
+q10	doi:10.5281/zenodo.11335175	2	agent	GF1 WFV Surface Reflectance Products
+q10	doi:10.6084/m9.figshare.29814788.v2	0	agent	图表与表格
+q10	doi:10.6084/m9.figshare.21427230.v2	0	agent	我们建立了海南岛热带雨林数据库
+q10	doi:10.6084/m9.figshare.29827235.v1	0	agent	TVPDI
+q10	url:data.europa.eu/data/datasets/scottish-remote-sensing-index	1	agent	Scottish Remote Sensing Index
+q10	url:registry.opendata.aws/nasa-operal3dist-alert-hlsv1	1	agent	OPERA Land Surface Disturbance Alert from Harmonized Landsat Sentinel-2 product 
+q10	url:hub.arcgis.com/datasets/e6a388fcfd2140338f70b4fd8e425620	1	agent	GIRAS
+q10	url:developers.google.com/earth-engine/datasets/catalog/OPERA_DIST_L3_DIST-ANN-HLS_V1	1	agent	OPERA Land Surface Disturbance Annual from Harmonized Landsat Sentinel-2 (DIST-A
+q10	url:huggingface.co/datasets/NoeFlandre/benchmark-llms-landuse-relevance	0	agent	NoeFlandre/benchmark-llms-landuse-relevance
+q11	doi:10.5281/zenodo.19368383	1	agent	House price data set for Copenhagen City and the Greater Copenhagen Area
+q11	doi:10.17632/w88msv7364	0	agent	Data for: The Effects of Short-Term Rental Regulations: Evidence From the City o
+q11	url:data.gov.uk/dataset/a1ce63a2-200b-489a-9512-084c29b0cffd/kpi-cjge121a	1	agent	Average House Price
+q11	doi:10.25549/impa-c123-92836	0	agent	Mission at the bottom - City Mission in Madagascar. It is difficult for a farmer
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=7dd5dcf3341b4962bec75037d89fbec7&indicatorId=faef20d919744346b11e5706c64e3861&da=000000000000	0	agent	城市绿地面积 (万公顷)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=88e999321a404fdfbe63a0f6572981dc&indicatorId=81552066be6548f1a94d065a2866b700&da=000000000000	0	agent	城市用水普及率 (%)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=88e999321a404fdfbe63a0f6572981dc&indicatorId=be8e1390e5464d1ba0fd281f31d62afd&da=000000000000	0	agent	城市燃气普及率 (%)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=622517fdd27446a695de48a1b6ab8533&indicatorId=7fb2dd662c18401885f8b6c8b4e84881&da=000000000000	0	agent	全部地级及以上城市数 (个)
+q11	url:data.gov.au/data/dataset/house-prices-by-small-area-sale-year	1	agent	House Prices by Small Area - Sale Year
+q11	doi:10.5281/zenodo.19367951	1	agent	House price data set for Copenhagen City and the Greater Copenhagen Area
+q11	url:kaggle.com/datasets/dravidvaishnav/mumbai-house-prices	1	agent	Mumbai House Prices
+q11	url:kaggle.com/datasets/karanchinchpure/house-price-predict-in-mumbai-city	1	agent	House Price Predict in mumbai City
+q11	doi:10.25549/chs-m1395	0	agent	Exterior view of the Philadelphia One Price Boot and Shoe House, Main Street sid
+q11	url:data.gov.au/data/dataset/house-prices-by-small-area-transfer-year	1	agent	House Prices by Small Area - Transfer Year
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=4b23085acd80447b9790aaf8a653c5bb&indicatorId=f8d48bf02512452b98b16306b2dad171&da=000000000000	0	agent	住宅房屋竣工价值累计值 (亿元)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=302cec9f9b354cb3a82670d8747bea2f&indicatorId=222b8f1e22804abaaa3b58b227f8103d&da=000000000000	1	agent	住宅商品房平均销售价格 (元/平方米)
+q11	doi:10.17632/2rxrnvgfym.1	1	agent	Geocoded real estate price in Perm, Russia
+q11	url:data.gov.uk/dataset/c2d3319a-4a35-4e38-baa1-d85e33fd8d9c/house-prices1	1	agent	House Prices
+q11	url:open.canada.ca/data/en/dataset/324befd1-893b-42e6-bece-6d30af3dd9f1	1	agent	New housing price index, monthly
+q11	url:hub.arcgis.com/datasets/e0598090ab334cbe882e002485368697	2	agent	省会城市住宅商品房年度价格数据地图
+q11	url:hub.arcgis.com/datasets/3714fbd4c61b4a0c8654c568f6e0af9f	0	agent	关于西安社区城市高温问题的调查 - 13 September_form
+q11	url:kaggle.com/datasets/dsdsahd123/chinese-livable-cities	0	agent	chinese livable cities
+q11	url:hub.arcgis.com/datasets/a8cbc2afc0f44dc6b342bf8a14a32c32	0	agent	Philadelphia Rent Map 2026
+q11	url:data.europa.eu/88u/dataset/kpi-cjge121a	1	agent	Average House Price
+q11	doi:10.25946/25018466	0	agent	housing-planning
+q11	doi:10.14457/tu.the.2014.498	0	agent	Zoning measure by inclusionary zoning for affordable housing
+q11	doi:10.6084/m9.figshare.26968507.v1	2	agent	china house price
+q11	url:huggingface.co/datasets/covaga/Philippines-Real-Estate-Asking-Prices	1	agent	covaga/Philippines-Real-Estate-Asking-Prices
+q12	doi:10.5281/zenodo.13785726	1	agent	Corpus Nummorum - Natural Language Processing Dataset
+q12	doi:10.5281/zenodo.23801768	1	agent	THEORETICAL AND PRACTICAL MODELING OF THE ANNOTATION OF LEXICAL UNITS IN THE ALI
+q12	doi:10.5281/zenodo.10777674	1	agent	FoRC4CL Corpus
+q12	doi:10.5281/zenodo.23803517	1	agent	Signwrite: A corpus of written Swedish texts and keystroke data from deaf and ha
+q12	doi:10.5281/zenodo.24386083	1	agent	LINGUISTIC AND TECHNOLOGICAL FOUNDATIONS FOR BUILDING A LARGE-SCALE UZBEK TEXT C
+q12	doi:10.17632/ffkm5rk2yg	1	agent	Bangla Text Paraphrase Corpus for Natural Language Processing
+q12	url:github.com/somastllc/somali-nlp-corpus	1	agent	somastllc/somali-nlp-corpus
+q12	url:huggingface.co/datasets/Ethosoft/Turkish_corpus	1	agent	Ethosoft/Turkish_corpus
+q12	doi:10.5281/zenodo.19890888	0	agent	IT IN PHILOLOGY
+q12	doi:10.7910/dvn/rxbncz	1	agent	Replication Data for Igbo Natural Language Processing Tasks I
+q12	url:catalog.data.gov/dataset/nlp-driven-microscopy-ontology-development-raw-data-dois	0	agent	NLP-Driven Microscopy Ontology Development - Raw data DOIs
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=6331ad868e8b4f55b8e9b6e765609ce1&indicatorId=806083491dbe46a08995783945a30b9d&da=000000000000	0	agent	年末总人口 (万人)
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=237e59ea2d2c43158c1b602f3dc56f24&indicatorId=d0ba8b236452418fa84e3cbe068e32d2&da=000000000000	0	agent	语言、文字图书出版印数 (亿册)
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=84888ecea4d548a4acc91034a2fc0c05&indicatorId=877a0b4671364678848081c16a15e130&da=000000000000	0	agent	语言、文字图书出版种数 (种)
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=50cce62cebc74963a83c23e93320ed22&indicatorId=4e992812d5244a61a2ad910700a32f4c&da=000000000000	0	agent	自动数据处理设备的零件出口数量 (吨)
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=d7da23d552724299bdf49bac090f20bd&indicatorId=f41486fd70e340479eef6325fce4e719&da=000000000000	0	agent	自动数据处理设备的零件出口金额 (百万美元)
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=e52b5b57b30545a5b719fb8290669303&indicatorId=63be764dee9343f392f5a50739157b0b&da=000000000000	0	agent	其他处理方式劳动争议案件处理数 (件)
+q12	url:data.humdata.org/dataset/central-america-media-analysis	0	agent	Central America - Media Analysis
+q12	url:data.gov.uk/dataset/f3734577-1483-4105-8e32-3adf2cb11724/labelled-data-for-fine-tuning-a-geological-named-entity-recognition-and-entity-relation-extract	1	agent	Labelled data for fine tuning a geological Named Entity Recognition and Entity R
+q12	url:open.canada.ca/data/en/dataset/a0d55711-ca4f-43dc-a448-4cb3d9ea7a05	0	agent	CCDR: Volume 46-6 -June 2020: Artificial intelligence in public health
+q12	url:data.gov.au/data/dataset/nsw-3-15514-bostes-nsw-annual-report-2015-2016	0	agent	BOSTES NSW Annual Report 2015-2016
+q12	url:b2find.eudat.eu/dataset/d5e349cc-c114-531c-a267-51ef29a8d17d	1	agent	Natural Language Toolkit
+q12	url:modelscope.cn/datasets/DAMO_NLP/ChineseSTS	2	agent	DAMO_NLP/ChineseSTS
+q12	doi:10.5281/zenodo.23301342	1	agent	农科(蔬菜学·茶学)学术英语语料库 v1.2 · 语料数据包(受限访问) / Agricultural English Corpus v1.2 (Horticu
+q12	doi:10.5281/zenodo.23301345	1	agent	农科(蔬菜学·茶学)学术英语语料库 v1.2 · 文档与代码包 / Agricultural English Corpus v1.2 (Horticulture
+q12	url:modelscope.cn/datasets/DAMO_NLP/BQ_Corpus	2	agent	DAMO_NLP/BQ_Corpus
+q12	url:kaggle.com/datasets/cweyyy/chinesenlpcorpus	2	agent	ChineseNLPCorpus
+q12	url:kaggle.com/datasets/appenlimited/ai-agent-paper-reproduction-benchmark-dataset	0	agent	PaperBench Dataset
+q12	doi:10.57760/sciencedb.j00001.00355	2	agent	A dataset of Tibetan-Chinese cross-language text plagiarism detection
+q12	doi:10.5281/zenodo.13785725	1	agent	Corpus Nummorum - Natural Language Processing Dataset
+q12	url:registry.opendata.aws/sudachi	1	agent	Sudachi Language Resources
+q12	url:omicsdi.org/dataset/pride/PXD071590	0	agent	MassNet: billion-scale AI-ready mass spectral corpus empowering scalable deep le
+q12	doi:10.13026/wks0-w041	0	agent	Tasks 1 and 3 from Progress Note Understanding Suite of Tasks: SOAP Note Tagging
+q13	doi:10.17903/fk2/kkzfmf	1	agent	The Unemployment Rate
+q13	doi:10.5281/zenodo.15575057	1	agent	Unemployment rates of the NUTS 2 regions for the years 2021 (EU27 and Switzerlan
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=3888eac6062945a79c8a27e5f13d4953&da=000000000000	2	agent	全国城镇调查失业率 (%)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=1c1b2d9ab24048bfadc5c7d9510dc663&da=000000000000	2	agent	全国城镇本地户籍劳动力失业率 (%)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=3921da310de24f14b6457c235657baf9&da=000000000000	2	agent	全国城镇外来户籍劳动力失业率 (%)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=1d550f3ec77a463bb607d4a3427e1465&da=000000000000	2	agent	31个大城市城镇调查失业率 (%)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=7bc1bd5daeac48ae8bb413c34ece1d08&da=000000000000	2	agent	全国城镇25—29岁劳动力失业率 (%)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=c03a36c9562246b6bc8aab010951ef1c&da=000000000000	2	agent	全国城镇30—59岁劳动力失业率 (%)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=ee3b7046b390415b9b7745e3d16f6052&indicatorId=bd6da1abb26046c2acb38aa701d90e86&da=000000000000	2	agent	全国城镇16—24岁劳动力失业率(%)
+q13	url:data.humdata.org/dataset/unicef-gn-unmply	1	agent	Global: Labour force unemployment rate
+q13	url:data.gov.uk/dataset/448923c0-6224-492a-b4d8-db239cdc7724/unemployment-rate-region1	1	agent	Unemployment Rate, Region
+q13	url:open.canada.ca/data/en/dataset/c2560599-b14b-4705-964a-2b06e83a5d9b	1	agent	Supplementary unemployment rates, annual
+q13	url:data.gov.au/data/dataset/nsw-3-19898-nsw-unemployment-rate	1	agent	NSW unemployment rate
+q13	url:data.humdata.org/dataset/employment-labour-force-participation-unemployment	1	agent	Türkiye: Employment rate, Labour Force Participation and  Unemployment statistic
+q13	url:data.gov.uk/dataset/d1dd2c6b-645b-468b-97b8-15039898ecab/economic-activity-rate-employment-rate-and-unemployment-rate-by-ethnic-group-nationality-boroug1	1	agent	Economic Activity Rate, Employment Rate and Unemployment Rate by Ethnic Group & 
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=5833e7e6ad6b4c2ab01fa3e56da109a9&indicatorId=32cdf70b88704c2880cd863ac772487e&da=000000000000	0	agent	失业保险基金支出 (亿元)
+q13	doi:10.5281/zenodo.22141375	1	agent	UZBEKISTAN'S JOBLESS RATE: A TEN-YEAR OUTLOOK AND WAYS TO BRING IT DOWN
+q13	doi:10.34740/kaggle/dsv/9858759	0	agent	S&P500_MACRO_Project_Data
+q13	doi:10.6084/m9.figshare.32766600.v1	0	agent	黄淮河农区特色粮经产品及示范区兰考县产地遥感调查数据集
+q13	url:hub.arcgis.com/datasets/77dd6532d75e4d46be79b358d60b8fef	1	agent	人口与失业人口失业人口增长率
+q13	doi:10.6084/m9.figshare.29814788.v2	0	agent	图表与表格
+q13	url:hub.arcgis.com/datasets/51ec7a2dd64a41f0afcc2392c5ea9d9d	0	agent	2016 Census Income (Layer)
+q13	doi:10.6084/m9.figshare.30877076.v1	0	agent	受控装置（拍翼）动态控制数据输出
+q13	url:kaggle.com/datasets/kgxiao/german	0	agent	german_credit_data
+q13	doi:10.6084/m9.figshare.29597396.v1	0	agent	艾司氯胺酮预处理对肝包虫病手术肝缺血再灌注损伤的保护作用：随机对照试
+q13	url:kaggle.com/datasets/rollbearwu/mathmodeling	0	agent	MathModeling
+q13	url:kaggle.com/datasets/afang19980925/aiai-user-behavior	0	agent	算力消耗与AI软件服务用户行为数据集AI User Behavior
+q13	doi:10.25318/1410002001-eng	1	agent	Unemployment rate, participation rate and employment rate by educational attainm
+q13	url:data.europa.eu/88u/dataset/kpi-cjge03	1	agent	York’s unemployment rate below the national (%pt) - (Snapshot)
+q13	url:catalog.data.gov/dataset/unemployment-rate-in-northeast-census-region	1	agent	Unemployment Rate in Northeast Census Region
+q13	url:cohesiondata.ec.europa.eu/dataset/Unemployment-Rate-2014/trgr-4cjw	1	agent	Unemployment Rate 2014
+q13	url:huggingface.co/datasets/electricsheepafrica/africa-synth-employment-unemployment-rates-africa-all	1	agent	electricsheepafrica/africa-synth-employment-unemployment-rates-africa-all
+q13	url:kaggle.com/datasets/jayrav13/unemployment-by-county-us	1	agent	US Unemployment Rate by County, 1990-2016
+q13	doi:10.5683/sp3/fns9ef	1	agent	Labour Force Survey, December 2025 [Canada]
+q13	url:osf.io/mzp5b	1	agent	Impacts of Covid-19 on the Australian unemployment rate
+q13	url:data.europa.eu/data/datasets/unemployment-rate-2016	1	agent	Unemployment rate 2016*
+q14	doi:10.5281/zenodo.24358724	1	agent	Replication package for: High-speed rail, digitalisation and rail passenger dema
+q14	doi:10.57760/sciencedb.01613	1	agent	China's High-speed Rail “Going Global” Termbase
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=5306ea73f09d45d4a1e0577c2ab31291&da=000000000000	1	agent	客运量_累计值 (万人)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=b48272271a65417da27b0f57fc5ea39d&da=000000000000	1	agent	客运量_同比增长 (%)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=c9a6513139c342488a8586b28f8a8d07&da=000000000000	1	agent	客运量_累计增长 (%)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=283f7c7b317340fe8e5443da77d3dd29&indicatorId=2e3a98814bc34e52b1c7e3aef4788d9e&da=000000000000	2	agent	铁路客运量 (万人)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=4867bf30e8c34bfd825a48c4ee6e7a2f&da=000000000000	1	agent	客运量_当期值 (万人)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=283f7c7b317340fe8e5443da77d3dd29&indicatorId=cd96dcaddd0c42148276ba61f40651d9&da=000000000000	1	agent	旅客运输量 (万人)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=d4434694f35145dbaeb113952171fec8&da=000000000000	0	agent	公路客运量_累计值 (万人)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=057e89c184374ca9aac8a702863bc503&da=000000000000	0	agent	公路客运量_当期值 (万人)
+q14	url:data.gov.uk/dataset/5f19d54f-92e8-475f-b8c7-f43f090b35fb/high-speed-rail-consultation-electronic	0	agent	High Speed Rail consultation (electronic)
+q14	doi:10.17632/h599kxj9vc	1	agent	Data for: Impact of High-speed Rail on Population Mobility and Urbanisation: A c
+q14	url:data.gov.uk/dataset/f3fa9fd2-a351-4f52-93ac-5f7a90a0f8ae/compass-hs2-map-portal	0	agent	Compass High Speed Rail HS2 Web Map Portal
+q14	doi:10.7910/dvn/lgu6ut	1	agent	Spatial spillover and heterogeneity impact of High speed Railway on County level
+q14	doi:10.5281/zenodo.4872772	0	agent	Rail-5k: a Real-World Dataset for Railway Surface Defects Detection
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=b273ee500f2c4213909aee5abbb45105&indicatorId=73d25f21611143d6b42c61439a475666&da=000000000000	1	agent	国家铁路软卧客车拥有量 (辆)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=1c0d19990b6c4d69817674221ee44be3&indicatorId=6374253245c8491eb391a7aa2918c6b1&da=000000000000	0	agent	铁路工程高、中级职称人员数 (人)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=b273ee500f2c4213909aee5abbb45105&indicatorId=97c2eaff4dcc4343bcdedfceab8b5566&da=000000000000	1	agent	国家铁路硬卧客车拥有量 (辆)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=a5f33b743c7446ed940db6240b5c8859&indicatorId=7bba7fe6bbe146c988d4dc674efd6be0&da=000000000000	0	agent	民办普通高中招生数 (万人)
+q14	doi:10.17632/sbbpzxw9v4	0	agent	Rail-Intrusion-Detection-2023
+q14	doi:10.5281/zenodo.19012743	0	agent	METHODS OF ASSEMBLING AND DISMANTLING RAIL JOINTS ON REINFORCED CONCRETE SLEEPER
+q14	url:data.humdata.org/dataset/hotosm_chn_railways	1	agent	Railways of China
+q14	url:open.canada.ca/data/en/dataset/057180f9-9c2e-47e2-ba2e-d3f5ab9df5a4	1	agent	Railway industry summary statistics on freight and passenger transportation
+q14	doi:10.5281/zenodo.24358723	1	agent	Replication package for: High-speed rail, digitalisation and rail passenger dema
+q14	doi:10.4121/uuid:2f612316-006b-41b1-91ea-8f15997342af	2	agent	Statistical Tables of China High Speed Railway and Japanese Shinkansen
+q14	url:data.europa.eu/data/datasets/compass-hs2-map-portal	0	agent	Compass High Speed Rail HS2 Web Map Portal
+q14	doi:10.17632/fv5n79z2wj.1	1	agent	Joint optimization of classified pricing and seat allocation for high speed rail
+q14	url:huggingface.co/datasets/Roy229/filesystem_rail_12306_huggingface_terminal_2795_b4de12	1	agent	Roy229/filesystem_rail_12306_huggingface_terminal_2795_b4de12
+q14	url:kaggle.com/datasets/saudidata2030/haramain-high-speed-railway-hhr-trips-dataset	1	agent	Haramain High-Speed Railway (HHR) Trips Dataset
+q03	url:openml.org/d/43963	0	agent	CPS1988
+q04	doi:10.1594/pangaea.940269	1	agent	Air quality data of station Guaymaral, Bogotá from 2014-2020
+q07	url:data.cdc.gov/Public-Health-Surveillance/CDC-Epidemic-Trends-and-Rt/5dqz-y4ea	2	agent	CDC Epidemic Trends and Rt
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=8edd9f3b6d1a4b72aceb9ed533b783cc&indicatorId=ac06d9bb3e8d43819f427a130370db98&da=000000000000	2	agent	城市居民消费价格指数 (1978=100)
+q08	url:data.stats.gov.cn/dg/website/page.html?cid=66ab9cf690b642baa8244c46c9e3f59c&indicatorId=71595684bdbc491ea3a9ec83a9cc70d1&da=000000000000	2	agent	居住类居民消费价格指数 (上年=100)
+q08	doi:10.5281/zenodo.7316539	0	agent	Are inflation expectations irrational in Turkey Exchange rate pass-through analy
+q08	doi:10.17632/w293jxpggj.1	1	agent	US consumer prices data 2017-18 for sub-national CPI-U calculations using TiPRD 
+q08	url:data.humdata.org/dataset/state-of-palestine-consumer-price-index	1	agent	State of Palestine - Consumer Price Index
+q08	url:data.gov.uk/dataset/54893d40-a859-4248-ade4-24247be658f7/consumer_prices_index_and_retail_prices_index-updating_weights	1	agent	Consumer Prices Index and Retail Prices Index: Updating Weights
+q08	url:open.canada.ca/data/en/dataset/2fa2b472-4b96-421c-9982-e238adcce758	1	agent	Consumer Price Index, monthly, seasonally adjusted
+q08	url:db.nomics.world/IMF/CPI	1	agent	Consumer Price Index (CPI)
+q08	doi:10.5281/zenodo.24116042	0	agent	Legal-services prices and jobs, monthly (BLS CPI, PPI and CES)
+q08	url:catalog.data.gov/dataset/comment-on-rulemaking-title-v-consumer-price-index-2016	0	agent	Comment on Rulemaking: Title V Consumer Price Index 2016
+q08	url:data.europa.eu/88u/dataset/consumer-price-index-food-and-non-alcoholic-beverages1	1	agent	Consumer price Index - Food and non-alcoholic beverages
+q08	url:data.europa.eu/88u/dataset/4834-consumer-price-index-cpi-all-households-2000-100	1	agent	Consumer price index (CPI) all households, 2000=100
+q08	url:kaggle.com/datasets/noeyislearning/consumer-price-index	1	agent	Consumer Price Index
+q08	url:osf.io/vaefc	0	agent	Causes and Effects of Crude Oil Price Shocks
+q08	url:data.europa.eu/data/datasets/71832f49-69b1-4b4d-bf8c-a12956aa1bd0	1	agent	ATA05 - Consumer Price Index
+q08	url:catalog.data.gov/dataset/consumer-price-index-cpi	1	agent	Consumer Price Index (CPI)
+q09	url:registry.opendata.aws/nasa-nacp	1	agent	NASA NACP Project
+q11	url:data.gov.uk/dataset/aec0a661-d7ad-4c0c-9381-3cac344b73c3/uk-house-price-index2	1	agent	UK House Price Index
+q11	url:data.gov.uk/dataset/49703a09-22ff-4280-9d37-ac0991bfa230/england-house-price-index	1	agent	House Price Index
+q11	url:data.gov.au/data/dataset/house-prices-by-small-area-transfer-year1	1	agent	House Prices by Small Area - Transfer Year
+q11	url:data.gov.au/data/dataset/house-prices-by-small-area-sale-year1	1	agent	House Prices by Small Area - Sale Year
+q11	url:data.gov.au/data/dataset/median-house-prices-by-type-and-sale-year	1	agent	Median House Prices - By Type and Sale Year
+q11	url:data.gov.au/data/dataset/median-house-prices-by-type-and-sale-year1	1	agent	Median House Prices - By Type and Sale Year
+q11	url:data.gov.au/data/dataset/median-house-prices-by-transfer-year-from-2000-2016	1	agent	Median House Prices by Transfer Year from 2000 - 2016
+q11	doi:10.3886/e220325v2	1	agent	FHFA House Price Index
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=4b23085acd80447b9790aaf8a653c5bb&indicatorId=0841bec4a62e41949702288e91be442d&da=000000000000	0	agent	办公用房屋竣工价值累计值 (亿元)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=6e2cd91668b84d9794dfecb4607f6643&indicatorId=170e6f4b99b848a386a1fa6500bcc2a1&da=000000000000	0	agent	租赁房房租居民消费价格指数 (上月=100)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=66ab9cf690b642baa8244c46c9e3f59c&indicatorId=361efe634cbf40049467217372e5a6e0&da=000000000000	0	agent	租赁房房租类居民消费价格指数 (上年=100)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=4b23085acd80447b9790aaf8a653c5bb&indicatorId=3883a45b95f74185a8f5d125d716f370&da=000000000000	0	agent	厂房及建筑物竣工价值累计值 (亿元)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=25f1110e11d945f9b27950768e4e0fa7&indicatorId=1c0e5c0d783a444eb66b45b57904ccc8&da=000000000000	0	agent	租赁房房租居民消费价格指数 (上年同月=100)
+q11	url:data.stats.gov.cn/dg/website/page.html?cid=902812964f3a4c208f176a2271545018&indicatorId=5f282014f84a47fd8073378bc4602c6f&da=000000000000	0	agent	租赁房房租居民消费价格指数 (上年同期=100)
+q11	doi:10.5061/dryad.1g1jwstr3	0	agent	Search Behavior can Affect Financial Decision Results: A Behavior Study of Googl
+q11	doi:10.6084/m9.figshare.21218507	1	agent	House Price
+q11	doi:10.5281/zenodo.20035742	1	agent	Macroeconomic Drivers of House Price Cycles in the EU: Are House Price Cycles Sy
+q11	url:data.europa.eu/88u/dataset/uk-house-price-index2	1	agent	UK House Price Index
+q11	url:data.europa.eu/88u/dataset/england-house-price-index	1	agent	House Price Index
+q11	doi:10.5255/ukda-sn-856204	1	agent	House Price Per Square Metre in England and Wales, 1995-2022
+q11	url:data.europa.eu/88u/dataset/house-prices	1	agent	House price statistics
+q11	doi:10.5255/ukda-sn-855033	1	agent	House Price per Square Metre in England and Wales, 1995-2021
+q11	url:db.nomics.world/Eurostat/prc_hpi_cow	1	agent	House price index - country weights
+q11	doi:10.7910/dvn/rprreh	1	agent	"Replication Data for ""House Prices and Rents"""
+q11	url:huggingface.co/datasets/aiacademy-kg/house_kg_full_dataset	1	agent	aiacademy-kg/house_kg_full_dataset
+q12	doi:10.57702/z5sucado	1	agent	Fairness Certification for Natural Language Processing and Large Language Models
+q13	url:catalog.data.gov/dataset/unemployment-rate-by-age-groups	1	agent	Unemployment Rate by Age Groups
+q14	doi:10.17026/dans-2zn-vdu9	1	agent	The Impact of the Opening of High-speed Railway on the Local Government's Indust
+q01	doi:10.5281/zenodo.18508331	0	agent	RAQAMLI TRANSFORMATSIYA SHAROITIDA SUN'IY INTELLEKT TEXNOLOGIYALARINING IQTISODI
+q01	doi:10.57760/sciencedb.018mk	0	agent	《Digital innovation promotes carbon emission equity: Evidence from China's prefe
+q03	url:data.gov.uk/dataset/6bf54211-c426-4811-b39f-125cd65b5f3f/census-21-ward-population-density	1	agent	Census 21 - Ward population density
+q03	doi:10.5281/zenodo.24155890	0	agent	澳门港口影像存量测量
+q04	url:hub.arcgis.com/datasets/a364defa642f458094b423040b67987c	2	agent	空气质量_PM2_5
+q04	url:hub.arcgis.com/datasets/4c6e52d8f4bb44bcba019a3806528ff8	2	agent	空气质量_PM2_5!
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=7c3480efd5114ac1b3d267256af024c6&indicatorId=a5bf63e73a584371a3ec6a90a91a471b&da=000000000000	0	agent	民用航空货物运输量 (万吨)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=283f7c7b317340fe8e5443da77d3dd29&indicatorId=34d8dc1ed7fa4d6f866468903a0b4bfc&da=000000000000	0	agent	民用航空客运量 (万人)
+q04	url:data.stats.gov.cn/dg/website/page.html?cid=7c3480efd5114ac1b3d267256af024c6&indicatorId=db1b5148143f4c878582df6cb1fe20be&da=000000000000	0	agent	民用航空旅客运输量 (万人)
+q04	url:data.humdata.org/dataset/air-quality-quito-monthly-2018-2020	1	agent	Ecuador: Monthly  Air Quality in Quito
+q05	doi:10.5281/zenodo.20281119	1	agent	长江流域复合极端事件数据集
+q05	url:data.gov.uk/dataset/0d79768c-24dc-412d-9cc6-20e674d628a0/climate-station-data-from-three-common-garden-plantations-along-a-thermal-gradient-in-2019-2025	1	agent	Climate station data from three common garden plantations along a thermal gradie
+q05	url:data.europa.eu/data/datasets/cb090f0b-45ed-49e7-8b27-5943a9f84cf1	1	agent	Claremorris Monthly Weather Station Data
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=6361a6f1fb3f4aeb85e016bbd48b7e52&indicatorId=19a36241fe53409fa5a05f3f942979da&da=000000000000	0	agent	各类医疗卫生机构病床工作日 (日)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=93dccbac81c44579af6071188a3c481d&indicatorId=78d06c18bf8f4296bc23570f117a426e&da=000000000000	0	agent	电力、热力、燃气及水生产和供应业每百家企业拥有网站数 (个)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=2577c321d70d429194d0bdebbdf340b6&indicatorId=f892a6b7e6ea44c4800d754170fb1019&da=000000000000	0	agent	各类医疗卫生机构平均住院日 (日)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=cbb42baa592243dd95d5adde8ef38a5c&indicatorId=719dd79ee0d442218ba1ec614e85ba00&da=000000000000	0	agent	企业拥有网站数 (个)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=b7ff054466ac4c018b907ffde5d96eaf&indicatorId=7f792e3c67234bdf817f3a1d7eb25a1e&da=000000000000	0	agent	医院病床工作日 (日)
+q05	url:data.stats.gov.cn/dg/website/page.html?cid=904a3972224a4293aced2b34a4c0708d&indicatorId=c4a638f2cf1a4acca14f8ec13c255f9a&da=000000000000	0	agent	乡镇文化站数 (个)
+q05	url:data.gov.au/data/dataset/2019-20-honours-project-identifying-atmospheric-processes-favouring-the-formation-of-physical-f7	0	agent	2019-20 Honours project - Identifying atmospheric processes favouring the format
+q05	doi:10.5281/zenodo.5709836	1	agent	气象卫星元数据
+q05	url:data.humdata.org/dataset/uganda-and-burundi-climate-data-for-some-stations	1	agent	Uganda and Burundi. Climate data for some stations
+q06	url:hub.arcgis.com/datasets/6c292ef053014abe815f8944f92357f8	2	agent	粮食产量
+q06	url:hub.arcgis.com/datasets/b5657e0caa2e4239b26c47b35d26cd3b	2	agent	粮食产量数据
+q06	url:hub.arcgis.com/datasets/cf085ebad55c45f29c2822bc496438d0	2	agent	2020-2024各省粮食产量
+q06	url:hub.arcgis.com/datasets/689bd613d24c4903a2e14994bd8171e4	2	agent	不同省份粮食产量
+q06	url:hub.arcgis.com/datasets/34b1f04aa591441f96c80756b6eabd88	2	agent	2016_2020全国31省粮食产量
+q06	url:data.humdata.org/dataset/climada-crop-production-dataset	1	agent	Crop production: Humanitarian Response Plan (HRP) Countries Exposure Data for Di
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=e49677a7a1194f2189f971fe24fb64bb&indicatorId=5deb2e5e2e2444a68bfa9513134f697f&da=000000000000	0	agent	农作物绝收面积 (千公顷)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=dc31a13d223d4ec594434968b183f6cf&indicatorId=749292f2ab60462390f1f7a7d6387e6c&da=000000000000	1	agent	国有农场粮食总产量 (万吨)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=80a338b88d9741409c005f9226bd891b&indicatorId=7b07f85850c84533a4e1d7921e35224f&da=000000000000	1	agent	粮食人均占有量 (公斤)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=dc31a13d223d4ec594434968b183f6cf&indicatorId=7fb1a3ef7e8346ec8d0f4409c40c9d67&da=000000000000	1	agent	国有农场农作物播种面积 (千公顷)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=50cce62cebc74963a83c23e93320ed22&indicatorId=5a273379bd7245a7b1ffa49f2771336f&da=000000000000	0	agent	粮食出口数量 (万吨)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=ebcf553b1c2642928bbc03c3d415e520&indicatorId=6f2cdd2713634253baffc431910da654&da=000000000000	1	agent	粮食作物播种面积 (千公顷)
+q06	url:data.stats.gov.cn/dg/website/page.html?cid=7049e8700d144c68b839ed0aea6cb60a&indicatorId=b11e5d45bf3947f889a1c792bef6cdc7&da=000000000000	0	agent	粮食出口数量 (吨)
+q06	url:open.canada.ca/data/en/dataset/fe27a130-4532-4ada-b679-24d128a2457b	1	agent	Supply and disposition of principal grains, by crop year
+q06	url:data.gov.au/data/dataset/pb_ausgnd9abag11a20161220	1	agent	Australian grains: outlook for 2016-17 and industry productivity
+q06	doi:10.5281/zenodo.8220177	0	agent	Fitness and cold tolerance of Spodoptera frugiperda fed on corn and two winter c
+q06	url:data.humdata.org/dataset/kenya-kisumu-county-crop-production-data-2014-2016	1	agent	Kenya - Kisumu county Crop production Data 2014-2016
+q07	doi:10.6084/m9.figshare.13365137.v1	1	agent	新冠疫情期间电商订单数据综合分析
+q07	doi:10.6084/m9.figshare.13353362.v1	1	agent	国内新冠肺炎疫情对旅客运输量的影响.rar
+q07	url:data.gov.au/data/dataset/nsw-3-19631-the-covid-19-pandemic-second-report	0	agent	The COVID-19 pandemic: second report
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=358c7a59b61e49e1a92b596192479039&indicatorId=c11486289d334298aeaea6b5ac5538f2&da=000000000000	0	agent	课本出版新出版种数 (种)
+q07	url:data.stats.gov.cn/dg/website/page.html?cid=a24dc46aeb7746e094ce6788d46c7188&indicatorId=52feee8afa9348d49e62ccbb1a207bcf&da=000000000000	0	agent	图书新出版种数 (种)
+q07	doi:10.5281/zenodo.3751193	1	agent	Coronavirus tweets TEST
+q07	url:data.humdata.org/dataset/covid-19-mobility-italy	1	agent	Italy: Mobility COVID-19
+q08	url:open.canada.ca/data/en/dataset/2b0c5ebe-c4a6-4a1d-9b4b-c850f9b5c3c4	1	agent	Consumer Price Index, monthly, not seasonally adjusted
+q08	url:data.gov.au/data/dataset/growth-in-consumer-price-index-2014-15	1	agent	Growth in Consumer Price Index 2014-15
+q08	doi:10.57760/sciencedb.11239	0	agent	"The supporting data for the paper ""Synergistic Enhancement of LSTM Time Series P"
+q08	url:data.gov.uk/dataset/consumer_prices_index_and_retail_prices_index-updating_weights	1	agent	Consumer Prices Index and Retail Prices Index: Updating Weights
+q09	url:data.gov.uk/dataset/36cdc136-7dfd-4510-a423-af753b44034b/regional-co2-emissions	1	agent	Regional CO2 Emissions
+q09	url:data.stats.gov.cn/dg/website/page.html?cid=0845f9f14b4743488cf7d23d0629d3a8&indicatorId=dbf034cc213449a9bce6e36b1119b403&da=000000000000	0	agent	磷矿石（折含五氧化二磷30％）产量累计增长 (%)
+q09	doi:10.5281/zenodo.11579311	0	agent	Carbon density data of terrestrial ecosystems in Xinjiang from 2000 to 2020
+q10	url:data.gov.uk/dataset/3aa77e2f-925e-4137-90cb-1f52aa1c91db/map-of-land-use-land-cover-and-floral-cover-across-an-arable-landscape-in-buckinghamshire-uk	1	agent	Map of land-use/land-cover and floral cover across an arable landscape in Buckin
+q10	doi:10.5281/zenodo.18468836	1	agent	New reconstruction of China's spatio-temporal forest over the past 300 years
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=f478a1d7c27a4015b6f9af06ce6f617c&indicatorId=11d6cb5f6ec54aea922378d5579150a7&da=000000000000	0	agent	国家土地增值税 (亿元)
+q10	url:data.stats.gov.cn/dg/website/page.html?cid=8501f430c9264d5784b7e67e1c48a4e8&indicatorId=0ef015c23446462d92c3b9a3cf4f3670&da=000000000000	0	agent	土地管理业固定资产投资 (不含农户) 比上年增长 (%)
+q10	doi:10.5281/zenodo.20603866	0	agent	Presence–absence and environmental predictor data for modelling Triadica sebifer
+q10	url:data.humdata.org/dataset/mimu-geonode-tanintharyi-region-land-cover-original	1	agent	Tanintharyi Region Land Cover (Original)
+q11	doi:10.5281/zenodo.14622091	2	agent	链家网 广州市房价
+q11	url:kaggle.com/datasets/liniling/lllkj	1	agent	房价预测 入门
+q11	url:data.gov.au/data/dataset/median-house-prices-by-transfer-year-from-2000-20161	1	agent	Median House Prices by Transfer Year from 2000 - 2016
+q11	url:data.gov.uk/dataset/bbc84974-7f23-48e6-bc3e-a4d36399ab91/uk-housing-market-and-housing-prices	1	agent	Housing market and house prices
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=ffed4267bba24830beea5991d4c9bcfc&indicatorId=3969129b26a846968a7dddff5f326f55&da=000000000000	0	agent	人口自然增长率 (‰)
+q12	url:data.stats.gov.cn/dg/website/page.html?cid=8632761a5d5d4585914e45d2c84be1fc&indicatorId=79c256f7331c40439e05782f63f8f850&da=000000000000	0	agent	自动数据处理设备及其部件进口金额 (百万美元)
+q13	url:open.canada.ca/data/en/dataset/fb6718d2-8a9f-4101-8df4-7f9f4490a078	1	agent	Employment and unemployment rate, annual
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=635e81f489bb41979a2c286bddec7e0b&indicatorId=8dbb73ba7ef742ea96c28dd3604caa96&da=000000000000	0	agent	失业保险累计结余 (亿元)
+q13	url:data.stats.gov.cn/dg/website/page.html?cid=5833e7e6ad6b4c2ab01fa3e56da109a9&indicatorId=90f9799595a8469db01a9d12c25e9215&da=000000000000	0	agent	失业保险基金收入 (亿元)
+q13	doi:10.5281/zenodo.19507638	0	agent	Future Extreme Weather Loss Dataset
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=61db72a4844a499eb555705f7bf53e74&indicatorId=e561db5af12d452494899579eff09cef&da=000000000000	0	agent	公路客运量_同比增长 (%)
+q14	url:hub.arcgis.com/datasets/6e4deb4504ab473bb9dbb5d2cf74cf27	1	agent	High-speed rail Germany
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=b273ee500f2c4213909aee5abbb45105&indicatorId=84d41f19fb044307b178dc52bc162268&da=000000000000	1	agent	国家铁路软座客车拥有量 (辆)
+q14	url:data.stats.gov.cn/dg/website/page.html?cid=e4f4815c081b4322bd3b1e4ed5fa73f6&indicatorId=2c5c519e5af94c3d9d60b19e3497754e&da=000000000000	0	agent	民办普通高中学校数 (所)
+q14	url:data.gov.au/data/dataset/nsw-3-9714-rail-infrastructure-corporation-annual-report-03	0	agent	Rail Infrastructure Corporation Annual Report 03
+q14	doi:10.5281/zenodo.21492504	0	agent	Multi-Scale Seismic Wavefield Along High-Speed Railways and Its Local Resonance 

@@ -1,0 +1,59 @@
+# 国家统计局分类树与各类年鉴的"分类名/章名/表标题" → 主题、地域的规则。
+#
+# 作用范围 scope：top 顶层分类/章名 · path 路径上任一级 · title 资源标题。
+# 匹配前会去掉章号和空白（"十三、工 业" → "工业"）。可多标签；`under` 只在父主题已命中时生效；`none` 为排除词。
+# 依据：2026-11-20 对国家统计局 13 个库的一级分类（年度库 28 个、月度库 14 个）与
+# 全国年鉴 29 章、山东/辽宁/河南年鉴各章的实际名称逐一核对。
+
+topic_rules:
+  # ── 顶层分类/章名 → 一级主题 ──
+  - {scope: top, topics: [cnstat.macro],       any: [国民经济核算, 综合, 采购经理指数, 主要社会经济指标, 主要统计指标, 国际主要, 国际统计, 附录]}
+  - {scope: top, topics: [cnstat.macro],       any: [经济], none: [对外]}   # 港澳台库的"经济"分类
+  - {scope: top, topics: [cnstat.population],  any: [人口]}
+  - {scope: top, topics: [cnstat.livelihood],  any: [就业, 工资, 人民生活, 居民生活, 失业]}
+  - {scope: top, topics: [cnstat.industry],    any: [工业]}
+  - {scope: top, topics: [cnstat.industry],    any: [采购经理指数]}
+  - {scope: top, topics: [cnstat.agriculture], any: [农业]}
+  - {scope: top, topics: [cnstat.commerce],    any: [批发, 零售, 住宿, 餐饮, 国内贸易, 服务业, 消费品]}
+  - {scope: top, topics: [cnstat.investment],  any: [固定资产投资, 建筑业, 房地产]}
+  - {scope: top, topics: [cnstat.prices],      any: [价格, 物价]}
+  - {scope: top, topics: [cnstat.fiscal],      any: [财政]}
+  - {scope: top, topics: [cnstat.finance],     any: [金融, 保险]}
+  - {scope: top, topics: [cnstat.trade],       any: [对外, 外贸]}
+  - {scope: top, topics: [cnstat.innovation],  any: [科技, 科学技术, 软件]}
+  - {scope: top, topics: [cnstat.energy],      any: [能源]}
+  - {scope: top, topics: [cnstat.environment], any: [资源, 环境]}
+  - {scope: top, topics: [cnstat.transport],   any: [运输, 交通, 邮电]}
+  - {scope: top, topics: [cnstat.education],   any: [教育]}
+  - {scope: top, topics: [cnstat.health],      any: [卫生, 社会保障, 社会服务, 社会组织, 公共管理]}
+  - {scope: top, topics: [cnstat.regional],    any: [城市, 区域, 县(市、区), 县（市、区）, 农村和区域]}
+  - {scope: top, topics: [cnstat.culture],     any: [文化, 体育, 旅游]}
+
+  # ── 标题 → 补充主题（多标签）：标题本身点明了另一个主题 ──
+  - {scope: title, topics: [cnstat.industry],   any: [工业]}
+  - {scope: title, topics: [cnstat.energy],     any: [能源消费, 能源生产, 电力消费, 发电量]}
+  - {scope: title, topics: [cnstat.prices],     any: [价格指数, 出厂价格, 购进价格]}
+  - {scope: title, topics: [cnstat.trade],      any: [进出口, 出口交货值, 外商直接投资]}
+  - {scope: title, topics: [cnstat.innovation], any: [研究与试验发展, 专利, R&D]}
+
+  # ── 二级主题：工业 ──
+  - {scope: title, under: cnstat.industry, topics: [cnstat.industry.enterprise_performance], any: [企业主要经济指标, 企业经济指标, 企业经济效益, 规模以上工业企业]}
+  - {scope: title, under: cnstat.industry, topics: [cnstat.industry.output_products],        any: [产品产量, 主要产品]}
+  - {scope: title, under: cnstat.industry, topics: [cnstat.industry.value_added],            any: [增加值]}
+  - {scope: title, under: cnstat.industry, topics: [cnstat.industry.export_delivery],        any: [出口交货值]}
+  # ── 二级主题：价格、人口 ──
+  - {scope: title, under: cnstat.prices,     topics: [cnstat.prices.cpi],    any: [居民消费价格, 消费价格]}
+  - {scope: title, under: cnstat.prices,     topics: [cnstat.prices.ppi],    any: [生产者出厂价格, 生产者购进价格, 工业生产者]}
+  - {scope: title, under: cnstat.population, topics: [cnstat.population.census], any: [普查, 人口抽样调查]}
+
+# ── 地域规则：章名/表标题点明了地域范围或报告粒度 ──
+# region 为空 = 不指定具体区域，只说明报告粒度；证据一律是 inferred（标题推断），不是 verified。
+region_rules:
+  - {scope: top,   any: [香港], region: CN-HK, relation: covers, scope_mode: exact}
+  - {scope: top,   any: [澳门], region: CN-MO, relation: covers, scope_mode: exact}
+  - {scope: top,   any: [台湾], region: CN-TW, relation: covers, scope_mode: exact}
+  - {scope: top,   any: [国际], region: WORLD, relation: covers, scope_mode: descendants}
+  - {scope: top,   any: [县(市、区), 县（市、区）, 各县], region: null, relation: reports_at, granularity: county, scope_mode: descendants}
+  - {scope: title, any: [各县, 分县], region: null, relation: reports_at, granularity: county, scope_mode: descendants}
+  - {scope: title, any: [各市, 分市, 地级市, 各地级], region: null, relation: reports_at, granularity: prefecture, scope_mode: descendants}
+  - {scope: title, any: [分地区, 各地区, 分省, 各省, 各省区市, 省际], region: null, relation: reports_at, granularity: province, scope_mode: descendants}

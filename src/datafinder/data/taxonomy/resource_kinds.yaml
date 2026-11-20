@@ -1,0 +1,38 @@
+# 资源类型体系：严格区分四件事 —— 它是什么（kind）、怎么访问（access_method）、文件格式（file_format）、
+# 内容能不能直接分析（usability）。
+#
+# delivery（给用户看的获取方式三类）不存储，由分发入口按下表推出：
+#   download 可直接下载 | generate 需要通过接口/解析生成 | link 只有链接
+
+kinds:
+  - {id: portal,         zh: 数据门户,     container: true}
+  - {id: database,       zh: 统计数据库,   container: true}
+  - {id: series,         zh: 连续出版系列, container: true}
+  - {id: edition,        zh: 版次,         container: true}
+  - {id: dataset,        zh: 数据集,       container: true}
+  - {id: table,          zh: 统计表}
+  - {id: indicator,      zh: 指标}
+  - {id: bulletin,       zh: 统计公报}
+  - {id: report,         zh: 专题报告}
+  - {id: census_product, zh: 普查数据产品}
+  - {id: category,       zh: 分类目录,     container: true, navigational: true}   # 仅用于逐级浏览，默认不参与检索
+
+access_methods:
+  api:         {zh: 接口,       delivery: generate}
+  html_parse:  {zh: 解析网页表格, delivery: generate}
+  direct_file: {zh: 文件直链,   delivery: download}
+  page:        {zh: 仅页面,     delivery: link}
+  manual:      {zh: 需人工获取（登录/申请/拒绝机器人）, delivery: link}
+
+file_formats: [csv, xlsx, xls, json, html, jpg, png, pdf, doc, docx, zip, other]
+
+# usability：下载下来的东西能不能直接分析。图片年鉴可以"下载"，但 usability=image。
+usability:
+  tabular:    结构化表格，可直接分析
+  html_table: 网页表格，可解析成表格
+  document:   文档（PDF/Word），需人工或提取
+  image:      图片，需 OCR
+
+# 校验状态
+verification_levels: [unverified, inferred, source_asserted, observed, manually_verified]
+access_statuses: [unknown, supported, blocked, auth_required, unavailable]

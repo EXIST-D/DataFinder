@@ -1,0 +1,41 @@
+# 中国官方统计领域的主题树（DataFinder 自定义分类，不是官方统计制度的原样目录）。
+#
+# - id 稳定（cnstat.*），名称可改；拆分/合并主题要在这里保留旧 id 的映射；
+# - 一个资源可属于多个主题（如能源消费表同时属于 industry 与 energy）；
+# - global_topics 映射到平台级粗粒度行业标签（core data/industries.yaml 的 id），不替代它；
+# - 二级主题（parent_id）只在有可靠规则、且数据量大到需要区分时才建（目前：工业、价格、人口）；
+# - reserved: true 为预留主题，暂无数据，默认不出现在分面里。
+
+version: "1.0"
+
+topics:
+  - {id: cnstat.macro,       name_zh: 宏观经济与国民经济核算, name_en: Macroeconomy and National Accounts, aliases: [宏观经济, 国民经济核算, GDP, 综合], global_topics: [economy, statistics]}
+  - {id: cnstat.population,  name_zh: 人口与人口结构,         name_en: Population,                          aliases: [人口, 人口结构], global_topics: [population]}
+  - {id: cnstat.livelihood,  name_zh: 就业、工资与居民生活,   name_en: Employment, Wages and Living Standards, aliases: [就业, 工资, 居民收入, 居民生活, 人民生活], global_topics: [population, economy]}
+  - {id: cnstat.industry,    name_zh: 工业与制造业,           name_en: Industry and Manufacturing,       aliases: [工业, 制造业, 规模以上工业], global_topics: [industry]}
+  - {id: cnstat.agriculture, name_zh: 农业与农村经济,         name_en: Agriculture and Rural Economy,    aliases: [农业, 农村, 粮食], global_topics: [agriculture]}
+  - {id: cnstat.commerce,    name_zh: 商贸消费与服务业,       name_en: Commerce, Consumption and Services, aliases: [商贸, 消费, 服务业, 批发零售, 住宿餐饮], global_topics: [trade_market, economy]}
+  - {id: cnstat.investment,  name_zh: 投资、建筑与房地产,     name_en: Investment, Construction and Real Estate, aliases: [投资, 固定资产投资, 建筑业, 房地产], global_topics: [housing, economy]}
+  - {id: cnstat.prices,      name_zh: 价格与市场指数,         name_en: Prices and Market Indices,       aliases: [价格, 物价, 价格指数], global_topics: [economy]}
+  - {id: cnstat.fiscal,      name_zh: 财政与税收,             name_en: Public Finance and Taxation,     aliases: [财政, 税收], global_topics: [economy, government]}
+  - {id: cnstat.finance,     name_zh: 金融与保险,             name_en: Finance and Insurance,           aliases: [金融, 保险, 银行], global_topics: [finance]}
+  - {id: cnstat.trade,       name_zh: 对外经济贸易,           name_en: Foreign Trade and Investment,    aliases: [对外贸易, 进出口, 外资], global_topics: [economy, trade_market]}
+  - {id: cnstat.innovation,  name_zh: 科技创新与数字经济,     name_en: Science, Technology and Digital Economy, aliases: [科技, 创新, 研发, 专利, 数字经济], global_topics: [science]}
+  - {id: cnstat.energy,      name_zh: 能源与碳排放,           name_en: Energy and Carbon Emissions,     aliases: [能源, 电力, 碳排放], global_topics: [energy]}
+  - {id: cnstat.environment, name_zh: 自然资源与生态环境,     name_en: Natural Resources and Environment, aliases: [资源, 环境, 生态], global_topics: [environment, climate]}
+  - {id: cnstat.transport,   name_zh: 交通运输与物流,         name_en: Transport and Logistics,         aliases: [交通, 运输, 物流, 邮电], global_topics: [transport]}
+  - {id: cnstat.education,   name_zh: 教育与人才,             name_en: Education and Talent,            aliases: [教育, 学校, 人才], global_topics: [education]}
+  - {id: cnstat.health,      name_zh: 医疗卫生与社会保障,     name_en: Health and Social Security,      aliases: [卫生, 医疗, 社会保障, 养老, 社会服务], global_topics: [health]}
+  - {id: cnstat.regional,    name_zh: 城市、县域与区域发展,   name_en: Cities, Counties and Regional Development, aliases: [城市, 县域, 区域发展, 城乡建设], global_topics: [government]}
+  - {id: cnstat.culture,     name_zh: 文化旅游体育及公共服务, name_en: Culture, Tourism, Sports and Public Services, aliases: [文化, 旅游, 体育, 公共服务], global_topics: [culture]}
+  # 预留：市场监管、标准化、认证认可等质量基础设施。多为部门行政记录，不是统计调查数据，接入时要标明数据性质。
+  - {id: cnstat.quality,     name_zh: 质量与标准,             name_en: Quality and Standards,           aliases: [质量, 标准化, 认证认可, 产品质量], global_topics: [industry, law], reserved: true}
+
+  # 二级主题
+  - {id: cnstat.industry.enterprise_performance, parent_id: cnstat.industry, name_zh: 工业企业经营效益, name_en: Enterprise Performance, aliases: [企业经济效益, 企业利润, 规上工业效益, 规模以上工业企业主要经济指标], global_topics: [industry, economy]}
+  - {id: cnstat.industry.output_products,        parent_id: cnstat.industry, name_zh: 工业产品产量,     name_en: Industrial Output Products, aliases: [产品产量, 主要工业产品]}
+  - {id: cnstat.industry.value_added,            parent_id: cnstat.industry, name_zh: 工业增加值,       name_en: Industrial Value Added, aliases: [增加值, 工业增加值增长速度]}
+  - {id: cnstat.industry.export_delivery,        parent_id: cnstat.industry, name_zh: 工业出口交货值,   name_en: Export Delivery Value, aliases: [出口交货值]}
+  - {id: cnstat.prices.cpi,                      parent_id: cnstat.prices,   name_zh: 居民消费价格,     name_en: Consumer Prices, aliases: [CPI, 居民消费价格指数]}
+  - {id: cnstat.prices.ppi,                      parent_id: cnstat.prices,   name_zh: 工业生产者价格,   name_en: Producer Prices, aliases: [PPI, 工业生产者出厂价格, 工业生产者购进价格]}
+  - {id: cnstat.population.census,               parent_id: cnstat.population, name_zh: 人口普查,       name_en: Population Census, aliases: [普查, 人口抽样调查]}

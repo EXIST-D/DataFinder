@@ -10,70 +10,149 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3Ccircle cx='14' cy='14' r='6' fill='none' stroke='white' stroke-width='2.4'/%3E%3Cpath d='M19 19l5 5' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/static/app.css">
 </head>
-<body>
+<body data-view="search">
   <header class="nav">
     <div class="nav-inner">
-      <a class="brand" href="/" aria-label="DataFinder 首页">
+      <a class="brand" href="/" data-view="search" aria-label="DataFinder 首页">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
         DataFinder
       </a>
+      <nav class="tabs" aria-label="主导航">
+        <a href="/" data-view="search">搜索</a>
+        <a href="/?v=browse" data-view="browse">分类浏览</a>
+        <a href="/?v=china" data-view="china">中国统计</a>
+        <a href="/?v=links" data-view="links">检索入口</a>
+      </nav>
       <span class="nav-status" id="navStatus" aria-live="polite"></span>
     </div>
     <div class="progress" id="progress" aria-hidden="true"><span></span></div>
   </header>
 
   <main>
-    <section class="hero" id="hero">
-      <div class="hero-title">
-        <div class="hero-title-inner">
-          <h1>找数据，<br>一句话的事。</h1>
-          <p class="sub">中文优先。一次查遍国家统计局、科研仓库与各国开放数据，<br class="wide">告诉你哪里有、怎么拿。</p>
+    <!-- ═══════════ 搜索 ═══════════ -->
+    <div class="view" data-view="search">
+      <section class="hero" id="hero">
+        <div class="hero-title">
+          <div class="hero-title-inner">
+            <h1>找数据，<br>一句话的事。</h1>
+            <p class="sub">中文优先。一次查遍国家统计局、科研仓库与各国开放数据，<br class="wide">告诉你哪里有、怎么拿。</p>
+          </div>
         </div>
-      </div>
 
-      <form class="search" id="searchForm" role="search" autocomplete="off">
+        <form class="search" id="searchForm" role="search" autocomplete="off">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          <input id="q" name="q" type="search" maxlength="200" enterkeyhint="search" spellcheck="false"
+                 placeholder="例如：中国各省近十年人口、GDP、城镇化率" aria-label="搜索数据">
+          <kbd class="kbd" aria-hidden="true">/</kbd>
+          <button class="go" id="go" type="submit" aria-label="搜索" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </form>
+
+        <div class="examples" id="examples" aria-label="试试这些">
+          <button type="button" class="chip" data-q="中国各省近十年人口 GDP 城镇化率">人口 · GDP · 城镇化率</button>
+          <button type="button" class="chip" data-q="国内生产总值">国内生产总值</button>
+          <button type="button" class="chip" data-q="空气质量 PM2.5">空气质量</button>
+          <button type="button" class="chip" data-q="人口普查">人口普查</button>
+          <button type="button" class="chip" data-q="air quality">air quality</button>
+        </div>
+
+        <p class="alt-entry" id="altEntry">不想打字？<a href="/?v=browse" data-view="browse">按领域、地区、机构类型分类浏览</a>
+          · <a href="/?v=china" data-view="china">查看中国官方统计</a></p>
+      </section>
+
+      <section class="results" id="results" hidden>
+        <div class="sources" id="sources" aria-live="polite"></div>
+        <div class="layout">
+          <div class="col-main">
+            <div class="section-head">
+              <h2>数据集</h2>
+              <span class="count" id="count"></span>
+            </div>
+            <div id="datasets"></div>
+          </div>
+          <aside class="col-side" aria-label="相关门户与检索入口">
+            <div class="section-head"><h2>相关门户</h2></div>
+            <div id="portals"></div>
+            <p class="note">门户目录来自 Dateno（CC BY 4.0），收录不代表已实时核验，请以原站为准。</p>
+            <div class="section-head side-gap"><h2>更多检索入口</h2><a class="more" href="/?v=links" data-view="links" id="moreLinks">全部 ›</a></div>
+            <div id="sideLinks"></div>
+          </aside>
+        </div>
+        <p class="footnote" id="footnote"></p>
+      </section>
+    </div>
+
+    <!-- ═══════════ 分类浏览 ═══════════ -->
+    <div class="view page" data-view="browse" hidden>
+      <header class="page-head">
+        <h1 class="page-title">分类浏览</h1>
+        <p class="page-sub">不用输入关键词：按领域、地区、机构类型层层点选，找到有这类数据的网站。</p>
+      </header>
+      <div class="domains" id="domains" aria-label="按领域浏览"></div>
+      <div class="browse-layout">
+        <aside class="filters" id="filters" aria-label="筛选"></aside>
+        <section class="browse-main" aria-label="门户列表">
+          <div class="bar">
+            <div class="bar-left"><strong id="bTotal"></strong><button type="button" class="chip sm filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filters">筛选</button><span class="active-chips" id="activeChips"></span></div>
+            <label class="sort">排序
+              <select id="bSort"><option value="official">官方优先</option><option value="name">名称</option></select>
+            </label>
+          </div>
+          <div id="bList"></div>
+          <nav class="pager" id="pager" aria-label="分页"></nav>
+          <p class="note browse-note">领域标签由名称、描述与主题自动归类，可能有偏差；"官方"指国际组织、国家级与地方政府发布；"开放程度"以原站为准。</p>
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════════ 中国统计 ═══════════ -->
+    <div class="view page" data-view="china" hidden>
+      <header class="page-head">
+        <h1 class="page-title">中国统计</h1>
+        <p class="page-sub">国家统计局官方数据库、31 个省级统计局、省市开放平台，一处点选。</p>
+      </header>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>国家统计局数据发布库 <span class="tag-exp">实验性</span></h2>
+          <a class="more" href="https://data.stats.gov.cn/dg/website/page.html" target="_blank" rel="noopener noreferrer">打开官网 ↗</a>
+        </div>
+        <p class="block-note">13 个数据库，按“时间维度（月/季/年）→ 专业分类 → 指标”逐级展开。接口为试运行期、无正式文档，且有访问防护，所以分类按你的点击逐级加载并缓存，不会批量抓取。</p>
+        <div class="db-tabs" id="dbTabs" role="tablist" aria-label="数据库"></div>
+        <div class="tree" id="tree" hidden></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><h2>省级统计局</h2><span class="count" id="bureauCount"></span></div>
+        <p class="block-note">官方网站直达。部分网站对自动访问返回拒绝，或从当前网络无法核验，已如实标注。</p>
+        <div class="grid" id="bureaus"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><h2>省市公共数据开放平台</h2></div>
+        <p class="block-note">这些平台的接口基本都需要注册、申请密钥后才能调用，所以这里只做导航并标明获取方式。</p>
+        <div id="platforms"></div>
+      </section>
+    </div>
+
+    <!-- ═══════════ 检索入口 ═══════════ -->
+    <div class="view page" data-view="links" hidden>
+      <header class="page-head">
+        <h1 class="page-title">更多检索入口</h1>
+        <p class="page-sub">在别的数据检索引擎里继续找。输入关键词，每个入口都会带着它跳转。</p>
+      </header>
+      <form class="search compact" id="linksForm" role="search" autocomplete="off">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
-        <input id="q" name="q" type="search" maxlength="200" enterkeyhint="search" spellcheck="false"
-               placeholder="例如：中国各省近十年人口、GDP、城镇化率" aria-label="搜索数据">
-        <kbd class="kbd" aria-hidden="true">/</kbd>
-        <button class="go" id="go" type="submit" aria-label="搜索" disabled>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-        </button>
+        <input id="linksQ" type="search" maxlength="200" spellcheck="false" placeholder="输入关键词，例如：人口普查" aria-label="关键词">
       </form>
-
-      <div class="examples" id="examples" aria-label="试试这些">
-        <button type="button" class="chip" data-q="中国各省近十年人口 GDP 城镇化率">人口 · GDP · 城镇化率</button>
-        <button type="button" class="chip" data-q="国内生产总值">国内生产总值</button>
-        <button type="button" class="chip" data-q="空气质量 PM2.5">空气质量</button>
-        <button type="button" class="chip" data-q="人口普查">人口普查</button>
-        <button type="button" class="chip" data-q="air quality">air quality</button>
-      </div>
-    </section>
-
-    <section class="results" id="results" hidden>
-      <div class="sources" id="sources" aria-live="polite"></div>
-      <div class="layout">
-        <div class="col-main">
-          <div class="section-head">
-            <h2>数据集</h2>
-            <span class="count" id="count"></span>
-          </div>
-          <div id="datasets"></div>
-        </div>
-        <aside class="col-side" aria-label="相关门户">
-          <div class="section-head">
-            <h2>相关门户</h2>
-          </div>
-          <div id="portals"></div>
-          <p class="note">门户目录来自 Dateno（CC BY 4.0），收录不代表已实时核验，请以原站为准。</p>
-        </aside>
-      </div>
-      <p class="footnote" id="footnote"></p>
-    </section>
+      <p class="block-note center" id="linksHint"></p>
+      <div id="linksGroups"></div>
+    </div>
   </main>
 
   <div class="scrim" id="scrim" hidden></div>
-  <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="详情" hidden>
     <button class="sheet-close" id="sheetClose" type="button" aria-label="关闭">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
@@ -81,6 +160,6 @@
   </aside>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="/static/app.js" defer></script>
+  <script type="module" src="/static/js/main.js"></script>
 </body>
 </html>

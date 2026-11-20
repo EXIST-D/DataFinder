@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -101,12 +102,24 @@ def test_security_headers_and_strict_csp(client):
 
 
 def test_static_files_comply_with_csp_and_stay_offline():
-    for name in ("index.html", "app.js", "app.css"):
-        text = (STATIC / name).read_text(encoding="utf-8")
+    files = [STATIC / "index.html", STATIC / "app.css", *sorted((STATIC / "js").glob("*.js"))]
+    assert len(files) >= 6
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        name = path.name
         assert 'style="' not in text, f"{name} 有内联样式，会被 CSP 拦截"
         assert "onclick=" not in text and "<script>" not in text.replace("<script src", "")
         cleaned = text.replace("http://www.w3.org/2000/svg", "")
-        assert "http://" not in cleaned and "https://" not in cleaned, f"{name} 引用了外部资源"
+        if path.suffix == ".js":
+            # 脚本里允许出现外部站点的"链接文字"，但不能主动加载外部资源
+            assert not re.search(r"""(fetch|import|EventSource|WebSocket)\s*\(?\s*["']https?://""", cleaned), name
+            assert "eval(" not in cleaned and "new Function" not in cleaned
+        elif path.suffix == ".css":
+            assert "http://" not in cleaned and "https://" not in cleaned, f"{name} 引用了外部资源"
+        else:  # html：<a> 可以指向外站，但 link/script/img/iframe 不能加载外部资源
+            assert not re.search(r"""<(link|script|img|iframe|source)\b[^>]*\b(src|href)=["']https?://""", cleaned), name
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    assert '<script type="module" src="/static/js/main.js">' in html
 
 
 # ───────────── 页面与状态 ─────────────
@@ -115,7 +128,7 @@ def test_static_files_comply_with_csp_and_stay_offline():
 def test_index_and_assets_served(client):
     html = client.get("/").text
     assert "DataFinder" in html and 'lang="zh-CN"' in html
-    assert client.get("/static/app.js").status_code == 200
+    assert client.get("/static/js/main.js").status_code == 200
     assert client.get("/static/app.css").status_code == 200
 
 

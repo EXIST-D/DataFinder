@@ -55,8 +55,11 @@ DATABASES: dict[str, tuple[str, str]] = {
 
 _ID = re.compile(r"^[0-9a-f]{32}$")
 _AREA = re.compile(r"^\d{12}$")
-MAX_AREAS = 8
+MAX_AREAS = 8  # 网页一次最多选的地区数
+MAX_AREAS_TABLE = 40  # 取表（CLI/MCP）一次最多的地区数，够装下 31 个省
 MAX_PERIODS = 30
+MAX_INDICATORS = 10
+_PERIOD = {"YY": re.compile(r"^\d{4}$"), "MM": re.compile(r"^\d{6}$"), "SS": re.compile(r"^\d{4}0[1-4]$")}
 
 
 NATIONAL = {"text": "全国", "value": "000000000000"}
@@ -90,12 +93,33 @@ def dts_window(dt_type: str, n: int, today: date | None = None) -> str:
     raise ValueError(f"未知时间类型 {dt_type}")
 
 
+def explicit_window(dt_type: str, start: str | None, end: str | None) -> str:
+    """明确的起止区间。缺一端时：起点默认 10 年前，终点默认今年（给不存在的未来期别也安全，空值会被过滤）。"""
+    pattern = _PERIOD.get(dt_type)
+    if pattern is None:
+        raise ValueError(f"未知时间类型 {dt_type}")
+    today = date.today()
+    default_end = {"YY": f"{today.year}", "MM": f"{today.year}{today.month:02d}",
+                   "SS": f"{today.year}{(today.month - 1) // 3 + 1:02d}"}[dt_type]
+    default_start = {"YY": f"{today.year - 10}", "MM": f"{today.year - 5}01", "SS": f"{today.year - 5}01"}[dt_type]
+    a, b = (start or default_start), (end or default_end)
+    for label, v in (("起", a), ("止", b)):
+        if not pattern.match(v):
+            hint = {"YY": "年度写 2015", "MM": "月度写 201501", "SS": "季度写 202401（2024 年第 1 季）"}[dt_type]
+            raise ValueError(f"{label}期格式不对：{v!r}（{hint}）")
+    if a > b:
+        raise ValueError("起期不能晚于止期")
+    return f"{a}{dt_type}-{b}{dt_type}"
+
+
 class NbsClient:
     def __init__(self, http: Http, cache: Cache) -> None:
         self.http = http
         self.cache = cache
+        self.calls = 0  # 实际发出的网络请求数（缓存命中不算）
 
     async def _call(self, method: str, path: str, **kw: Any) -> Any:
+        self.calls += 1
         reason = self.cache.resting(SOURCE_ID)
         if reason:
             raise SourceError("rate_limited", f"国家统计局接口暂时休息（{reason}），请稍后再试")
@@ -193,7 +217,60 @@ class NbsClient:
         self.cache.kv_put(key, result)
         return result
 
+    # ── 全国级关键词搜索（官方全局搜索；分省/城市库只返回计数，所以这里只有全国口径）──
+    async def search_national(self, term: str, limit: int = 15) -> list[dict]:
+        data = await self._call(
+            "GET", "/query", params={"code": "", "pagenum": 1, "pageSize": limit, "search": term}
+        )
+        rows = (data or {}).get("data") if isinstance(data, dict) else None
+        if not isinstance(rows, list):
+            raise ShapeError("搜索响应 data.data 不是列表")
+        out = []
+        for r in rows:
+            if "cid" not in r or "indic_id" not in r:
+                continue
+            code = {"YY": "3", "SS": "2", "MM": "1"}.get(str(r.get("dt_type") or ""))
+            out.append(
+                {
+                    "indicator": re.sub(r"\s+", " ", str(r.get("show_name") or "")).strip(),
+                    "area": str(r.get("da_name") or "全国"),
+                    "latest_period": str(r.get("dt_name") or r.get("dt") or ""),
+                    "latest_value": r.get("value"),
+                    "kind": str(r.get("type_text") or ""),
+                    "db": code,
+                    "cid": str(r["cid"]),
+                    "indicator_id": str(r["indic_id"]),
+                    "root_id": str(r.get("treeinfo_globalid") or "").split(".")[0],
+                }
+            )
+        return out
+
     # ── 取值 ──
+    async def _es_data(
+        self,
+        *,
+        cid: str,
+        indicator_ids: list[str],
+        root_id: str,
+        areas: list[dict],
+        dts: str,
+    ) -> Any:
+        body = {
+            "cid": cid,
+            "indicatorIds": indicator_ids,
+            "daCatalogId": "",
+            "das": areas[:MAX_AREAS_TABLE],
+            "showType": "3",  # 多地区必须用 3；返回里地区字段是 area/areaCode
+            "dts": [dts],
+            "rootId": root_id,
+        }
+        return await self._call(
+            "POST",
+            "/stream/esData",
+            json_body=body,
+            headers={"Content-Type": "application/json;charset=UTF-8"},
+        )
+
     async def series(
         self,
         *,
@@ -207,23 +284,50 @@ class NbsClient:
     ) -> dict:
         if code not in DATABASES:
             raise ValueError(f"未知数据库代码 {code}")
-        areas = areas[:MAX_AREAS]
-        body = {
-            "cid": cid,
-            "indicatorIds": [indicator_id],
-            "daCatalogId": "",
-            "das": areas,
-            "showType": "3",  # 多地区必须用 3；返回里地区字段是 area/areaCode
-            "dts": [dts_window(DATABASES[code][1], n, today)],
-            "rootId": root_id,
-        }
-        data = await self._call(
-            "POST",
-            "/stream/esData",
-            json_body=body,
-            headers={"Content-Type": "application/json;charset=UTF-8"},
+        data = await self._es_data(
+            cid=cid,
+            indicator_ids=[indicator_id],
+            root_id=root_id,
+            areas=areas[:MAX_AREAS],
+            dts=dts_window(DATABASES[code][1], n, today),
         )
         return parse_series(data, n)
+
+    async def table(
+        self,
+        *,
+        code: str,
+        cid: str,
+        indicator_ids: list[str],
+        root_id: str,
+        areas: list[dict],
+        n: int = 8,
+        start: str | None = None,
+        end: str | None = None,
+        today: date | None = None,
+    ) -> list[dict]:
+        """整洁长表的行字典：期别、期别代码、地区、指标、数值、单位。
+
+        给了 start/end 就取这个区间（年度 `2015`、月度 `201501`、季度 `202401` 表示 2024 年第 1 季），
+        否则取最近 n 期。一次可取多个指标（最多 MAX_INDICATORS 个，每个指标发一次请求）。
+        """
+        if code not in DATABASES:
+            raise ValueError(f"未知数据库代码 {code}")
+        if not 1 <= len(indicator_ids) <= MAX_INDICATORS:
+            raise ValueError(f"一次取 1–{MAX_INDICATORS} 个指标")
+        dt_type = DATABASES[code][1]
+        dts = explicit_window(dt_type, start, end) if (start or end) else dts_window(dt_type, n, today)
+        # 实测：showType 3（多地区）下一次传多个指标，接口每个 地区×期别 只回其中一个指标（其余被吞掉，
+        # 且不报错）。所以一个指标一个请求，串行（有限速），宁可慢一点也不能静默丢数据。
+        data: list[dict] = []
+        for indicator_id in indicator_ids:
+            part = await self._es_data(
+                cid=cid, indicator_ids=[indicator_id], root_id=root_id, areas=areas, dts=dts
+            )
+            if not isinstance(part, list):
+                raise ShapeError("取值响应 data 不是列表")
+            data.extend(part)
+        return parse_tidy(data, None if (start or end) else n)
 
 
 def parse_series(data: Any, n: int) -> dict:
@@ -249,3 +353,54 @@ def parse_series(data: Any, n: int) -> dict:
         if values:
             periods.append({"code": p.get("code"), "name": p.get("name"), "values": values})
     return {"indicator": indicator, "unit": unit, "areas": areas, "periods": periods[:n]}
+
+
+_UNIT_TAIL = re.compile(r"\s*[(（]([^()（）]*)[)）]\s*$")
+
+
+def clean_name(show: Any, unit: Any) -> str:
+    """'工业增加值 (亿元) ' → '工业增加值'（单位另有一列，名称里不再重复）。"""
+    text = str(show or "").strip()
+    m = _UNIT_TAIL.search(text)
+    if m and (not unit or m.group(1).strip() == str(unit).strip()):
+        text = text[: m.start()].strip()
+    return text
+
+
+def parse_tidy(data: Any, n: int | None) -> list[dict]:
+    """esData 响应 → 整洁长表行。过滤未发布（空值）的观测；n 给定时每个 指标×地区 只保留最近 n 期。"""
+    if not isinstance(data, list):
+        raise ShapeError("取值响应 data 不是列表")
+    rows: list[dict] = []
+    for p in sorted(data, key=lambda x: str(x.get("code", "")), reverse=True):
+        for v in p.get("values") or []:
+            val = v.get("value")
+            if val in (None, ""):
+                continue
+            # 注意：`_name` 是该指标所属的标准名（如"工业增加值"行里写的是"国内生产总值"），
+            # 官网上显示、用户要找的是 `i_showname`（实测）
+            indicator = clean_name(v.get("i_showname"), v.get("du_name")) or str(
+                v.get("_name") or ""
+            ).strip()
+            rows.append(
+                {
+                    "期别": str(p.get("name") or p.get("code") or ""),
+                    "期别代码": str(p.get("code") or ""),
+                    "地区": str(v.get("area") or v.get("da_name") or "全国").strip(),
+                    "指标": indicator,
+                    "数值": val,
+                    "单位": str(v.get("du_name") or ""),
+                    "指标ID": str(v.get("_id") or ""),
+                    "地区代码": str(v.get("areaCode") or v.get("da") or ""),
+                }
+            )
+    if n is not None:
+        kept: dict[tuple[str, str], int] = {}
+        out = []
+        for r in rows:  # rows 已按期别新→旧
+            key = (r["指标ID"] or r["指标"], r["地区代码"] or r["地区"])
+            kept[key] = kept.get(key, 0) + 1
+            if kept[key] <= n:
+                out.append(r)
+        rows = out
+    return rows

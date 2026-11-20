@@ -276,6 +276,12 @@ def _drop_redundant(concepts: list[Concept]) -> list[Concept]:
     return keep
 
 
+def find_locations(text: str) -> tuple[list[str], list[str]]:
+    """从一段文字里识别地点，返回 (国家码列表, 省级码列表)。给数据集补"地区"用。"""
+    _, countries, regions = _extract_locations(normalize(text))
+    return countries, regions
+
+
 def parse(query: str, *, today: date | None = None, lex: Lexicon | None = None) -> QueryPlan:
     lex = lex or load_lexicon()
     today = today or date.today()

@@ -28,6 +28,7 @@ class Dataset:
     title: str
     url: str
     source: str  # 首个来源 id（合并后以第一个为准）
+    landing_url: str | None = None  # 给人点击的页面（url 只做身份标识时，如国家统计局单页应用）
     description: str | None = None
     publisher: str | None = None
     doi: str | None = None

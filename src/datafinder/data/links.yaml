@@ -1,0 +1,95 @@
+# 外部数据检索入口：点一下就带着当前关键词跳到别的检索引擎继续找。
+# 模板里的 {q} 会被替换成（URL 编码后的）关键词：lang=en 的引擎用我们翻译好的英文检索词，其余用原句。
+#
+# check 状态（2026-11-20 实际访问）：
+#   ok    HTTP 200，页面正常
+#   bot   站点对自动访问返回验证页/403（真人浏览器正常）；链接格式按该站公开的搜索路径，未能自动核验
+#   nokey 站点没有可用的关键词参数，只打开站点本身
+# 新增条目前请先访问核验；格式写错会让用户跳到空页面。
+
+groups:
+  - {id: general, zh: 综合数据集搜索}
+  - {id: stats,   zh: 统计与官方数据}
+  - {id: science, zh: 科研数据仓库}
+  - {id: ml,      zh: AI 与机器学习}
+  - {id: china,   zh: 中国数据}
+  - {id: web,     zh: 网页文件搜索}
+
+links:
+  # ── 综合 ──
+  - {id: dateno, group: general, name: Dateno, scope: 全球, lang: en, check: ok,
+     desc: 开放数据集搜索引擎，收录 2000 万+ 数据集,
+     url: "https://dateno.io/search?query={q}"}
+  - {id: google-ds, group: general, name: Google Dataset Search, scope: 全球, lang: en, check: ok,
+     desc: 谷歌的数据集搜索,
+     url: "https://datasetsearch.research.google.com/search?query={q}"}
+  - {id: datacite, group: general, name: DataCite Commons, scope: 全球, lang: en, check: bot,
+     desc: 按 DOI 检索科研数据集,
+     url: "https://commons.datacite.org/?query={q}"}
+
+  # ── 统计与官方 ──
+  - {id: europa, group: stats, name: 欧盟开放数据门户, scope: 欧盟, lang: en, check: ok,
+     desc: data.europa.eu,
+     url: "https://data.europa.eu/data/datasets?query={q}"}
+  - {id: data-gov, group: stats, name: 美国政府数据 Data.gov, scope: 美国, lang: en, check: ok,
+     desc: catalog.data.gov,
+     url: "https://catalog.data.gov/search?q={q}"}
+  - {id: data-gov-uk, group: stats, name: 英国政府数据, scope: 英国, lang: en, check: ok,
+     desc: data.gov.uk,
+     url: "https://www.data.gov.uk/search?q={q}"}
+  - {id: open-canada, group: stats, name: 加拿大开放政府, scope: 加拿大, lang: en, check: ok,
+     desc: open.canada.ca,
+     url: "https://search.open.canada.ca/opendata/?search_text={q}"}
+  - {id: hdx, group: stats, name: 人道主义数据交换 HDX, scope: 全球, lang: en, check: ok,
+     desc: 联合国 OCHA 运营的人道与发展数据,
+     url: "https://data.humdata.org/dataset/?q={q}"}
+  - {id: undata, group: stats, name: 联合国数据 UNData, scope: 全球, lang: en, check: ok,
+     desc: data.un.org,
+     url: "https://data.un.org/Search.aspx?q={q}"}
+  - {id: owid, group: stats, name: Our World in Data, scope: 全球, lang: en, check: ok,
+     desc: 全球指标图表与数据,
+     url: "https://ourworldindata.org/search?q={q}"}
+
+  # ── 科研 ──
+  - {id: zenodo, group: science, name: Zenodo, scope: 全球, lang: en, check: bot,
+     desc: CERN 运营的科研数据仓库,
+     url: "https://zenodo.org/search?q={q}&f=resource_type%3Adataset"}
+  - {id: dataverse, group: science, name: Harvard Dataverse, scope: 全球, lang: en, check: ok,
+     desc: 哈佛大学的科研数据仓库,
+     url: "https://dataverse.harvard.edu/dataverse/harvard?q={q}"}
+  - {id: figshare, group: science, name: Figshare, scope: 全球, lang: en, check: ok,
+     desc: 通用科研成果与数据仓库,
+     url: "https://figshare.com/search?q={q}"}
+  - {id: mendeley, group: science, name: Mendeley Data, scope: 全球, lang: en, check: ok,
+     desc: Elsevier 的科研数据仓库,
+     url: "https://data.mendeley.com/research-data/?search={q}"}
+  - {id: scidb, group: science, name: 科学数据银行 ScienceDB, scope: 中国, lang: any, check: ok,
+     desc: 中国的通用科学数据仓库,
+     url: "https://www.scidb.cn/en/list?q={q}"}
+
+  # ── AI / 机器学习 ──
+  - {id: hf, group: ml, name: Hugging Face 数据集, scope: 全球, lang: en, check: ok,
+     desc: 机器学习数据集社区,
+     url: "https://huggingface.co/datasets?search={q}"}
+  - {id: kaggle, group: ml, name: Kaggle 数据集, scope: 全球, lang: en, check: bot,
+     desc: 数据科学竞赛与数据集社区,
+     url: "https://www.kaggle.com/search?q={q}&resource=datasets"}
+  - {id: openml, group: ml, name: OpenML, scope: 全球, lang: en, check: ok,
+     desc: 机器学习实验与数据集,
+     url: "https://www.openml.org/search?type=data&q={q}"}
+
+  # ── 中国 ──
+  - {id: nbs, group: china, name: 国家统计局·国家数据, scope: 中国, lang: zh, check: nokey,
+     desc: 官方统计数据发布库（站内搜索框“查数”）,
+     url: "https://data.stats.gov.cn/dg/website/page.html"}
+  - {id: cnopendata, group: china, name: CnOpenData, scope: 中国, lang: zh, check: nokey,
+     desc: 经济金融与企业数据目录（需注册登录）,
+     url: "https://www.cnopendata.com"}
+
+  # ── 网页文件搜索（找散落在网上的 Excel / CSV）──
+  - {id: bing-files, group: web, name: 必应 · 找表格文件, scope: 全网, lang: any, check: ok,
+     desc: 在搜索词后加 filetype:xlsx,
+     url: "https://www.bing.com/search?q={q}%20filetype%3Axlsx"}
+  - {id: baidu-files, group: web, name: 百度 · 找表格文件, scope: 全网, lang: zh, check: bot,
+     desc: 在搜索词后加 filetype:xls,
+     url: "https://www.baidu.com/s?wd={q}%20filetype%3Axls"}

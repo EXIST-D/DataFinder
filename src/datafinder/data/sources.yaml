@@ -13,6 +13,7 @@
   status: experimental        # 新版发布库 2026-03 上线、试运行、无正式文档
   official: true
   langs: [zh]
+  options: {country: CN}
 
 # ── 高质量英文 / 国际 ──
 - id: zenodo
@@ -39,6 +40,7 @@
   base_url: https://ckan.publishing.service.gov.uk/api/action   # data.gov.uk 会重定向到此
   options:
     dsk_id: data-gov-uk
+    country: GB
     url_pattern: "https://www.data.gov.uk/dataset/{id}/{name}"
 
 - id: open-canada
@@ -47,6 +49,7 @@
   base_url: https://open.canada.ca/data/api/action
   options:
     dsk_id: open-canada
+    country: CA
     url_pattern: "https://open.canada.ca/data/en/dataset/{id}"
 
 - id: data-gov-au
@@ -55,6 +58,7 @@
   base_url: https://data.gov.au/data/api/3/action
   options:
     dsk_id: data-gov-au
+    country: AU
     url_pattern: "https://data.gov.au/data/dataset/{name}"
 
 # ── 长尾桥接：约 60 个国际来源；自动排除上面已自研的来源 ──

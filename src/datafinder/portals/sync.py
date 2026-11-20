@@ -22,6 +22,7 @@ from ..query.plan import country_zh_name, province_zh_name
 from ..query.tokenize import token_text
 from ..resources import load_yaml
 from ..util import normalize_url
+from .facets import kind_of, openness_of, tier_of
 from .tag import industry_zh, load_config, tag_industries
 
 REGISTRY_REPO = "datenoio/dataportals-registry"
@@ -46,6 +47,10 @@ class Portal:
     country_en: str | None = None
     region: str | None = None
     catalog_type: str | None = None
+    owner_type: str | None = None
+    labels: list[str] = field(default_factory=list)  # 专区标签（stats_bureau / open_platform）
+    note: str | None = None
+    verify: str | None = None  # 自有精选核验状态：ok / blocked / unverified
     software: str | None = None
     api_url: str | None = None
     has_api: bool = False
@@ -183,6 +188,7 @@ def to_portal(rec: dict) -> Portal | None:
         country_en=(location.get("country") or {}).get("name"),
         region=(location.get("subregion") or {}).get("id"),
         catalog_type=rec.get("catalog_type"),
+        owner_type=owner.get("type"),
         software=software,
         api_url=endpoints[0]["url"] if endpoints and endpoints[0].get("url") else None,
         has_api=bool(rec.get("api")),
@@ -215,7 +221,9 @@ def apply_curated(portals: list[Portal], entries: list[dict]) -> tuple[int, int,
                     url=e["link"],
                     source="curated",
                     country=e.get("country"),
+                    region=e.get("region"),
                     catalog_type=e.get("catalog_type"),
+                    owner_type=e.get("owner_type"),
                     is_national=bool(e.get("is_national")),
                 )
                 portals.append(p)
@@ -229,6 +237,10 @@ def apply_curated(portals: list[Portal], entries: list[dict]) -> tuple[int, int,
         p.desc_zh = e.get("desc_zh") or p.desc_zh
         p.featured = bool(e.get("featured", p.featured))
         p.curated = True
+        p.owner_type = e.get("owner_type") or p.owner_type
+        p.note = e.get("note") or p.note
+        p.verify = e.get("verify") or p.verify
+        p.labels = list(dict.fromkeys([*p.labels, *e.get("labels", [])]))
         if e.get("industries"):
             p.industries = list(e["industries"])  # 精选条目人工指定行业，覆盖自动打标
         if p.source == "dateno":
@@ -262,6 +274,7 @@ def write_db(conn: sqlite3.Connection, portals: list[Portal], meta: dict[str, st
     with conn:
         conn.execute("DELETE FROM portals")
         conn.execute("DELETE FROM portals_fts")
+        conn.execute("DELETE FROM portal_industries")
         for rowid, p in enumerate(portals, start=1):
             region_zh = province_zh_name(p.region) if p.region else None
             hints = _hints(p, region_zh)
@@ -273,40 +286,49 @@ def write_db(conn: sqlite3.Connection, portals: list[Portal], meta: dict[str, st
             desc_tokens = token_text(description)
             hint_tokens = token_text(hints)
             all_tokens = " ".join([name_tokens, name_zh_tokens, desc_tokens, hint_tokens])
+            row = {
+                "rowid": rowid,
+                "id": p.id,
+                "name": p.name,
+                "name_zh": p.name_zh,
+                "url": p.url,
+                "norm_url": p.norm_url,
+                "org": p.org,
+                "country": p.country,
+                "country_en": p.country_en,
+                "region": p.region,
+                "region_zh": region_zh,
+                "catalog_type": p.catalog_type,
+                "owner_type": p.owner_type,
+                "tier": tier_of(p.owner_type),
+                "kind": kind_of(p.catalog_type),
+                "openness": openness_of(p.access),
+                "labels": json.dumps(p.labels, ensure_ascii=False),
+                "note": p.note,
+                "verify": p.verify,
+                "software": p.software,
+                "api_url": p.api_url,
+                "has_api": int(p.has_api),
+                "access": p.access,
+                "industries": json.dumps(p.industries, ensure_ascii=False),
+                "topics": json.dumps(p.topics, ensure_ascii=False),
+                "description": p.description,
+                "desc_zh": p.desc_zh,
+                "is_national": int(p.is_national),
+                "featured": int(p.featured),
+                "curated": int(p.curated),
+                "source": p.source,
+                "tokens": all_tokens,
+                "imported_at": now,
+            }
+            cols = ", ".join(row)
             conn.execute(
-                "INSERT INTO portals(rowid, id, name, name_zh, url, norm_url, org, country,"
-                " country_en, region, region_zh, catalog_type, software, api_url, has_api, access,"
-                " industries, topics, description, desc_zh, is_national, featured, curated,"
-                " source, tokens, imported_at)"
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                (
-                    rowid,
-                    p.id,
-                    p.name,
-                    p.name_zh,
-                    p.url,
-                    p.norm_url,
-                    p.org,
-                    p.country,
-                    p.country_en,
-                    p.region,
-                    region_zh,
-                    p.catalog_type,
-                    p.software,
-                    p.api_url,
-                    int(p.has_api),
-                    p.access,
-                    json.dumps(p.industries, ensure_ascii=False),
-                    json.dumps(p.topics, ensure_ascii=False),
-                    p.description,
-                    p.desc_zh,
-                    int(p.is_national),
-                    int(p.featured),
-                    int(p.curated),
-                    p.source,
-                    all_tokens,
-                    now,
-                ),
+                f"INSERT INTO portals({cols}) VALUES ({', '.join('?' * len(row))})",
+                list(row.values()),
+            )
+            conn.executemany(
+                "INSERT INTO portal_industries(portal_rowid, industry) VALUES (?, ?)",
+                [(rowid, ind) for ind in p.industries],
             )
             conn.execute(
                 "INSERT INTO portals_fts(rowid, name, name_zh, description, hints)"

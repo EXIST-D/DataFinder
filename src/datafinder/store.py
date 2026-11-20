@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .config import data_dir
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS portals (
@@ -26,6 +26,13 @@ CREATE TABLE IF NOT EXISTS portals (
     region        TEXT,
     region_zh     TEXT,
     catalog_type  TEXT,
+    owner_type    TEXT,
+    tier          INTEGER,            -- 机构类型档位 1–6，见 data/facets.yaml
+    kind          TEXT NOT NULL DEFAULT 'other',   -- 数据形态（7 类）
+    openness      TEXT NOT NULL DEFAULT 'open',    -- open / mixed / restricted
+    labels        TEXT NOT NULL DEFAULT '[]',      -- 专区标签，如 stats_bureau / open_platform
+    note          TEXT,               -- 获取方式等备注（如"需注册获取 userKey"）
+    verify        TEXT,               -- 自有精选的核验状态：ok / blocked / unverified
     software      TEXT,
     api_url       TEXT,
     has_api       INTEGER NOT NULL DEFAULT 0,
@@ -44,6 +51,12 @@ CREATE TABLE IF NOT EXISTS portals (
 CREATE INDEX IF NOT EXISTS portals_country ON portals(country);
 CREATE INDEX IF NOT EXISTS portals_region ON portals(region);
 CREATE INDEX IF NOT EXISTS portals_featured ON portals(featured);
+CREATE INDEX IF NOT EXISTS portals_tier ON portals(tier);
+CREATE INDEX IF NOT EXISTS portals_kind ON portals(kind);
+CREATE TABLE IF NOT EXISTS portal_industries (
+    portal_rowid INTEGER NOT NULL, industry TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS portal_industries_ind ON portal_industries(industry, portal_rowid);
 CREATE INDEX IF NOT EXISTS portals_norm_url ON portals(norm_url);
 CREATE VIRTUAL TABLE IF NOT EXISTS portals_fts USING fts5(
     name, name_zh, description, hints,
@@ -52,7 +65,10 @@ CREATE VIRTUAL TABLE IF NOT EXISTS portals_fts USING fts5(
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 """
 
-_DROP = "DROP TABLE IF EXISTS portals; DROP TABLE IF EXISTS portals_fts; DROP TABLE IF EXISTS meta;"
+_DROP = (
+    "DROP TABLE IF EXISTS portals; DROP TABLE IF EXISTS portals_fts; "
+    "DROP TABLE IF EXISTS portal_industries; DROP TABLE IF EXISTS meta;"
+)
 
 
 def db_path() -> Path:

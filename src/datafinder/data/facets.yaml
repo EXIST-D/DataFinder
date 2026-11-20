@@ -1,0 +1,28 @@
+# 分类浏览的维度定义（见 docs/03_分类与信息架构方案.md）。
+# 加一类/改归属只改这里；门户库下次 `datafinder sync` 时重新归类。
+
+# 机构类型（"权威程度"不做打分，改为可解释的 6 档；①–③ 统称"官方"）
+tiers:
+  - {tier: 1, key: intl,      zh: 国际组织,     official: true,  owner_types: [International]}
+  - {tier: 2, key: national,  zh: 国家级政府,   official: true,  owner_types: [Central government, Federal government]}
+  - {tier: 3, key: local,     zh: 地方政府,     official: true,  owner_types: [Regional government, Local government]}
+  - {tier: 4, key: academy,   zh: 科研与高校,   official: false, owner_types: [Academy]}
+  - {tier: 5, key: business,  zh: 企业与商业,   official: false, owner_types: [Business]}
+  - {tier: 6, key: community, zh: 社会组织与社区, official: false, owner_types: [Civil society, Community, Other]}
+
+# 数据形态（把 Dateno 的 11 种 catalog_type 合并成用户看得懂的 7 类）
+kinds:
+  - {key: statistics, zh: 统计指标库,       catalog_types: [Indicators catalog]}
+  - {key: opendata,   zh: 开放数据门户,     catalog_types: [Open data portal]}
+  - {key: science,    zh: 科研数据仓库,     catalog_types: [Scientific data repository, General research repository]}
+  - {key: geo,        zh: 地理信息,         catalog_types: [Geoportal]}
+  - {key: micro,      zh: 微观与调查数据,   catalog_types: [Microdata catalog]}
+  - {key: ml,         zh: AI 与机器学习,    catalog_types: [Machine learning catalog]}
+  - {key: market,     zh: 数据交易与市场,   catalog_types: [Data marketplace]}
+  - {key: other,      zh: 其他,             catalog_types: []}   # 兜底：没有映射到上面的类型
+
+# 开放程度（由 access_mode 推出）
+openness:
+  - {key: open,       zh: 开放}
+  - {key: mixed,      zh: 部分受限}
+  - {key: restricted, zh: 受限}

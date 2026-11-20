@@ -34,11 +34,15 @@
 
 - link: https://data.beijing.gov.cn
   name_zh: 北京市公共数据开放平台
+  labels: [open_platform]
+  note: 注册后在“用户中心”获取 userKey，再调用数据接口（JSON）；市统计局的数据集在目录 zyml/ajg/stjj 下。
   industries: [government]
   featured: true
 
 - link: https://data.sh.gov.cn
   name_zh: 上海市公共数据开放平台
+  labels: [open_platform]
+  note: 无条件开放的数据可直接下载或调用接口；有条件开放的数据需申请；开发者中心提供接口文档，需实名认证。
   industries: [government]
   featured: true
 
@@ -49,6 +53,8 @@
 
 - link: https://data.zjzwfw.gov.cn
   name_zh: 浙江省数据开放平台
+  labels: [open_platform]
+  note: 需注册并实名认证、创建应用、申请接口，通过 appsecret 调用；分页接口每页最多 200 条。
   industries: [government]
   featured: true
 
@@ -143,6 +149,429 @@
   country: CN
   catalog_type: Indicators catalog
   industries: [economy, finance, law]
+
+# ───────────── 省级统计局（31）─────────────
+# 状态来自 2026-11-20 的实际访问：ok=HTTP 200 且页面标题含“统计”；blocked=返回 403/412（站点在线、拒绝机器人）；
+# unverified=从当前网络超时/连接失败，未能核验（界面会如实标注，不当作已核验）。
+- add: true
+  link: https://tjj.beijing.gov.cn
+  name: Beijing Provincial Bureau of Statistics
+  name_zh: 北京市统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-BJ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://stats.tj.gov.cn
+  name: Tianjin Provincial Bureau of Statistics
+  name_zh: 天津市统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-TJ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: http://tjj.hebei.gov.cn
+  name: Hebei Provincial Bureau of Statistics
+  name_zh: 河北省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-HE
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://tjj.shanxi.gov.cn
+  name: Shanxi Provincial Bureau of Statistics
+  name_zh: 山西省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-SX
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://tj.nmg.gov.cn
+  name: Inner Mongolia Provincial Bureau of Statistics
+  name_zh: 内蒙古自治区统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-NM
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: https://tjj.ln.gov.cn
+  name: Liaoning Provincial Bureau of Statistics
+  name_zh: 辽宁省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-LN
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.jl.gov.cn
+  name: Jilin Provincial Bureau of Statistics
+  name_zh: 吉林省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-JL
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.hlj.gov.cn
+  name: Heilongjiang Provincial Bureau of Statistics
+  name_zh: 黑龙江省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-HL
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.sh.gov.cn
+  name: Shanghai Provincial Bureau of Statistics
+  name_zh: 上海市统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-SH
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: http://tj.jiangsu.gov.cn
+  name: Jiangsu Provincial Bureau of Statistics
+  name_zh: 江苏省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-JS
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: http://tjj.zj.gov.cn
+  name: Zhejiang Provincial Bureau of Statistics
+  name_zh: 浙江省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-ZJ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://tjj.ah.gov.cn
+  name: Anhui Provincial Bureau of Statistics
+  name_zh: 安徽省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-AH
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: https://tjj.fujian.gov.cn
+  name: Fujian Provincial Bureau of Statistics
+  name_zh: 福建省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-FJ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.jiangxi.gov.cn
+  name: Jiangxi Provincial Bureau of Statistics
+  name_zh: 江西省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-JX
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: http://tjj.shandong.gov.cn
+  name: Shandong Provincial Bureau of Statistics
+  name_zh: 山东省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-SD
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.henan.gov.cn
+  name: Henan Provincial Bureau of Statistics
+  name_zh: 河南省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-HA
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: https://tjj.hubei.gov.cn
+  name: Hubei Provincial Bureau of Statistics
+  name_zh: 湖北省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-HB
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.hunan.gov.cn
+  name: Hunan Provincial Bureau of Statistics
+  name_zh: 湖南省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-HN
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: http://stats.gd.gov.cn
+  name: Guangdong Provincial Bureau of Statistics
+  name_zh: 广东省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-GD
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: http://tjj.gxzf.gov.cn
+  name: Guangxi Provincial Bureau of Statistics
+  name_zh: 广西壮族自治区统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-GX
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://stats.hainan.gov.cn
+  name: Hainan Provincial Bureau of Statistics
+  name_zh: 海南省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-HI
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: https://tjj.cq.gov.cn
+  name: Chongqing Provincial Bureau of Statistics
+  name_zh: 重庆市统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-CQ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://tjj.sc.gov.cn
+  name: Sichuan Provincial Bureau of Statistics
+  name_zh: 四川省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-SC
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://stjj.guizhou.gov.cn
+  name: Guizhou Provincial Bureau of Statistics
+  name_zh: 贵州省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-GZ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://stats.yn.gov.cn
+  name: Yunnan Provincial Bureau of Statistics
+  name_zh: 云南省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-YN
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.xizang.gov.cn
+  name: Tibet Provincial Bureau of Statistics
+  name_zh: 西藏自治区统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-XZ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.shaanxi.gov.cn
+  name: Shaanxi Provincial Bureau of Statistics
+  name_zh: 陕西省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-SN
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://tjj.gansu.gov.cn
+  name: Gansu Provincial Bureau of Statistics
+  name_zh: 甘肃省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-GS
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: blocked
+  note: 该站对自动访问返回 403/412（站点在线，但拒绝机器人），请用浏览器打开。
+
+- add: true
+  link: https://tjj.qinghai.gov.cn
+  name: Qinghai Provincial Bureau of Statistics
+  name_zh: 青海省统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-QH
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: unverified
+  note: 未能从当前网络核验可访问性（可能需要在国内网络打开），链接按公开域名规则收录。
+
+- add: true
+  link: https://tj.nx.gov.cn
+  name: Ningxia Provincial Bureau of Statistics
+  name_zh: 宁夏回族自治区统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-NX
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
+
+- add: true
+  link: https://tjj.xinjiang.gov.cn
+  name: Xinjiang Provincial Bureau of Statistics
+  name_zh: 新疆维吾尔自治区统计局
+  desc_zh: 省级统计机构官方网站，可查本地区统计公报、统计年鉴等官方统计信息。
+  country: CN
+  region: CN-XJ
+  catalog_type: Indicators catalog
+  owner_type: Regional government
+  industries: [statistics]
+  labels: [stats_bureau]
+  verify: ok
 
 # ───────────── 国际高质量门户 ─────────────
 - link: https://data.worldbank.org

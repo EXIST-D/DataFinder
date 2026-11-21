@@ -5,6 +5,7 @@ from __future__ import annotations
 from datafinder.catalog.adapters import register_adapter
 from datafinder.catalog.scout import register_probe
 from datafinder.catalog.taxonomy import register_taxonomy
+from datafinder.catalog.tree import register_domain
 from datafinder.finder import MIN_INTERVAL
 from datafinder.query.units import register_thesaurus
 from datafinder.resources import load_package_yaml
@@ -23,6 +24,7 @@ from .yearbook.adapter import YearbookAdapter
 
 PACKAGE = f"datafinder.domains.{DOMAIN_ID}"
 
+register_domain(DOMAIN_ID, "中国官方统计")
 register_protocol("nbs", NbsSource)
 register_thesaurus(DOMAIN_ID, load_package_yaml(PACKAGE, "thesaurus.zh.yaml"))
 register_taxonomy(

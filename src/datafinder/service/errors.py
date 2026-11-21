@@ -57,6 +57,7 @@ def translate(exc: BaseException) -> ServiceError:
     """把各层的异常翻译成 ServiceError；认不出的原样包成 ERROR（保留原消息）。"""
     from datafinder.catalog.adapters import AdapterError, Unsupported
     from datafinder.catalog.query import InvalidFacet
+    from datafinder.catalog.tree import InvalidNode
     from datafinder.engine.errors import SourceError
 
     if isinstance(exc, ServiceError):
@@ -66,6 +67,12 @@ def translate(exc: BaseException) -> ServiceError:
             str(exc),
             code="INVALID_FACET_ID",
             next_action="先用 facets 查看合法的主题、地域和资源类型",
+        )
+    if isinstance(exc, InvalidNode):
+        return ServiceError(
+            str(exc),
+            code="NOT_FOUND",
+            next_action="从该轴的顶层（不带 node）逐级展开，使用返回的节点 id",
         )
     if isinstance(exc, AdapterError):
         return ServiceError(str(exc), code="INVALID_ARGUMENT")

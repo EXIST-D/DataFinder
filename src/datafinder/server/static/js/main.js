@@ -6,12 +6,14 @@ import { bindLinks, register, render } from "./router.js";
 import * as search from "./search.js";
 import * as browse from "./browse.js";
 import * as catalog from "./catalog.js";
+import * as tree from "./tree.js";
 import * as china from "./china.js";
 import * as links from "./links.js";
 import "./sheet.js";
 
 register("search", search);
 register("catalog", catalog);
+register("tree", tree);
 register("browse", browse);
 register("china", china);
 register("links", links);

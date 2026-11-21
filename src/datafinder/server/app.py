@@ -6,6 +6,7 @@
 - GET /api/inspect            按需读取某个数据集页面公布的文件列表（只允许本次会话搜到过的链接）
 资源目录（统一检索：主题 × 地域 × 资源类型）：
 - GET /api/catalog/search|facets|inspect   目录检索、合法分面词表、资源详情（不联网；网页只展示获取方式，不执行下载）
+- GET /api/catalog/tree       目录树：当前检索的命中集合按 主题/地域/来源 逐级展开（无状态，计数口径同 search 的 total）
 门户目录：
 - GET /api/browse/facets      各维度取值与条数（在其他筛选条件下）
 - GET /api/browse/portals     分页门户列表
@@ -290,12 +291,16 @@ def create_app() -> FastAPI:
         mode: str = Query("discovery", max_length=12),
         y1: int | None = Query(None, ge=1000, le=3000),
         y2: int | None = Query(None, ge=1000, le=3000),
+        domain: str = Query("", max_length=200),
+        source: str = Query("", max_length=200),
         limit: int = Query(20, ge=1, le=50),
         offset: int = Query(0, ge=0, le=5000),
     ) -> dict[str, Any]:
         try:
             return await service.search(
                 q,
+                domain_ids=_csv(domain),
+                source_ids=_csv(source),
                 topic_ids=_csv(topic),
                 region_ids=_csv(region),
                 kinds_=_csv(kind),
@@ -308,6 +313,45 @@ def create_app() -> FastAPI:
                 offset=offset,
             )
         except Exception as exc:  # noqa: BLE001 —— 边界层：统一翻译成 HTTP 错误
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/catalog/tree")
+    def catalog_tree(
+        axis: str = Query("", max_length=12),
+        node: str = Query("", max_length=400),
+        q: str = Query("", max_length=MAX_QUERY),
+        topic: str = Query("", max_length=200),
+        region: str = Query("", max_length=200),
+        kind: str = Query("", max_length=200),
+        delivery: str = Query("", max_length=60),
+        granularity: str | None = Query(None, max_length=20),
+        mode: str = Query("discovery", max_length=12),
+        y1: int | None = Query(None, ge=1000, le=3000),
+        y2: int | None = Query(None, ge=1000, le=3000),
+        domain: str = Query("", max_length=200),
+        source: str = Query("", max_length=200),
+        limit: int = Query(100, ge=1, le=200),
+        offset: int = Query(0, ge=0, le=5000),
+    ) -> dict[str, Any]:
+        try:
+            return service.tree(
+                axis,
+                node,
+                q,
+                domain_ids=_csv(domain),
+                source_ids=_csv(source),
+                topic_ids=_csv(topic),
+                region_ids=_csv(region),
+                kinds_=_csv(kind),
+                delivery=_csv(delivery),
+                geo_granularity=granularity,
+                mode=mode,
+                period_start=y1,
+                period_end=y2,
+                limit=limit,
+                offset=offset,
+            )
+        except Exception as exc:  # noqa: BLE001
             raise _service_http_error(exc) from exc
 
     @app.get("/api/catalog/facets")

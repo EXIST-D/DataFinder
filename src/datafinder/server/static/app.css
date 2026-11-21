@@ -452,3 +452,17 @@ table.data thead th:first-child { text-align: left; }
 ul.plain { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; font-size: 14px; line-height: 1.5; }
 ul.plain > li.clickable:hover { background: var(--row-hover); border-radius: 8px; }
 @media (prefers-color-scheme: dark) { .badge.dl-download { color: #5fd49a; } }
+
+/* 目录树 */
+.tree-axes { display: flex; gap: 8px; justify-content: center; margin: 4px 0 18px; flex-wrap: wrap; }
+.tree-axes .chip.on { background: var(--accent); color: #fff; }
+.tnode { display: flex; align-items: center; gap: 12px; padding: 12px 18px; }
+.tnode.clickable { cursor: pointer; }
+.tnode:hover { background: var(--row-hover); }
+.tnode-name { flex: 1; min-width: 0; font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
+.tnode-name small { display: block; font-size: 12px; color: var(--text-3); }
+.tnode-n { font-size: 13px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.tnode-go { border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 980px; padding: 3px 11px; font-size: 12px; font-weight: 500; }
+.tnode-go:hover { background: var(--accent); color: #fff; }
+.tnode.muted .tnode-name { color: var(--text-3); }
+.tree-more { display: block; width: 100%; padding: 12px; border: 0; background: none; color: var(--link); font-size: 13px; }

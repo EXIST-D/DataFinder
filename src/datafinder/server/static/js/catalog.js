@@ -2,20 +2,20 @@
 /* 资源目录：主题 × 地域 × 资源类型 × 获取方式。状态全部写进 URL；网页只展示"怎么获取"，不执行下载。 */
 
 import { $, api, copy, emptyPanel, esc, ICON_OUT, safeUrl, skeleton } from "./util.js";
-import { currentParams, updateUrl } from "./router.js";
+import { currentParams, go, updateUrl } from "./router.js";
 import { openSheet, sheetBody } from "./sheet.js";
 
-const el = { form: $("cForm"), q: $("cQ"), topics: $("cTopics"), filters: $("cFilters"), total: $("cTotal"), chips: $("cChips"), list: $("cList"), pager: $("cPager"), toggle: $("cFilterToggle") };
+const el = { form: $("cForm"), q: $("cQ"), topics: $("cTopics"), filters: $("cFilters"), total: $("cTotal"), chips: $("cChips"), list: $("cList"), pager: $("cPager"), toggle: $("cFilterToggle"), toTree: $("cToTree") };
 const PAGE = 20;
 const DELIVERY = { download: ["可下载", "dl-download"], generate: ["需生成", "dl-generate"], link: ["仅链接", "dl-link"] };
 const USABILITY = { image: "图片，需 OCR", document: "文档", html_table: "网页表格", tabular: "可直接分析" };
-const EMPTY = { q: "", topic: "", region: "", kind: "", delivery: "", strict: false, page: 1 };
+const EMPTY = { q: "", topic: "", region: "", kind: "", delivery: "", domain: "", source: "", strict: false, page: 1 };
 let state = { ...EMPTY };
 let vocab = null;
 let seq = 0;
 
-const fromParams = (p) => ({ q: p.q || "", topic: p.topic || "", region: p.region || "", kind: p.kind || "", delivery: p.delivery || "", strict: p.strict === "1", page: Math.max(1, parseInt(p.page || "1", 10) || 1) });
-const syncUrl = () => updateUrl({ v: "catalog", q: state.q, topic: state.topic, region: state.region, kind: state.kind, delivery: state.delivery, strict: state.strict, page: state.page > 1 ? state.page : "" });
+const fromParams = (p) => ({ q: p.q || "", topic: p.topic || "", region: p.region || "", kind: p.kind || "", delivery: p.delivery || "", domain: p.domain || "", source: p.source || "", strict: p.strict === "1", page: Math.max(1, parseInt(p.page || "1", 10) || 1) });
+const syncUrl = () => updateUrl({ v: "catalog", q: state.q, topic: state.topic, region: state.region, kind: state.kind, delivery: state.delivery, domain: state.domain, source: state.source, strict: state.strict, page: state.page > 1 ? state.page : "" });
 
 function change(patch) {
   state = { ...state, ...patch, page: patch.page ?? 1 };
@@ -80,6 +80,8 @@ function renderChips() {
   if (state.region) chips.push(["region", `地域：${regionName(state.region)}`]);
   if (state.kind) chips.push(["kind", `类型：${vocab.kinds.find((k) => k.id === state.kind)?.name || state.kind}`]);
   if (state.delivery) chips.push(["delivery", DELIVERY[state.delivery][0]]);
+  if (state.domain) chips.push(["domain", `领域：${state.domain}`]);
+  if (state.source) chips.push(["source", `来源：${state.source}`]);
   if (state.strict) chips.push(["strict", "严格模式"]);
   el.chips.innerHTML = chips.map(([k, t]) => `<button type="button" class="achip" data-clear="${k}">${esc(t)} <span aria-hidden="true">×</span><span class="sr">移除</span></button>`).join("");
 }
@@ -103,7 +105,7 @@ async function load() {
   try {
     if (!vocab) vocab = await api("/api/catalog/facets");
     const res = await api("/api/catalog/search", {
-      q: state.q, topic: state.topic, region: state.region, kind: state.kind, delivery: state.delivery,
+      q: state.q, topic: state.topic, region: state.region, kind: state.kind, delivery: state.delivery, domain: state.domain, source: state.source,
       mode: state.strict ? "strict" : "discovery", limit: PAGE, offset: (state.page - 1) * PAGE,
     });
     if (mine !== seq) return;
@@ -127,7 +129,7 @@ function cliHint(r, how) {
   return "";
 }
 
-async function openDetail(id) {
+export async function openDetail(id) {
   openSheet((b) => { b.innerHTML = '<p class="sheet-note"><span class="spinner"></span>读取中…</p>'; });
   try {
     const d = await api("/api/catalog/inspect", { id, children: true });
@@ -170,6 +172,7 @@ el.filters.addEventListener("change", (e) => {
   else if (t.id === "cRegion") change({ region: t.value });
   else if (t.id === "cStrict") change({ strict: t.checked });
 });
+el.toTree.addEventListener("click", () => go("tree", { q: state.q, topic: state.topic, region: state.region, kind: state.kind, delivery: state.delivery, domain: state.domain, source: state.source, strict: state.strict }));
 el.toggle.addEventListener("click", () => { const open = el.filters.classList.toggle("open"); el.toggle.setAttribute("aria-expanded", String(open)); });
 el.list.addEventListener("click", (e) => {
   const c = e.target.closest("[data-clear]");

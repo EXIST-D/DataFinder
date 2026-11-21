@@ -251,3 +251,27 @@ def test_catalog_endpoints_never_download_or_write_files(client, catalog_ready):
     assert (
         client.get("/api/catalog/download").status_code == 404
     )  # 网页没有下载接口：获取只走命令行/MCP
+
+
+def test_catalog_tree_endpoint_is_stateless_and_carries_filters(client, catalog_ready):
+    top = client.get("/api/catalog/tree").json()
+    assert [a["id"] for a in top["axes"]] == ["topic", "region", "source"] and top["total"] == 9
+    t = client.get("/api/catalog/tree", params={"axis": "topic", "q": "工业增加值"}).json()
+    ids = {c["id"] for c in t["children"]}
+    assert "cnstat.industry" in ids and "cnstat.population" not in ids
+    s = client.get("/api/catalog/tree", params={"axis": "source", "node": "source:nbs"}).json()
+    assert s["path"][-1]["name"] == "国家统计局"
+    # 选中节点后附带的参数可以直接用于检索：domain / source 参数
+    r = client.get("/api/catalog/search", params={"source": "yb.sd", "kind": "table"}).json()
+    assert r["total"] == 3 and all(x["source_id"] == "yb.sd" for x in r["results"])
+
+
+def test_catalog_tree_errors_map_to_http_statuses(client, catalog_ready):
+    assert client.get("/api/catalog/tree", params={"axis": "colour"}).status_code == 404
+    assert (
+        client.get("/api/catalog/tree", params={"axis": "topic", "node": "cnstat.nope"}).status_code
+        == 404
+    )
+    bad = client.get("/api/catalog/tree", params={"axis": "topic", "topic": "cnstat.nope"})
+    assert bad.status_code == 400 and "INVALID_FACET_ID" in bad.json()["detail"]
+    assert client.get("/api/catalog/tree", params={"limit": 999}).status_code == 422

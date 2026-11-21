@@ -160,23 +160,28 @@ def _missing(e: Entry, req: SearchRequest) -> list[str]:
 # ── 主入口 ──
 
 
-def search(cat: Catalog, request: SearchRequest) -> SearchResponse:
+def prepare(request: SearchRequest) -> tuple[SearchRequest, list[Unit], Where | None, list[str]]:
+    """校验请求并建好 SQL 条件；关键词全是无区分度的词又没有其他筛选时 where 为 None（检索与目录树共用）。"""
     req = request.normalized()
     units = build_units(req.query) if req.query.strip() else []
-    hints: list[str] = []
     if req.query.strip() and not units:
         if not req.has_filters:
-            return SearchResponse(
+            return (
                 req,
-                0,
-                [],
-                {},
+                units,
+                None,
                 [
                     "关键词里只有“数据/统计/评价”或地名这类无区分度的词，请换成具体的指标或主题词，或加上筛选条件"
                 ],
             )
-        hints.append("关键词只含地名/泛词，已忽略，按筛选条件浏览")
-    where = Where(req, units)
+        return req, units, Where(req, units), ["关键词只含地名/泛词，已忽略，按筛选条件浏览"]
+    return req, units, Where(req, units), []
+
+
+def search(cat: Catalog, request: SearchRequest) -> SearchResponse:
+    req, units, where, hints = prepare(request)
+    if where is None:
+        return SearchResponse(req, 0, [], {}, hints)
     clause, args = where.sql()
     total = cat.conn.execute(f"SELECT COUNT(*) FROM resources r WHERE {clause}", args).fetchone()[0]
 

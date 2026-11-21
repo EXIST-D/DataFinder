@@ -20,6 +20,7 @@
       <nav class="tabs" aria-label="主导航">
         <a href="/" data-view="search">搜索</a>
         <a href="/?v=catalog" data-view="catalog">资源目录</a>
+        <a href="/?v=tree" data-view="tree">目录树</a>
         <a href="/?v=browse" data-view="browse">门户目录</a>
         <a href="/?v=china" data-view="china">中国统计</a>
         <a href="/?v=links" data-view="links">检索入口</a>
@@ -100,12 +101,33 @@
         <section class="browse-main" aria-label="资源列表">
           <div class="bar">
             <div class="bar-left"><strong id="cTotal"></strong><button type="button" class="chip sm filter-toggle" id="cFilterToggle" aria-expanded="false" aria-controls="cFilters">筛选</button><span class="active-chips" id="cChips"></span></div>
+            <button type="button" class="chip sm" id="cToTree">在目录树中看</button>
           </div>
           <div id="cList"></div>
           <nav class="pager" id="cPager" aria-label="分页"></nav>
           <p class="note browse-note">目录只收录名称、口径与链接，不含数值。“可下载”表示有文件直链，图片类只能看、不能直接分析；“需生成”表示要通过接口取数，请在命令行用 <code>datafinder get</code>（或让 AI 助手通过 MCP）获取。</p>
         </section>
       </div>
+    </div>
+
+    <!-- ═══════════ 目录树（主题 / 地域 / 来源 三条轴）═══════════ -->
+    <div class="view page" data-view="tree" hidden>
+      <header class="page-head">
+        <h1 class="page-title">目录树</h1>
+        <p class="page-sub">同一批资源的三种看法：按主题、按地域、按来源逐级展开，数字是当前条件下命中的资源数。</p>
+      </header>
+      <form class="search compact" id="tForm" role="search" autocomplete="off">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="tQ" type="search" placeholder="可选：先用关键词缩小范围，如：工业增加值" maxlength="200" aria-label="关键词">
+      </form>
+      <div class="tree-axes" id="tAxes" role="tablist" aria-label="展开方式"></div>
+      <section class="browse-main" aria-label="目录树">
+        <div class="panel">
+          <nav class="crumbs" id="tCrumbs" aria-label="当前位置"></nav>
+          <div id="tList"></div>
+        </div>
+        <p class="note" id="tNote"></p>
+      </section>
     </div>
 
     <!-- ═══════════ 分类浏览 ═══════════ -->

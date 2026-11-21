@@ -9,6 +9,8 @@
 - index      目录的抓取与旧索引迁移
 - export     取数结果的保存、读回与描述统计
 - overview   整体状态（status）
+- tree       目录树：命中集合按主题/地域/来源展开
+- presentation 汇报：给助手的简明文字与统一的 presentation 块
 所有函数返回可 JSON 序列化的 dict/list。
 """
 
@@ -20,6 +22,7 @@ from .errors import ServiceError, guard, translate
 from .export import load_table, table_result
 from .overview import status
 from .plan import plan_sources
+from .tree import tree
 
 __all__ = [
     "ServiceError",
@@ -37,4 +40,5 @@ __all__ = [
     "status",
     "table_result",
     "translate",
+    "tree",
 ]

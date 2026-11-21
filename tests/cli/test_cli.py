@@ -74,11 +74,9 @@ def test_command_set_matches_the_capability_layers():
 def test_search_without_catalog_explains_how_to_build_it(tmp_path, monkeypatch):
     monkeypatch.setenv("DATAFINDER_HOME", str(tmp_path / "empty"))
     result = runner.invoke(app, ["search", "工业"])
-    assert (
-        result.exit_code == 1
-        and "INDEX_NOT_READY" in result.output
-        and "index build" in result.output
-    )
+    out = " ".join(result.output.split())
+    assert result.exit_code == 1 and "INDEX_NOT_READY" in out
+    assert "index pull" in out and "index build" in out
 
 
 def test_search_filters_and_json_output(ready_catalog):

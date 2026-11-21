@@ -24,7 +24,7 @@ async def test_empty_catalog_gives_actionable_error(tmp_path, monkeypatch):
     with pytest.raises(ServiceError) as e:
         await service.search("工业")
     assert e.value.code == "INDEX_NOT_READY" and "index build" in str(e.value)
-    assert e.value.to_dict()["error"]["next_action"] == "datafinder index build"
+    assert e.value.to_dict()["error"]["next_action"] == "datafinder index pull"
 
 
 # ───────────── 检索 / 分面 / 来源 ─────────────

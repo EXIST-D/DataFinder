@@ -7,8 +7,8 @@ from datafinder.catalog import Catalog
 from .errors import ServiceError
 
 NOT_READY = (
-    "资源目录还没建立。请在终端运行 `datafinder index build`（抓取，可中断续跑），"
-    "或 `datafinder index migrate`（把旧版本地索引一次性迁入）。"
+    "资源目录还没建立。请在终端运行 `datafinder index pull`（下载已发布的目录快照，约一分钟），"
+    "或 `datafinder index build`（自行抓取，可中断续跑）/ `datafinder index migrate`（迁入旧版本地索引）。"
 )
 
 
@@ -16,5 +16,5 @@ def open_catalog(*, require_data: bool = True) -> Catalog:
     cat = Catalog.open()
     if require_data and cat.stats()["resources"] == 0:
         cat.close()
-        raise ServiceError(NOT_READY, code="INDEX_NOT_READY", next_action="datafinder index build")
+        raise ServiceError(NOT_READY, code="INDEX_NOT_READY", next_action="datafinder index pull")
     return cat

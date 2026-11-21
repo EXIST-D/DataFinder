@@ -27,7 +27,7 @@ def status() -> dict[str, Any]:
         hints.append("门户库为空：运行 datafinder sync")
     if not info["resources"]:
         hints.append(
-            "资源目录为空：运行 datafinder index build 抓取；有旧版本地索引则运行 datafinder index migrate 一次性迁入"
+            "资源目录为空：运行 datafinder index pull 下载已发布的快照；也可 index build 自行抓取，有旧版本地索引则 index migrate 迁入"
         )
     elif migratable:
         hints.append(

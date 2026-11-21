@@ -45,7 +45,24 @@ publishers:
   - {id: CN-BJ, name: 北京市统计局, region: CN-BJ, home: "https://tjj.beijing.gov.cn/", discover_nav: true}
   - {id: CN-TJ, name: 天津市统计局, region: CN-TJ, home: "https://stats.tj.gov.cn/", discover_nav: true}
   - {id: CN-HE, name: 河北省统计局, region: CN-HE, home: "http://tjj.hebei.gov.cn/", discover_nav: true}
-  - {id: CN-SX, name: 山西省统计局, region: CN-SX, home: "https://tjj.shanxi.gov.cn/", discover_nav: true}
+  - id: CN-SX
+    name: 山西省统计局
+    region: CN-SX
+    home: "https://tjj.shanxi.gov.cn/"
+    discover_nav: true
+    # 栏目地址取自"统计数据"页（/tjsj/），2026-11-21 实测
+    columns:
+      - {id: sx-release, title: 最新发布, url: "https://tjj.shanxi.gov.cn/tjsj/sjxx/", kind: report}
+      - {id: sx-interpret, title: 数据解读, url: "https://tjj.shanxi.gov.cn/tjsj/sjjd/", kind: report}
+      - {id: sx-progress, title: 进度数据, url: "https://tjj.shanxi.gov.cn/tjsj/jdsj/", kind: report}
+      - {id: sx-bulletin-annual, title: 年度统计公报, url: "https://tjj.shanxi.gov.cn/tjsj/tjgb/ndtjgb/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: sx-bulletin-pop, title: 人口普查公报, url: "https://tjj.shanxi.gov.cn/tjsj/tjgb/rkpcgb/", kind: bulletin, topics: [cnstat.population]}
+      - {id: sx-bulletin-econ, title: 经济普查公报, url: "https://tjj.shanxi.gov.cn/tjsj/tjgb/jjpcgb/", kind: bulletin}
+      - {id: sx-bulletin-rd, title: 科技普查公报, url: "https://tjj.shanxi.gov.cn/tjsj/tjgb/rdpcgb/", kind: bulletin, topics: [cnstat.innovation]}
+      - {id: sx-city, title: 市级信息, url: "https://tjj.shanxi.gov.cn/tjsj/sxxx/", kind: report}
+      - {id: sx-indicator, title: 指标解释, url: "https://tjj.shanxi.gov.cn/tjsj/tjcd/", kind: reference}
+      - {id: sx-system, title: 统计制度, url: "https://tjj.shanxi.gov.cn/tjsj/tjzd/", kind: reference}
+      - {id: sx-standard, title: 统计标准, url: "https://tjj.shanxi.gov.cn/tjsj/tjbz/", kind: reference}
   - {id: CN-NM, name: 内蒙古自治区统计局, region: CN-NM, home: "https://tj.nmg.gov.cn/", discover_nav: true}
   - {id: CN-LN, name: 辽宁省统计局, region: CN-LN, home: "https://tjj.ln.gov.cn/", discover_nav: true}
   - {id: CN-JL, name: 吉林省统计局, region: CN-JL, home: "https://tjj.jl.gov.cn/", discover_nav: true}
@@ -56,8 +73,29 @@ publishers:
   - {id: CN-AH, name: 安徽省统计局, region: CN-AH, home: "https://tjj.ah.gov.cn/", discover_nav: true}
   - {id: CN-FJ, name: 福建省统计局, region: CN-FJ, home: "https://tjj.fujian.gov.cn/", discover_nav: true}
   - {id: CN-JX, name: 江西省统计局, region: CN-JX, home: "http://tjj.jiangxi.gov.cn/", discover_nav: true}  # https 为老旧 TLS（legacy renegotiation），客户端连不上
-  - {id: CN-SD, name: 山东省统计局, region: CN-SD, home: "http://tjj.shandong.gov.cn/", discover_nav: true}
-  - {id: CN-HA, name: 河南省统计局, region: CN-HA, home: "https://tjj.henan.gov.cn/", discover_nav: true}
+  - id: CN-SD
+    name: 山东省统计局
+    region: CN-SD
+    home: "http://tjj.shandong.gov.cn/"
+    discover_nav: true
+    # 栏目地址取自"统计数据查询"页（/col/col6279/）的导航，2026-11-21 实测
+    columns:
+      - {id: sd-bulletin, title: 统计公报, url: "http://tjj.shandong.gov.cn/col/col6196/index.html", kind: bulletin, topics: [cnstat.macro]}
+      - {id: sd-census-bulletin, title: 普查公报, url: "http://tjj.shandong.gov.cn/col/col6293/index.html", kind: bulletin}
+      - {id: sd-census, title: 普查数据, url: "http://tjj.shandong.gov.cn/col/col322452/index.html", kind: census_product}
+      - {id: sd-progress, title: 进度分析, url: "http://tjj.shandong.gov.cn/col/col6089/index.html", kind: report}
+      - {id: sd-annual, title: 年度分析, url: "http://tjj.shandong.gov.cn/col/col6227/index.html", kind: report}
+      - {id: sd-system, title: 统计制度, url: "http://tjj.shandong.gov.cn/col/col6112/index.html", kind: reference}
+      - {id: sd-standard, title: 统计标准, url: "http://tjj.shandong.gov.cn/col/col6099/index.html", kind: reference}
+  - id: CN-HA
+    name: 河南省统计局
+    region: CN-HA
+    home: "https://tjj.henan.gov.cn/"
+    discover_nav: true
+    columns:
+      - {id: ha-release, title: 最新发布, url: "https://tjj.henan.gov.cn/tjfw/zxfb/", kind: report}
+      - {id: ha-data, title: 统计数据, url: "https://tjj.henan.gov.cn/tjfw/tjsj/", kind: report}
+      - {id: ha-bulletin, title: 统计公报, url: "https://tjj.henan.gov.cn/tjfw/tjgb/", kind: bulletin, topics: [cnstat.macro]}
   - {id: CN-HB, name: 湖北省统计局, region: CN-HB, home: "https://tjj.hubei.gov.cn/", discover_nav: true}
   - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "http://tjj.hunan.gov.cn/", discover_nav: true}  # https 握手报 BAD_ECPOINT，走 http
   - {id: CN-GD, name: 广东省统计局, region: CN-GD, home: "http://stats.gd.gov.cn/", discover_nav: true}

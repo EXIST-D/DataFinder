@@ -94,10 +94,18 @@ series:
     zh: 山西统计年鉴
     region: CN-SX
     publisher: 山西省统计局
-    years: [2019, 2025]
-    base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj{year}/zk/"
     toc: [left.htm, lefte.htm]
     home: http://tjj.shanxi.gov.cn/tjsj/tjnj/
+    # 2019–2025 在 /zk/，2018 在根目录
+    editions:
+      - {year: 2025, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2025/zk/"}
+      - {year: 2024, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2024/zk/"}
+      - {year: 2023, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2023/zk/"}
+      - {year: 2022, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2022/zk/"}
+      - {year: 2021, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2021/zk/"}
+      - {year: 2020, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2020/zk/"}
+      - {year: 2019, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2019/zk/"}
+      - {year: 2018, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2018/"}
 
   - id: CN-LN
     zh: 辽宁统计年鉴
@@ -121,10 +129,27 @@ series:
     zh: 山东统计年鉴
     region: CN-SD
     publisher: 山东省统计局
-    years: [2015, 2025]
-    base: "http://tjj.shandong.gov.cn/tjnj/nj{year}/zk/"
     toc: [left.htm, lefte.htm]
     home: http://tjj.shandong.gov.cn/col/col6279/
+    # 2017–2025 在 /zk/；2016、2014 在根目录；2007–2011 在 /new/（2026-11-21 逐版实测）
+    editions:
+      - {year: 2025, base: "http://tjj.shandong.gov.cn/tjnj/nj2025/zk/"}
+      - {year: 2024, base: "http://tjj.shandong.gov.cn/tjnj/nj2024/zk/"}
+      - {year: 2023, base: "http://tjj.shandong.gov.cn/tjnj/nj2023/zk/"}
+      - {year: 2022, base: "http://tjj.shandong.gov.cn/tjnj/nj2022/zk/zk/"}
+      - {year: 2021, base: "http://tjj.shandong.gov.cn/tjnj/nj2021/zk/"}
+      - {year: 2020, base: "http://tjj.shandong.gov.cn/tjnj/nj2020/zk/"}
+      - {year: 2019, base: "http://tjj.shandong.gov.cn/tjnj/nj2019/zk/"}
+      - {year: 2018, base: "http://tjj.shandong.gov.cn/tjnj/nj2018/zk/"}
+      - {year: 2017, base: "http://tjj.shandong.gov.cn/tjnj/nj2017/zk/"}
+      - {year: 2016, base: "http://tjj.shandong.gov.cn/tjnj/nj2016/"}
+      - {year: 2015, base: "http://tjj.shandong.gov.cn/tjnj/nj2015/zk/"}
+      - {year: 2014, base: "http://tjj.shandong.gov.cn/tjnj/nj2014/"}
+      - {year: 2011, base: "http://tjj.shandong.gov.cn/tjnj/nj2011/new/"}
+      - {year: 2010, base: "http://tjj.shandong.gov.cn/tjnj/nj2010/new/"}
+      - {year: 2009, base: "http://tjj.shandong.gov.cn/tjnj/nj2009/new/"}
+      - {year: 2008, base: "http://tjj.shandong.gov.cn/tjnj/nj2008/new/"}
+      - {year: 2007, base: "http://tjj.shandong.gov.cn/tjnj/nj2007/new/"}
 
   - id: CN-HA
     zh: 河南统计年鉴

@@ -469,3 +469,14 @@ series:
     # 普查数据栏目下的第七次人口普查资料，目录是标准 zk 模板
     editions:
       - {year: 2020, label: 第七次（2020年）, base: "http://tjj.shandong.gov.cn/pcsj/2020/zk/", landing: "http://tjj.shandong.gov.cn/pcsj/2020/zk/indexch.htm"}
+
+  - id: CN-HI-ec
+    zh: 海南经济普查年鉴
+    type: census
+    region: CN-HI
+    publisher: 海南省统计局
+    toc: [left.htm, lefte.htm]
+    home: https://stats.hainan.gov.cn/tjj/
+    # 2023 版是标准 zk 目录；更早的 2008/2013 只提供整本 zip，按入口登记在站点栏目里
+    editions:
+      - {year: 2023, label: 第五次（2023年）, base: "https://stats.hainan.gov.cn/tjj/2023hnnj/", landing: "https://stats.hainan.gov.cn/tjj/2023hnnj/indexce.htm"}

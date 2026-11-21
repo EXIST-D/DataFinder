@@ -63,7 +63,15 @@ publishers:
       - {id: sx-indicator, title: 指标解释, url: "https://tjj.shanxi.gov.cn/tjsj/tjcd/", kind: reference}
       - {id: sx-system, title: 统计制度, url: "https://tjj.shanxi.gov.cn/tjsj/tjzd/", kind: reference}
       - {id: sx-standard, title: 统计标准, url: "https://tjj.shanxi.gov.cn/tjsj/tjbz/", kind: reference}
-  - {id: CN-NM, name: 内蒙古自治区统计局, region: CN-NM, home: "https://tj.nmg.gov.cn/", discover_nav: true}
+  - id: CN-NM
+    name: 内蒙古自治区统计局
+    region: CN-NM
+    home: "https://tj.nmg.gov.cn/"
+    discover_nav: true
+    columns:
+      - {id: nm-bulletin, title: 统计公报, url: "https://tj.nmg.gov.cn/tjyw/tjgb/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: nm-release, title: 数据发布与解读, url: "https://tj.nmg.gov.cn/tjyw/fbyjd_11654/", kind: report}
+      - {id: nm-data, title: 统计数据, url: "https://tj.nmg.gov.cn/tjyw/", kind: report}
   - {id: CN-LN, name: 辽宁省统计局, region: CN-LN, home: "https://tjj.ln.gov.cn/", discover_nav: true}
   - {id: CN-JL, name: 吉林省统计局, region: CN-JL, home: "https://tjj.jl.gov.cn/", discover_nav: true}
   - {id: CN-HL, name: 黑龙江省统计局, region: CN-HL, home: "https://tjj.hlj.gov.cn/", discover_nav: true}
@@ -109,7 +117,17 @@ publishers:
   - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "http://tjj.hunan.gov.cn/", discover_nav: true}  # https 握手报 BAD_ECPOINT，走 http
   - {id: CN-GD, name: 广东省统计局, region: CN-GD, home: "http://stats.gd.gov.cn/", discover_nav: true}
   - {id: CN-GX, name: 广西壮族自治区统计局, region: CN-GX, home: "http://tjj.gxzf.gov.cn/", discover_nav: true}
-  - {id: CN-HI, name: 海南省统计局, region: CN-HI, home: "https://stats.hainan.gov.cn/", discover_nav: true}
+  - id: CN-HI
+    name: 海南省统计局
+    region: CN-HI
+    home: "https://stats.hainan.gov.cn/"
+    discover_nav: true
+    columns:
+      - {id: hi-bulletin, title: 统计公报, url: "https://stats.hainan.gov.cn/tjgb/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: hi-census-bulletin, title: 普查公报, url: "https://stats.hainan.gov.cn/tjgb/pcgb/", kind: bulletin}
+      - {id: hi-dev-bulletin, title: 发展公报, url: "https://stats.hainan.gov.cn/tjgb/fzgb/", kind: bulletin}
+      - {id: hi-census, title: 普查数据, url: "https://stats.hainan.gov.cn/tjsu/pcsj/", kind: census_product}
+      - {id: hi-release, title: 数据发布, url: "https://stats.hainan.gov.cn/tjsu/", kind: report}
   - id: CN-CQ
     name: 重庆市统计局
     region: CN-CQ
@@ -125,7 +143,14 @@ publishers:
   - {id: CN-SN, name: 陕西省统计局, region: CN-SN, home: "https://tjj.shaanxi.gov.cn/", discover_nav: true}
   - {id: CN-GS, name: 甘肃省统计局, region: CN-GS, home: "https://tjj.gansu.gov.cn/", discover_nav: true}
   - {id: CN-QH, name: 青海省统计局, region: CN-QH, home: "https://tjj.qinghai.gov.cn/", discover_nav: true}
-  - {id: CN-NX, name: 宁夏回族自治区统计局, region: CN-NX, home: "https://tj.nx.gov.cn/", discover_nav: true}
+  - id: CN-NX
+    name: 宁夏回族自治区统计局
+    region: CN-NX
+    home: "https://tj.nx.gov.cn/"
+    discover_nav: true
+    columns:
+      - {id: nx-bulletin, title: 统计公报, url: "https://tj.nx.gov.cn/tjsj_htr/tjgb_htr/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: nx-standard, title: 统计标准, url: "https://tj.nx.gov.cn/xxgk_htr/gkml_xxgk/tjbzhzd_gkml/tjbz/", kind: reference}
   - {id: CN-XJ, name: 新疆维吾尔自治区统计局, region: CN-XJ, home: "https://tjj.xinjiang.gov.cn/", discover_nav: true}
 
   # ── 部委及其他国家级发布机构 ──

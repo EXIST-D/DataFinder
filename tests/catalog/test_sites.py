@@ -217,6 +217,51 @@ async def test_unknown_site_and_request_budget(cat, monkeypatch):
     assert r.status == "limited" and r.requests == 1
 
 
+async def test_refresh_cut_short_by_the_request_budget_keeps_the_old_list_and_resumes(
+    cat, monkeypatch
+):
+    table = {
+        "https://s.example.gov.cn/": "<html></html>",
+        "https://s.example.gov.cn/sj/zxfb/": page("zxfb", 3, pages=9),
+        "https://s.example.gov.cn/sj/zxfb/index_1.html": page("zxfb", 3, start=3),
+        "https://s.example.gov.cn/sj/zxfb/index_2.html": page("zxfb", 3, start=6),
+        "https://s.example.gov.cn/sj/gb/": page("gb", 4),
+    }
+    opts = {"site": "nbs"}
+    await adapter(routes(table), monkeypatch).discover(cat, DiscoverOptions(params=opts))
+    reports = lambda: [e for e in cat.iter_all("site.nbs") if e.kind == "report"]  # noqa: E731
+    assert len(reports()) == 9
+    # 刷新时预算只够翻一页：旧的 9 条不能被半截的 3 条替换
+    r = await adapter(routes(table), monkeypatch).discover(
+        cat, DiscoverOptions(params=opts, refresh=True, max_requests=3)
+    )
+    assert r.status == "limited" and len(reports()) == 9
+    done = await adapter(routes(table), monkeypatch).discover(
+        cat, DiscoverOptions(params=opts, refresh=True)
+    )
+    assert done.status == "done" and len(reports()) == 9
+
+
+async def test_a_column_cut_short_on_the_first_crawl_is_not_marked_done(cat, monkeypatch):
+    table = {
+        "https://s.example.gov.cn/": "<html></html>",
+        "https://s.example.gov.cn/sj/zxfb/": page("zxfb", 3, pages=9),
+        "https://s.example.gov.cn/sj/zxfb/index_1.html": page("zxfb", 3, start=3),
+        "https://s.example.gov.cn/sj/zxfb/index_2.html": page("zxfb", 3, start=6),
+        "https://s.example.gov.cn/sj/gb/": page("gb", 4),
+    }
+    opts = {"site": "nbs"}
+    await adapter(routes(table), monkeypatch).discover(
+        cat, DiscoverOptions(params=opts, max_requests=2)
+    )
+    col = cat.get("site.nbs:portal:col/release")
+    assert col is None or col.access_status != "supported"  # 没翻完，续跑时要重来
+    # 续跑（不带 refresh）：没完成的栏目会被重新抓完
+    await adapter(routes(table), monkeypatch).discover(cat, DiscoverOptions(params=opts))
+    assert cat.get("site.nbs:portal:col/release").access_status == "supported"
+    assert len([e for e in cat.iter_all("site.nbs") if e.kind == "report"]) == 9
+
+
 async def test_publisher_interval_is_passed_to_the_http_client(cat, monkeypatch):
     from datafinder.catalog import sites
 

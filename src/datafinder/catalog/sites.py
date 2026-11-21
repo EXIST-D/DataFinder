@@ -451,14 +451,15 @@ class SiteAdapter(Adapter):
             cat.upsert([self.column_entry(pub, col, access_status="supported", verified=True)])
             opts.say(f"{pub.name}·{col.title}：栏目入口（未解析出列表）")
             return
-        cat.delete_children(rid)
         limit = min(col.pages or self.spec.pages, total_pages(html))
+        truncated = False
         seen = {link.href for link in items}
         seen_raw = {link.href for link in raw}
         all_items = list(items)
         for n in range(2, limit + 1):
             if budget[0] is not None and budget[0] <= 0:
                 result.status = "limited"
+                truncated = True
                 break
             nxt = await self._get(http, page_url(base, n, html), result, budget)
             if nxt is None:
@@ -480,6 +481,14 @@ class SiteAdapter(Adapter):
             seen |= {x.href for x in fresh}
             all_items += fresh
         entries = [self.item_entry(pub, col, x) for x in all_items]
+        if truncated:
+            # 本批请求数用完、这一栏没翻完：只补充新条目，不删旧的、不标记"已完成"，续跑时整栏重来。
+            # （否则 --refresh 配合 --max-requests 会用半截列表替换完整列表，并且续跑时跳过这一栏）
+            cat.upsert([e for e in entries if not cat.exists(e.resource_id)])
+            result.seen += len(entries)
+            opts.say(f"{pub.name}·{col.title}：本批只翻到一部分（{len(entries)} 条），未标记完成")
+            return
+        cat.delete_children(rid)
         cat.upsert(
             [self.column_entry(pub, col, access_status="supported", verified=True), *entries]
         )

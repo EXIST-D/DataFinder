@@ -10,8 +10,9 @@ from datafinder.resources import load_package_yaml
 from datafinder.server.routers import register_router
 from datafinder.sources.registry import register_protocol
 
-from . import DOMAIN_ID
+from . import DOMAIN_ID, admin
 from .hmt.hk import HkAdapter
+from .hmt.tw import TwAdapter
 from .nbs.adapter import NbsAdapter
 from .nbs.search import NbsSource
 from .sites.adapter import build as build_site_adapter
@@ -32,6 +33,8 @@ register_adapter(NbsAdapter())
 register_adapter(YearbookAdapter())
 register_adapter(build_site_adapter())
 register_adapter(HkAdapter())
+register_adapter(TwAdapter())
+admin.register()  # 地级、县级行政区划进入地域分面
 
 
 def _web_router():

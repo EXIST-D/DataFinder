@@ -126,3 +126,21 @@ publishers:
   - {id: csrc, name: 中国证券监督管理委员会, region: CN, home: "https://www.csrc.gov.cn/", type: ministry, discover_nav: true}
   - {id: nfra, name: 国家金融监督管理总局, region: CN, home: "https://www.nfra.gov.cn/", type: ministry, discover_nav: true}
   - {id: nda, name: 国家数据局, region: CN, home: "https://www.nda.gov.cn/", type: ministry, discover_nav: true}
+
+  # ── 澳门（没有公开数据接口：只做数据库与刊物的栏目入口；2026-11-21 首页导航核实）──
+  - id: CN-MO
+    name: 澳门统计暨普查局
+    region: CN-MO
+    home: "https://www.dsec.gov.mo/zh-MO"
+    type: statistics_bureau
+    columns:
+      - {id: database,   title: 统计数据库,    url: "https://www.dsec.gov.mo/zh-MO/Statistic/Database", kind: report}
+      - {id: timeseries, title: 时间序列资料库, url: "https://www.dsec.gov.mo/ts/", kind: report}
+      - {id: trade-db,   title: 外贸数据库,    url: "https://www.dsec.gov.mo/EMTS.aspx?lang=zh-MO", kind: report, topics: [cnstat.trade]}
+      - {id: tourism-db, title: 旅客统计资料库, url: "https://www.dsec.gov.mo/TourismDBWeb/", kind: report, topics: [cnstat.culture]}
+      - {id: census-db,  title: 人口数据资料库, url: "https://www.dsec.gov.mo/CensosWebDB/", kind: report, topics: [cnstat.population]}
+      - {id: yearbook,   title: 澳门统计年鉴,  url: "https://www.dsec.gov.mo/zh-MO/Home/Publication/YearbookOfStatistics", kind: report}
+      - {id: publication, title: 统计刊物,     url: "https://www.dsec.gov.mo/zh-MO/Statistic/Publication", kind: report}
+      - {id: release,    title: 资料公布时间表, url: "https://www.dsec.gov.mo/zh-MO/Statistic/Release", kind: reference}
+      - {id: classify,   title: 统计分类表,    url: "https://www.dsec.gov.mo/zh-MO/Statistic/Classify", kind: reference}
+      - {id: concept,    title: 统计概念资料库, url: "https://www.dsec.gov.mo/zh-MO/Statistic/Concept", kind: reference}

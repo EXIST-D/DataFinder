@@ -13,3 +13,16 @@ _PUNCT = re.compile(r"[\s\u3000，,、:：]+")
 def norm_title(title: str) -> str:
     """同一张表在不同版次里标题会带不同年份/括号说明：去掉它们，得到可归并的键。"""
     return _PUNCT.sub("", _YEARS.sub("", _PAREN.sub("", title)))
+
+
+_T2S = None
+
+
+def to_simplified(text: str) -> str:
+    """繁体 → 简体（港澳台来源的标题、维度名统一成简体，才能被简体检索词命中）。"""
+    global _T2S
+    if _T2S is None:
+        from opencc import OpenCC
+
+        _T2S = OpenCC("t2s")
+    return _T2S.convert(text)

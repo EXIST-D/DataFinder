@@ -1,0 +1,20 @@
+{
+  "file": "tw_gdp.csv",
+  "size_bytes": 11211,
+  "sha256": "9368eac64f1937a87c11b5153284adeaa20a31a1a09ad079e06376f9a33985c4",
+  "created_at": "2026-11-21T12:30:26",
+  "resource_id": "tw.dgbas:dataset:A018102050",
+  "source_id": "tw.dgbas",
+  "title": "国内生产毛额及平减指数依支出分-年(70年以后)",
+  "source_url": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=210&funid=A018102050",
+  "license": "以台湾行政院主计总处网站声明为准（许可未逐条核实）",
+  "request": {
+    "regions": [],
+    "indicators": [],
+    "start": null,
+    "end": null,
+    "periods": 2
+  },
+  "row_count": 63,
+  "kind": "generated"
+}

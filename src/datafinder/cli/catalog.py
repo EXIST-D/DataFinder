@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import shutil
 import sys
 from typing import Any
@@ -368,14 +369,11 @@ def mcp_cmd(
 ) -> None:
     """启动 MCP 服务（stdio），供 Cursor / Claude 等 AI 助手调用。"""
     if print_config:
-        exe = shutil.which("datafinder") or sys.argv[0]
-        typer.echo(
-            json.dumps(
-                {"mcpServers": {"datafinder": {"command": exe, "args": ["mcp"]}}},
-                ensure_ascii=False,
-                indent=2,
-            )
-        )
+        exe = shutil.which("datafinder") or os.path.abspath(sys.argv[0])  # 一定是绝对路径
+        server: dict[str, Any] = {"command": exe, "args": ["mcp"]}
+        if home := os.environ.get("DATAFINDER_HOME"):  # 数据目录不在默认位置时一并带上
+            server["env"] = {"DATAFINDER_HOME": os.path.abspath(home)}
+        typer.echo(json.dumps({"mcpServers": {"datafinder": server}}, ensure_ascii=False, indent=2))
         return
     from ..mcp_server import run
 

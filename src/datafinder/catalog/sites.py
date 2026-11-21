@@ -421,14 +421,18 @@ class SiteAdapter(Adapter):
             if (nxt := await self._get(http, jump, result, budget)) is not None:
                 html, base = nxt, jump
         links = extract_links(html, base)
+        raw = item_links(
+            links, base, href=col.href
+        )  # 标题过滤之前：用来判断"这是不是列表页"和翻页是否到头
         items = item_links(links, base, href=col.href, text=col.text)
-        if len(items) < MIN_ITEMS:
+        if len(raw) < MIN_ITEMS:
             cat.upsert([self.column_entry(pub, col, access_status="supported", verified=True)])
             opts.say(f"{pub.name}·{col.title}：栏目入口（未解析出列表）")
             return
         cat.delete_children(rid)
         limit = min(col.pages or self.spec.pages, total_pages(html))
         seen = {link.href for link in items}
+        seen_raw = {link.href for link in raw}
         all_items = list(items)
         for n in range(2, limit + 1):
             if budget[0] is not None and budget[0] <= 0:
@@ -437,13 +441,20 @@ class SiteAdapter(Adapter):
             nxt = await self._get(http, page_url(base, n, html), result, budget)
             if nxt is None:
                 break
+            page_links = extract_links(nxt, base)
+            page_raw = [
+                x for x in item_links(page_links, base, href=col.href) if x.href not in seen_raw
+            ]
+            if (
+                not page_raw
+            ):  # 这一页没有新条目：翻到头了（标题过滤后为空不算到头，后面几页可能还有）
+                break
+            seen_raw |= {x.href for x in page_raw}
             fresh = [
                 x
-                for x in item_links(extract_links(nxt, base), base, href=col.href, text=col.text)
+                for x in item_links(page_links, base, href=col.href, text=col.text)
                 if x.href not in seen
             ]
-            if not fresh:
-                break
             seen |= {x.href for x in fresh}
             all_items += fresh
         entries = [self.item_entry(pub, col, x) for x in all_items]

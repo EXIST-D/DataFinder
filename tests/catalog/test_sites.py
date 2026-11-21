@@ -242,3 +242,44 @@ async def test_home_status_recovers_after_an_earlier_block(cat, monkeypatch):
     await adapter(routes(table), monkeypatch).discover(cat, only_nbs)
     home = cat.get("site.nbs:portal:home")
     assert home.access_status == "supported" and home.distributions[0].access_method == "page"
+
+
+async def test_title_filtered_columns_keep_paging_past_pages_without_matches(cat, monkeypatch):
+    def pg(prefix, titles, start):
+        return "".join(
+            f'<li><a href="/{prefix}/202601/t2026010{start + i}_{start + i}.html">{t}</a><span>2026-01-0{i + 1}</span></li>'
+            for i, t in enumerate(titles)
+        )
+
+    plain = ["普通图书甲号", "普通图书乙号", "普通图书丙号"]
+    yb = ["中国统计年鉴-2021", "中国农村统计年鉴-2021", "中国能源统计年鉴2018"]
+    h = routes(
+        {
+            "https://s.example.gov.cn/sj/zxfb/": pg("b", yb[:1] + plain[:2], 1)
+            + '<script>createPageHTML(4, 0, "index", "html");</script>',
+            "https://s.example.gov.cn/sj/zxfb/index_1.html": pg("b", plain, 4),  # 整页都不匹配
+            "https://s.example.gov.cn/sj/zxfb/index_2.html": pg("b", yb[1:] + plain[:1], 7),
+            "https://s.example.gov.cn/sj/zxfb/index_3.html": 404,
+        }
+    )
+    spec = {
+        **SPEC,
+        "publishers": [
+            {
+                **SPEC["publishers"][0],
+                "columns": [
+                    {
+                        "id": "books",
+                        "title": "书目",
+                        "url": "https://s.example.gov.cn/sj/zxfb/",
+                        "kind": "reference",
+                        "pages": 4,
+                        "text": "年鉴",
+                    }
+                ],
+            }
+        ],
+    }
+    await adapter(h, monkeypatch, spec).discover(cat, DiscoverOptions(params={"site": "nbs"}))
+    titles = sorted(e.title for e in cat.iter_all("site.nbs") if e.kind == "reference")
+    assert titles == ["中国农村统计年鉴-2021", "中国统计年鉴-2021", "中国能源统计年鉴2018"]

@@ -163,11 +163,17 @@ def item_links(
             ok = bool(href_re.search(link.href))
         else:
             ok = bool(_ITEM_HREF.search(link.href)) or link.date is not None
-        if not ok or (text_re and not text_re.search(link.text)):
+        if not ok:
             continue
         seen.add(link.href)
         out.append(link)
-    if href_re:
+    chosen = _list_region(out, bool(href_re))
+    # 标题过滤放在"识别列表"之后：先确定哪些是列表条目，再按标题挑；否则只剩一两条时会被误判成"不是列表"
+    return [x for x in chosen if not text_re or text_re.search(x.text)]
+
+
+def _list_region(out: list[Link], explicit: bool) -> list[Link]:
+    if explicit:
         return out
     # 没有自定义正则时：列表页的条目都带发布日期，页脚/侧栏的链接没有——能区分时只留带日期的
     dated = [x for x in out if x.date]

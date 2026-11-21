@@ -96,6 +96,7 @@ publishers:
       - {id: ha-release, title: 最新发布, url: "https://tjj.henan.gov.cn/tjfw/zxfb/", kind: report}
       - {id: ha-data, title: 统计数据, url: "https://tjj.henan.gov.cn/tjfw/tjsj/", kind: report}
       - {id: ha-bulletin, title: 统计公报, url: "https://tjj.henan.gov.cn/tjfw/tjgb/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: ha-census-yearbook, title: 普查年鉴, url: "https://tjj.henan.gov.cn/tjfw/tjsj/pcnj/", kind: census_product, pages: 4}
   - {id: CN-HB, name: 湖北省统计局, region: CN-HB, home: "https://tjj.hubei.gov.cn/", discover_nav: true}
   - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "http://tjj.hunan.gov.cn/", discover_nav: true}  # https 握手报 BAD_ECPOINT，走 http
   - {id: CN-GD, name: 广东省统计局, region: CN-GD, home: "http://stats.gd.gov.cn/", discover_nav: true}

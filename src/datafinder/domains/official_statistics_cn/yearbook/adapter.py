@@ -42,6 +42,7 @@ from .entries import (
 )
 from .parse import (
     TocEntry,
+    parse_book_toc,
     parse_fj_toc,
     parse_fp_chapters,
     parse_fp_toc,
@@ -63,6 +64,7 @@ PARSERS = {
     "fp": parse_fp_toc,
     "fj": parse_fj_toc,
     "heb": parse_heb_toc,
+    "book": parse_book_toc,
 }
 ARCHIVES = {"zip", "rar", "xls", "xlsx", "pdf", "doc", "docx"}  # 版次页上可下载的附件类型
 _YEAR = re.compile(r"(?:19|20)\d{2}")

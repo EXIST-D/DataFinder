@@ -406,3 +406,40 @@ def parse_heb_toc(html: str, base_url: str) -> list[TocEntry]:
             for _, name, text, url in docs
         ]
     return parse_toc(html, base_url)
+
+
+_BOOK_ANCHOR = re.compile(
+    r"""<a\s[^>]*?href=["'](?P<href>[^"']+)["'][^>]*>(?P<inner>.*?)</a>""", re.S | re.I
+)
+_BOOK_TABLE = re.compile(r"/(?P<ch>\d+)-(?P<no>\d+)\.html?$", re.I)
+_BOOK_CHAPTER = ("#", "javascript:;", "javascript:void(0)", "javascript:void(0);")
+
+
+def parse_book_toc(html: str, base_url: str) -> list[TocEntry]:
+    """旧版光盘目录（山西 2012–2014 这类）：没有折叠标记，
+
+    - 章节是 `<a href="#">综 合</a>`（占位链接，不跳转）；
+    - 表是 `<a href="../book/1-1.htm">行政区划(2013年)</a>`，表号就在文件名里。
+
+    已经是标准 zk 目录页时（2015 起）直接交给 `parse_toc`。
+    """
+    zk = parse_toc(html, base_url)
+    if any(e.kind == "table" for e in zk):
+        return zk
+    entries: list[TocEntry] = []
+    chapter: str | None = None
+    for m in _BOOK_ANCHOR.finditer(html):
+        href = m.group("href").strip()
+        text = clean_text(m.group("inner"))
+        if not text:
+            continue
+        if href.lower() in _BOOK_CHAPTER:
+            chapter = text
+            continue
+        hit = _BOOK_TABLE.search(href)
+        if hit and chapter:
+            no = f"{int(hit.group('ch'))}-{int(hit.group('no'))}"
+            entries.append(
+                TocEntry(chapter, no, text, urljoin(base_url, href), fmt_of(href), "table")
+            )
+    return entries or zk

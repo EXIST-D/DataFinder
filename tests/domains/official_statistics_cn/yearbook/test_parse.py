@@ -226,3 +226,24 @@ def test_parse_heb_toc_derives_numbers_from_filenames_and_keeps_image_tables():
     # 2020 起是标准 zk 目录页：交给 parse_toc，表号来自标题
     zk = [e for e in parse_heb_toc(HTML, BASE) if e.kind == "table"]
     assert [e.no for e in zk] == ["1-1", "1-2", "1-3", "14-1", "14-2", "15.1"]
+
+
+BOOK_TOC = """
+<a href="#">综 合</a>
+<a href="../book/1-1.htm">行政区划(2013年)</a>
+<a href="../book/1-2.htm">国民经济和社会发展总量与速度指标</a>
+<a href="#">人口</a>
+<a href="../book/2-1.Htm">人口主要指标</a>
+"""
+
+
+def test_parse_book_toc_reads_old_cdrom_shape_and_falls_back_to_zk():
+    """山西 2012–2014：章节用 href="#" 占位，表号在 book/N-M.htm 的文件名里。"""
+    from datafinder.domains.official_statistics_cn.yearbook.parse import parse_book_toc
+
+    entries = parse_book_toc(BOOK_TOC, "http://x.gov.cn/tjsj/tjnj/nj2014/html/left.htm")
+    assert [(e.chapter, e.no) for e in entries] == [
+        ("综 合", "1-1"),
+        ("综 合", "1-2"),
+        ("人口", "2-1"),
+    ]

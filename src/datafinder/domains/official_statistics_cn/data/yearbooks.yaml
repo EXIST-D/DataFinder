@@ -94,9 +94,10 @@ series:
     zh: 山西统计年鉴
     region: CN-SX
     publisher: 山西省统计局
+    format: book                  # 2012–2014 是旧光盘版（章节锚点 + book/N-M.htm），2015 起是 zk
     toc: [left.htm, lefte.htm]
     home: http://tjj.shanxi.gov.cn/tjsj/tjnj/
-    # 2019–2025 在 /zk/，2018 在根目录
+    # 2019–2025 在 /zk/；2015–2018 在根目录；2012–2014 在 /html/
     editions:
       - {year: 2025, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2025/zk/"}
       - {year: 2024, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2024/zk/"}
@@ -106,6 +107,12 @@ series:
       - {year: 2020, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2020/zk/"}
       - {year: 2019, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2019/zk/"}
       - {year: 2018, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2018/"}
+      - {year: 2017, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2017/"}
+      - {year: 2016, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2016/"}
+      - {year: 2015, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2015/"}
+      - {year: 2014, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2014/html/"}
+      - {year: 2013, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2013/html/"}
+      - {year: 2012, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2012/html/"}
 
   - id: CN-LN
     zh: 辽宁统计年鉴
@@ -145,6 +152,8 @@ series:
       - {year: 2016, base: "http://tjj.shandong.gov.cn/tjnj/nj2016/"}
       - {year: 2015, base: "http://tjj.shandong.gov.cn/tjnj/nj2015/zk/"}
       - {year: 2014, base: "http://tjj.shandong.gov.cn/tjnj/nj2014/"}
+      - {year: 2013, base: "http://tjj.shandong.gov.cn/tjnj/nj2013/"}
+      - {year: 2012, base: "http://tjj.shandong.gov.cn/tjnj/nj2012/"}
       - {year: 2011, base: "http://tjj.shandong.gov.cn/tjnj/nj2011/new/"}
       - {year: 2010, base: "http://tjj.shandong.gov.cn/tjnj/nj2010/new/"}
       - {year: 2009, base: "http://tjj.shandong.gov.cn/tjnj/nj2009/new/"}
@@ -438,3 +447,14 @@ series:
     # 人口年鉴栏目下目前只有第七次人口普查（2020）一版，目录是标准 zk 模板
     editions:
       - {year: 2020, label: 第七次（2020年）, base: "https://tjj.hebei.gov.cn/extra/col20/rkpc2020/", landing: "https://tjj.hebei.gov.cn/extra/col20/rkpc2020/indexch.htm"}
+
+  - id: CN-SD-pop
+    zh: 山东人口普查资料
+    type: census
+    region: CN-SD
+    publisher: 山东省统计局
+    toc: [left.htm, lefte.htm]
+    home: http://tjj.shandong.gov.cn/col/col322452/index.html
+    # 普查数据栏目下的第七次人口普查资料，目录是标准 zk 模板
+    editions:
+      - {year: 2020, label: 第七次（2020年）, base: "http://tjj.shandong.gov.cn/pcsj/2020/zk/", landing: "http://tjj.shandong.gov.cn/pcsj/2020/zk/indexch.htm"}

@@ -1,0 +1,29 @@
+# 门户—来源的人工认定（只写自动算不出的例外）。
+# 自动规则：门户网址规范化后，与来源的 base_url 或首页条目网址完全一致 → same_site。
+# portal_key = 门户库里门户网址规范化后的形式（去协议、去 www、去末尾斜杠，见 datafinder.util.normalize_url）。
+# relation：hosted_on 来源托管在该门户的网站上 · section 该门户是来源所属网站的一个栏目/专区 · related 只作提示（不计入接入等级）
+version: 1
+links:
+  # 省级统计年鉴挂在各省统计局网站上
+  - {portal_key: tjj.beijing.gov.cn, source_id: yearbook.CN-BJ, relation: hosted_on}
+  - {portal_key: tjj.hlj.gov.cn, source_id: yearbook.CN-HL, relation: hosted_on}
+  - {portal_key: tjj.ln.gov.cn, source_id: yearbook.CN-LN, relation: hosted_on}
+  - {portal_key: tjj.shandong.gov.cn, source_id: yearbook.CN-SD, relation: hosted_on}
+  - {portal_key: tjj.sh.gov.cn, source_id: yearbook.CN-SH, relation: hosted_on}
+  - {portal_key: stats.gd.gov.cn, source_id: yearbook.CN-GD, relation: hosted_on}
+  - {portal_key: tj.jiangsu.gov.cn, source_id: yearbook.CN-JS, relation: hosted_on}
+  - {portal_key: tjj.hubei.gov.cn, source_id: yearbook.CN-HB, relation: hosted_on}
+  # 普查资料在国家统计局官网的"统计数据"栏目下
+  - {portal_key: stats.gov.cn, source_id: census.pop, relation: hosted_on}
+  - {portal_key: stats.gov.cn, source_id: census.econ, relation: hosted_on}
+  # 部委网站的统计栏目是该部委网站的一部分
+  - {portal_key: moe.gov.cn/jyb_sjzl, source_id: site.moe, relation: section}
+  - {portal_key: nhc.gov.cn/mohwsbwstjxxzx, source_id: site.nhc, relation: section}
+  - {portal_key: pbc.gov.cn/diaochatongjisi/116219/116319/index.html, source_id: site.pbc, relation: section}
+  - {portal_key: safe.gov.cn/safe/tjsj1/index.html, source_id: site.safe, relation: section}
+  # 澳门统计暨普查局的各个数据库是同一机构站点上的专题库（提示用，不算已接入）
+  - {portal_key: dsec.gov.mo/CensosWebDB, source_id: site.CN-MO, relation: related}
+  - {portal_key: dsec.gov.mo/ts, source_id: site.CN-MO, relation: related}
+  - {portal_key: dsec.gov.mo/EMTS.aspx, source_id: site.CN-MO, relation: related}
+  - {portal_key: dsec.gov.mo/TourismDBWeb, source_id: site.CN-MO, relation: related}
+  - {portal_key: dsec.gov.mo/gis/unidade, source_id: site.CN-MO, relation: related}

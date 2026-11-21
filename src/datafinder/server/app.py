@@ -7,6 +7,8 @@
 资源目录（统一检索：主题 × 地域 × 资源类型）：
 - GET /api/catalog/search|facets|inspect   目录检索、合法分面词表、资源详情（不联网；网页只展示获取方式，不执行下载）
 - GET /api/catalog/tree       目录树：当前检索的命中集合按 主题/地域/来源 逐级展开（无状态，计数口径同 search 的 total）
+数据来源（门户与已索引来源的关联、接入等级）：
+- GET /api/data-sources|detail|resources   列表（scope=indexed|all）、详情、关联来源下的资源检索
 门户目录：
 - GET /api/browse/facets      各维度取值与条数（在其他筛选条件下）
 - GET /api/browse/portals     分页门户列表
@@ -350,6 +352,63 @@ def create_app() -> FastAPI:
                 period_end=y2,
                 limit=limit,
                 offset=offset,
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    # ───────────── 数据来源：门户与已索引来源 ─────────────
+
+    @app.get("/api/data-sources")
+    def data_sources(
+        scope: str = Query("indexed", max_length=10),
+        level: str | None = Query(None, max_length=30),
+        q: str = Query("", max_length=MAX_QUERY),
+        domain: str | None = Query(None, max_length=60),
+        region: str | None = Query(None, max_length=60),
+        country: str | None = Query(None, max_length=10),
+        official: bool = False,
+        page: int = Query(1, ge=1, le=2000),
+        size: int = Query(20, ge=1, le=50),
+    ) -> dict[str, Any]:
+        try:
+            return service.portal_directory.directory(
+                scope=scope,
+                level=level,
+                q=q,
+                domain=domain,
+                region=region,
+                country=country,
+                official=official,
+                page=page,
+                size=size,
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/data-sources/detail")
+    def data_source_detail(id: str = Query(..., max_length=400)) -> dict[str, Any]:  # noqa: A002
+        try:
+            return service.portal_directory.detail(id)
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/data-sources/resources")
+    async def data_source_resources(
+        id: str = Query(..., max_length=400),  # noqa: A002
+        q: str = Query("", max_length=MAX_QUERY),
+        limit: int = Query(20, ge=1, le=50),
+        offset: int = Query(0, ge=0, le=5000),
+    ) -> dict[str, Any]:
+        try:
+            linked = service.portal_directory.detail(id)["integration"]["linked_source_ids"]
+            if not linked:
+                raise service.ServiceError(
+                    "这个门户还没有关联的资源索引",
+                    code="NOT_FOUND",
+                    next_action="用 /api/data-sources?scope=indexed 看已接入的",
+                )
+            return await service.search(
+                q, source_ids=linked, limit=limit, offset=offset, facets=False
             )
         except Exception as exc:  # noqa: BLE001
             raise _service_http_error(exc) from exc

@@ -9,6 +9,7 @@ from datafinder.catalog.search import summarize
 
 from .common import open_catalog
 from .errors import ServiceError, guard
+from .portal_directory import portal_for_source
 
 _REQ = SearchRequest()
 
@@ -30,6 +31,16 @@ def _needs(e: Entry) -> list[str]:
     ):
         needs.append("regions")
     return needs
+
+
+def _source_info(cat, source_id: str) -> dict[str, Any]:
+    """资源所属的来源及其门户条目（网页上可由此回到"数据来源"页）。"""
+    row = cat.conn.execute("SELECT name FROM sources WHERE source_id = ?", (source_id,)).fetchone()
+    return {
+        "source_id": source_id,
+        "name": row["name"] if row else source_id,
+        "portal": portal_for_source(cat, source_id),
+    }
 
 
 def inspect(
@@ -67,6 +78,7 @@ def inspect(
             "verification_level": e.verification_level,
             "extra": {k: v for k, v in e.extra.items() if k not in ("indicators_done",)},
             "container": e.kind in kinds.container_kinds(),
+            "source": _source_info(cat, e.source_id),
         }
         if e.delivery == "generate":
             out["how_to_get"] = {

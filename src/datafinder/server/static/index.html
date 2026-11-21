@@ -21,6 +21,7 @@
         <a href="/" data-view="search">搜索</a>
         <a href="/?v=catalog" data-view="catalog">资源目录</a>
         <a href="/?v=tree" data-view="tree">目录树</a>
+        <a href="/?v=sources" data-view="sources">数据来源</a>
         <a href="/?v=browse" data-view="browse">门户目录</a>
         <a href="/?v=china" data-view="china">中国统计</a>
         <a href="/?v=links" data-view="links">检索入口</a>
@@ -127,6 +128,24 @@
           <div id="tList"></div>
         </div>
         <p class="note" id="tNote"></p>
+      </section>
+    </div>
+
+    <!-- ═══════════ 数据来源（已建立资源索引的来源/门户）═══════════ -->
+    <div class="view page" data-view="sources" hidden>
+      <header class="page-head">
+        <h1 class="page-title">数据来源</h1>
+        <p class="page-sub">DataFinder 已经收进目录的来源：每个来源接入到什么程度、有多少已索引资源。想看全部网站入口，请到 <a href="/?v=browse" data-view="browse">门户目录</a>。</p>
+      </header>
+      <form class="search compact" id="sForm" role="search" autocomplete="off">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="sQ" type="search" placeholder="按名称或网址筛选，如：统计局" maxlength="200" aria-label="名称或网址">
+      </form>
+      <div class="tree-axes" id="sLevels" role="group" aria-label="接入等级"></div>
+      <section class="browse-main" aria-label="来源列表">
+        <div class="bar"><div class="bar-left"><strong id="sTotal"></strong></div></div>
+        <div id="sList"></div>
+        <nav class="pager" id="sPager" aria-label="分页"></nav>
       </section>
     </div>
 

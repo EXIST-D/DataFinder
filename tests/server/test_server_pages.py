@@ -275,3 +275,42 @@ def test_catalog_tree_errors_map_to_http_statuses(client, catalog_ready):
     bad = client.get("/api/catalog/tree", params={"axis": "topic", "topic": "cnstat.nope"})
     assert bad.status_code == 400 and "INVALID_FACET_ID" in bad.json()["detail"]
     assert client.get("/api/catalog/tree", params={"limit": 999}).status_code == 422
+
+
+def test_data_sources_endpoints(client, catalog_ready):
+    from datafinder.catalog import Catalog
+    from datafinder.portals.sync import write_db
+    from datafinder.store import connect
+
+    from ..conftest import P
+
+    cat = Catalog.open()
+    cat.upsert_source(
+        "nbs",
+        domain_id="official_statistics_cn",
+        adapter_id="nbs",
+        name="国家统计局",
+        base_url="https://data.example.org/",
+    )
+    cat.close()
+    conn = connect()
+    write_db(
+        conn,
+        [P("datax", "Data X", name_zh="国家数据", url="https://data.example.org", country="CN")],
+        meta={},
+    )
+    conn.close()
+    r = client.get("/api/data-sources").json()
+    assert (
+        r["items"][0]["name"] == "国家数据"
+        and r["items"][0]["integration"]["level"] == "indexed_and_fetchable"
+    )
+    d = client.get("/api/data-sources/detail", params={"id": "datax"}).json()
+    assert d["sources"][0]["source_id"] == "nbs"
+    res = client.get(
+        "/api/data-sources/resources", params={"id": "datax", "q": "工业增加值"}
+    ).json()
+    assert res["total"] >= 1 and all(x["source_id"] == "nbs" for x in res["results"])
+    assert client.get("/api/data-sources/detail", params={"id": "nope"}).status_code == 404
+    assert client.get("/api/data-sources", params={"scope": "x"}).status_code == 400
+    assert client.get("/api/data-sources", params={"size": 999}).status_code == 422

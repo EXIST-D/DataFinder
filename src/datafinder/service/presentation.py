@@ -250,6 +250,13 @@ def _plan(data: dict, full: bool) -> tuple[dict, str]:
 
 
 # ── inspect ──
+def _source_line(data: dict, r: dict) -> str:
+    src = data.get("source") or {}
+    portal = src.get("portal") or {}
+    name = src.get("name") or r.get("source_id")
+    return f"来源 {name}" + (f"（门户 {portal['home_url']}）" if portal.get("home_url") else "")
+
+
 def _inspect(data: dict, full: bool) -> tuple[dict, str]:
     r = data["resource"]
     how = data.get("how_to_get") or {}

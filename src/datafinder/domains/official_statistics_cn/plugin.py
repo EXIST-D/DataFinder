@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datafinder.catalog.adapters import register_adapter
 from datafinder.catalog.scout import register_probe
+from datafinder.catalog.portal_links import register_portal_links
 from datafinder.catalog.taxonomy import register_taxonomy
 from datafinder.catalog.tree import register_domain
 from datafinder.finder import MIN_INTERVAL
@@ -25,6 +26,7 @@ from .yearbook.adapter import YearbookAdapter
 PACKAGE = f"datafinder.domains.{DOMAIN_ID}"
 
 register_domain(DOMAIN_ID, "中国官方统计")
+register_portal_links(DOMAIN_ID, load_package_yaml(PACKAGE, "portal_source_links.yaml")["links"])
 register_protocol("nbs", NbsSource)
 register_thesaurus(DOMAIN_ID, load_package_yaml(PACKAGE, "thesaurus.zh.yaml"))
 register_taxonomy(
@@ -37,7 +39,6 @@ MIN_INTERVAL["data.stats.gov.cn"] = 0.8
 register_adapter(NbsAdapter())
 register_adapter(YearbookAdapter())
 register_adapter(HebeiQueryAdapter())
-register_probe(probe_report)
 register_probe(probe_report)
 register_adapter(build_site_adapter())
 register_adapter(HkAdapter())

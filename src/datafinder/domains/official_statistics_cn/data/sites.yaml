@@ -97,12 +97,27 @@ publishers:
       - {id: ha-data, title: 统计数据, url: "https://tjj.henan.gov.cn/tjfw/tjsj/", kind: report}
       - {id: ha-bulletin, title: 统计公报, url: "https://tjj.henan.gov.cn/tjfw/tjgb/", kind: bulletin, topics: [cnstat.macro]}
       - {id: ha-census-yearbook, title: 普查年鉴, url: "https://tjj.henan.gov.cn/tjfw/tjsj/pcnj/", kind: census_product, pages: 4}
-  - {id: CN-HB, name: 湖北省统计局, region: CN-HB, home: "https://tjj.hubei.gov.cn/", discover_nav: true}
+  - id: CN-HB
+    name: 湖北省统计局
+    region: CN-HB
+    home: "https://tjj.hubei.gov.cn/"
+    discover_nav: true
+    columns:
+      - {id: hb-bulletin, title: 统计公报, url: "https://tjj.hubei.gov.cn/tjsj/tjgb/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: hb-census-bulletin, title: 普查公报, url: "https://tjj.hubei.gov.cn/tjsj/tjgb/pcgb/", kind: bulletin}
+      - {id: hb-analysis, title: 数据发布与解读, url: "https://tjj.hubei.gov.cn/tjsj/tjfx/qstjfx/", kind: report}
   - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "http://tjj.hunan.gov.cn/", discover_nav: true}  # https 握手报 BAD_ECPOINT，走 http
   - {id: CN-GD, name: 广东省统计局, region: CN-GD, home: "http://stats.gd.gov.cn/", discover_nav: true}
   - {id: CN-GX, name: 广西壮族自治区统计局, region: CN-GX, home: "http://tjj.gxzf.gov.cn/", discover_nav: true}
   - {id: CN-HI, name: 海南省统计局, region: CN-HI, home: "https://stats.hainan.gov.cn/", discover_nav: true}
-  - {id: CN-CQ, name: 重庆市统计局, region: CN-CQ, home: "https://tjj.cq.gov.cn/", discover_nav: true}
+  - id: CN-CQ
+    name: 重庆市统计局
+    region: CN-CQ
+    home: "https://tjj.cq.gov.cn/"
+    discover_nav: true
+    columns:
+      - {id: cq-bulletin, title: 统计公报, url: "https://tjj.cq.gov.cn/zwgk_233/fdzdgknr/tjxx/sjzl_55471/tjgb_55472/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: cq-analysis, title: 数据解读, url: "https://tjj.cq.gov.cn/zwgk_233/fdzdgknr/tjxx/sjjd_55469/", kind: report}
   - {id: CN-SC, name: 四川省统计局, region: CN-SC, home: "https://tjj.sc.gov.cn/", discover_nav: true}
   - {id: CN-GZ, name: 贵州省统计局, region: CN-GZ, home: "https://stjj.guizhou.gov.cn/", discover_nav: true}
   - {id: CN-YN, name: 云南省统计局, region: CN-YN, home: "https://stats.yn.gov.cn/", discover_nav: true}

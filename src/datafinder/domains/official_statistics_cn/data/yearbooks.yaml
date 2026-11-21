@@ -97,7 +97,7 @@ series:
     format: book                  # 2012–2014 是旧光盘版（章节锚点 + book/N-M.htm），2015 起是 zk
     toc: [left.htm, lefte.htm]
     home: http://tjj.shanxi.gov.cn/tjsj/tjnj/
-    # 2019–2025 在 /zk/；2015–2018 在根目录；2012–2014 在 /html/
+    # 2019–2025 在 /zk/；2015–2018 在根目录；2001–2014 在 /html/（旧光盘版，book 形态）
     editions:
       - {year: 2025, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2025/zk/"}
       - {year: 2024, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2024/zk/"}
@@ -113,6 +113,17 @@ series:
       - {year: 2014, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2014/html/"}
       - {year: 2013, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2013/html/"}
       - {year: 2012, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2012/html/"}
+      - {year: 2011, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2011/html/"}
+      - {year: 2010, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2010/html/"}
+      - {year: 2009, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2009/html/"}
+      - {year: 2008, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2008/html/"}
+      - {year: 2007, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2007/html/"}
+      - {year: 2006, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2006/html/"}
+      - {year: 2005, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2005/html/"}
+      - {year: 2004, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2004/html/"}
+      - {year: 2003, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2003/html/"}
+      - {year: 2002, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2002/html/"}
+      - {year: 2001, base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj2001/html/"}
 
   - id: CN-LN
     zh: 辽宁统计年鉴

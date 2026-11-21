@@ -443,3 +443,17 @@ def parse_book_toc(html: str, base_url: str) -> list[TocEntry]:
                 TocEntry(chapter, no, text, urljoin(base_url, href), fmt_of(href), "table")
             )
     return entries or zk
+
+
+# 目录形态 → 解析器。新增形态时在这里登记一次，适配器和探测工具都从这里取。
+PARSERS = {
+    "zk": parse_toc,
+    "tree": parse_tree_toc,
+    "json": parse_json_toc,
+    "ml": parse_ml_toc,
+    "yb": parse_yb_toc,
+    "fp": parse_fp_toc,
+    "fj": parse_fj_toc,
+    "heb": parse_heb_toc,
+    "book": parse_book_toc,
+}

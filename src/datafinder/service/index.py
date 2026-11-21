@@ -68,6 +68,21 @@ def migrate(adapter_ids: list[str] | None = None) -> list[dict[str, Any]]:
     return out
 
 
+async def probe(url: str, *, editions: int = 3) -> dict[str, Any]:
+    """扫一个统计局站点：有哪些数据栏目、年鉴有哪些版次、目录形态能不能解析。
+
+    维护者用：新省接入前先跑这个，把"要不要手写解析器"变成一次可复现的判断。
+    """
+    from datafinder.catalog.adapters import adapters
+    from datafinder.catalog.scout import has_probe, probe_site
+
+    adapters()  # 触发领域包加载（它们在这里注册探测扩展点）
+    if not has_probe():
+        raise ServiceError("站点探测未注册（领域插件没加载）", code="UNSUPPORTED")
+    with guard():
+        return await probe_site(url, editions=editions)
+
+
 def snapshot(out_dir: str | Path) -> dict[str, Any]:
     """把当前目录库打包成可发布的快照（维护者用）。返回清单。"""
     with guard():

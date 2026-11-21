@@ -489,6 +489,48 @@ def index_pull(
         console.print(f"[dim]原目录库已备份：{r['backup']}[/dim]")
 
 
+@index_app.command("probe")
+def index_probe(
+    url: str = typer.Argument(..., help="统计局站点首页或数据栏目页，如 https://tjj.xx.gov.cn/"),
+    editions: int = typer.Option(3, "--editions", "-e", help="往回探几个版次"),
+    as_json: bool = typer.Option(False, "--json"),
+) -> None:
+    """（维护者）扫一个站点：数据栏目、年鉴版次、目录形态能否解析。新省接入前先跑它。"""
+    console.print(f"探测 {url}：串行、限速，只读目录页，不取任何数值。\n")
+    rep = _run(service.index.probe(url, editions=editions))
+    if as_json:
+        _json(rep)
+        return
+    if rep["channels"]:
+        table = RichTable(show_header=True, header_style="bold", box=None, pad_edge=False)
+        for col in ("类型", "栏目", "地址"):
+            table.add_column(col)
+        for c in rep["channels"][:12]:
+            table.add_row(c["kind"], c["title"], c["url"])
+        console.print(table)
+    else:
+        console.print("[yellow]没找到数据栏目[/yellow]")
+    if rep["editions"]:
+        console.print(f"\n年鉴版次：{[e['year'] for e in rep['editions']]}")
+    best = rep["best"]
+    if best:
+        console.print(
+            f"\n[green]可解析[/green] {best['edition']} 版：{best['format']} 形态，{best['tables']} 张表"
+        )
+        console.print(f"  目录：{best['toc']}")
+        console.print("  可直接写进来源登记：")
+        console.print(f"    format: {best['format']}")
+        console.print(f'    toc: ["{best["toc"].rsplit("/", 1)[-1]}"]')
+        base = best["toc"].rsplit("/", 1)[0] + "/"
+        console.print(f'    editions: [{{year: {best["edition"]}, base: "{base}"}}]')
+    elif rep["tocs"]:
+        console.print(
+            "\n[yellow]命中了目录页，但一张表都没解析出来——需要新的目录形态解析器[/yellow]"
+        )
+    for note in rep["notes"]:
+        console.print(f"[dim]{note}[/dim]")
+
+
 @index_app.command("snapshot")
 def index_snapshot(
     out: str = typer.Option("snapshot", "--out", help="输出目录"),

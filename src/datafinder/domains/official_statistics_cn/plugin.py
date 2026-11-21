@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datafinder.catalog.adapters import register_adapter
+from datafinder.catalog.scout import register_probe
 from datafinder.catalog.taxonomy import register_taxonomy
 from datafinder.finder import MIN_INTERVAL
 from datafinder.query.units import register_thesaurus
@@ -16,6 +17,7 @@ from .hmt.tw import TwAdapter
 from .nbs.adapter import NbsAdapter
 from .nbs.search import NbsSource
 from .province.hebei import HebeiQueryAdapter
+from .scout import probe_report
 from .sites.adapter import build as build_site_adapter
 from .yearbook.adapter import YearbookAdapter
 
@@ -33,6 +35,8 @@ MIN_INTERVAL["data.stats.gov.cn"] = 0.8
 register_adapter(NbsAdapter())
 register_adapter(YearbookAdapter())
 register_adapter(HebeiQueryAdapter())
+register_probe(probe_report)
+register_probe(probe_report)
 register_adapter(build_site_adapter())
 register_adapter(HkAdapter())
 register_adapter(TwAdapter())

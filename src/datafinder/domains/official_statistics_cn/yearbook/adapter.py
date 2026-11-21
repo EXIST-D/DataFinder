@@ -41,31 +41,13 @@ from .entries import (
     table_key,
 )
 from .parse import (
+    PARSERS,
     TocEntry,
-    parse_book_toc,
-    parse_fj_toc,
     parse_fp_chapters,
     parse_fp_toc,
-    parse_heb_toc,
-    parse_json_toc,
-    parse_ml_toc,
-    parse_toc,
-    parse_tree_toc,
-    parse_yb_toc,
 )
 from .registry import Series, load_series
 
-PARSERS = {
-    "zk": parse_toc,
-    "tree": parse_tree_toc,
-    "json": parse_json_toc,
-    "ml": parse_ml_toc,
-    "yb": parse_yb_toc,
-    "fp": parse_fp_toc,
-    "fj": parse_fj_toc,
-    "heb": parse_heb_toc,
-    "book": parse_book_toc,
-}
 ARCHIVES = {"zip", "rar", "xls", "xlsx", "pdf", "doc", "docx"}  # 版次页上可下载的附件类型
 _YEAR = re.compile(r"(?:19|20)\d{2}")
 MIN_TABLES = 20  # 少于这个数当作"不是目录页"，避免把错误页当成目录

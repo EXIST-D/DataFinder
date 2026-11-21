@@ -55,11 +55,11 @@ publishers:
   - {id: CN-ZJ, name: 浙江省统计局, region: CN-ZJ, home: "http://tjj.zj.gov.cn/", discover_nav: true}
   - {id: CN-AH, name: 安徽省统计局, region: CN-AH, home: "https://tjj.ah.gov.cn/", discover_nav: true}
   - {id: CN-FJ, name: 福建省统计局, region: CN-FJ, home: "https://tjj.fujian.gov.cn/", discover_nav: true}
-  - {id: CN-JX, name: 江西省统计局, region: CN-JX, home: "https://tjj.jiangxi.gov.cn/", discover_nav: true}
+  - {id: CN-JX, name: 江西省统计局, region: CN-JX, home: "http://tjj.jiangxi.gov.cn/", discover_nav: true}  # https 为老旧 TLS（legacy renegotiation），客户端连不上
   - {id: CN-SD, name: 山东省统计局, region: CN-SD, home: "http://tjj.shandong.gov.cn/", discover_nav: true}
   - {id: CN-HA, name: 河南省统计局, region: CN-HA, home: "https://tjj.henan.gov.cn/", discover_nav: true}
   - {id: CN-HB, name: 湖北省统计局, region: CN-HB, home: "https://tjj.hubei.gov.cn/", discover_nav: true}
-  - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "https://tjj.hunan.gov.cn/", discover_nav: true}
+  - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "http://tjj.hunan.gov.cn/", discover_nav: true}  # https 握手报 BAD_ECPOINT，走 http
   - {id: CN-GD, name: 广东省统计局, region: CN-GD, home: "http://stats.gd.gov.cn/", discover_nav: true}
   - {id: CN-GX, name: 广西壮族自治区统计局, region: CN-GX, home: "http://tjj.gxzf.gov.cn/", discover_nav: true}
   - {id: CN-HI, name: 海南省统计局, region: CN-HI, home: "https://stats.hainan.gov.cn/", discover_nav: true}

@@ -21,6 +21,8 @@ from ..store import connect, portal_count
 from .common import open_catalog
 from .errors import ServiceError, guard
 
+TABLE_KINDS = ["table", "census_product"]  # 年鉴表与普查数据表同属"数据表"
+DOC_KINDS = ["bulletin", "report"]  # 统计公报、数据发布与解读
 _ASSESS = ("评价", "评估", "指数", "水平", "效率", "竞争力", "质量", "绩效", "发展程度", "综合")
 _REGIONAL_INTENT = re.compile(r"各省|分省|各地区|各地|各市|省际|区域|地区差异|地区间|省份")
 
@@ -138,12 +140,14 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
         with open_catalog() as cat:
             if region_codes:
                 regional = run(kinds=["indicator"], region_ids=region_codes)
-                regional_tables = run(kinds=["table"], region_ids=region_codes)
+                regional_tables = run(kinds=TABLE_KINDS, region_ids=region_codes)
+                regional_docs = run(kinds=DOC_KINDS, region_ids=region_codes)
             elif intent:
                 regional = run(kinds=["indicator"], geo_granularity="province")
-                regional_tables = run(kinds=["table"], geo_granularity="province")
+                regional_tables = run(kinds=TABLE_KINDS, geo_granularity="province")
+                regional_docs = run(kinds=DOC_KINDS, geo_granularity="province")
             else:
-                regional, regional_tables = [], []
+                regional, regional_tables, regional_docs = [], [], []
             # 全国口径也要给：做地区研究时总要和全国对照（它们覆盖的是"全国"，不含该地区，所以单独查）
             national = (
                 run(kinds=["indicator"], region_ids=["CN"], region_match="exact")
@@ -151,12 +155,18 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
                 else run(kinds=["indicator"])
             )
             national_tables = (
-                run(kinds=["table"], region_ids=["CN"], region_match="exact")
+                run(kinds=TABLE_KINDS, region_ids=["CN"], region_match="exact")
                 if intent
-                else run(kinds=["table"])
+                else run(kinds=TABLE_KINDS)
+            )
+            national_docs = (
+                run(kinds=DOC_KINDS, region_ids=["CN"], region_match="exact")
+                if intent
+                else run(kinds=DOC_KINDS)
             )
         indicators = list({r["resource_id"]: r for r in [*regional, *national]}.values())
         tables = list({r["resource_id"]: r for r in [*regional_tables, *national_tables]}.values())
+        documents = list({r["resource_id"]: r for r in [*regional_docs, *national_docs]}.values())
         for item in indicators:
             item["fetch"] = _fetch_hint(item, region_names)
 
@@ -178,6 +188,10 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
             steps.append(
                 "对 indicators 里的指标调用 fetch 取表（先不带 confirm 预览，确认后 confirm=true；会导出 CSV/Excel 并给出描述统计与覆盖检查）。"
             )
+        if documents:
+            steps.append(
+                "documents 是公报与数据发布（多为网页，delivery=link 请按链接阅读；带 PDF/Excel 附件的可 download）；做地区研究时先看目标地区统计局的公报。"
+            )
         if any(t["delivery"] == "download" for t in tables):
             steps.append(
                 "tables 里 delivery=download 的可用 download 下载；注意 usability=image 的只是图片，不能直接分析。"
@@ -198,7 +212,11 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
             },
             "sources": {
                 "indicators": {"title": "可取数的指标", "items": indicators},
-                "tables": {"title": "数据表（年鉴等，可按版次查）", "items": tables},
+                "tables": {"title": "数据表（年鉴、普查资料等，可按版次查）", "items": tables},
+                "documents": {
+                    "title": "公报与数据发布（统计公报、月度/季度发布）",
+                    "items": documents,
+                },
                 "regional_portals": {"title": "目标地区的官方入口", "items": regional_portals},
                 "official_portals": {"title": "相关领域的官方/权威门户", "items": official_portals},
                 "search_entries": {"title": "继续检索的入口", "items": _search_entries(topic)},

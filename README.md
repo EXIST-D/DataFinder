@@ -2,7 +2,7 @@
 
 **多领域、多来源的找数入口，能下载的直接给**：用关键词或一句话，跨领域找到**数据门户、数据集、数据表、指标**，告诉你**数据在哪、怎么拿**——能直接下载的给文件，需要通过接口取数的生成表格，只有链接的给准确链接和获取方式。中文优先。
 
-> 状态：早期开发中（v0.0.x）。当前已接入的领域：**中国官方统计**（国家统计局发布库、统计年鉴；统计公报、普查、部委统计在路上）。框架按"核心通用、领域插件化"搭建，后续领域复用同一套机制。
+> 状态：早期开发中（v0.0.x）。当前已接入的领域：**中国官方统计**（国家统计局发布库、统计年鉴、普查资料、统计公报与数据发布、省级统计局与部委的统计栏目）。框架按"核心通用、领域插件化"搭建，后续领域复用同一套机制。
 > 三种用法：**命令行**、**本地网页**、**MCP（给 AI 助手用）**。
 
 ## 它怎么组织数据
@@ -34,7 +34,7 @@
 uv tool install git+https://github.com/EXIST-D/DataFinder
 
 datafinder sync                              # 一次：门户库（约 7MB）
-datafinder index build                       # 一次：资源目录（抓取，串行限速，可中断续跑；见下）
+datafinder index pull                        # 一次：下载已发布的资源目录快照（约 45MB，几秒装好）
 datafinder search "工业增加值" -r 河北         # 跨主题 × 地域 × 类型检索
 datafinder get '<resource_id>' -r 河北 --yes   # 取数并导出（不加 --yes 只预览）
 datafinder serve                             # 本地网页
@@ -42,7 +42,7 @@ datafinder serve                             # 本地网页
 
 从源码运行把 `datafinder` 换成 `uv run datafinder`。命令别名 `dfd`（不使用 `df`，它会遮蔽系统自带的磁盘命令）。
 
-> 目录首次抓取较久（国家统计局约 1 小时，年鉴几分钟），之后检索都在本地、毫秒级。如果你本机有旧版本地索引，用 `datafinder index migrate` 一次性迁入，免去重爬。
+> 快照里只有名称、口径、链接等元数据（不含数值），装好后检索都在本地、毫秒级。想自己抓取或补全某个来源（快照里个别站点因网络原因缺失）用 `datafinder index build [来源]`——串行限速、可中断续跑，国家统计局发布库约 1 小时；本机有旧版本地索引则 `datafinder index migrate` 一次性迁入。本地目录比快照新时 `pull` 会拒绝覆盖（`--force` 才替换，旧库备份为 `catalog.db.bak`）。
 
 ## 命令行
 
@@ -62,7 +62,9 @@ datafinder get '<resource_id>' --yes                           # 可直接下载
 datafinder describe 工业增加值.csv                              # 描述统计
 
 # 维护
-datafinder index build [适配器] --opt db=3,6                    # 抓取目录（国家统计局按库；年鉴按系列/年份：--opt series=cn,CN-SD --opt from=2015）
+datafinder index pull [--from 目录或https地址]                   # 安装发布的目录快照
+datafinder index build [适配器] --opt db=3,6                    # 抓取目录（国家统计局按库；年鉴/普查按系列：--opt series=cn,CN-SD,pop；官网栏目按机构：--opt site=nbs,CN-BJ）
+datafinder index snapshot --out snapshot                       # （维护者）把当前目录打包成可发布的快照
 datafinder index migrate / status
 datafinder datasets "air quality"                              # 实时查外部数据平台（Zenodo、DataCite、各国开放数据…）
 datafinder sources / doctor
@@ -107,8 +109,12 @@ datafinder mcp --print-config        # 打印可粘贴到 Cursor / Claude Deskto
 ## 目前接入的领域：中国官方统计
 
 - **国家统计局发布库**：13 个数据库（月度/季度/年度、分省、主要城市、港澳台、国际）、约 8 万个指标，可实时取数（多地区、多指标，`["全部"]`=31 省）。**实验性**：新版发布库 2026-03 上线，接口无正式文档，且前面有访问防护——只在你主动抓取/取数时访问，串行限速，遇防护即停，**不重试、不绕过**。
-- **统计年鉴**：中国统计年鉴 2005–2025（21 版）与山东、辽宁、河南等省级年鉴的数据表目录（约 2.3 万张表），同一张表的各版次归并；表格文件格式因版次而异（早期网页表格，较新多为图片）。北京、河北、四川、黑龙江的地址模板已登记，但部分网络环境会超时或被拒绝，如实标注。
-- **官方入口**：31 个省级统计局、20 余个国家部委、北京/上海/浙江开放平台（标注核验状态与获取方式）。
+- **统计年鉴**：中国统计年鉴 2005–2025（21 版）与山东、辽宁、河南、**上海**（2004–2025，树形目录）省级年鉴的数据表目录，同一张表的各版次归并；广东、湖北只有各版次列表，登记整本 zip/rar 下载与在线浏览入口。同一版次有 Excel 目录时**把 xls 并进来**，下载时优先给能直接分析的格式（xls > 网页表格 > 图片）。北京、河北、四川、黑龙江的地址模板已登记，但部分网络环境会超时或被拒绝，如实标注。
+- **普查资料**：第七、六次全国人口普查与第一至五次全国经济普查的数据表（`census_product`，同一套目录模板，多数有 xls）。
+- **统计公报与数据发布**：国家统计局的全国年度统计公报、各类普查公报、**数据发布与数据解读**（月度/季度发布，约 2000 条），以及各省统计局、部委网站的"统计公报/统计数据/数据发布/普查"栏目（`bulletin` / `report`）——从机构首页导航自动发现栏目，能解析成"带日期的条目列表"的逐页收录，解析不了的栏目只作入口，**不硬凑条目**。条目大多是网页（只有链接），带 PDF/Excel 附件的可下载。
+- **官方入口**：31 个省级统计局、27 个国家部委等发布机构的网站入口与栏目（标注核验状态；站点拒绝或连不上时只保留首页并写明原因，换个网络后 `index build site` 补全）。
+
+> 覆盖现状：官网栏目的条目收录取决于站点是否可访问、栏目页能否被通用解析。2026-11-21 在一个国内网络环境实测，约 1/3 的省级统计局和 4 个部委的栏目被收录，其余因超时/拒绝（HTTP 403/412）、动态页（列表由脚本加载）而只有入口。这些站点换个网络通常可以补全。
 
 **国家统计局有 MCP 吗？**（2026-11-20 调研）没有官方 MCP。社区项目有 [`icen-ai/mcp-cnbs`](https://github.com/icen-ai/mcp-cnbs)（Apache-2.0，还聚合世界银行、IMF、OECD 等）、`Eliseowzy/cnbs-mcp-server`、`Ddhjx-code/national_data`、`pipeworx-io/mcp-china-macro`；它们都封装同一个非公开网页接口。DataFinder 直接调用接口，不依赖它们，你也可以把它们和 DataFinder 一起挂进助手。
 
@@ -134,12 +140,12 @@ datafinder mcp --print-config        # 打印可粘贴到 Cursor / Claude Deskto
 三套基准都在本机运行、可复现，**开发集用来调参，留出集只用来估计没调过的新题**：
 
 ```bash
-datafinder bench topics [--holdout]    # 真实选题验收：找数方案是否给出该有的门户/指标/数据表
+datafinder bench topics [--holdout|--public]   # 真实选题验收：找数方案是否给出该有的门户/指标/数据表/公报（--public = 公开来源选题集）
 datafinder bench facets [--holdout]    # 分面检索验收：筛选语义，尤其是"必须不出现"的误导项
 datafinder bench run                   # 排序基准：14 条中文问句 + 约 580 条标注，比较排序方案
 ```
 
-局限（务必知道）：样本小、标注者是 AI；开发集分数偏乐观，**留出集才是对"新问题"的估计**。方法与结果见 [bench/README.md](bench/README.md)。
+局限（务必知道）：样本小、标注者是 AI；开发集分数偏乐观，**留出集才是对"新问题"的估计**。公开来源选题集（取自 CT2C-QA、统计建模大赛获奖选题、NTCIR Data Search 题型）第一次跑的成绩是 **59/76（78%）**，其中真正的公开题 73%——这比我们自己的开发/留出集低得多，说明自拟题集偏乐观；缺口主要是术语词表（如"PM2.5/空气质量"到"生态环境状况公报"）和部委/省局网站的覆盖。方法与结果见 [bench/README.md](bench/README.md)。
 
 ## 扩展
 
@@ -166,11 +172,11 @@ uv run ruff check . && uv run ruff format --check .
 
 ```
 src/datafinder/
-  catalog/        统一资源目录：资源类型 · 地域 · 主题 · 分类规则 · 存储与检索 · 适配器协议 · 受控下载
+  catalog/        统一资源目录：资源类型 · 地域 · 主题 · 分类规则 · 存储与检索 · 适配器协议 · 受控下载 · 栏目页解析与官网栏目适配器（listing/sites）· 目录快照（snapshot）
   service/        共用服务层（CLI / MCP / 网页都走这里）：discover · detail · acquire · plan · index · export · overview
   cli/  mcp_server/  server/    三个入口
   domains/        领域包（连接器、分类词典、术语词表、数据文件、plugin.py）
-    official_statistics_cn/     中国官方统计：nbs（国家统计局）· yearbook（统计年鉴）· legacy（旧索引迁移）
+    official_statistics_cn/     中国官方统计：nbs（国家统计局）· yearbook（统计年鉴与普查资料）· sites（官网栏目配置）· legacy（旧索引迁移）
   portals/        门户目录：同步、分类、浏览、检索
   sources/        通用实时来源（Zenodo、DataCite、CKAN、Dataseek）
   engine/ query/  并发检索与 HTTP/缓存/去重/排序；分词、词表、检索计划、检索单元

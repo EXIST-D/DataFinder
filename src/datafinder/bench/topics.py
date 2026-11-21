@@ -22,8 +22,9 @@ from ..service import ServiceError, plan_sources
 console = Console()
 topics_app = typer.Typer(no_args_is_help=True)
 
-KINDS = ("portals", "indicators", "tables")
-KIND_ZH = {"portals": "门户", "indicators": "指标", "tables": "数据表"}
+SOURCE_ZH = {"public": "公开题", "adapted": "改写自公开题型", "authored": "自拟补充"}
+KINDS = ("portals", "indicators", "tables", "documents")
+KIND_ZH = {"portals": "门户", "indicators": "指标", "tables": "数据表", "documents": "公报/发布"}
 
 
 @dataclass
@@ -34,6 +35,7 @@ class TopicCase:
     expect: dict[str, list[list[str]]] = field(
         default_factory=dict
     )  # kind -> [任一关键词命中即算该条通过]
+    source: str | None = None  # public 公开题 / adapted 改写 / authored 自拟（公开题集才有）
 
 
 def load_topics(directory: Path, name: str = "topics.yaml") -> list[TopicCase]:
@@ -44,7 +46,7 @@ def load_topics(directory: Path, name: str = "topics.yaml") -> list[TopicCase]:
         for kind in KINDS:
             groups = t.get("expect", {}).get(kind, [])
             expect[kind] = [[g] if isinstance(g, str) else list(g) for g in groups]
-        cases.append(TopicCase(t["id"], t["topic"], t.get("region"), expect))
+        cases.append(TopicCase(t["id"], t["topic"], t.get("region"), expect, t.get("source")))
     return cases
 
 
@@ -58,13 +60,19 @@ def _texts(plan: dict[str, Any]) -> dict[str, list[str]]:
         ],
         "indicators": [f"{i['title']} {i.get('path') or ''}" for i in src["indicators"]["items"]],
         "tables": [f"{t['title']} {t.get('path') or ''}" for t in src["tables"]["items"]],
+        "documents": [f"{d['title']} {d.get('path') or ''}" for d in src["documents"]["items"]],
     }
 
 
 def evaluate(case: TopicCase, plan: dict[str, Any]) -> dict[str, Any]:
     """纯函数：把找数方案的结果与期望逐条比对。"""
     texts = _texts(plan)
-    out: dict[str, Any] = {"id": case.id, "topic": case.topic, "kinds": {}}
+    out: dict[str, Any] = {
+        "id": case.id,
+        "topic": case.topic,
+        "source": case.source,
+        "kinds": {},
+    }
     for kind in KINDS:
         groups = case.expect.get(kind, [])
         if not groups:
@@ -95,6 +103,9 @@ def topics(
     holdout: bool = typer.Option(
         False, "--holdout", help="跑留出集 topics.holdout.yaml（调参时没看过的选题）"
     ),
+    public: bool = typer.Option(
+        False, "--public", help="跑公开来源选题集 topics.public.yaml（评测集/赛事/真实用户问题）"
+    ),
     only: str | None = typer.Option(None, "--only", help="只跑这个选题 id"),
     min_recall: float = typer.Option(
         0.0, "--min-recall", min=0, max=1, help="总命中率低于此值时退出码为 1"
@@ -102,7 +113,7 @@ def topics(
     as_json: bool = typer.Option(False, "--json"),
 ) -> None:
     """用真实选题验收找数方案（只读本地门户库、指标索引与年鉴目录，不联网）。"""
-    name = "topics.holdout.yaml" if holdout else "topics.yaml"
+    name = "topics.public.yaml" if public else "topics.holdout.yaml" if holdout else "topics.yaml"
     cases = [c for c in load_topics(directory, name) if not only or c.id == only]
     if not cases:
         raise typer.BadParameter("没有匹配的选题")
@@ -139,5 +150,12 @@ def topics(
                     console.print(f"  [yellow]未命中[/yellow] {r['id']} · {KIND_ZH[kind]}：{m}")
         rate = hit / total if total else 0.0
         console.print(f"\n总命中 {hit}/{total}（{rate:.0%}）。")
+        by_source: dict[str, list[dict[str, Any]]] = {}
+        for r in results:
+            if r["source"]:
+                by_source.setdefault(r["source"], []).append(r)
+        for src, rs in by_source.items():
+            h, n = recall(rs)
+            console.print(f"  [dim]{SOURCE_ZH.get(src, src)}：{h}/{n}（{h / n:.0%}）[/dim]")
     if total and hit / total < min_recall:
         raise typer.Exit(code=1)

@@ -8,11 +8,12 @@ from datafinder.bench.topics import TopicCase, evaluate, load_topics, recall
 BENCH = Path(__file__).parents[2] / "bench"
 
 
-def plan(indicators=(), portals=(), tables=()):
+def plan(indicators=(), portals=(), tables=(), documents=()):
     return {
         "sources": {
             "indicators": {"items": [{"title": i, "path": "库 › 类"} for i in indicators]},
             "tables": {"items": [{"title": t, "path": "章"} for t in tables]},
+            "documents": {"items": [{"title": d, "path": "栏目"} for d in documents]},
             "regional_portals": {"items": [{"name": p} for p in portals[:1]]},
             "official_portals": {"items": [{"name": p} for p in portals[1:]]},
         }
@@ -68,3 +69,12 @@ def test_topics_command_fails_clearly_without_catalog():
     assert (
         result.exit_code == 1 and "index" in result.output
     )  # 目录是空的：提示怎么建立，不悄悄给 0 分
+
+
+def test_documents_are_checked_like_the_other_kinds():
+    case = TopicCase(
+        "d", "公报", None, {"documents": [["人口普查公报", "普查公报"]], "tables": [["人口"]]}
+    )
+    r = evaluate(case, plan(documents=["第七次全国人口普查公报（第一号）"], tables=["年龄"]))
+    assert r["kinds"]["documents"] == {"total": 1, "hit": 1, "misses": []}
+    assert r["kinds"]["tables"]["misses"] == ["人口"]

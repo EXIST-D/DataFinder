@@ -1,0 +1,213 @@
+# 公开来源选题集：题目来自公开的评测集/赛事/真实用户问题，**不是我们自己为系统量身写的**。
+# 写下这些题和期望时没有看过检索结果；跑出的第一遍成绩如实记录，之后不拿它调词表/排序/规则
+# （发现缺口可以补数据源，但补完要换一批新题再评估）。
+#
+# 每题的 source 标明出处与改写程度：
+#   public   公开题目原样（或仅翻译/提炼），出处见 ref
+#   adapted  借用公开评测集的"题型"改写成中国官方统计场景（原题是日本/美国的）
+#   authored 我们补写的，用来覆盖公开题没触及的子模块（统计公报、普查、部委、省统计局）——这类题不算"公开题"
+#
+# 期望的写法同 topics.yaml：每类下的每一项是"任一关键词出现在该类结果的文本里即算命中"；
+# documents = 公报与数据发布（统计公报、月度/季度发布、解读），tables 含年鉴表与普查数据表。
+#
+# 出处：
+#   [CT2C] CT2C-QA（ACM MM 2024，arXiv:2410.21414）：取自国家统计局网页的中文问答集，9981 条
+#   [SMC]  全国大学生统计建模大赛 2025（第十一届）获奖论文选题（中国统计出版社，ISBN 978-7-5230-0987-1）
+#   [NTCIR] NTCIR-15/16 Data Search：面向政府统计数据的公开检索评测，题目来自真实用户提问（日本 e-Stat / 美国 Data.gov）
+
+topics:
+  # ───────── [CT2C] 国家统计局网页问答：该找到对应的数据发布 ─────────
+  - id: ct2c-mining-profit
+    source: public
+    ref: "CT2C-QA 示例：2024年1—2月份采矿业利润总额是多少？"
+    topic: 2024年1—2月份采矿业利润总额
+    expect:
+      portals: [国家统计局]
+      documents: [[工业企业利润]]
+      indicators: [[利润总额, 利润]]
+
+  - id: ct2c-culture-industry
+    source: public
+    ref: "CT2C-QA 示例：2021年全国文化及相关产业增加值是多少？"
+    topic: 2021年全国文化及相关产业增加值
+    expect:
+      portals: [国家统计局]
+      documents: [[文化及相关产业]]
+
+  - id: ct2c-power-generation
+    source: public
+    ref: "CT2C-QA 示例：2022年11月发电量同比增长率"
+    topic: 2022年11月规模以上工业发电量同比增长
+    expect:
+      portals: [国家统计局, 国家能源局]
+      documents: [[能源生产]]
+      indicators: [[发电量]]
+
+  # ───────── [SMC] 统计建模大赛 2025 获奖选题 ─────────
+  - id: smc-county-common-prosperity
+    source: public
+    ref: "SMC 2025：中国县域共同富裕水平测度、时空演进及障碍因子分析（1811 个县域面板）"
+    topic: 中国县域共同富裕水平测度与时空演进
+    expect:
+      portals: [国家统计局]
+      indicators: [[居民人均可支配收入, 可支配收入]]
+      tables: [[各县, 县（市、区）, 县(市、区), 县域]]
+
+  - id: smc-yangtze-energy-efficiency
+    source: public
+    ref: "SMC 2025：长江经济带能源综合效率的测算、时空演化与影响因素分析"
+    topic: 长江经济带能源综合效率测算与影响因素
+    expect:
+      portals: [国家统计局, 国家能源局]
+      indicators: [[能源消费总量, 能源消费], [地区生产总值], [固定资产投资]]
+      tables: [[能源消费, 能源]]
+
+  - id: smc-regional-carbon
+    source: public
+    ref: "SMC 2025：八大经济区域碳排放总量测度与预测研究"
+    topic: 八大经济区域碳排放总量测度与预测
+    expect:
+      portals: [国家统计局, 生态环境部]
+      indicators: [[能源消费, 煤炭, 能源]]
+      tables: [[能源消费, 能源平衡, 煤炭]]
+      documents: [[生态环境状况公报, 环境状况公报]]
+
+  - id: smc-manufacturing-new-quality
+    source: public
+    ref: "SMC 2025：大数据时代下中国制造业新质化发展水平测度分析及优化路径研究"
+    topic: 中国制造业新质化发展水平测度
+    expect:
+      portals: [国家统计局, 工业和信息化部]
+      indicators: [[工业增加值, 规模以上工业], [研究与试验发展, R&D, 研发]]
+      tables: [[工业, 研究与试验发展, R&D]]
+      documents: [[R&D, 研究与试验发展, 科技]]
+
+  - id: smc-jiangxi-fertility
+    source: public
+    ref: "SMC 2025：低生育率背景下人口生育意愿的影响因素与未来趋势预测——以江西11市为例"
+    topic: 低生育率背景下人口生育意愿与未来趋势
+    region: 江西
+    expect:
+      portals: [江西省统计局, 国家统计局]
+      indicators: [[出生率, 人口出生率], [自然增长率]]
+      tables: [[出生, 生育, 人口]]
+      documents: [[人口普查, 统计公报]]
+
+  - id: smc-education-employment
+    source: public
+    ref: "SMC 2025：教育分层视角下中国“就业网络”结构的异质性分析"
+    topic: 教育分层视角下的就业结构与受教育程度
+    expect:
+      portals: [国家统计局, 教育部]
+      indicators: [[就业人员]]
+      tables: [[受教育程度, 文化程度]]
+      documents: [[人口普查]]
+
+  - id: smc-jjj-pm25
+    source: public
+    ref: "SMC 2025：基于时空特征融合的京津冀地区PM2.5浓度多尺度预测研究"
+    topic: 京津冀地区PM2.5浓度与空气质量
+    expect:
+      portals: [生态环境部]
+      documents: [[生态环境状况公报, 环境状况公报]]
+
+  - id: smc-shandong-pv
+    source: public
+    ref: "SMC 2025：在 VMD-SSA-LSTM 模型下的山东省多地区光伏功率预测及对比研究"
+    topic: 山东省光伏发电与电力装机
+    region: 山东
+    expect:
+      portals: [国家能源局, 山东省统计局]
+      indicators: [[发电量, 电力]]
+      tables: [[发电量, 电力, 能源]]
+
+  - id: smc-yunnan-tourism
+    source: public
+    ref: "SMC 2025：基于 BERT-TextCNN 的云南省旅游信心指数测度与分析"
+    topic: 云南省旅游业发展与游客接待
+    region: 云南
+    expect:
+      portals: [云南省统计局, 文化和旅游部]
+      tables: [[旅游, 游客, 住宿]]
+
+  # ───────── [NTCIR] 日常数据问句的题型，改写成中国官方统计场景 ─────────
+  - id: ntcir-unemployment-by-province
+    source: adapted
+    ref: "NTCIR-15 示例「都道府県別の有効求人倍率」→ 各省份城镇登记失业率"
+    topic: 各省份城镇登记失业率
+    expect:
+      portals: [人力资源和社会保障部, 国家统计局]
+      indicators: [[失业]]
+      tables: [[失业, 就业]]
+
+  - id: ntcir-second-house
+    source: adapted
+    ref: "NTCIR-15 示例 DS1-E-0007「有多少人拥有第二套住房」→ 住房拥有情况"
+    topic: 我国居民住房拥有情况与人均住房面积
+    expect:
+      portals: [国家统计局, 住房和城乡建设部]
+      tables: [[住房]]
+      documents: [[人口普查, 住户调查, 居民收入]]
+
+  - id: ntcir-city-population
+    source: adapted
+    ref: "NTCIR-15 示例 DS1-E-0014「人口约30万的城市」→ 各城市常住人口规模"
+    topic: 各城市常住人口规模排名
+    expect:
+      portals: [国家统计局]
+      tables: [[城市, 市辖区, 各地区]]
+      documents: [[人口普查]]
+
+  - id: ntcir-housing-price-cities
+    source: adapted
+    ref: "NTCIR 式日常问句：各城市房价涨跌 → 70个大中城市商品住宅销售价格"
+    topic: 各城市商品住宅销售价格涨跌
+    expect:
+      portals: [国家统计局, 住房和城乡建设部]
+      documents: [[商品住宅销售价格]]
+      indicators: [[商品住宅, 住宅销售价格, 房价]]
+
+  # ───────── 补写：覆盖公开题没触及的子模块（不算公开题）─────────
+  - id: authored-fujian-bulletin
+    source: authored
+    ref: 省级统计公报（子模块 C/E）
+    topic: 福建省国民经济和社会发展统计公报
+    region: 福建
+    expect:
+      portals: [福建省统计局]
+      documents: [[统计公报]]
+
+  - id: authored-guangdong-economy
+    source: authored
+    ref: 省统计局数据发布与解读（子模块 E）
+    topic: 广东省经济运行情况与统计分析
+    region: 广东
+    expect:
+      portals: [广东省统计局]
+      documents: [[广东, 经济运行, 统计分析]]
+
+  - id: authored-census-age
+    source: authored
+    ref: 普查数据表（子模块 C）
+    topic: 第七次全国人口普查各地区人口年龄构成
+    expect:
+      portals: [国家统计局]
+      tables: [[年龄]]
+      documents: [[第七次全国人口普查公报, 人口普查公报]]
+
+  - id: authored-economic-census
+    source: authored
+    ref: 经济普查数据表与公报（子模块 C）
+    topic: 全国经济普查法人单位数与从业人员按行业分组
+    expect:
+      portals: [国家统计局]
+      tables: [[法人单位]]
+      documents: [[经济普查公报]]
+
+  - id: authored-pbc-finance
+    source: authored
+    ref: 部委统计数据（子模块 D）：中国人民银行金融统计
+    topic: 社会融资规模与货币供应量统计数据
+    expect:
+      portals: [中国人民银行]
+      documents: [[社会融资规模, 金融统计, 统计数据]]

@@ -22,7 +22,9 @@ from ..tables import describe, describe_markdown
 
 console = Console()
 err = Console(stderr=True)
-index_app = typer.Typer(help="资源目录的建立与维护：抓取、迁移旧索引、状态。", no_args_is_help=True)
+index_app = typer.Typer(
+    help="资源目录的建立与维护：下载快照、抓取、迁移旧索引、制作快照、状态。", no_args_is_help=True
+)
 
 DELIVERY_ICON = {
     "download": "[green]⬇ 可下载[/green]",
@@ -315,7 +317,7 @@ def plan_cmd(
     console.print(
         f"[bold]主题[/bold] {res['topic']}  [dim]地区 {u['regions'] or '未指定'} · 领域 {u['domains'] or '未识别'}[/dim]\n"
     )
-    for key in ("indicators", "tables"):
+    for key in ("indicators", "tables", "documents"):
         g = res["sources"][key]
         console.print(f"[bold]{g['title']}[/bold]")
         for it in g["items"][:10]:
@@ -451,6 +453,40 @@ def index_migrate(adapter: list[str] = typer.Argument(None, help="适配器 id�
                 f"[green]✓[/green] {r['adapter']}："
                 + "，".join(f"{k} {v}" for k, v in r.items() if k not in ("adapter", "migrated"))
             )
+
+
+@index_app.command("pull")
+def index_pull(
+    source: str = typer.Option(
+        None,
+        "--from",
+        help="快照来源：https 基地址或含快照文件的本地目录（默认官方发布）",
+    ),
+    force: bool = typer.Option(False, "--force", help="本地目录比快照新时也替换"),
+) -> None:
+    """下载已发布的目录快照并安装（免去自己抓取；旧目录库会备份为 catalog.db.bak）。"""
+    r = _call(service.index.pull, source, force=force, progress=_progress)
+    m = r["manifest"]
+    console.print(
+        f"[green]✓[/green] 已安装快照：{m['resources']} 条资源（{m['created_at'][:10]} 制作，"
+        f"{m['bytes'] >> 20}MB）"
+    )
+    for sid, n in sorted(m["by_source"].items(), key=lambda kv: -kv[1])[:6]:
+        console.print(f"  [dim]{sid}：{n}[/dim]")
+    if r["backup"]:
+        console.print(f"[dim]原目录库已备份：{r['backup']}[/dim]")
+
+
+@index_app.command("snapshot")
+def index_snapshot(
+    out: str = typer.Option("snapshot", "--out", help="输出目录"),
+) -> None:
+    """（维护者）把当前目录库打包成可发布的快照：datafinder-catalog.db.gz + .json。"""
+    m = _call(service.index.snapshot, out)
+    console.print(
+        f"[green]✓[/green] 已生成快照：{m['resources']} 条，{m['bytes'] >> 20}MB（原 {m['bytes_uncompressed'] >> 20}MB）→ {out}/"
+    )
+    console.print("[dim]发布：gh release upload catalog-latest <两个文件> --clobber[/dim]")
 
 
 @index_app.command("status")

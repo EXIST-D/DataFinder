@@ -11,6 +11,7 @@ from datafinder.server.routers import register_router
 from datafinder.sources.registry import register_protocol
 
 from . import DOMAIN_ID
+from .hmt.hk import HkAdapter
 from .nbs.adapter import NbsAdapter
 from .nbs.search import NbsSource
 from .sites.adapter import build as build_site_adapter
@@ -30,6 +31,7 @@ MIN_INTERVAL["data.stats.gov.cn"] = 0.8
 register_adapter(NbsAdapter())
 register_adapter(YearbookAdapter())
 register_adapter(build_site_adapter())
+register_adapter(HkAdapter())
 
 
 def _web_router():

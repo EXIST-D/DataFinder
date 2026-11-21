@@ -1,0 +1,20 @@
+{
+  "file": "hk_pop.csv",
+  "size_bytes": 34863,
+  "sha256": "080ec023b59bdaac11d5031b4b58bb133d4e789f31df7dd6da7f088889dbc363",
+  "created_at": "2026-11-21T12:19:36",
+  "resource_id": "hk.csd:dataset:110-01001",
+  "source_id": "hk.csd",
+  "title": "按性别及年龄组别划分的人口",
+  "source_url": "https://www.censtatd.gov.hk/api/get.php?id=110-01001&lang=sc&full_series=1",
+  "license": "香港政府统计处使用条款（https://www.censtatd.gov.hk/tc/page_31.html）",
+  "request": {
+    "regions": [],
+    "indicators": [],
+    "start": null,
+    "end": null,
+    "periods": 3
+  },
+  "row_count": 342,
+  "kind": "generated"
+}

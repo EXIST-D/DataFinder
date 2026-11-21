@@ -172,7 +172,12 @@ class SiteAdapter(Adapter):
         return e
 
     def home_entry(
-        self, pub: Publisher, *, access_status: str = "unknown", note: str | None = None
+        self,
+        pub: Publisher,
+        *,
+        access_status: str = "unknown",
+        note: str | None = None,
+        verified: bool = False,
     ) -> Entry:
         manual = access_status in ("blocked", "unavailable")
         return self._entry(
@@ -183,7 +188,7 @@ class SiteAdapter(Adapter):
             Target(),
             landing_url=pub.home,
             access_status=access_status,
-            verification_level="source_asserted",
+            verification_level="observed" if verified else "source_asserted",
             distributions=[
                 Distribution(
                     "manual" if manual else "page",
@@ -314,6 +319,7 @@ class SiteAdapter(Adapter):
         budget: list[int | None],
     ) -> None:
         columns = list(pub.columns)
+        before = result.requests
         try:
             if pub.discover_nav:
                 home = await self._get(http, pub.home, result, budget)
@@ -324,6 +330,10 @@ class SiteAdapter(Adapter):
                 columns += found
             for col in columns:
                 await self._column(cat, http, pub, col, opts, result, budget)
+            if (
+                result.requests > before
+            ):  # 这一轮确实访问成功过：把早先因防护中断留下的"拒绝/连不上"状态改回来
+                cat.upsert([self.home_entry(pub, access_status="supported", verified=True)])
         except SourceError as exc:
             result.stopped.append(f"{pub.name}：{exc}")
             opts.say(f"{pub.name}：{exc}（放弃该机构，不重试不绕过）")

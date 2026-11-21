@@ -230,3 +230,15 @@ async def test_publisher_interval_is_passed_to_the_http_client(cat, monkeypatch)
     monkeypatch.setattr(sites, "Http", fake)
     await SiteAdapter(load_spec(spec), "d").discover(cat, DiscoverOptions())
     assert seen["min_interval"] == {"s.example.gov.cn": 2.5} and seen["default_interval"] == 1.0
+
+
+async def test_home_status_recovers_after_an_earlier_block(cat, monkeypatch):
+    table = {"https://s.example.gov.cn/sj/zxfb/": 412}
+    a = adapter(routes(table), monkeypatch)
+    only_nbs = DiscoverOptions(params={"site": "nbs"})
+    await a.discover(cat, only_nbs)
+    assert cat.get("site.nbs:portal:home").access_status == "blocked"
+    table["https://s.example.gov.cn/sj/zxfb/"] = page("zxfb", 3)
+    await adapter(routes(table), monkeypatch).discover(cat, only_nbs)
+    home = cat.get("site.nbs:portal:home")
+    assert home.access_status == "supported" and home.distributions[0].access_method == "page"

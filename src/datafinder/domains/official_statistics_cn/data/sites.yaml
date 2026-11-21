@@ -34,6 +34,12 @@ publishers:
       - {id: bulletin-ind,   title: 工业普查公报, url: "https://www.stats.gov.cn/sj/tjgb/gypcgb/", kind: bulletin, topics: [cnstat.industry]}
       - {id: bulletin-svc,   title: 第三产业普查公报, url: "https://www.stats.gov.cn/sj/tjgb/scpcgb/", kind: bulletin}
       - {id: bulletin-other, title: 其他统计公报, url: "https://www.stats.gov.cn/sj/tjgb/qttjgb/", kind: bulletin}
+      # 参考资料：说明"数据怎么统计、按什么分类、指标什么口径"，不是数据本身
+      - {id: ref-system,    title: 统计制度,   url: "https://www.stats.gov.cn/sj/tjzd/", kind: reference, pages: 4}
+      - {id: ref-standard,  title: 统计标准,   url: "https://www.stats.gov.cn/sj/tjbz/gjtjbz/", kind: reference, pages: 5}
+      - {id: ref-indicator, title: 指标解释,   url: "https://www.stats.gov.cn/sj/zbjs/", kind: reference, pages: 3}
+      # 统计出版物书目（专业年鉴多为书目与简介页、并非免费下载；收录它是为了告诉用户"有哪些卷、去哪里找"）
+      - {id: ref-books, title: 统计出版物, url: "https://www.stats.gov.cn/zs/tjwh/tjkw/tjzl/", kind: reference, pages: 16, text: "年鉴|统计摘要|普查|统计资料|统计年报|统计年报", item_title: "{text}（出版物书目）"}
 
   # ── 省级统计局：首页导航自动发现栏目 ──
   - {id: CN-BJ, name: 北京市统计局, region: CN-BJ, home: "https://tjj.beijing.gov.cn/", discover_nav: true}
@@ -70,14 +76,30 @@ publishers:
 
   # ── 部委及其他国家级发布机构 ──
   - {id: ndrc, name: 国家发展和改革委员会, region: CN, home: "https://www.ndrc.gov.cn/", type: ministry, discover_nav: true}
-  - {id: miit, name: 工业和信息化部, region: CN, home: "https://www.miit.gov.cn/", type: ministry, discover_nav: true}
+  - id: miit
+    name: 工业和信息化部
+    region: CN
+    home: "https://www.miit.gov.cn/"
+    type: ministry
+    discover_nav: true
+    columns:
+      - {id: monitor, title: 行业运行监测, url: "https://www.miit.gov.cn/gxsj/index.html", kind: report, text: "运行情况|经济运行", topics: [cnstat.industry]}
   - {id: moe, name: 教育部, region: CN, home: "http://www.moe.gov.cn/", type: ministry, discover_nav: true}
   - {id: most, name: 科学技术部, region: CN, home: "https://www.most.gov.cn/", type: ministry, discover_nav: true}
   - {id: mohrss, name: 人力资源和社会保障部, region: CN, home: "https://www.mohrss.gov.cn/", type: ministry, discover_nav: true}
   - {id: mnr, name: 自然资源部, region: CN, home: "https://www.mnr.gov.cn/", type: ministry, discover_nav: true}
   - {id: mee, name: 生态环境部, region: CN, home: "https://www.mee.gov.cn/", type: ministry, discover_nav: true}
   - {id: mohurd, name: 住房和城乡建设部, region: CN, home: "https://www.mohurd.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mot, name: 交通运输部, region: CN, home: "https://www.mot.gov.cn/", type: ministry, discover_nav: true}
+  - id: mot
+    name: 交通运输部
+    region: CN
+    home: "https://www.mot.gov.cn/"
+    type: ministry
+    discover_nav: true
+    columns:
+      - {id: stat-monthly, title: 统计数据, url: "https://www.mot.gov.cn/shuju/index.html", kind: report, href: "/shuju/tongjishuju/", topics: [cnstat.transport]}
+      - {id: bulletin, title: 行业公报, url: "https://www.mot.gov.cn/shuju/index.html", kind: bulletin, href: "/shuju/fenxigongbao/", topics: [cnstat.transport]}
+      - {id: freight-index, title: 运价指数与运输市场分析, url: "https://www.mot.gov.cn/shuju/index.html", kind: report, href: "/shuju/yunjiazhishu/", topics: [cnstat.transport, cnstat.prices]}
   - {id: mwr, name: 水利部, region: CN, home: "https://www.mwr.gov.cn/", type: ministry, discover_nav: true}
   - {id: moa, name: 农业农村部, region: CN, home: "https://www.moa.gov.cn/", type: ministry, discover_nav: true}
   - {id: mofcom, name: 商务部, region: CN, home: "https://www.mofcom.gov.cn/", type: ministry, discover_nav: true}
@@ -90,7 +112,14 @@ publishers:
   - {id: chinatax, name: 国家税务总局, region: CN, home: "https://www.chinatax.gov.cn/", type: ministry, discover_nav: true}
   - {id: samr, name: 国家市场监督管理总局, region: CN, home: "https://www.samr.gov.cn/", type: ministry, discover_nav: true}
   - {id: nhsa, name: 国家医疗保障局, region: CN, home: "https://www.nhsa.gov.cn/", type: ministry, discover_nav: true}
-  - {id: nea, name: 国家能源局, region: CN, home: "https://www.nea.gov.cn/", type: ministry, discover_nav: true}
+  - id: nea
+    name: 国家能源局
+    region: CN
+    home: "https://www.nea.gov.cn/"
+    type: ministry
+    discover_nav: true
+    columns:
+      - {id: power-stats, title: 电力工业统计数据, url: "http://www.nea.gov.cn/sjzz/ghs/zjgx.htm", kind: report, text: "统计数据|用电量", topics: [cnstat.energy]}
   - {id: cnipa, name: 国家知识产权局, region: CN, home: "https://www.cnipa.gov.cn/", type: ministry, discover_nav: true}
   - {id: caac, name: 中国民用航空局, region: CN, home: "https://www.caac.gov.cn/", type: ministry, discover_nav: true}
   - {id: safe, name: 国家外汇管理局, region: CN, home: "https://www.safe.gov.cn/", type: ministry, discover_nav: true}

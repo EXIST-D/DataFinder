@@ -15,6 +15,7 @@ kinds:
   - {id: bulletin,       zh: 统计公报}
   - {id: report,         zh: 专题报告}
   - {id: census_product, zh: 普查数据产品}
+  - {id: reference,      zh: 统计制度与标准}   # 统计制度、分类标准、指标解释、统计出版物书目：说明"数据怎么统计"，不是数据本身
   - {id: category,       zh: 分类目录,     container: true, navigational: true}   # 仅用于逐级浏览，默认不参与检索
 
 access_methods:

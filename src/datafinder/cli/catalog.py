@@ -318,7 +318,7 @@ def plan_cmd(
     console.print(
         f"[bold]主题[/bold] {res['topic']}  [dim]地区 {u['regions'] or '未指定'} · 领域 {u['domains'] or '未识别'}[/dim]\n"
     )
-    for key in ("indicators", "tables", "documents"):
+    for key in ("indicators", "tables", "documents", "references"):
         g = res["sources"][key]
         console.print(f"[bold]{g['title']}[/bold]")
         for it in g["items"][:10]:

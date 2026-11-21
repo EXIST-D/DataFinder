@@ -159,6 +159,7 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
                 if intent
                 else run(kinds=TABLE_KINDS)
             )
+            references = run(kinds=["reference"])  # 统计制度/分类标准/指标解释/出版物书目：不分地区
             national_docs = (
                 run(kinds=DOC_KINDS, region_ids=["CN"], region_match="exact")
                 if intent
@@ -216,6 +217,10 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
                 "documents": {
                     "title": "公报与数据发布（统计公报、月度/季度发布）",
                     "items": documents,
+                },
+                "references": {
+                    "title": "统计制度、分类标准、指标解释与出版物书目（说明数据怎么统计）",
+                    "items": references,
                 },
                 "regional_portals": {"title": "目标地区的官方入口", "items": regional_portals},
                 "official_portals": {"title": "相关领域的官方/权威门户", "items": official_portals},

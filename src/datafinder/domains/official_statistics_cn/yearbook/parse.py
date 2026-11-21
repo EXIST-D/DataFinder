@@ -62,7 +62,9 @@ def parse_toc(html: str, base_url: str) -> list[TocEntry]:
         text = clean_text(inner)
         if not text:
             continue
-        url = urljoin(base_url, href)
+        url = urljoin(
+            base_url, href.strip().replace("\\", "/")
+        )  # 老目录里有 html\\A0118C.HTM 这样的反斜杠
         num = _NUMBERED.match(text)
         if num:
             entries.append(

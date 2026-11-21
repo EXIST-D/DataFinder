@@ -28,6 +28,7 @@ series:
     years: [2005, 2025]
     base: "https://www.stats.gov.cn/sj/ndsj/{year}/"
     toc: [left.htm, lefte.htm]
+    wrapper_html: [2014]          # 2014 版目录里的 zk/html/Z*.HTM 是图片外壳页，同名 .xls 才是表格（抽样 8/8 核验）
     home: https://www.stats.gov.cn/sj/ndsj/
 
   - id: CN-BJ

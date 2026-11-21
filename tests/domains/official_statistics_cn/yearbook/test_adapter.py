@@ -4,7 +4,7 @@ import httpx
 import pytest
 
 from datafinder.catalog import Catalog
-from datafinder.catalog.adapters import AdapterError, DiscoverOptions
+from datafinder.catalog.adapters import AdapterError, DiscoverOptions, FetchParams
 from datafinder.domains.official_statistics_cn.yearbook import adapter as yb_adapter
 from datafinder.domains.official_statistics_cn.yearbook.adapter import (
     YearbookAdapter,
@@ -385,3 +385,150 @@ async def test_list_series_whose_link_is_the_file_itself(cat, patch_series):
     assert [d.access_method for d in e.distributions] == [
         "direct_file"
     ]  # 不重复一个指向同一文件的页面入口
+
+
+# ───────────────────────── 网页表格：目录里是 html_parse，取数时解析成整洁长表 ─────────────────────────
+
+TABLE_PAGE = (
+    "<html><table>"
+    "<tr><td colspan=3>表1-1 各地区人口（2010年）</td></tr>"
+    "<tr><td>地区</td><td>人口</td><td>面积</td></tr>"
+    "<tr><td></td><td>（万人）</td><td>（平方公里）</td></tr>"
+    "<tr><td>北京</td><td>1 961</td><td>16410</td></tr>"
+    "<tr><td>天津</td><td>1 294</td><td>11917</td></tr>"
+    "<tr><td>河北</td><td>7 194</td><td>187700</td></tr>"
+    "<tr><td colspan=3>注：数据来自普查</td></tr></table></html>"
+)
+
+
+def html_entry(source="yearbook.cn", year=2010, region="CN"):
+    t = TocEntry("一、综合", "1-1", "各地区人口", "https://t.example/html/a.htm", "html", "table")
+    s = series(id=source.split(".")[1], region=region, type="yearbook")
+    return table_entries(s, year, [t])[0]
+
+
+def test_html_tables_are_catalogued_as_parse_not_download_and_xls_still_wins():
+    e = html_entry()
+    assert [d.access_method for d in e.distributions] == ["html_parse"] and e.delivery == "generate"
+    assert e.distributions[0].usability == "html_table"
+    both = TocEntry(
+        "一、综合",
+        "1-1",
+        "各地区人口",
+        "https://t.example/a.htm",
+        "html",
+        "table",
+        (("https://t.example/a.xls", "xls"),),
+    )
+    both_e = table_entries(series(), 2010, [both])[0]
+    assert [d.access_method for d in both_e.distributions] == ["direct_file", "html_parse"]
+    assert both_e.delivery == "download"  # 能直接下载 xls 的先给下载
+
+
+async def test_fetch_parses_the_web_table_and_filters_by_region_and_year(cat, monkeypatch):
+    seen = []
+
+    def handler(req):
+        seen.append(str(req.url))
+        return httpx.Response(200, content=TABLE_PAGE.encode())
+
+    monkeypatch.setattr(yb_adapter, "Http", lambda **kw: http_for(handler))
+    e = html_entry()
+    table = await YearbookAdapter().fetch(cat, e, FetchParams())
+    assert seen == ["https://t.example/html/a.htm"] and len(table) == 6
+    assert table.rows[0][:3] == ["2010年", "2010YY", "北京"] and table.rows[0][4] == 1961.0
+    assert table.rows[0][5] == "万人" and table.meta["资源"] == e.resource_id
+    only = await YearbookAdapter().fetch(cat, e, FetchParams(regions=["河北省", "北京"]))
+    assert {r[2] for r in only.rows} == {"河北", "北京"}
+    none = await YearbookAdapter().fetch(cat, e, FetchParams(start="2015", end="2020"))
+    assert len(none) == 0  # 这张表是 2010 年的
+    with pytest.raises(AdapterError, match="没有这些地区"):
+        await YearbookAdapter().fetch(cat, e, FetchParams(regions=["火星"]))
+
+
+async def test_fetch_follows_frames_stacks_them_and_reports_image_or_file_only_tables(
+    cat, monkeypatch
+):
+    frameset = '<frameset><frame src="C1301A.htm"><frame src="C1301B.htm"></frameset>'
+    top = "<table><tr><td colspan=3>表13.1 工业总产值（1978～2012）</td></tr><tr><td>年份</td><td>合计（亿元）</td><td>轻工业（亿元）</td></tr></table>"
+    data = "<table><tr><td>1978</td><td>514.01</td><td>266.02</td></tr><tr><td>1979</td><td>556.30</td><td>290.78</td></tr><tr><td>1980</td><td>598.75</td><td>331.13</td></tr></table>"
+    pages = {
+        "/t/C1301.htm": frameset,
+        "/t/C1301A.htm": top,
+        "/t/C1301B.htm": data,
+        "/t/img.htm": "<html><img src='a.jpg'></html>",
+    }
+    monkeypatch.setattr(
+        yb_adapter,
+        "Http",
+        lambda **kw: http_for(lambda r: httpx.Response(200, content=pages[r.url.path].encode())),
+    )
+    t = TocEntry("工业", "13.1", "工业总产值", "https://t.example/t/C1301.htm", "html", "table")
+    e = table_entries(series(id="CN-SH", region="CN-SH"), 2013, [t])[0]
+    table = await YearbookAdapter().fetch(cat, e, FetchParams())
+    assert len(table) == 6 and table.rows[0][:3] == ["1978年", "1978YY", "上海"]
+    assert table.rows[0][4] == 514.01 and table.rows[0][5] == "亿元"
+    img = TocEntry("x", "1-1", "图片表", "https://t.example/t/img.htm", "html", "table")
+    with pytest.raises(AdapterError, match="没有表格"):
+        await YearbookAdapter().fetch(cat, table_entries(series(), 2010, [img])[0], FetchParams())
+    jpg = TocEntry("x", "1-2", "图片文件", "https://t.example/a.jpg", "jpg", "table")
+    with pytest.raises(AdapterError, match="没有可解析的网页版本"):
+        await YearbookAdapter().fetch(cat, table_entries(series(), 2010, [jpg])[0], FetchParams())
+
+
+def test_census_tables_use_the_census_year_as_default_period_but_yearbooks_do_not():
+    from datafinder.domains.official_statistics_cn.yearbook.registry import Edition
+
+    pop = Series(
+        id="pop",
+        zh="人口普查",
+        region="CN",
+        publisher="x",
+        home="https://t.example/",
+        type="census",
+        editions=(Edition(2010, "https://t.example/6rp/"),),
+    )
+    t = TocEntry("卷", "1-1", "各地区人口", "https://t.example/a.htm", "html", "table")
+    assert table_entries(pop, 2010, [t])[0].edition_year == 2010  # 普查：版次年就是参考年
+
+
+def test_wrapper_editions_give_the_same_named_xls_and_keep_the_shell_page_as_entry_only():
+    t = TocEntry("一", "26-15", "港澳台", "https://t.example/zk/html/Z2615C.HTM", "html", "table")
+    s = series(wrapper_html=(2014,))
+    e = table_entries(s, 2014, [t])[0]
+    assert [(d.access_method, d.file_format) for d in e.distributions] == [
+        ("direct_file", "xls"),
+        ("page", None),
+    ]
+    assert e.distributions[0].url == "https://t.example/zk/html/Z2615C.xls"
+    assert e.delivery == "download"
+    # 其他版次的 html 仍然是真正的网页表格
+    assert table_entries(s, 2013, [t])[0].distributions[0].access_method == "html_parse"
+
+
+def test_xls_filename_case_follows_the_web_page_name_because_the_server_is_case_sensitive():
+    t = TocEntry(
+        "一",
+        "1-13",
+        "各地区储量",
+        "https://t.example/2005/html/A0113C.HTM",
+        "html",
+        "table",
+        (("https://t.example/2005/html/A0113c.xls", "xls"),),  # 目录写的是小写 c，实际文件是大写 C
+    )
+    e = table_entries(series(), 2005, [t])[0]
+    assert e.distributions[0].url == "https://t.example/2005/html/A0113C.xls"
+    # 不只是大小写不同的（真的是另一个文件）不动
+    other = TocEntry(
+        "一",
+        "1-14",
+        "x",
+        "https://t.example/a/B1.HTM",
+        "html",
+        "table",
+        (("https://t.example/excel/B1.xls", "xls"),),
+    )
+    assert (
+        table_entries(series(), 2005, [other])[0].distributions[0].url
+        == "https://t.example/excel/B1.xls"
+    )

@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+import re
+
 from datafinder.catalog.entities import Distribution, Entry, RegionLink, TopicLink, make_id
 from datafinder.catalog.files import distribution_for
 from datafinder.catalog.rules import Target
@@ -79,13 +81,44 @@ def edition_entry(series: Series, year: int, toc_url: str) -> Entry:
 _USABILITY_RANK = {"tabular": 0, "html_table": 1, "document": 2, "image": 3}
 
 
-def _distributions(t: TocEntry) -> list[Distribution]:
+def _distributions(t: TocEntry, *, wrapper: bool = False) -> list[Distribution]:
     """同一张表目录里给出的各种格式：能直接分析的排前面（xls 先于网页表格先于图片）。"""
     seen, out = set(), []
+    stem = re.sub(r"\.[A-Za-z]+$", "", t.url)
     for url, fmt in ((t.url, t.fmt), *t.others):
+        # 统计局目录里 xls 的文件名大小写和网页不一致（"A0113c.xls" vs 实际存在的 "A0113C.xls"，服务器区分大小写）：
+        # 同一张表、只差大小写时，以网页文件名为准（2005/2010 版实测）
+        if (
+            fmt == "xls"
+            and url != t.url
+            and re.sub(r"\.[A-Za-z]+$", "", url).lower() == stem.lower()
+        ):
+            url = stem + ".xls"
         if url not in seen:
             seen.add(url)
-            out.append(distribution_for(url, fmt))
+            if fmt == "html" and wrapper:
+                # 图片外壳页：页里链着同名 xls（该版次抽样 8/8 核验过）——给 xls 下载，外壳页只当入口
+                xls = re.sub(r"\.[A-Za-z]+$", ".xls", url)
+                out.append(
+                    Distribution(
+                        "direct_file", xls, "xls", "tabular", note="外壳页同名 xls（抽样核验）"
+                    )
+                )
+                out.append(Distribution("page", url, note="图片版外壳页（含 xls 链接）"))
+            elif (
+                fmt == "html"
+            ):  # 网页表格：实时解析成整洁长表（delivery=generate），不是下载一个网页文件
+                out.append(
+                    Distribution(
+                        "html_parse",
+                        url,
+                        "html",
+                        "html_table",
+                        note="解析网页表格为整洁长表（实时）",
+                    )
+                )
+            else:
+                out.append(distribution_for(url, fmt))
     return _sorted(out)
 
 
@@ -142,7 +175,7 @@ def table_entry(series: Series, year: int, t: TocEntry, key_suffix: str = "") ->
         verification_level="source_asserted",
         topics=topics,
         regions=regions_for(target, _base_region(series)),
-        distributions=_distributions(t),
+        distributions=_distributions(t, wrapper=year in series.wrapper_html),
         extra={"no": t.no, "chapter": t.chapter, "series": series.id},
     )
 

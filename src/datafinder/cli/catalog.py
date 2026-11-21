@@ -238,12 +238,17 @@ def get_cmd(
         None, "--file", help="有多个可下载文件时选第几个（见预览里的 other_options）"
     ),
     yes: bool = typer.Option(False, "--yes", "-y", help="确认执行（不加只预览）"),
+    parse: bool = typer.Option(
+        False,
+        "--parse",
+        help='强制走"生成"：有网页版的表（同时有 xls 时默认是下载 xls），把网页表格实时解析成整洁长表',
+    ),
     no_describe: bool = typer.Option(False, "--no-describe"),
     as_json: bool = typer.Option(False, "--json"),
 ) -> None:
     """获取一个资源：可直接下载 → 下载；需要生成 → 实时取数并导出；只有链接 → 给出链接。默认只预览，--yes 才执行。"""
     res = _run(
-        service.get(
+        (service.fetch if parse else service.get)(
             resource_id,
             regions=region or None,
             indicators=indicator or None,
@@ -253,8 +258,8 @@ def get_cmd(
             path=output,
             confirm=yes,
             describe=not no_describe,
-            distribution_index=index,
             trusted=True,
+            **({} if parse else {"distribution_index": index}),
         )
     )
     if as_json:

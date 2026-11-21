@@ -81,7 +81,7 @@ async def fetch(
     """对"需要生成"的资源实时取数（通过适配器调用来源接口）。不带 confirm 只返回将要做什么与还缺什么参数。"""
     with guard(), open_catalog() as cat:
         e = _entry(cat, resource_id)
-        if e.delivery != "generate":
+        if not any(d.delivery == "generate" for d in e.distributions):
             raise ServiceError(
                 f"{resource_id} 的获取方式是 {e.delivery}，不能 fetch"
                 + ("；请用 download" if e.delivery == "download" else "；只有链接"),

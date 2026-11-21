@@ -3,6 +3,9 @@ docs/
 
 # ── 测试会话产出 ──
 DataFinder测试/
+/*.csv
+/*.xlsx
+/*.manifest.json
 
 # ── 敏感信息 ──
 .env

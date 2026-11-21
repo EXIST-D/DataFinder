@@ -7,21 +7,26 @@ from __future__ import annotations
 
 import re
 
+from datafinder.catalog import regions
 from datafinder.catalog.adapters import (
     CAP_DISCOVER,
+    CAP_FETCH,
     CAP_MIGRATE,
     Adapter,
     AdapterError,
     DiscoverOptions,
     DiscoverResult,
+    FetchParams,
     SourceInfo,
 )
-from datafinder.catalog.entities import Distribution
+from datafinder.catalog.entities import Distribution, Entry
 from datafinder.catalog.files import decode_html, distribution_for, fmt_of
+from datafinder.catalog.htmltable import frame_layout, has_table, layout_urls, to_table
 from datafinder.catalog.listing import Link, extract_links
 from datafinder.catalog.repository import Catalog
 from datafinder.engine.errors import SourceError
 from datafinder.engine.http import Http
+from datafinder.tables import Table
 
 from .. import DOMAIN_ID
 from .entries import (
@@ -110,10 +115,66 @@ async def fetch_edition(http: Http, series: Series, year: int):
     )
 
 
+async def _html_with_table(http: Http, url: str):
+    """取网页；若是框架页（上海年鉴：标题、角标、表头、行标签、数据各在一个框架里），把各子框架取回来，
+    按框架的嵌套关系（上下 rows / 左右 cols）组成布局。返回 (页面或布局, 实际地址)。"""
+    code, content = await http.get_bytes(url, headers=HEADERS)
+    if code in (404, 410):
+        raise AdapterError(f"网页不存在（HTTP {code}）：{url}")
+    html = decode_html(content)
+    if has_table(html):
+        return html, url
+    tree = frame_layout(html, url)
+    if tree is None:
+        raise AdapterError("页面里没有表格（可能是图片版或纯文字页）：请用 inspect 查看其他格式")
+    pages: dict[str, str] = {}
+    for frame in layout_urls(tree)[:12]:
+        code, content = await http.get_bytes(frame, headers=HEADERS)
+        pages[frame] = decode_html(content) if code == 200 else ""
+
+    def build(node):
+        kind, kids = node
+        return (
+            kind,
+            [build(k) if isinstance(k, tuple) else pages.get(k, "") for k in kids],
+        )
+
+    return build(tree), url
+
+
+def _apply_filters(table: Table, params: FetchParams) -> Table:
+    """regions：只留这些地区的行（["全部"] 不筛）；start/end：只留这段年份（没有期别的行保留）。"""
+    rows = table.rows
+    wanted = [r for r in params.regions if r and r not in ("全部", "all")]
+    if wanted:
+
+        def norm(x: str) -> str:
+            return re.sub(r"(省|市|自治区|特别行政区)$", "", x.strip())
+
+        want = {norm(w) for w in wanted}
+        have = sorted({r[2] for r in rows})
+        rows = [r for r in rows if norm(r[2]) in want]
+        if not rows:
+            raise AdapterError(
+                f"表里没有这些地区的数据：{', '.join(wanted)}（表里有：{', '.join(have[:12])}）"
+            )
+    lo = int(params.start) if params.start and params.start[:4].isdigit() else None
+    hi = int(params.end) if params.end and params.end[:4].isdigit() else None
+    if lo or hi:
+
+        def ok(r: list) -> bool:
+            y = int(r[1][:4]) if r[1] else None
+            return y is None or ((lo is None or y >= lo) and (hi is None or y <= hi))
+
+        rows = [r for r in rows if ok(r)]
+    table.rows = rows
+    return table
+
+
 class YearbookAdapter(Adapter):
     id = "yearbook"
     domain_id = DOMAIN_ID
-    capabilities = frozenset({CAP_DISCOVER, CAP_MIGRATE})
+    capabilities = frozenset({CAP_DISCOVER, CAP_FETCH, CAP_MIGRATE})
 
     def sources(self) -> list[SourceInfo]:
         return [SourceInfo(source_id(s), s.zh, s.publisher, s.home) for s in load_series()]
@@ -250,6 +311,32 @@ class YearbookAdapter(Adapter):
             )
             result.stopped.append(f"{s.zh}：{exc}")
             opts.say(f"{s.zh}：{exc}（放弃该系列，不重试不绕过）")
+
+    async def fetch(self, cat: Catalog, entry: Entry, params: FetchParams) -> Table:
+        """网页表格（html_parse 入口）→ 整洁长表。表是图片/文件的资源不能取数（请用 download）。"""
+        dist = next((d for d in entry.distributions if d.access_method == "html_parse"), None)
+        if dist is None or not dist.url:
+            raise AdapterError(
+                "这张表没有可解析的网页版本（只有文件或图片）：可直接下载的用 download，图片需要 OCR"
+            )
+        url = dist.url.strip().replace("\\", "/")
+        http = Http(default_interval=1.0)
+        try:
+            html, used = await _html_with_table(http, url)
+        finally:
+            await http.aclose()
+        primary = next((r.region_id for r in entry.regions if r.relation == "covers"), "CN")
+        census = entry.source_id.startswith("census.")
+        table = to_table(
+            html,
+            default_region="全国" if primary == "CN" else regions.name_zh(primary),
+            # 普查表的参考年就是版次年；年鉴的版次年是出版年、不是观测年，不能拿来当期别
+            default_year=str(entry.edition_year) if census and entry.edition_year else None,
+            source_url=used,
+            title_hint=entry.title,
+        )
+        table.meta["资源"] = entry.resource_id
+        return _apply_filters(table, params)
 
     def legacy_present(self) -> bool:
         from datafinder.config import data_dir

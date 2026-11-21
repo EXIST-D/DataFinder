@@ -31,6 +31,9 @@ class Series:
     type: str = "yearbook"  # yearbook 统计年鉴 | census 普查资料（同一套目录页模板）
     editions: tuple[Edition, ...] = ()
     topics: tuple[str, ...] = ()  # 整个系列固定的主题（普查资料按卷章难以推断主题）
+    wrapper_html: tuple[
+        int, ...
+    ] = ()  # 这些版次目录里的"网页"其实是图片外壳页（页内链着同名 xls），不是表格网页
     format: str = "zk"  # 目录页形态：zk 统计出版社模板 | tree 树形目录（上海）| list 只有各版次列表（广东、湖北）
     landing: str | None = None  # 版次入口页模板（含 {year}）；默认 base + indexch.htm
     list_urls: tuple[str, ...] = ()  # format=list：各版次列表页（可多页）
@@ -91,6 +94,7 @@ def load_series() -> list[Series]:
                 type=s.get("type", "yearbook"),
                 editions=editions,
                 topics=tuple(s.get("topics", ())),
+                wrapper_html=tuple(s.get("wrapper_html", ())),
                 format=s.get("format", "zk"),
                 landing=s.get("landing"),
                 list_urls=tuple(s.get("list_urls", ())),

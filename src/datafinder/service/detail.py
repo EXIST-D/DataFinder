@@ -79,6 +79,11 @@ def inspect(
                 "tool": "download",
                 "note": "下载前需要确认（confirm=true）；会先告诉你文件格式与可用性",
             }
+            if any(d.delivery == "generate" for d in e.distributions):
+                out["how_to_get"]["also"] = {
+                    "tool": "fetch",
+                    "note": "这张表还有网页版：fetch 会把网页表格实时解析成整洁长表（期别、地区、指标、数值、单位）",
+                }
         else:
             out["how_to_get"] = {
                 "tool": None,

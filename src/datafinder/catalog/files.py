@@ -42,7 +42,9 @@ def distribution_for(url: str, fmt: str | None = None) -> Distribution:
 
 
 def decode_html(content: bytes) -> str:
-    """网页字节 → 文本：先试 UTF-8，再试 GB18030（老站点常见）。"""
+    """网页字节 → 文本：带 BOM 的 UTF-16（Excel 另存的网页常见）、UTF-8，再试 GB18030（老站点常见）。"""
+    if content[:2] in (b"\xff\xfe", b"\xfe\xff"):
+        return content.decode("utf-16", errors="replace")
     for enc in ("utf-8", "gb18030"):
         try:
             return content.decode(enc)

@@ -317,3 +317,34 @@ def test_index_migrate_without_legacy_reports_not_migrated():
     assert {o["adapter"] for o in out} == {"nbs", "yearbook"} and all(
         o["migrated"] is False for o in out
     )
+
+
+async def test_tables_with_both_a_file_and_a_parseable_web_page_can_be_fetched_too(fake_adapter):
+    from datafinder.catalog import Distribution, Entry
+
+    with Catalog.open() as cat:
+        cat.conn.execute("UPDATE sources SET adapter_id='fake-nbs' WHERE source_id='yb.sd'")
+        cat.conn.commit()
+        cat.upsert(
+            [
+                Entry(
+                    "yb.sd",
+                    "table",
+                    "2025/99-1",
+                    "各地区人口",
+                    distributions=[
+                        Distribution("direct_file", "https://x/a.xls", "xls", "tabular"),
+                        Distribution("html_parse", "https://x/a.htm", "html", "html_table"),
+                    ],
+                )
+            ]
+        )
+    rid = "yb.sd:table:2025/99-1"
+    assert (await service.get(rid))["delivery"] == "download"  # 自动分流：有 xls 先给下载
+    r = await service.fetch(rid, confirm=True)  # 但也可以明确要求把网页表解析成整洁表
+    assert r["status"] == "done" and fake_adapter.calls[-1][0] == rid
+    how = service.inspect(rid)["how_to_get"]
+    assert how["tool"] == "download" and how["also"]["tool"] == "fetch"
+    # 只有文件、没有可生成入口的资源仍然不能 fetch
+    with pytest.raises(ServiceError, match="不能 fetch"):
+        await service.fetch("yb.sd:table:2025/14-08", confirm=True)

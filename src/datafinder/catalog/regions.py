@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 from functools import lru_cache
 
@@ -21,15 +22,33 @@ COUNTRY_CN = "CN"
 class Region:
     id: str
     name_zh: str
-    level: str  # world | country | province | special
+    level: str  # world | country | province | special | prefecture | county
     parent_id: str | None
     aliases: tuple[str, ...] = ()
     gb: str | None = None  # 6 位行政区划码
     stat12: str | None = None  # 统计用区划代码（12 位）
 
 
+# 领域包登记的更细一级区域（地级、县级）：核心不内置，由领域包的数据文件提供
+_EXTRA: dict[str, Region] = {}
+_NAME_ONLY_IF_UNIQUE = (
+    "prefecture",
+    "county",
+)  # 这两级重名很多（朝阳区、市辖区…），只登记不重名的名称
+
+
+def register_regions(extra: Iterable[Region]) -> None:
+    """登记领域包提供的区域（须带 parent_id，且上级已存在或同批登记）。重复登记同一批是幂等的。"""
+    for r in extra:
+        _EXTRA[r.id] = r
+    _load.cache_clear()
+
+
 @lru_cache(maxsize=1)
 def _load() -> tuple[dict[str, Region], dict[str, str]]:
+    from .. import domains
+
+    domains.load_all()  # 领域包可能登记更细的区域（plugin 在 load_all 里执行）
     raw = load_yaml("regions.yaml")
     regions: dict[str, Region] = {
         WORLD: Region(WORLD, "全球/国际", "world", None, ("国际", "世界", "全球"))
@@ -48,11 +67,26 @@ def _load() -> tuple[dict[str, Region], dict[str, str]]:
                 gb,
                 gb + "000000" if gb else None,
             )
+    regions.update(_EXTRA)
     index: dict[str, str] = {}
     for r in regions.values():
+        if r.level in _NAME_ONLY_IF_UNIQUE:
+            continue
         for key in (r.id, r.name_zh, *r.aliases, r.gb, r.stat12):
             if key:
                 index.setdefault(normalize(key), r.id)
+    # 地级/县级：代码一律可认；名称只有在整个词表里唯一时才认（重名不猜）
+    names: dict[str, list[str]] = {}
+    for r in regions.values():
+        if r.level in _NAME_ONLY_IF_UNIQUE:
+            for key in (r.name_zh, *r.aliases):
+                names.setdefault(normalize(key), []).append(r.id)
+            for key in (r.id, r.gb, r.stat12):
+                if key:
+                    index.setdefault(normalize(key), r.id)
+    for key, ids in names.items():
+        if len(set(ids)) == 1:
+            index.setdefault(key, ids[0])
     return regions, index
 
 

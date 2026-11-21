@@ -202,10 +202,16 @@ class Where:
             if not exact:
                 anc = regions.ancestors(rid)
                 if anc:  # 上级区域的"含下级"资源也覆盖本区域（如全国分省库覆盖河北）
-                    clauses.append(
-                        f"(rr.scope_mode = 'descendants' AND rr.region_id IN ({_marks(anc)}))"
+                    # 但只有"报告粒度够细"才算：按省报告的数据不覆盖某个地级市/县（它根本没有市县数据）
+                    target = regions.get(rid)
+                    fine = {"prefecture": ("prefecture", "county"), "county": ("county",)}.get(
+                        target.level if target else ""
                     )
-                    args += anc
+                    gran = f" AND rr.granularity IN ({_marks(list(fine))})" if fine else ""
+                    clauses.append(
+                        f"(rr.scope_mode = 'descendants' AND rr.region_id IN ({_marks(anc)}){gran})"
+                    )
+                    args += [*anc, *(fine or ())]
         sql = (
             "EXISTS (SELECT 1 FROM resource_regions rr WHERE rr.resource_id = r.resource_id"
             f" AND ({' OR '.join(clauses)}))"

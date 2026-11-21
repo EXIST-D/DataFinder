@@ -62,14 +62,21 @@ class Catalog:
                         taxonomy.version(t.domain),
                     ),
                 )
-            for r in region_data.regions().values():
-                codes = {k: v for k, v in (("gb", r.gb), ("stat12", r.stat12)) if v}
-                self.conn.execute(
-                    "INSERT INTO regions(region_id,parent_id,level,name_zh,codes) VALUES (?,?,?,?,?)"
-                    " ON CONFLICT(region_id) DO UPDATE SET parent_id=excluded.parent_id, level=excluded.level,"
-                    " name_zh=excluded.name_zh, codes=excluded.codes",
-                    (r.id, r.parent_id, r.level, r.name_zh, json.dumps(codes)),
-                )
+            self.conn.executemany(
+                "INSERT INTO regions(region_id,parent_id,level,name_zh,codes) VALUES (?,?,?,?,?)"
+                " ON CONFLICT(region_id) DO UPDATE SET parent_id=excluded.parent_id, level=excluded.level,"
+                " name_zh=excluded.name_zh, codes=excluded.codes",
+                [
+                    (
+                        r.id,
+                        r.parent_id,
+                        r.level,
+                        r.name_zh,
+                        json.dumps({k: v for k, v in (("gb", r.gb), ("stat12", r.stat12)) if v}),
+                    )
+                    for r in region_data.regions().values()
+                ],
+            )
 
     # ── 来源 ──
     def upsert_source(

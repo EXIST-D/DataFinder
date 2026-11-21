@@ -224,6 +224,15 @@ def _plan(data: dict, full: bool) -> tuple[dict, str]:
                 else ""
             )
             blocks.append(f"### {src[key]['title']}\n{body}{more}")
+    terms = src.get("glossary", {}).get("items", [])
+    if terms:
+        blocks.append(
+            f"### {src['glossary']['title']}\n"
+            + "\n".join(
+                f"- **{t['name_zh']}**（{t['status_zh']}）：{_clip(t['definition'], 120 if not full else 220)} {t.get('source_url') or ''}"
+                for t in terms[: (6 if full else 3)]
+            )
+        )
     for key in ("regional_portals", "official_portals"):
         items = src[key]["items"]
         if items:
@@ -298,6 +307,10 @@ def _inspect(data: dict, full: bool) -> tuple[dict, str]:
             else ""
         )
         blocks.append("子资源：\n" + shown + more)
+    for t in data.get("glossary", [])[:1]:
+        blocks.append(
+            f"术语说明（{t['status_zh']}）：{t['name_zh']}——{_clip(t['definition'], 160)} {t.get('source_url') or ''}"
+        )
     blocks.append(f"获取方式：{how.get('tool') or '链接'} — {how.get('note', '')}")
     return pres, _fit(blocks)
 

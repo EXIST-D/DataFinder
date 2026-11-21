@@ -10,6 +10,7 @@
 - export     取数结果的保存、读回与描述统计
 - overview   整体状态（status）
 - portal_directory 数据来源：门户与已索引来源的关联、接入等级
+- glossary   术语词典：查词、定义与出处、关系
 - tree       目录树：命中集合按主题/地域/来源展开
 - presentation 汇报：给助手的简明文字与统一的 presentation 块
 所有函数返回可 JSON 序列化的 dict/list。
@@ -31,6 +32,7 @@ __all__ = [
     "facets",
     "fetch",
     "get",
+    "glossary",
     "guard",
     "index",
     "inspect",

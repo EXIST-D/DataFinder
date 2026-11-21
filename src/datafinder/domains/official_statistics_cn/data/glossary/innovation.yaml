@@ -1,0 +1,196 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.science_tech.b48e20d5
+  name_zh: 研究与试验发展
+  aliases:
+  - R&D
+  topic_ids:
+  - cnstat.innovation
+  definition: 指在科学技术领域，为增加知识总量，以及运用这些知识去创造新的应用进行的系统的创造性的活动，包括基础研究、应用研究、试验发展三类活动。国际上通常采用R&D活动的规模和强度指标反映一国的科技实力和核心竞争力。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.e5cfd455
+  name_zh: 基础研究
+  topic_ids:
+  - cnstat.innovation
+  definition: 指为了获得关于现象和可观察事实的基本原理的新知识（揭示客观事物的本质、运动规律，获得新发现、新学说）而进行的实验性或理论性研究，它不以任何专门或特定的应用或使用为目的。其成果以科学论文和科学著作为主要形式。用来反映知识的原始创新能力。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.10e26073
+  name_zh: 应用研究
+  topic_ids:
+  - cnstat.innovation
+  definition: 指为获得新知识而进行的创造性研究，主要针对某一特定的目的或目标。应用研究是为了确定基础研究成果可能的用途，或是为达到预定的目标探索应采取的新方法（原理性）或新途径。其成果形式以科学论文、专著、原理性模型或发明专利为主。用来反映对基础研究成果应用途径的探索。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.77872c96
+  name_zh: 试验发展
+  topic_ids:
+  - cnstat.innovation
+  definition: 指利用从基础研究、应用研究和实际经验所获得的现有知识，为产生新的产品、材料和装置，建立新的工艺、系统和服务，以及对已产生和建立的上述各项作实质性的改进而进行的系统性工作。其成果形式主要是专利、专有技术、具有新产品基本特征的产品原型或具有新装置基本特征的原始样机等。在社会科学领域，试验发展是指把通过基础研究、应用研究获得的知识转变成可以实施的计划（包括为进行检验和评估实施示范项目）的过程。人文科学领域没有对应的试验发展活动。主要反映将科研成果转化为技术和产品的能力，是科技推动经济社会发展的物化成果。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.f3699c82
+  name_zh: 产品创新
+  topic_ids:
+  - cnstat.innovation
+  definition: '指企业推出了全新的或有重大改进的产品。产品创新的“新”要体现在产品的功能或特性上，包括技术规范、材料、组件、用户友好性等方面的重大改进。不包括产品仅有外观变化或其他微小改变的情况，也不包括直接转销。此处的“新”是指该产品对本企业而言必须是新的，但对于其他企业或整个市场而言不一定是新的。
+
+    这里的产品既包括货物，也包括服务。货物方面产品创新的例子有新能源汽车、新功能手机等；服务方面产品创新的例子有新的保修服务，如显著延长的新产品保修期限等。'
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.b4d36553
+  name_zh: 工艺创新
+  topic_ids:
+  - cnstat.innovation
+  definition: 指企业采用了全新的或有重大改进的生产方法、工艺设备或辅助性活动。工艺创新的“新”要体现在技术、设备或流程上；它对本企业而言必须是新的，但对于其他企业或整个市场而言不一定是新的。不包括单纯的组织管理方式的变化。此处的辅助性活动指企业的采购、物流、财务、信息化等活动。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.8793d8ba
+  name_zh: 组织（管理）创新
+  topic_ids:
+  - cnstat.innovation
+  definition: 指企业采取了此前从未使用过的全新的组织管理方式，主要涉及企业的经营模式、组织结构或外部关系等方面。不包括单纯的合并或收购。组织（管理）创新应是企业管理层战略决策的结果。此处的“新”是指它对本企业而言必须是新的，但对于其他企业而言不一定是新的。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.7c1505c3
+  name_zh: 营销创新
+  topic_ids:
+  - cnstat.innovation
+  definition: 指企业采用了此前从未使用过的全新的营销概念或营销策略，主要涉及产品（服务）设计或包装、产品（服务）推广、产品（服务）销售渠道、产品（服务）定价等方面。不包括季节性、周期性变化和其他常规的营销方式变化。此处的“新”是指它对本企业而言必须是新的，但对于其他企业或整个市场而言不一定是新的。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.d25f253e
+  name_zh: R&D人员
+  topic_ids:
+  - cnstat.innovation
+  definition: 指参与研究与试验发展项目研究、管理和辅助工作的人员，包括项目（课题）组人员，企业科技行政管理人员和直接为项目（课题）活动提供服务的辅助人员。反映投入从事拥有自主知识产权的研究开发活动的人力规模。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.8c595b58
+  name_zh: R&D人员全时当量
+  topic_ids:
+  - cnstat.innovation
+  definition: 指全时人员数加非全时人员按工作量折算为全时人员数的总和。例如：有两个全时人员和三个非全时人员（工作时间分别为20%、30%和70%），则全时当量为2+0.2+0.3+0.7=3.2人年。为国际上比较科技人力投入而制定的可比指标。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.107cc011
+  name_zh: R&D经费支出合计
+  topic_ids:
+  - cnstat.innovation
+  definition: 指调查单位用于内部开展R&D活动（基础研究、应用研究和试验发展）的实际支出。包括用于R&D项目（课题）活动的直接支出，以及间接用于R&D活动的管理费、服务费、与R&D有关的基本建设支出以及外协加工费等。不包括生产性活动支出、归还贷款支出以及与外单位合作或委托外单位进行R&D活动而转拨给对方的经费支出。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.0005726b
+  name_zh: R&D经费支出中政府资金
+  topic_ids:
+  - cnstat.innovation
+  definition: 指R&D经费内部支出中来自各级政府部门的各类资金，包括财政科学技术拨款、科学基金、教育等部门事业费以及政府部门预算外资金的实际支出。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.14b3fe60
+  name_zh: R&D经费支出中企业资金
+  topic_ids:
+  - cnstat.innovation
+  definition: 指R&D经费内部支出中来自本企业的自有资金和接受其他企业委托而获得的经费，以及科研院所、高校等事业单位从企业获得的资金的实际支出。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.a26c0d1b
+  name_zh: R&D项目（课题）数
+  topic_ids:
+  - cnstat.innovation
+  definition: 指在当年立项并开展研究工作、以前年份立项仍继续进行研究的研发项目（课题）数，包括当年完成和年内研究工作已告失败的研发项目（课题），但不包括委托外单位进行的研发项目（课题）数。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.868b957a
+  name_zh: R&D项目（课题）人员全时当量
+  topic_ids:
+  - cnstat.innovation
+  definition: 指实际参加研发项目（课题）活动人员折合的全时当量。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.d680147f
+  name_zh: R&D项目（课题）经费支出
+  topic_ids:
+  - cnstat.innovation
+  definition: 指调查单位内部在报告年度进行研发项目（课题）研究和试制等的实际支出。包括劳务费、其他日常支出、固定资产购建费、外协加工费等，不包括委托或与外单位合作进行项目（课题）研究而拨付给对方使用的经费。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.048be172
+  name_zh: 新产品销售收入
+  topic_ids:
+  - cnstat.innovation
+  definition: 指报告期企业销售新产品实现的销售收入。新产品是指采用新技术原理、新设计构思研制、生产的全新产品，或在结构、材质、工艺等某一方面比原有产品有明显改进，从而显著提高了产品性能或扩大了使用功能的产品。既包括经政府有关部门认定并在有效期内的新产品，也包括企业自行研制开发，未经政府有关部门认定，从投产之日起一年之内的新产品。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.0c02ef2c
+  name_zh: 专利
+  topic_ids:
+  - cnstat.innovation
+  definition: 是专利权的简称，是对发明人的发明创造经审查合格后，由专利局依据专利法授予发明人和设计人对该项发明创造享有的专有权。包括发明、实用新型和外观设计。反映拥有自主知识产权的科技和设计成果情况。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.d05a8bba
+  name_zh: 发明（专利）
+  topic_ids:
+  - cnstat.innovation
+  definition: 指对产品、方法或者其改进所提出的新的技术方案。是国际通行的反映拥有自主知识产权技术的核心指标。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.f0de32f7
+  name_zh: 实用新型（专利）
+  topic_ids:
+  - cnstat.innovation
+  definition: 指对产品的形状、构造或者其结合所提出的适于实用的新的技术方案。反映具有一定技术含量的技术成果情况。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.science_tech.78d507cb
+  name_zh: 外观设计（专利）
+  topic_ids:
+  - cnstat.innovation
+  definition: 指对产品的形状、图案、色彩或者其结合所作出的富有美感并适于工业上应用的新设计。反映拥有自主知识产权的外观设计成果情况。
+  source_name: 国家统计局·指标解释·科学技术
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

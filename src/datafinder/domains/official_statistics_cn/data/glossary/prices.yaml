@@ -1,0 +1,84 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.prices.621f2783
+  name_zh: 居民消费价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内城乡居民所购买的生活消费品和服务项目价格变动趋势和程度的相对数，是对城市居民消费价格指数和农村居民消费价格指数进行综合汇总计算的结果。通过该指数可以观察和分析消费品的零售价格和服务项目价格变动对城乡居民实际生活费支出的影响程度。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.6ff497dd
+  name_zh: 城市居民消费价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内城市居民家庭所购买的生活消费品价格和服务项目价格变动趋势和程度的相对数。通过该指数可以观察和分析消费品的零售价格和服务项目价格变动对城镇居民收入和消费支出的影响。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.41802297
+  name_zh: 农村居民消费价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内农村居民家庭所购买的生活消费品价格和服务项目价格变动趋势和程度的相对数。该指数可以观察农村消费品的零售价格和服务项目价格变动对农村居民收入和生活消费支出的影响。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.9e5ba826
+  name_zh: 商品零售价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内城乡商品零售价格变动趋势和程度的相对数。商品零售价格的变动与国家的财政收入、市场供需的平衡、消费与积累的比例关系有关。因此，该指数可以从一个侧面对上述经济活动进行观察和分析。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.b04b47b5
+  name_zh: 农业生产资料价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 指反映一定时期内农业生产资料价格变动趋势和程度的相对数。其编制目的是了解农业生产中投入物质资料价格的变动状况，服务于国民经济核算。1994年以前，农业生产资料价格指数仅仅是商品零售价格指数的一个类别，此后，从商品零售价格指数中分离出来，单独编制。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.e6e5db07
+  name_zh: 农产品生产者价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内，农产品生产者出售农产品价格水平变动趋势及幅度的相对数。该指数可以客观反映全国农产品生产价格水平和结构变动情况，满足农业与国民经济核算需要。其中某代表品生产价格指数是通过对全部有出售该产品行为的调查单位的个体指数进行几何平均求得的，类价格指数是通过对其所属的类（或代表品）的价格指数进行加权平均求得的。季度累计价格指数的计算方法与分季指数的计算方法相同。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.c3bb6b41
+  name_zh: 工业生产者出厂价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内全部工业产品第一次出售时的出厂价格总水平的变动趋势和变动幅度的相对数。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.96a0c126
+  name_zh: 工业生产者购进价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映作为中间投入的原材料、燃料、动力购进价格总水平的变动趋势和变动幅度的相对数。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.prices.88e07f97
+  name_zh: 固定资产投资价格指数
+  topic_ids:
+  - cnstat.prices
+  definition: 是反映一定时期内固定资产投资品及取费项目的价格变动趋势和变动幅度的相对数。该指数可以准确地反映固定资产投资中涉及的各类投资品和取费项目价格变动趋势和变动幅度，消除按现价计算的固定资产投资指标中的价格变动因素，真实地反映固定资产投资的规模、速度、结构和效益。
+  source_name: 国家统计局·指标解释·价格
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

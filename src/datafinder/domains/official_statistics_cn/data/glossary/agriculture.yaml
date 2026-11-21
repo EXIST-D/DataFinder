@@ -1,0 +1,109 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.agriculture.407b8d5d
+  name_zh: 农林牧渔业总产值
+  topic_ids:
+  - cnstat.agriculture
+  definition: '指以货币表现的农、林、牧、渔业全部产品和对农林牧渔业生产活动进行的各种支持性服务活动的价值总量，它反映一定时期内农林牧渔业生产总规模和总成果。1957年以前的农林牧渔业总产值中包括了厩肥和农民自给性手工业（如农民自制衣服、鞋、袜，自己从事粮食初步加工等）。1958年及以后，林业中增加了村及村以下竹木采伐产值；牧业中取消了厩肥产值；副业中取消了农民自给性手工业产值，增加了村及村以下办的工业产值； 渔业中增加了海洋捕捞水产品产值。1980年及以后，在副业中增加了农民家庭兼营工业商品部分的产值。从1984年起村及村以下工业产值划归工业。从1993年起取消副业，将野生动物的捕猎划入牧业，野生植物采集和农民家庭兼营商品性工业划归农业。从2003年起，执行新的国民经济行业分类标准，农林牧渔业总产值中包括了农林牧渔服务业产值，2018年以后农林牧渔服务业产值改称农林牧渔专业及辅助性活动产值。林业中增加了森林采运业产值。农业中取消了家庭兼营商品性工业产值，将野生林产品的采集划归林业。第一、二、三次农业普查以后，根据农业普查结果，对农业、畜牧业、渔业年报数据和农业、畜牧业、渔业产值进行了修订。2010年执行《统计用产品分类目录》， 对2009年的农业、林业产值做了相应调整。
+
+    农林牧渔业总产值的计算方法通常是按农、林、牧、渔业产品及其副产品的产量分别乘以各自单位产品价格求得；少数生产周期较长，当年没有产品或产品产量不易统计的，则采用间接方法匡算其产值；然后将四业产品产值及农林牧渔专业及辅助性活动产值相加即为农林牧渔业总产值。'
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.0d880eec
+  name_zh: 粮食产量
+  topic_ids:
+  - cnstat.agriculture
+  definition: 指农业生产经营者日历年度内生产的全部粮食数量。按收获季节包括夏收粮食、早稻和秋收粮食，按作物品种包括谷物、薯类和豆类。其产量计算方法：谷物按脱粒后的原粮计算，豆类按去豆荚后的干豆计算；薯类（包括甘薯和马铃薯，不包括芋头和木薯）1963年以前按每4公斤鲜薯折1公斤粮食计算，从1964年开始改为按5公斤鲜薯折1公斤粮食计算；城市郊区作为蔬菜的薯类（如马铃薯等）按鲜品计算，并且不作粮食统计。1989年以前全国粮食产量数据主要靠全面报表取得，1989年开始使用抽样调查数据。
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.3c245b6e
+  name_zh: 棉花产量
+  topic_ids:
+  - cnstat.agriculture
+  definition: 指全社会的产量。包括春播棉和夏播棉。产量按皮棉计算。不包括木棉。
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.c8b4d874
+  name_zh: 油料产量
+  topic_ids:
+  - cnstat.agriculture
+  definition: 指全部油料作物的生产量。包括花生、油菜籽、芝麻、向日葵籽、胡麻籽（亚麻籽）和其他油料。不包括大豆、木本油料和野生油料。花生以带壳干花生计算。
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.2ed7fa94
+  name_zh: 水产品产量
+  topic_ids:
+  - cnstat.agriculture
+  definition: '指渔业（捕捞和养殖）生产活动的最终有效成果，包括全部海水和淡水鱼类、甲壳类（虾、蟹）、贝类、头足类、藻类和其他类渔业产品的最终产量。水产品产量是通过各级水产部门逐级上报取得数据。1995年及以前，贝类中牡蛎按鲜肉计算；蚶、蛤、蛙按5斤鲜品折1斤计算。1996年以后则统一按鲜品计算。
+
+    猪、牛、羊肉产量 指当年出栏并已屠宰、除去头蹄下水后带骨肉（即胴体重）的重量。包括全社会范围内的产量。1996年以前为全面统计并逐级上报数据。1996年第一次农业普查以后，根据普查结果，对畜牧业主要年报数据进行了修正。1999年以后，国家统计局在部分地区开展了猪、牛、羊、禽等主要畜禽品种的抽样调查，并用抽样数据作为国家定案数据使用。未开展抽样调查的地区和品种，仍使用各级统计部门逐级上报数据。2008年，建立了主要畜禽监测调查制度，猪、牛、羊、禽等主要畜禽数据均以抽样调查数为法定数据。'
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.391536e9
+  name_zh: 期初（末）畜禽存栏头（只）数
+  topic_ids:
+  - cnstat.agriculture
+  definition: 指报告期初（末）农村各种合作经济组织和国营农场、农民个人、机关、团体、学校、工矿企业、部队等单位以及城镇居民饲养的大牲畜、猪、羊、家禽等畜禽的数量。数据上报方式及数据调整情况同猪、牛、羊肉产量。
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.0b5aff71
+  name_zh: 农作物播种面积
+  topic_ids:
+  - cnstat.agriculture
+  definition: 指农业生产经营者应在日历年度内收获农作物在全部土地（耕地或非耕地）上的播种或移植面积。凡是本年内收获的农作物，无论是本年还是上年播种，都算为播种面积，但不包括本年播种，下年收获的农作物面积。
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.1a5a5cc3
+  name_zh: 耕地灌溉面积
+  topic_ids:
+  - cnstat.agriculture
+  definition: 指具有一定的水源，地块比较平整，灌溉工程或设备已经配套，在一般年景下能够进行正常灌溉的耕地面积。在一般情况下，耕地灌溉面积应等于灌溉工程或设备已经配套，能够进行正常灌溉的水田和水浇地面积之和。它是反映我国农田水利建设的重要指标。
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.fb4e1b3e
+  name_zh: 农用化肥施用量
+  topic_ids:
+  - cnstat.agriculture
+  definition: '指本年内实际用于农业生产的化肥数量，包括氮肥、磷肥、钾肥和复合肥。化肥施用量要求按折纯量计算数量。折纯量是指把氮肥、磷肥、钾肥分别按含氮、含五氧化二磷、含氧化钾的百分之百成份进行折算后的数量。复合肥按其所含主要成分折算。公式为：
+
+    折纯量=实物量×某种化肥有效成份含量的百分比'
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.agriculture.d36d74ef
+  name_zh: 农业机械总动力
+  topic_ids:
+  - cnstat.agriculture
+  definition: '指全部农业机械动力的额定功率之和。农业机械是指用于种植业、畜牧业、渔业、农产品初加工、农用运输和农田基本建设等活动的机械及设备。农机总动力按使用能源不同分为以下四部分：
+
+    柴油发动机动力：指全部柴油发动机额定功率之和；
+
+    汽油发动机动力：指全部汽油发动机额定功率之和；
+
+    电动机动力：指全部电动机（含潜水电泵的电动机）额定功率之和；
+
+    其他机械动力：指采用柴油、汽油、电力之外的其他能源，如水力、风力、煤炭、太阳能等动力机械功率之和。
+
+    这个指标的统计数据主要来源于农机部门。'
+  source_name: 国家统计局·指标解释·农业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

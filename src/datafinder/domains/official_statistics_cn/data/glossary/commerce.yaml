@@ -1,0 +1,185 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.wholesale_retail.4225b8b4
+  name_zh: 批发业
+  topic_ids:
+  - cnstat.commerce
+  definition: 指向其他批发或零售单位（含个体经营者）及其他企事业单位、机关团体等批量销售生活用品、生产资料的活动，以及从事进出口贸易和贸易经纪与代理的活动，包括拥有货物所有权，并以本单位（公司）的名义进行交易活动，也包括不拥有货物的所有权，收取佣金的商品代理、商品代售活动；还包括各类商品批发市场中固定摊位的批发活动，以及以销售为目的的收购活动。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.d1a62a7a
+  name_zh: 零售业
+  topic_ids:
+  - cnstat.commerce
+  definition: '指百货商店、超级市场、专门零售商店、品牌专卖店、售货摊等主要面向最终消费者（如居民等）的销售活动，以互联网、邮政、电话、售货机等方式的销售活动，还包括在同一地点，后面加工生产，前面销售的店铺（如面包房）；谷物、种子、饲料、牲畜、矿产品、生产用原料、化工原料、农用化工产品、机械设备（乘用车、计算机及通信设备除外）等生产资料的销售不作为零售活动；多数零售商对其销售的货物拥有所有权，但有些则是充当委托人的代理人，进行委托销售或以收取佣金的方式进行销售。
+
+    批发和零售业商品购进、销售、库存额 指各种登记注册类型的批发和零售业企业（单位）以本企业（单位）为总体的，从国内、国外市场购进的商品总价，销售和出口的商品总价，库存的商品总价等情况。该指标可以反映商品流转过程中商品的购进、销售、库存之间的比例关系和存在的问题。'
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.dc6a9d12
+  name_zh: 商品购进额
+  topic_ids:
+  - cnstat.commerce
+  definition: 指从本企业以外的单位和个人购进（包括从国外直接进口）作为转卖或加工后转卖的商品金额（含增值税）。商品购进包括：（1）从工农业生产者、批发和零售业、住宿和餐饮业、出版社或报社的出版发行部门和其他服务业等企事业单位和个体经营户购进的商品；（2）从机关、社会团体购进的商品；（3）从海关、市场管理部门购进的缉私和没收的商品；（4）从居民收购的废旧商品等。不包括：（1）企业为本单位自身经营用，不是作为转卖而购进的商品，如材料物资、包装物、低值易耗品、办公用品等；（2）未通过买卖行为而收入的商品，如接受其他部门移交的商品、借入的商品、收入代其他单位保管的商品、其他单位赠送的样品、加工回收的成品等；（3）经本单位介绍，由买卖双方直接结算，本单位只收取手续费的业务；（4）销售退回和买方拒付货款的商品；（5）商品溢余；（6）期货交易商品。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.efa828d4
+  name_zh: 进口
+  topic_ids:
+  - cnstat.commerce
+  definition: 指直接从国外进口或委托外贸企业代理进口的商品金额，不包括从国内有关单位购进的进口商品。对外贸易企业只统计自主经营进口的商品，不统计受托代理进口的商品。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.c0ff6f89
+  name_zh: 商品销售额
+  topic_ids:
+  - cnstat.commerce
+  definition: 指对本单位以外的单位和个人出售的商品金额（包括售给本单位消费用的商品，含增值税）。商品销售包括：（1）售给个人和社会集团消费用的商品；（2）售给农业、工业、建筑业、服务业等国民经济各行业用于生产、经营用的商品，包括售予批发和零售业作为转卖或加工后转卖的商品；（3）对国（境）外直接出口的商品。不包括：（1）未通过买卖行为付出的商品，如因机构变动移交给其他企业单位的商品、借出的商品、归还受其他单位委托代保管的商品、付出的加工原料和赠送给其他单位的样品等；（2）促销返券所销售的、不计入营业收入的商品；（3）经本单位介绍，由买卖双方直接结算，本单位只收取手续费的业务；（4）未发生所有权转移的商品预付卡销售，如加油卡；（5）汽车维修、电话卡销售等服务性经济活动；（6）购货退回的商品；（7）商品损耗和损失；（8）出售本单位自用的废旧物资；（9）期货交易商品；（10）自来水供应企业、电力企业、天然气供应企业提供的水、电、气。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.dd877ebc
+  name_zh: 出口
+  topic_ids:
+  - cnstat.commerce
+  definition: 指直接向国（境）外出口商品和委托外贸企业代理出口的商品金额，商品出口不包括售给外贸企业出口或加工后出口的商品，以及在国内市场以外币销售的商品。外贸企业只统计自主经营出口的商品，不包括受托代理出口的商品。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.60de8f85
+  name_zh: 期末商品库存额
+  topic_ids:
+  - cnstat.commerce
+  definition: 对于批发和零售业法人单位和个体经营户，是指报告期末取得所有权的全部商品金额（含增值税）；对于批发和零售业产业活动单位，是指报告期末实际在库且归属法人具有所有权的全部商品金额（含增值税）。库存商品包括：（1）存放在本单位（如门市部、批发站、采购站、经营处）的仓库、货场、货柜和货架中的商品；（2）挑选、整理、包装中的商品；（3）已记入购进而尚未运到本单位的商品，即发货单或银行承兑凭证已到而货未到的商品；（4）寄放他处的商品，如因购货方拒绝付款而暂时存在购货方的商品；（5）委托其他单位代销（未作销售或调出）尚未售出的商品；（6）代其他单位购进尚未交付的商品。不包括：（1）所有权不属于本单位的商品，如商品已作销售但买方尚未取走的商品，代替他人保管、运输、加工的商品，代其他单位销售（未做购进或调入）而未售出的商品；（2）委托外单位加工的商品（包括本单位所属加工厂和其他生产单位加工生产尚未收回成品的商品）；（3）外贸企业代理其他单位从国外进口，尚未付给订货单位的商品；（4）代国家储备部门保管的商品。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.08601261
+  name_zh: 连锁总店（总部）
+  topic_ids:
+  - cnstat.commerce
+  definition: 指负责连锁企业资源（商号、商誉、经营模式、服务标准、管理模式等）的开发、配置、控制或使用等功能的企业核心管理机构。连锁经营是指经营同类商品或服务，使用统一商号的若干店铺，在同一总店（总部）的管理下，采取统一采购或特许经营等方式，实现规模效益的组织形式，包括直营连锁、特许连锁和自愿连锁三种形式。其中，直营连锁是指连锁店铺由连锁公司全资或控股开设，在总部的直接控制下，开展统一经营的连锁经营形式；特许连锁是指拥有注册商标、企业标志、专利、专有技术等经营资源的企业（特许人），以合同形式将其拥有的经营资源许可其他经营者（被特许人）使用，被特许人按合同约定在统一的经营模式下开展经营，并向特许人支付特许经营费用的连锁经营形式；自愿连锁是指若干个店铺或企业自愿组合起来，在不改变各自资产所有权关系的情况下，以同一个品牌形象面对消费者，以共同进货为纽带开展的连锁经营形式。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.af8ad02d
+  name_zh: 亿元以上商品交易市场
+  topic_ids:
+  - cnstat.commerce
+  definition: 指年成交额在亿元及以上的商品交易市场。商品交易市场是指经有关部门和组织批准设立，有固定场所、设施，有经营管理部门和监管人员，若干市场经营者入内，常年或实际开业三个月以上，集中、公开、独立地进行生活消费品、生产资料等现货商品交易以及提供相关服务的交易场所，包括各类消费品市场、生产资料市场等。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.c2a5606e
+  name_zh: 社会消费品零售总额
+  topic_ids:
+  - cnstat.commerce
+  definition: 指企业（单位、个体户）通过交易直接售给个人、社会集团非生产、非经营用的实物商品金额，以及提供餐饮服务所取得的收入金额。个人包括城乡居民和入境人员，社会集团包括机关、社会团体、部队、学校、企事业单位、居委会或村委会等。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.wholesale_retail.6dfe92d6
+  name_zh: 网上零售额
+  topic_ids:
+  - cnstat.commerce
+  definition: 指通过公共网络交易平台（包括自建网站和第三方平台）实现的商品和服务零售额之和。商品和服务包括实物商品和非实物商品（如虚拟商品、服务类商品等）。
+  source_name: 国家统计局·指标解释·批发和零售业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.fbc03fa7
+  name_zh: 住宿业
+  topic_ids:
+  - cnstat.commerce
+  definition: 指为旅行者提供短期留宿场所的活动，有些单位只提供住宿，也有些单位提供住宿、饮食、商务、娱乐一体的服务，不包括主要按月或按年长期出租房屋住所的活动。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.14a5c328
+  name_zh: 餐饮业
+  topic_ids:
+  - cnstat.commerce
+  definition: 指通过即时制作加工、商业销售和服务性劳动等，向消费者提供食品和消费场所及设施的服务。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.20fc2cd1
+  name_zh: 营业额
+  topic_ids:
+  - cnstat.commerce
+  definition: 指住宿和餐饮业单位在经营活动中，因提供服务或销售商品等取得的全部收入（含增值税），收入主要来源于提供客房、餐费服务、商品销售和其他服务，如商务服务。不包括多产业法人企业附营的其他行业产业活动单位的餐费收入、商品销售收入等各项收入。其中，客房收入指住宿和餐饮业单位在经营活动中因提供住宿服务取得的收入（含增值税）。不包括多产业法人企业附营的其他行业产业活动单位的客房收入。餐费收入指本单位为顾客提供就餐服务取得的收入（含增值税）。包括：经烹饪、调制加工后出售的各种食品，如主食、炒菜、凉拌菜等的收入。不包括多产业法人企业附营的其他行业产业活动单位的餐费收入。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.19db3a75
+  name_zh: 入境游客
+  topic_ids:
+  - cnstat.commerce
+  definition: 指报告期内来中国（大陆）观光、度假、探亲访友、就医疗养、购物、参加会议或从事经济、文化、体育、宗教活动的外国人、港澳台同胞等游客（即入境旅游人数）。统计时，入境游客按每入境一次统计1人次。入境旅游人数包括入境过夜游客和入境一日游游客。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.a30c74bf
+  name_zh: 出境人数（出境游客）
+  topic_ids:
+  - cnstat.commerce
+  definition: 指中国（大陆）居民因公或因私出境前往其他国家、中国香港特别行政区、澳门特别行政区和台湾省观光、度假、探亲访友、就医疗养、购物、参加会议或从事经济、文化、体育、宗教活动的人数（即出境游客）。统计时，出境游客按每出境一次统计1人次。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.0e497b6b
+  name_zh: 国内游客
+  topic_ids:
+  - cnstat.commerce
+  definition: 指报告期内在中国（大陆）观光游览、度假、探亲访友、就医疗养、购物、参加会议或从事经济、文化、体育、宗教活动的中国（大陆）居民人数，其出游的目的不是通过所从事的活动谋取报酬。统计时，国内游客按每出游一次统计1人次。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.c82ca39c
+  name_zh: 国际旅游收入
+  topic_ids:
+  - cnstat.commerce
+  definition: 指入境游客在中国（大陆）境内旅行、游览过程中用于交通、参观游览、住宿、餐饮、购物、娱乐等全部花费。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.4b1ac4d0
+  name_zh: 国内旅游收入（旅游总花费）
+  topic_ids:
+  - cnstat.commerce
+  definition: 指国内游客在国内旅行、游览过程中用于交通、参观游览、住宿、餐饮、购物、娱乐等全部花费。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.lodging_catering_tourism.f2368bbb
+  name_zh: 星级饭店
+  topic_ids:
+  - cnstat.commerce
+  definition: 指设备、设施、服务符合《旅游饭店星级的划分与评定》（GB/T14308-2010）标准，经过有关旅游管理权威部门评定（验收）后授予“星级”称号的饭店。
+  source_name: 国家统计局·指标解释·住宿、餐饮业和旅游
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

@@ -1,0 +1,249 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.employment_wages.23149496
+  name_zh: 劳动力
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指在16周岁及以上，有劳动能力，参加或要求参加社会经济活动的人口。包括就业人员和失业人员。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.f82c6014
+  name_zh: 就业人员
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指在一定年龄以上，有劳动能力，为取得劳动报酬或经营收入而从事一定社会劳动的人员。具体指年满16周岁，为取得报酬或经营利润，在调查周内从事了1小时（含1小时）以上劳动的人员；或由于学习、休假等原因在调查周内暂时处于未工作状态，但有工作单位或场所的人员；或由于临时停工放假、单位不景气放假等原因在调查周内暂时处于未工作状态，但不满三个月的人员。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.829108b4
+  name_zh: 单位就业人员
+  topic_ids:
+  - cnstat.livelihood
+  definition: '指报告期末最后一日在本单位工作，并取得工资或其他形式劳动报酬的人员数。该指标为时点指标，不包括最后一日当天及以前已经与单位解除劳动合同关系的人员，是在岗职工、劳务派遣人员及其他就业人员之和。就业人员不包括：
+
+    （1）离开本单位仍保留劳动关系，并定期领取生活费的人员；
+
+    （2）在本单位实习的各类在校学生；
+
+    （3）本单位以劳务外包形式使用的人员，如：建筑业整建制使用的人员。'
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.aa41147b
+  name_zh: 城镇私营和个体就业人员
+  topic_ids:
+  - cnstat.livelihood
+  definition: 城镇私营就业人员指在工商管理部门注册登记，其经营地址设在县城关镇（含县城关镇）以上的私营企业就业人员，包括私营企业投资者和雇工。城镇个体就业人员指在工商管理部门注册登记，并持有城镇户口或在城镇长期居住，经批准从事个体工商经营的就业人员，包括个体经营者和在个体工商户劳动的家庭帮工和雇工。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.7303566f
+  name_zh: 在岗职工
+  topic_ids:
+  - cnstat.livelihood
+  definition: '指在本单位工作且与本单位签订劳动合同，并由单位支付各项工资和社会保险、住房公积金的人员，以及上述人员中由于学习、病伤、产假等原因暂未工作仍由单位支付工资的人员。在岗职工还包括：
+
+    （1）应订立劳动合同而未订立劳动合同人员（如使用的农村户籍人员）；
+
+    （2）处于试用期人员；
+
+    （3）编制外招用的人员，如临时人员；
+
+    （4）派往外单位工作，但工资仍由本单位发放的人员（如挂职锻炼、外派工作等情况）。'
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.4c085d65
+  name_zh: 工资总额
+  topic_ids:
+  - cnstat.livelihood
+  definition: '指根据《关于工资总额组成的规定》（1990年1月1日国家统计局发布的一号令）进行修订，本单位在报告期内（季度或年度）直接支付给本单位全部就业人员的劳动报酬总额。包括计时工资、计件工资、奖金、津贴和补贴、加班加点工资、特殊情况下支付的工资，是在岗职工工资总额、劳务派遣人员工资总额和其他就业人员工资总额之和。
+
+    工资总额是税前工资，包括单位从个人工资中直接为其代扣或代缴的房费、水费、电费、住房公积金和社会保险基金个人缴纳部分等。
+
+    工资总额不论是计入成本的还是不计入成本的，不论是以货币形式支付的还是以实物形式支付的，均应列入工资总额的计算范围。'
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.dd14be76
+  name_zh: 平均工资
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指单位就业人员在一定时期内平均每人所得的工资额。它表明一定时期工资收入的高低程度，是反映就业人员工资水平的主要指标。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.0bb7ca46
+  name_zh: 平均货币工资指数
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指报告期就业人员平均工资与基期就业人员平均工资的比率，是反映不同时期就业人员货币工资水平变动情况的相对数。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.babb9d1a
+  name_zh: 城镇登记失业人员
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指有非农业户口，在一定的劳动年龄内（16周岁至退休年龄），有劳动能力，无业而要求就业，并在当地劳动保障部门进行失业登记的人员。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.employment_wages.1a9916f6
+  name_zh: 城镇登记失业率
+  topic_ids:
+  - cnstat.livelihood
+  definition: 城镇登记失业人员与城镇单位就业人员（扣除使用的农村劳动力、聘用的离退休人员、港澳台及外方人员）、城镇单位中的不在岗职工、城镇私营业主、个体户主、城镇私营企业和个体就业人员、城镇登记失业人员之和的比。
+  source_name: 国家统计局·指标解释·就业和工资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.f3ffa476
+  name_zh: 工资性收入
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指就业人员通过各种途径得到的全部劳动报酬和各种福利，包括受雇于单位或个人、从事各种自由职业、兼职和零星劳动得到的全部劳动报酬和福利。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.01bda4f3
+  name_zh: 经营净收入
+  topic_ids:
+  - cnstat.livelihood
+  definition: '指住户或住户成员从事生产经营活动所获得的净收入，是全部经营收入中扣除经营费用、生产性固定资产折旧和生产税之后得到的净收入。计算公式为：
+
+    经营净收入=经营收入-经营费用-生产性固定资产折旧-生产税'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.181bed09
+  name_zh: 财产净收入
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指住户或住户成员将其所拥有的金融资产、住房等非金融资产和自然资源交由其他机构单位、住户或个人支配而获得的回报并扣除相关的费用之后得到的净收入。财产净收入包括利息净收入、红利收入、储蓄性保险净收益、转让承包土地经营权租金净收入、出租房屋净收入、出租其他资产净收入和自有住房折算净租金等。财产净收入不包括转让资产所有权的溢价所得。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.2e88ae7a
+  name_zh: 转移净收入
+  topic_ids:
+  - cnstat.livelihood
+  definition: 计算公式为：转移净收入=转移性收入-转移性支出
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.14c805f9
+  name_zh: 转移性收入
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指国家、单位、社会团体对住户的各种经常性转移支付和住户之间的经常性收入转移。包括养老金或退休金、社会救济和补助、政策性生产补贴、政策性生活补贴、救灾款、经常性捐赠和赔偿、报销医疗费、住户之间的赡养收入，本住户非常住成员寄回带回的收入等。转移性收入不包括住户之间的实物馈赠。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.15e559a1
+  name_zh: 转移性支出
+  topic_ids:
+  - cnstat.livelihood
+  definition: '指调查户对国家、单位、住户或个人的经常性或义务性转移支付。包括缴纳的税款、各项社会保障支出、赡养支出、经常性捐赠和赔偿支出以及其他经常转移支出等。
+
+    根据住户收支与生活状况调查，分城镇和农村的居民人均可支配收入等数据的覆盖人群主要变化：一是计算城镇居民人均可支配收入时分母包括了在城镇地区常住的农民工，计算农村居民人均可支配收入时分母不包括在城镇地区常住的农民工；二是由本户供养的在外大学生视为常住人口。
+
+    二、居民消费支出
+
+    居民消费支出是指居民用于满足家庭日常生活消费需要的全部支出，既包括现金消费支出，也包括实物消费支出。消费支出可划分为食品烟酒、衣着、居住、生活用品及服务、交通通信、教育文化娱乐、医疗保健以及其他用品及服务八大类。'
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.3b9038b2
+  name_zh: 食品烟酒
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指用于各种食品和烟草、酒类的支出。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.ff57c423
+  name_zh: 衣着
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指与居民穿着有关的支出，包括服装、服装材料、鞋类、其他衣类及配件、衣着相关加工服务的支出。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.ff172eba
+  name_zh: 居住
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指与居住有关的支出，包括房租、水、电、燃料、物业管理等方面的支出，也包括自有住房折算租金。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.66d98bc0
+  name_zh: 生活用品及服务
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指家庭及个人的各类生活品及家庭服务。包括家具及室内装饰品、家用器具、家用纺织品、家庭日用杂品、个人用品和家庭服务。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.28061749
+  name_zh: 交通通信
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指用于交通和通信工具及相关的各种服务费、维修费和车辆保险等支出。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.b7433912
+  name_zh: 教育文化娱乐
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指用于教育、文化和娱乐方面的支出。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.da877506
+  name_zh: 医疗保健
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指用于医疗和保健的药品、用品和服务的总费用。包括医疗器具及药品，以及医疗服务。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.living.7d5d2895
+  name_zh: 其他用品及服务
+  topic_ids:
+  - cnstat.livelihood
+  definition: 指无法直接归入上述各类支出的其他用品与服务支出。
+  source_name: 国家统计局·指标解释·人民生活
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

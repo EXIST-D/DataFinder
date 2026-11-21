@@ -466,3 +466,4 @@ ul.plain > li.clickable:hover { background: var(--row-hover); border-radius: 8px
 .tnode-go:hover { background: var(--accent); color: #fff; }
 .tnode.muted .tnode-name { color: var(--text-3); }
 .tree-more { display: block; width: 100%; padding: 12px; border: 0; background: none; color: var(--link); font-size: 13px; }
+.defn { white-space: pre-line; line-height: 1.7; font-size: 15px; margin: 6px 0 12px; }

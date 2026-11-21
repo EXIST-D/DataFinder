@@ -1,0 +1,212 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.urban_rural_regional.ed0c465e
+  name_zh: 供水综合生产能力
+  topic_ids:
+  - cnstat.regional
+  definition: 指按供水设施取水、净化、送水、出厂输水干管等环节设计能力计算的综合生产能力。包括在原设计能力的基础上，经挖、革、改增加的生产能力。计算时，以四个环节中最薄弱的环节为主确定能力。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.3052b22c
+  name_zh: 供水管道长度
+  topic_ids:
+  - cnstat.regional
+  definition: 指从送水泵至用户水表之间所有管道的长度。不包括新安装尚未使用、水厂内以及用户建筑物内的管道。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.b23abbfb
+  name_zh: 城市供水总量
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期供水企业（单位）供出的全部水量。包括有效供水量和漏损水量。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.8bd6f424
+  name_zh: 生活用水
+  topic_ids:
+  - cnstat.regional
+  definition: 包括公共服务用水和居民家庭用水。公共服务用水指为城区社会公共生活服务的用水。包括行政事业单位、部队营区和公共设施服务、批发零售业、住宿餐饮业以及社会服务业等单位的用水。居民家庭用水指城市范围内所有居民家庭的日常生活用水。包括城市居民、农民家庭、公共供水站用水。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.7d2d8e91
+  name_zh: 生产用水
+  topic_ids:
+  - cnstat.regional
+  definition: 指在城区范围内生产、运营的农、林、牧、渔业、工业、建筑业、交通运输业等单位在生产、运营过程中的用水。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.ae080b87
+  name_zh: 用水普及率
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期末城区用水人口数与城市人口总数的比率。计算公式：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.db817239
+  name_zh: 人工煤气生产能力
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期末人工燃气生产厂制气、净化、输送等环节的综合生产能力，不包括备用设备能力。一般按设计能力计算，当实际生产能力大于设计能力时，应按实际测定的生产能力计算。测定时应以制气、净化、输送三个环节中最薄弱的环节为主。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.44b11dc0
+  name_zh: 供气管道长度
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期末从气源厂压缩机的出口或门站出口至各类用户引入管之间的全部已经通气、投入使用的管道长度。不包括煤气生产厂、输配站、液化气储存站、灌瓶站、储配站、气化站、混气站、供应站等厂（站）内的管道。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.c01a48bc
+  name_zh: 城市供气总量
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期燃气企业（单位）向用户供应的燃气数量。包括销售量和损失量。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.c38485bc
+  name_zh: 燃气普及率
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期末城区使用燃气的城市人口数与城市人口总数的比率。其中燃气包括人工煤气、天然气、液化石油气三种。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.a071de00
+  name_zh: 城市供热能力
+  topic_ids:
+  - cnstat.regional
+  definition: 指供热企业（单位）向城市热用户输送热能的设计能力。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.654079b6
+  name_zh: 城市供热总量
+  topic_ids:
+  - cnstat.regional
+  definition: 指在报告期供热企业（单位）向城市热用户输送全部蒸汽和热水的总热量。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.f59be1d7
+  name_zh: 城市供热管道长度
+  topic_ids:
+  - cnstat.regional
+  definition: 指从各类热源到热用户建筑物接入口之间的全部蒸汽和热水的管道长度。不包括各类热源厂内部的管道长度。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.40f1d80e
+  name_zh: 道路长度
+  topic_ids:
+  - cnstat.regional
+  definition: 指道路长度和与道路相通的桥梁、隧道的长度，按车行道中心线计算。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.79ee4869
+  name_zh: 城市桥梁
+  topic_ids:
+  - cnstat.regional
+  definition: 指为跨越天然或人工障碍物而修建的构筑物。包括跨河桥、立交桥、人行天桥以及人行地下通道等。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.587f51fa
+  name_zh: 城市排水管道长度
+  topic_ids:
+  - cnstat.regional
+  definition: 指所有排水总管、干管、支管、检查井及连接井进出口等长度之和。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.6d660f8f
+  name_zh: 城市污水日处理能力
+  topic_ids:
+  - cnstat.regional
+  definition: 指污水处理厂（或污水处理装置）每昼夜处理污水量的设计能力。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.5fd880b4
+  name_zh: 年末公共交通车辆运营数
+  topic_ids:
+  - cnstat.regional
+  definition: 指年末城市用于公共交通运营业务的全部车辆数。新购、新制和调入的运营车辆，自投入之日起开始计算；调出、报废和调作他用的运营车辆，自上级主管机关批准之日起不再计入。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.46fa0a64
+  name_zh: 城市绿地面积
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期末用作园林和绿化的各种绿地面积。包括公园绿地、生产绿地、防护绿地、附属绿地和其他绿地的面积。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.0fe7ed88
+  name_zh: 公园绿地
+  topic_ids:
+  - cnstat.regional
+  definition: 城市中向公众开放的、以游憩为主要功能，有一定的游憩设施和服务设施，同时兼有健全生态、美化景观、防灾减灾等综合作用的绿化用地。包括综合公园、社区公园、专类公园、带状公园和街旁绿地。其中综合公园、专类公园和带状公园面积之和为公园面积。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.c01b4849
+  name_zh: 清扫保洁面积
+  topic_ids:
+  - cnstat.regional
+  definition: 指报告期末对城市道路和公共场所（主要包括城市行车道、人行道、车行隧道、人行过街地下通道、道路附属绿地、地铁站、高架路、人行过街天桥、立交桥、广场、停车场及其他设施等）进行清扫保洁的面积。一天清扫保洁多次的，按清扫保洁面积最大的一次计算。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.1246b14f
+  name_zh: 市容环卫专用车辆设备
+  topic_ids:
+  - cnstat.regional
+  definition: 指用于环境卫生作业、监察的专用车辆和设备，包括用于道路清扫、冲洗、洒水、除雪、垃圾粪便清运、市容监察以及与其配套使用的车辆和设备。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.urban_rural_regional.8c754cb8
+  name_zh: 每万人拥有公共汽电车辆
+  topic_ids:
+  - cnstat.regional
+  definition: 指按城市人口计算的每万人平均拥有的公共汽电车辆标台数。
+  source_name: 国家统计局·指标解释·城市、农村和区域发展
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

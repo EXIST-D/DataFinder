@@ -157,7 +157,9 @@ def item_links(
     for link in links:
         if link.href == page_url or link.href in seen or site_of(link.href) != home:
             continue
-        if len(link.text) < 4 or link.text in _CHROME_TEXT:
+        if (
+            len(link.text) < 2 or link.text in _CHROME_TEXT
+        ):  # 两三个字的栏目名（工业、人口、建筑业）也是正经条目
             continue
         if href_re:
             ok = bool(href_re.search(link.href))

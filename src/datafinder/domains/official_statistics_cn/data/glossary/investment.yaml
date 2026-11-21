@@ -1,0 +1,316 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.fixed_investment.ba7231c0
+  name_zh: 全社会固定资产投资
+  topic_ids:
+  - cnstat.investment
+  definition: 是以货币形式表现的在一定时期内全社会建造和购置固定资产的工作量以及与此有关费用的总称。该指标是反映固定资产投资规模、结构和发展速度的综合性指标。全社会固定资产投资按登记注册类型可分为国有、集体、联营、股份制、私营和个体、港澳台商、外商、其他等。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.142cbf57
+  name_zh: 固定资产投资（不含农户）
+  topic_ids:
+  - cnstat.investment
+  definition: 指城镇和农村各种登记注册类型的企业、事业、行政单位及城镇个体户进行的计划总投资500万元及以上的建设项目投资和房地产开发投资，包括原口径的城镇固定资产投资加上农村企事业组织项目投资，该口径自2011年起开始使用。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.8f79ff86
+  name_zh: 民间固定资产投资
+  topic_ids:
+  - cnstat.investment
+  definition: 指具有集体、私营、个人性质的内资企事业单位以及由其控股（包括绝对控股和相对控股）的企业单位在中华人民共和国境内建造或购置固定资产的投资。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.27ccd517
+  name_zh: 基础设施投资
+  topic_ids:
+  - cnstat.investment
+  definition: 指为社会生产和生活提供基础性、大众性服务的工程和设施，是社会赖以生存和发展的基本条件。包括以下行业投资：铁路运输业、道路运输业、水上运输业、航空运输业、管道运输业、多式联运和运输代理业、装卸搬运业、邮政业、电信广播电视和卫星传输服务业、互联网和相关服务业、水利管理业、生态保护和环境治理业、公共设施管理业。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.d1c35c5d
+  name_zh: 实际到位资金
+  topic_ids:
+  - cnstat.investment
+  definition: 指用于固定资产投资的各种货币资金。包括国家预算资金、国内贷款、利用外资、自筹资金和其他资金。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.15153310
+  name_zh: 国家预算资金
+  topic_ids:
+  - cnstat.investment
+  definition: 国家预算包括一般预算、政府性基金预算、国有资本经营预算和社保基金预算。各类预算中用于固定资产投资的资金全部作为国家预算资金填报，其中一般预算中用于固定资产投资的部分包括基建投资、车购税、灾后恢复重建基金和其他财政投资。各级政府债券也应归入国家预算资金。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.7f099bb7
+  name_zh: 国内贷款
+  topic_ids:
+  - cnstat.investment
+  definition: 指报告期固定资产投资项目单位向银行及非银行金融机构借入用于固定资产投资的各种国内借款，包括银行利用自有资金及吸收存款发放的贷款、上级拨入的国内贷款、国家专项贷款（包括煤代油贷款、劳改煤矿专项贷款等），地方财政专项资金安排的贷款、国内储备贷款、周转贷款等。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.48305527
+  name_zh: 利用外资
+  topic_ids:
+  - cnstat.investment
+  definition: 指报告期收到的境外（包括外国及港澳台地区）资金（包括设备、材料、技术在内）。包括对外借款（外国政府贷款、国际金融组织贷款、出口信贷、外国银行商业贷款、对外发行债券和股票）、外商直接投资、外商其他投资（包括利用外商投资收益在国内进行固定资产再投资活动的资金）。不包括我国自有外汇资金（国家外汇、地方外汇、留成外汇、调剂外汇和国内银行自有资金发放的外汇贷款等）。各类外资按报告期的外汇牌价（中间价）折成人民币计算。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.d5aaf826
+  name_zh: 自筹资金
+  topic_ids:
+  - cnstat.investment
+  definition: 指固定资产投资单位在报告期收到的，由各企、事业单位筹集用于固定资产投资的资金，包括各类企事业单位的自有资金和从其他单位筹集的用于固定资产投资的资金，但不包括各类财政性资金、从各类金融机构借入资金和国外资金。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.b26925f4
+  name_zh: 其他资金来源
+  topic_ids:
+  - cnstat.investment
+  definition: 指在报告期收到的除以上各种资金之外的用于固定资产投资的资金。包括社会集资、个人资金、无偿捐赠的资金及其他单位拨入的资金等。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.24c0104a
+  name_zh: 固定资产投资按国民经济行业分
+  topic_ids:
+  - cnstat.investment
+  definition: 指根据其从事的社会经济活动性质对各类单位进行的分类。应根据建设项目建成投产后的主要产品种类或主要用途及社会经济活动种类来划分，不能根据项目单位本身的行业类别来划分。如果项目投产后有几种产品，应根据主要产品来确定行业类别。一般情况下，一个建设项目只能属于一种国民经济行业。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.6b59f90f
+  name_zh: 固定资产投资按隶属关系分
+  topic_ids:
+  - cnstat.investment
+  definition: '是按建设单位或企业、事业、行政单位的主管上级机关确定的。
+
+    （1）中央 是指中共中央、人大常委会和国务院各部、委、局、总公司以及直属机构直接领导的建设项目和企业、事业、行政单位。这些单位的固定资产投资计划由国务院各部门直接编制和下达，统一组织或委托下级实施。包括有中央垂直管理的部门（如国家统计局各级调查队）和中央直属企业、事业单位（如工商银行、中国电信、中国石油）等。
+
+    （2）地方 是由省（自治区、直辖市）、地（区、市、州、盟）、县（区、市、旗）三级政府及业务主管部门直接领导和管理的建设项目、企业、事业、行政单位。地方项目还包括不隶属以上各级政府及主管部门的建设项目和企业、事业单位，如外商投资企业和无主管部门的企业等。'
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.a523ad70
+  name_zh: 固定资产投资按建设性质分
+  topic_ids:
+  - cnstat.investment
+  definition: '按整个建设项目情况来确定。建设项目的性质一般分为新建、扩建、改建和技术改造、单纯建造生活设施、迁建、恢复、单纯购置。农户投资不划分建设性质。
+
+    （1）新建 指从无到有“平地起家”开始建设的项目。现有企业、事业、行政单位投资的项目一般不属于新建。但如有的单位原有基础很小，经过建设后新增的固定资产价值超过该企业、事业、行政单位原有固定资产价值（原值）三倍以上的，也应作为新建。
+
+    （2）扩建 指在厂内或其他地点，为扩大原有产品的生产能力（或效益）或增加新的产品生产能力，而增建的生产车间（或主要工程）、分厂、独立的生产线等项目。行政、事业单位在原单位增建业务性用房（如学校增建教学用房、医院增建门诊部、病房等）也作为扩建。
+
+    现有企、事业单位为扩大原有主要产品生产能力或增加新的产品生产能力，增建一个或几个主要生产车间（或主要工程）、分厂，同时进行一些更新改造工程的，也应作为扩建。
+
+    （3）改建和技术改造 指现有企业、事业单位对原有设施进行技术改造或更新（包括相应配套的辅助性生产、生活福利设施）的建设项目。改建项目包括企业、事业单位为适应市场变化的需要，而改变企业的主要产品种类（如军工企业转民用产品等）的建设项目；原有产品生产作业线由于各工序（车间）之间能力不平衡，为填平补齐充分发挥原有生产能力而增建但不增加主要产品生产能力的建设项目。技术改造是指企业、事业单位在现有基础上用先进的技术代替落后的技术，用先进的工艺和装备代替落后的工艺和装备，以改变企业落后的技术经济面貌，实现以内涵为主的扩大再生产，达到提高产品质量、促进产品更新换代、节约能源、降低消耗、扩大生产规模、全面提高社会经济效益的目的。技术改造具体包括以下内容：机器设备和工具的更新改造；生产工艺改革、节约能源和原材料的改造；厂房建筑和公共设施的改造；保护环境进行的“三废”治理改造；劳动条件和生产环境的改造等。
+
+    固定资产投资按构成分
+
+    （1）建筑工程 指各种房屋、建筑物的建造工程。这部分投资额必须兴工动料，通过施工活动才能实现，是固定资产投资额的重要组成部分。
+
+    （2）安装工程 指各种设备、装置的安装工程。
+
+    在安装工程中，不包括被安装设备本身价值。
+
+    （3）设备工器具购置 指报告期内购置或自制的，达到固定资产标准的设备、工具、器具的价值。新建单位及扩建单位的新建车间，按照设计或计划要求购置或自制的全部设备、工具、器具，不论是否达到固定资产标准均计入“设备工器具购置”中。
+
+    （4）其他费用 指在固定资产建造和购置过程中发生的，除建筑安装工程和设备、工器具购置投资完成额以外的应当分摊计入固定资产投资的费用，不指经营中财务上的其他费用。'
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.fixed_investment.6d900ff5
+  name_zh: 本年新增生产能力（或工程效益）
+  topic_ids:
+  - cnstat.investment
+  definition: 指在本年度内按照新增生产能力（或工程效益）的计算条件和标准，实际建成投入生产或交付使用的生产能力（或工程效益）。
+  source_name: 国家统计局·指标解释·固定资产投资
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.construction.9042c87c
+  name_zh: 建筑业统计单位
+  topic_ids:
+  - cnstat.investment
+  definition: 指从事房屋、构筑物建造和设备安装活动的法人企业。建筑业法人企业应具有建筑业资质并能够独立核算，同时还应具备以下条件：①依法成立，有自己的名称、组织机构和场所，能够承担民事责任；②独立拥有和使用资产，承担负债，有权与其他单位签订合同；③独立核算盈亏，能够编制资产负债表。
+  source_name: 国家统计局·指标解释·建筑业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897097.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.construction.d6c464cf
+  name_zh: 建筑业总产值
+  topic_ids:
+  - cnstat.investment
+  definition: '是以货币形式表现的建筑业企业在一定时期内生产的建筑业产品和提供服务的总和。建筑业总产值包括：
+
+    ⑴建筑工程产值：指列入建筑工程预算内的各种工程价值。
+
+    ⑵安装工程产值：指设备安装工程价值，不包括被安装设备本身的价值。
+
+    ⑶其他产值：建筑业总产值中除建筑工程、安装工程以外的产值。包括房屋构筑物修理产值、非标准设备制造产值、总包企业向分包企业收取的管理费以及不能明确划分的施工活动所完成的产值。
+
+    a.房屋构筑物修理产值：指房屋和构筑物修理所完成的产值，但不包括被修理房屋、构筑物本身价值和生产设备的修理价值。
+
+    b.非标准设备制造产值：指加工制造没有定型的非标准生产设备的加工费和原材料价值（如化工厂、炼油厂用的各种罐、槽，矿井生产统一使用的各种漏斗、三角槽、阀门等）以及附属加工厂为本企业承建工程制作的非标准设备的价值。'
+  source_name: 国家统计局·指标解释·建筑业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897097.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.construction.efdb5b8d
+  name_zh: 房屋施工面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指报告期内施工的全部房屋建筑面积，包括本期新开工的房屋建筑面积、上期跨入本期继续施工的房屋建筑面积、上期停缓建在本期恢复施工的房屋建筑面积、本期竣工的房屋建筑面积及本期施工后又停缓建的房屋建筑面积。
+  source_name: 国家统计局·指标解释·建筑业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897097.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.construction.7ae550e3
+  name_zh: 房屋竣工面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指报告期内房屋建筑按照设计要求已全部完工，达到住人和使用条件，经验收鉴定合格或达到竣工验收标准，可正式移交使用的各栋房屋建筑面积的总和。
+  source_name: 国家统计局·指标解释·建筑业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897097.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.10b449c7
+  name_zh: 待开发土地面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业经有关部门批准，通过各种方式获得土地使用权，但尚未开工建设的土地面积。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.5daa4b42
+  name_zh: 本年土地购置面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年通过各种方式获得土地使用权的土地面积。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.12b2a82e
+  name_zh: 本年土地成交价款
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年进行土地使用权交易活动的最终金额。在土地一级市场，是指土地最后的划拨款、“招拍挂”价格和出让价；在土地二级市场是指土地转让、出租、抵押等最后确定的合同价格。土地成交价款与土地购置面积同口径。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.e8d6ba99
+  name_zh: 土地购置费
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业通过各种方式取得土地使用权而支付的费用。土地购置费按本年实际发生额计入投资。土地购置费为分期付款的，分期计入房地产开发投资。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.3521d24b
+  name_zh: 计划总投资
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业在建的建设工程按照总体设计（或按设计概算或预算）规定的内容全部建成计划需要的总投资。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.864f2b6d
+  name_zh: 自开始建设累计完成投资
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业在建的房屋建设工程或正在开发的土地开发工程从开始建设到本年末止累计完成的全部投资。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.31683925
+  name_zh: 房地产开发投资
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年完成的全部用于房屋建设工程、土地开发工程的投资额以及公益性建筑和土地购置费等的投资。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.6efc71df
+  name_zh: 本年实际到位资金
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年实际到位的，可用于房地产开发的各种货币资金。包括国内贷款、利用外资、自筹资金、定金及预收款、个人按揭贷款和其他资金。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.efdb5b8d
+  name_zh: 房屋施工面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年施工的全部房屋建筑面积。包括本年新开工的房屋建筑面积、上年跨入本年继续施工的房屋建筑面积、上年停缓建在本年恢复施工的房屋建筑面积、本年竣工的房屋建筑面积以及本年施工后又停缓建的房屋建筑面积。多层建筑应填各层建筑面积之和。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.9f924b96
+  name_zh: 房屋新开工面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年新开工建设的房屋建筑面积，以单位工程为核算对象。不包括在上年开工跨入本年继续施工的房屋建筑面积和上年停缓建而在本年恢复施工的房屋建筑面积。房屋的开工应以房屋正式开始破土刨槽（地基处理或打永久桩）的日期为准。房屋新开工面积指整栋房屋的全部建筑面积，不能分割计算。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.7ae550e3
+  name_zh: 房屋竣工面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年按照设计要求已全部完工，达到住人和使用条件，经验收鉴定合格或达到竣工验收标准，可正式移交使用的各栋房屋建筑面积的总和。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.1bdaa88f
+  name_zh: 商品房销售面积
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年出售商品房屋的合同总面积（即双方签署的正式买卖合同中所确定的建筑面积）。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.real_estate.01e78ac4
+  name_zh: 商品房销售额
+  topic_ids:
+  - cnstat.investment
+  definition: 指房地产开发企业本年出售商品房屋的合同总价款（即双方签署的正式买卖合同中所确定的合同总价）。该指标与商品房销售面积同口径。
+  source_name: 国家统计局·指标解释·房地产
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

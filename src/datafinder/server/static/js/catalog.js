@@ -137,6 +137,8 @@ export async function openDetail(id) {
     const [dtext, dcls] = DELIVERY[r.delivery];
     const dists = d.distributions.map((x) => `<li><span class="badge soft">${esc(x.access_method)}</span> ${x.url ? `<a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener noreferrer">${esc(x.url)} ${ICON_OUT}</a>` : ""} ${x.file_format ? `<span class="pill">${esc(x.file_format)}</span>` : ""} ${x.usability ? `<span class="pill">${esc(USABILITY[x.usability] || x.usability)}</span>` : ""}${x.note ? ` <small>${esc(x.note)}</small>` : ""}</li>`).join("");
     const kids = (d.children || []).map((c) => `<li class="clickable" data-open="${esc(c.resource_id)}" tabindex="0" role="button"><span class="badge ${DELIVERY[c.delivery][1]}">${DELIVERY[c.delivery][0]}</span> ${esc(c.title)}</li>`).join("");
+    const terms = (d.glossary || []).map((t) => `<li><strong>${esc(t.name_zh)}</strong>（${esc(t.status_zh)}）${esc(t.definition)} <button class="link-btn" type="button" data-gterm="${esc(t.name_zh)}">术语词典 ›</button></li>`).join("");
+    const portal = d.source?.portal;
     const cmd = cliHint(r, d.how_to_get);
     const regions = r.regions.map((x) => `${esc(regionName(x.region_id))}${x.granularity ? `·按${esc(GRAN[x.granularity] || x.granularity)}报告` : ""}（${esc(EVIDENCE[x.evidence] || x.evidence)}）`).join("；");
     openSheet((b) => {
@@ -151,6 +153,8 @@ export async function openDetail(id) {
           <dt>地域</dt><dd>${regions || "未标注"}</dd>
           <dt>主题</dt><dd>${r.topic_ids.map((t) => esc(topicName(t))).join("、") || "未分类"}</dd>
         </dl>
+        ${terms ? `<h4>术语说明</h4><ul class="plain">${terms}</ul>` : ""}
+        ${portal ? `<p class="sheet-note">来源：${esc(d.source.name)} · <button class="link-btn" type="button" data-gsource="${esc(d.source.name)}">在“数据来源”里查看 ›</button></p>` : ""}
         <h4>怎么获取</h4>
         <p class="lead">${esc(d.how_to_get.note)}</p>
         ${cmd ? `<pre class="code" id="cCmd">${esc(cmd)}</pre><div class="res-actions"><button class="link-btn" id="cCopy" type="button">复制命令</button></div>` : ""}
@@ -183,7 +187,14 @@ el.list.addEventListener("click", (e) => {
 el.list.addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.closest("[data-i]")?.click(); });
 el.chips.addEventListener("click", (e) => { const c = e.target.closest("[data-clear]"); if (c) change({ [c.dataset.clear]: c.dataset.clear === "strict" ? false : "" }); });
 el.pager.addEventListener("click", (e) => { const p = e.target.closest("[data-page]"); if (p && !p.disabled) { state.page = Number(p.dataset.page); syncUrl(); load(); window.scrollTo({ top: el.topics.offsetTop - 12, behavior: "smooth" }); } });
-sheetBody.addEventListener("click", (e) => { const k = e.target.closest("[data-open]"); if (k) openDetail(k.dataset.open); });
+sheetBody.addEventListener("click", (e) => {
+  const k = e.target.closest("[data-open]");
+  if (k) return openDetail(k.dataset.open);
+  const g = e.target.closest("[data-gterm]");
+  if (g) return go("glossary", { q: g.dataset.gterm });
+  const s = e.target.closest("[data-gsource]");
+  if (s) go("sources", { q: s.dataset.gsource });
+});
 sheetBody.addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.closest("[data-open]")?.click(); });
 
 export function enter() {

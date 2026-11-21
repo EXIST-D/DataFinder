@@ -1,0 +1,443 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.health_social.9538edeb
+  name_zh: 医疗卫生机构
+  topic_ids:
+  - cnstat.health
+  definition: 指从卫生（卫生计生）行政部门取得《医疗机构执业许可证》、《中医诊所备案证》、《计划生育技术服务许可证》，或从民政、工商行政、机构编制管理部门取得法人单位登记证书，为社会提供医疗服务、公共卫生服务或从事医学科研和医学在职培训等工作的单位。医疗卫生机构包括医院、基层医疗卫生机构、专业公共卫生机构、其他医疗卫生机构。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.41deb734
+  name_zh: 医院
+  topic_ids:
+  - cnstat.health
+  definition: 包括综合医院、中医医院、中西医结合医院、民族医院、各类专科医院和护理院，不包括专科疾病防治院、妇幼保健院和疗养院，包括医学院校附属医院。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.851e5a74
+  name_zh: 基层医疗卫生机构
+  topic_ids:
+  - cnstat.health
+  definition: 包括社区卫生服务中心、社区卫生服务站、街道卫生院、乡镇卫生院、村卫生室、门诊部、诊所（医务室）。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.cf1fde45
+  name_zh: 专业公共卫生机构
+  topic_ids:
+  - cnstat.health
+  definition: 包括疾病预防控制中心、专科疾病防治机构、妇幼保健机构（含妇幼保健计划生育服务中心）、健康教育机构、急救中心（站）、采供血机构、卫生监督机构、取得《医疗机构执业许可证》或《计划生育技术服务许可证》的计划生育技术服务机构。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.3df6e814
+  name_zh: 卫生人员
+  topic_ids:
+  - cnstat.health
+  definition: 指在医院、基层医疗卫生机构、专业公共卫生机构及其他医疗卫生机构工作的职工，包括卫生技术人员、乡村医生和卫生员、其他技术人员、管理人员和工勤人员。一律按支付年底工资的在岗职工统计，包括各类聘任人员（含合同工）及返聘本单位半年以上人员，不包括临时工、离退休人员、退职人员、离开本单位仍保留劳动关系人员、本单位返聘和临聘不足半年人员。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.5fc86361
+  name_zh: 卫生技术人员
+  topic_ids:
+  - cnstat.health
+  definition: 包括执业医师、执业助理医师、注册护士、药师（士）、检验技师（士）、影像技师、卫生监督员和见习医（药、护、技）师（士）等卫生专业人员。不包括从事管理工作的卫生技术人员（如院长、副院长、党委书记等）。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.224a2dac
+  name_zh: 执业医师
+  topic_ids:
+  - cnstat.health
+  definition: 指《医师执业证》“级别”为“执业医师”且实际从事医疗、预防保健工作的人员，不包括实际从事管理工作的执业医师。执业医师类别分为临床、中医、口腔和公共卫生四类。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.85627276
+  name_zh: 执业（助理）医师
+  topic_ids:
+  - cnstat.health
+  definition: 指《医师执业证》“级别”为“执业助理医师”且实际从事医疗、预防保健工作的人员，不包括实际从事管理工作的执业助理医师。执业助理医师类别分为临床、中医、口腔和公共卫生四类。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.91d8c23f
+  name_zh: 每千人口卫生技术人员
+  topic_ids:
+  - cnstat.health
+  definition: 每千人口卫生技术人员=卫生技术人员数/人口数×1000。人口数系年末常住人口。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.6aa8d84e
+  name_zh: 每千人口执业（助理）医师
+  topic_ids:
+  - cnstat.health
+  definition: 每千人口执业（助理）医师=（执业医师数+执业助理医师数）/人口数×1000。人口数系年末常住人口。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.ce31415f
+  name_zh: 床位数
+  topic_ids:
+  - cnstat.health
+  definition: 指年底固定实有床位（非编制床位），包括正规床、简易床、监护床、超过半年加床、正在消毒和修理床位、因扩建或大修而停用的床位，不包括产科新生儿床、接产室待产床、库存床、观察床、临时加床和病人家属陪待床。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.58a39a72
+  name_zh: 每千人口医疗卫生机构床位
+  topic_ids:
+  - cnstat.health
+  definition: 每千人口医疗卫生机构床位=医疗卫生机构床位数/人口数×1000。人口数系年末常住人口。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.34b86e68
+  name_zh: 28种传染病发病率
+  topic_ids:
+  - cnstat.health
+  definition: 是指某年每10万人口中28种传染病发病数。即28种传染病发病率=28种传染病发病数/人口数×100000。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.7f7c90a3
+  name_zh: 28种传染病死亡率
+  topic_ids:
+  - cnstat.health
+  definition: 是指某年每10万人口中28种传染病死亡数。即28种传染病死亡率=28种传染病死亡数/人口数×100000。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.36b41383
+  name_zh: 死亡率
+  topic_ids:
+  - cnstat.health
+  definition: 指年内一定地区的死亡人数与同期平均人数之比，一般以‰表示。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.fdbd4b3a
+  name_zh: 孕产妇死亡率
+  topic_ids:
+  - cnstat.health
+  definition: 指年内每10万名孕产妇的死亡人数。孕产妇死亡指从妊娠期至产后42天内，由于任何妊娠或妊娠处理有关的原因导致的死亡，但不包括意外原因死亡者。按国际通用计算方法，“孕产妇总数”以“活产数”代替计算。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.1d769c0c
+  name_zh: 5岁以下儿童死亡率
+  topic_ids:
+  - cnstat.health
+  definition: 指年内未满5岁儿童死亡人数与 活产数之比，一般以‰表示。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.bcf95fdb
+  name_zh: 新生儿死亡率
+  topic_ids:
+  - cnstat.health
+  definition: 指年内新生儿死亡数与活产数之比。一般以‰表示。新生儿死亡指出生至28天以内（即0-27天）死亡人数。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.30e91fb9
+  name_zh: 卫生总费用
+  topic_ids:
+  - cnstat.health
+  definition: 指一个国家或地区在一定时期内，为开展卫生服务活动从全社会筹集的卫生资源的货币总额，按来源法核算。它反映一定经济条件下，政府、社会和居民个人对卫生保健的重视程度和费用负担水平，以及卫生筹资模式的主要特征和卫生筹资的公平性合理性。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.c58676b2
+  name_zh: 政府卫生支出
+  topic_ids:
+  - cnstat.health
+  definition: 指各级政府用于医疗卫生服务、医疗保障补助、卫生和医疗保障行政管理、人口与计划生育事务支出等各项事业的经费。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.5cdffc63
+  name_zh: 社会卫生支出
+  topic_ids:
+  - cnstat.health
+  definition: 指政府支出外的社会各界对卫生事业的资金投入。包括社会医疗保障支出、商业健康保险费、社会办医支出、社会捐赠援助、行政事业性收费收入等。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.ce237e4e
+  name_zh: 个人现金卫生支出
+  topic_ids:
+  - cnstat.health
+  definition: 指城乡居民在接受各类医疗卫生服务时的现金支付，包括享受各种医疗保险制度的居民就医时自付的费用。可分为城镇居民、农村居民个人现金卫生支出，反映城乡居民医疗卫生费用的负担程度。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.7ebca238
+  name_zh: 人均卫生费用
+  topic_ids:
+  - cnstat.health
+  definition: 即某年卫生总费用与同期平均人口数之比。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.d5f27393
+  name_zh: 卫生总费用与GDP之比
+  topic_ids:
+  - cnstat.health
+  definition: 指某年卫生总费用与同期国内生产总值（GDP）之比。是用来反映一定时期国家对卫生事业的资金投入力度，以及政府和全社会对卫生事业、居民健康的重视程度。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.e365a7c1
+  name_zh: 提供住宿的民政机构
+  topic_ids:
+  - cnstat.health
+  definition: 指能为老年人、残疾人、智障与精神病人、儿童等人员提供住宿的社会服务机构数。包括社会福利院、农村特困人员救助供养机构、光荣院、养老公寓等其他养老机构、社会福利医院、儿童福利院、未成年人救助保护中心、生活无着人员救助管理站、安置农场以及其他提供住宿的机构。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.2415f3b7
+  name_zh: 孤儿数
+  topic_ids:
+  - cnstat.health
+  definition: 指失去父母或查找不到生父母的未满18周岁的未成年人的人数。由地方县级以上民政部门依据有关规定和条件认定的，并已经领取了孤儿补助费的孤儿。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.dc5db7cf
+  name_zh: 家庭收养儿童数
+  topic_ids:
+  - cnstat.health
+  definition: 指中国公民收养查找不到生父母的弃婴、儿童和福利机构抚养的孤儿以及外国人收养中国儿童并在中国县级及以上民政部门办理儿童收养登记后取得合法收养关系的总件数。县级及以上民政部门办理儿童收养登记一次为一件。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.5013a5ed
+  name_zh: 被中国公民收养
+  topic_ids:
+  - cnstat.health
+  definition: 指收养人是中国公民（包括港澳台居民及华侨）的儿童收养登记。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.7f5e4534
+  name_zh: 被外国人收养
+  topic_ids:
+  - cnstat.health
+  definition: 指收养人是具有外国国籍（包括无国籍人）的人员。夫妻共同收养有一方是外国人的，按外国人办理收养登记。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.0e423259
+  name_zh: 城市居民最低生活保障人数
+  topic_ids:
+  - cnstat.health
+  definition: 指在报告期末共同生活的家庭成员人均收入低于当地最低生活保障标准，且家庭财产状况符合相关规定的城镇居民，并已发放补助经费的人数。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.136e3102
+  name_zh: 农村居民最低生活保障人数
+  topic_ids:
+  - cnstat.health
+  definition: 指报告期末共同生活的家庭成员人均收入低于当地最低生活保障标准，得到当地政府给予最低生活保障待遇的农业人口家庭人数。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.2c482651
+  name_zh: 离婚率
+  topic_ids:
+  - cnstat.health
+  definition: 指某地区当年离婚对数占该地区年平均人口的比重。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.health_social.686cd773
+  name_zh: 残疾人就业人数
+  topic_ids:
+  - cnstat.health
+  definition: 指本年度通过集中就业、按比例就业、个体就业、公益性岗位就业、辅助性就业、从事农业种养、灵活就业形式安排实现就业的城镇残疾人。
+  source_name: 国家统计局·指标解释·卫生和社会服务
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.32cc0e30
+  name_zh: 批准逮捕
+  topic_ids:
+  - cnstat.health
+  definition: 指人民检察院对公安机关、国家安全机关、监狱管理机关提出逮捕的犯罪嫌疑人进行审查，根据事实，依法做出逮捕决定。该指标主要反映人民检察院对提请逮捕犯罪嫌疑人进行审查后依法做出批准逮捕决定的情况。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.ba37c4d4
+  name_zh: 决定逮捕
+  topic_ids:
+  - cnstat.health
+  definition: 指人民检察院对直接立案侦查的案件，认为需要逮捕犯罪嫌疑人时，依据法律做出的逮捕决定。该指标主要反映人民检察院对直接受理的案件行使决定逮捕权的情况。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.8a7c797f
+  name_zh: 提出抗诉
+  topic_ids:
+  - cnstat.health
+  definition: 指人民检察院对人民法院的判决、裁定认为确有错误，向人民法院提出对案件重新进行审理的诉讼活动。包括按照第二审程序提出的抗诉和按照审判监督程序（再审程序）提出的抗诉。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.5f47d0bb
+  name_zh: 立案监督
+  topic_ids:
+  - cnstat.health
+  definition: 指人民检察院对侦查机关刑事立案活动的监督。包括对应当立案而不立案的监督和不应立案而立案的监督。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.081d8408
+  name_zh: 监督立案
+  topic_ids:
+  - cnstat.health
+  definition: 包括侦查机关接到要求说明不立案理由后主动立案和执行通知立案两个内容。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.56b4a205
+  name_zh: 青少年罪犯
+  topic_ids:
+  - cnstat.health
+  definition: 指人民法院在报告期内判决发生法律效力的有罪判决中 14 周岁以上不满 25 周岁的罪犯。其中 14周岁以上不满 18 周岁的罪犯为未成年罪犯。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.e64ee13c
+  name_zh: 行政案件
+  topic_ids:
+  - cnstat.health
+  definition: 指公民、法人和其他组织认为行政机关和行政机关工作人员的行政行为侵犯其合法权益，向人民法院提起行政诉讼，人民法院依法审理的案件。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.ba2f202d
+  name_zh: 行政赔偿案件
+  topic_ids:
+  - cnstat.health
+  definition: 指公民、法人或者其他组织认为其合法权益受到行政机关及其工作人员违法行使职权的侵害，向人民法院单独或与行政诉讼一并提起赔偿诉讼，人民法院依法审理的案件。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.de66f4cd
+  name_zh: 公证（出证）
+  topic_ids:
+  - cnstat.health
+  definition: 指公证处根据当事人申请，依照事实和法律，按照法定程序制作的，具有法律效力的司法证明文书。
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.public_admin.8d672155
+  name_zh: 受理劳动人事争议案件数
+  topic_ids:
+  - cnstat.health
+  definition: '指劳动人事争议仲裁委员会根据国家法律、法规及有关规章规定，对劳动人事争议当事人提出的仲裁申请进行审查后，符合受理条件而正式立案的劳动人事争议案件数。
+
+    城镇职工基本养老保险
+
+    1.参保人数 包括参保职工人数和离退休（职）人员。参保职工人数指报告期末参加城镇职工基本养老保险并在社保经办机构已建立缴费记录档案的职工人数，包括中断缴费但未终止养老保险关系的职工人数，不包括只登记未建立缴费记录档案的人数。离退休（职）人员人数指报告期末参加城镇职工基本养老保险并由养老保险基金支付养老金的离休、退休和退职人员的人数。
+
+    2.基金收入 指根据国家有关规定，由纳入职工基本养老保险范围的缴费单位和个人按国家规定的缴费基数和缴费比例缴纳的养老保险费，以及通过其他方式取得的形成基金来源的收入。包括单位和职工个人缴纳的基本养老保险费、基本养老保险基金利息收入、委托投资收益、上级补助收入、下级上解收入、转移收入、财政补贴和其他收入。
+
+    3.基金支出 指按照国家政策规定的开支范围和开支标准从职工基本养老保险基金中支付给参加职工基本养老保险的个人养老保险待遇支出，以及由于保险关系转移、上下级之间补助、上解等原因而发生的支出。包括基本养老金、医疗补助金、丧葬补助金和抚恤金、病残津贴、补助下级支出、上解上级支出、转移支出和其他支出等。
+
+    4.基金累计结余 指职工基本养老保险基金收支相抵后的期末累计余额。
+
+    城乡居民基本养老保险
+
+    1.参保人数 指报告期末，参加城乡居民基本养老保险（在经办机构参保登记并已建立缴费记录以及制度实施当年已经年满 60 周岁并在经办机构参保登记）的总人数（不包括已经办理注销登记手续的人数）。
+
+    2.基金收入 指根据国家有关规定，由参加城乡居民基本养老保险的个人按规定缴费的城乡居民基本养老保险费，以及通过集体补助、财政补助等其他方式取得的形成基金来源的收入。包括个人缴费收入、集体补助收入、财政补贴收入、利息收入、委托投资收益、转移收入、上级补助收入、下级上解收入和其他收入。
+
+    3.基金支出 指按照国家政策规定的开支范围和开支标准从城乡居民基本养老保险基金中支付给参加城乡居民基本养老保险的个人养老保险待遇支出，以及由于参保人员跨统筹地区或跨制度流动而发生的支出等。包括养老保险待遇支出、转移支出、补助下级支出、上解上级支出和其他支出。
+
+    4.基金累计结余 指城乡居民基本养老保险基金收支相抵后的期末累计余额。
+
+    基本医疗保险
+
+    1.参保人数 指报告期末参加职工基本医疗保险和城乡居民基本医疗保险人员的合计。
+
+    2.基金收入（含生育保险） 基本医疗保险基金收入包括职工基本医疗保险基金收入（含生育保险）和城乡居民基本医疗保险基金收入。职工基本医疗保险基金收入（含生育保险）包括基本医疗保险费收入（含生育保险）、利息收入、财政补贴收入、其他收入、待转保险费收入、待转利息收入、转移收入。城乡居民基本医疗保险基金收入包括基本医疗保险费收入、利息收入、财政补贴收入、其他收入。
+
+    3.基金支出（含生育保险） 基本医疗保险基金支出包括职工基本医疗保险基金支出（含生育保险）和城乡居民基本医疗保险基金支出。职工基本医疗保险基金支出（含生育保险）包括基本医疗保险待遇支出、生育保险待遇支出、其他支出、转移支出。城乡居民基本医疗保险基金支出包括基本医疗保险待遇支出、购买大病保险支出、其他支出。
+
+    4.基金累计结余（含生育保险） 指截至报告期末基本医疗保险基金（含生育保险）累计结余金额。
+
+    失业保险
+
+    1.参保人数 指报告期末城镇企业、事业单位职工参加失业保险的人数及按地方规定参加失业保险的其他人员人数之和，不包括领取失业保险金人数。
+
+    2.基金收入 指报告期内筹集的失业保险基金的总额，包括失业保险费收入、利息收入、财政补贴收入、其他收入、转移收入。
+
+    3.基金支出 指报告期内为保障失业人员基本生活、预防失业、促进再就业等支出的基金总额，包括失业保险金支出、基本医疗保险费支出、丧葬补助金和抚恤金支出、职业培训和职业介绍补贴支出、其他费用支出、技能提升补贴支出、稳定岗位补贴支出、其他支出、转移支出。
+
+    4.基金累计结余 指截至报告期末失业保险基金收支相抵后的累计余额。
+
+    工伤保险
+
+    1.参保人数 指报告期末参加工伤保险的职工人数和有雇工的个体工商户的雇工数。
+
+    2.享受工伤保险待遇人数 指年报告期内由工伤基金支付，享受工伤医疗、伤残、工亡待遇的总人数。不进行重复计算。
+
+    3.基金收入 指根据国家有关规定，由参加工伤保险的单位按国家规定的缴费基数和缴费比例缴纳及难以直接按照工资总额计算缴纳工伤保险费的部分行业企业按规定方式缴纳的工伤保险费，以及依法通过其他形式取得的形成基金来源的款项。包括：工伤保险费收入、利息收入、上级补助收入、下级上解收入、其他收入。
+
+    4.基金支出 指按照国家政策规定的开支范围和开支标准从工伤保险基金中支付给参加工伤保险的人员及供养直系亲属工伤保险待遇支出及其他支出。包括工伤医疗待遇支出、伤残待遇支出、工亡待遇支出、劳动能力鉴定支出、工伤预防费用支出、补助下级支出、上解上级支出和其他支出。5.基金累计结余 指工伤保险基金收支相抵后的期末累计结余金额。
+
+    5.基金累计结余 指工伤保险基金收支相抵后的期末累计结余金额。'
+  source_name: 国家统计局·指标解释·公共管理、社会保障和社会组织
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

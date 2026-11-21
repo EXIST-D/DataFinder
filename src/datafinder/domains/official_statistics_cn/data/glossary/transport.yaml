@@ -1,0 +1,179 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.transport_post_software.f52f9cd3
+  name_zh: 铁路营业里程
+  topic_ids:
+  - cnstat.transport
+  definition: 又称营业长度，指投入客货运输营业或临时营业的线路长度。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.688c0fdd
+  name_zh: 电气化里程
+  topic_ids:
+  - cnstat.transport
+  definition: 指具备了电力机车牵引条件，并已交付运营的线路里程。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.ed928e56
+  name_zh: 公路里程
+  topic_ids:
+  - cnstat.transport
+  definition: 指报告期末公路的实际长度。统计范围：包括城间、城乡间、乡（村）间能行驶汽车的公共道路，公路通过城镇街道的里程，公路桥梁长度、隧道长度、渡口宽度。不包括城市街道里程，断头路里程，农（林）业生产用道路里程，工（矿）企业等内部道路里程。统计原则：按已竣工验收或交付使用的实际里程计算；两条或多条公路共同经由同一路段的重复里程，只计算一次。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.845e7bc8
+  name_zh: 内河航道里程
+  topic_ids:
+  - cnstat.transport
+  definition: 指在一定时期内，能通航运输船舶及排筏的天然河流、湖泊水库、运河及通航渠道的长度。包括全年季节性通航累计三个月以上的航道，不包括仅供零散流放竹、木排的河道。两省以河为界的航道里程，双方均按一半计算，以免重复。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.a926ff8c
+  name_zh: 定期航班航线里程
+  topic_ids:
+  - cnstat.transport
+  definition: 指定期航班营运里程的总长度，以万公里为计算单位。航线里程的统计分为按重复距离计算和按不重复距离计算两种形式。“按重复距离计算”是指不同航线的相同航段距离可以重复累加；“按不重复距离计算”则不同航线相同航段只统计一次。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.c564fded
+  name_zh: 管道输油（气）里程
+  topic_ids:
+  - cnstat.transport
+  definition: 指油、气、成品油等各类介质实际输送距离，是反映运输管线长度的指标，也是计算周转量的依据。对于有复线和备用线的地段，原则上按单线计算管输里程。双线同时输送又不能分开计量的情况下，管输里程为双线长度之和除以2。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.7906d4bd
+  name_zh: 货（客）运量
+  topic_ids:
+  - cnstat.transport
+  definition: 指在一定时期内，各种运输工具实际运送的货物重量（旅客数量）。货运按吨计算，客运按人计算。货物不论运输距离长短、货物类别，均按实际重量统计。旅客不论行程远近或票价多少，均按一人一次客运量统计；半价票、儿童票也按一人统计。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.4e924065
+  name_zh: 货物（旅客）周转量
+  topic_ids:
+  - cnstat.transport
+  definition: '指在一定时期内，由各种运输工具运送的货物（旅客）数量与其相应运输距离的乘积之总和。该指标可以反映运输业生产的总成果，也是编制和检查运输生产计划，计算运输效率、劳动生产率以及核算运输单位成本的主要基础资料。计算货物周转量通常按发出站与到达站之间的最短距离，也就是计费距离计算。计算公式为：
+
+    货物（旅客）周转量=∑（货物（旅客）运输量×运输距离）'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.ed344ad4
+  name_zh: 港口货物吞吐量
+  topic_ids:
+  - cnstat.transport
+  definition: 指经由水路进、出港区范围，并经过装卸的货物数量。按货物流向分为进港吞吐量和出港吞吐量，按货物的贸易性质分为内贸和外贸吞吐量。货物类别根据现行的交通行业《运输货物分类和代码》标准分类。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.b2d6db38
+  name_zh: 民用运输船舶拥有量
+  topic_ids:
+  - cnstat.transport
+  definition: 指报告期末在水路运输管理部门注册登记的从事水上客、货运输活动的我国企业或私人拥有的营业性运输船舶（含我国企业或私人拥有的悬挂外国旗的船舶）数量。不包括非运输船舶及农业、渔业生产船舶。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.6c718057
+  name_zh: 民用汽车拥有量
+  topic_ids:
+  - cnstat.transport
+  definition: '指报告期末，在公安交通管理部门按照《机动车注册登记工作规范》，已注册登记领有民用车辆牌照的全部汽车数量。汽车拥有量统计的主要分类：根据汽车结构分为载客汽车、载货汽车及其他汽车；根据汽车所有者不同分为个人（私人）汽车、单位汽车；根据汽车的使用性质分为营运汽车、非营运汽车；根据汽车大小规格不同，载客汽车分为大型、中型、小型和微型，载货汽车分为重型、中型、轻型和微型。
+
+    邮政、电信业务总量 指以货币形式表示的邮政、电信通信企业为社会提供各类邮政、电信通信服务的总数量。计算方法为各类业务的实物量分别乘以相应的不变单价，求出各类业务的货币量加总求得。没有不变单价的业务按其业务收入直接相加。'
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.218455cf
+  name_zh: 移动电话用户
+  topic_ids:
+  - cnstat.transport
+  definition: 指在电信运营企业营业网点办理开户登记手续，通过移动电话交换机进入移动电话网，占用移动电话号码的各类电话用户。包括各类签约用户、智能网预付费用户、无线上网卡用户。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.2aa4b4b7
+  name_zh: 互联网上网人数
+  topic_ids:
+  - cnstat.transport
+  definition: 指过去半年内使用过互联网的6周岁及以上中国居民人数。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.9d82e663
+  name_zh: 固定电话用户
+  topic_ids:
+  - cnstat.transport
+  definition: 指在电信企业营业网点办理开户登记手续并已接入固定电话网上的全部电话用户。包括普通电话用户、无线市话用户、公用电话用户、窄带综合业务数字网（N—ISDN）用户、智能网专用接入终端用户等。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.888af907
+  name_zh: 住宅电话用户
+  topic_ids:
+  - cnstat.transport
+  definition: 指私人付费或安装在居民住宅并按照私人或住宅电话用户登记注册和收费的各类电话用户。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.aeeff242
+  name_zh: 固定长途电话交换机容量
+  topic_ids:
+  - cnstat.transport
+  definition: 指电信企业用于接入长途电话网的电话交换机的设备额定容量。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.48c68c89
+  name_zh: 局用交换机容量
+  topic_ids:
+  - cnstat.transport
+  definition: 指安装在电信企业内用于接续本地固定电话的电话交换机容量，包括接入网设备容量（安装在电信运营企业用于连接语音用户的远端节点的设备容量）。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.d00a15ac
+  name_zh: 移动电话交换机容量
+  topic_ids:
+  - cnstat.transport
+  definition: 指移动电话交换机根据一定话务模型和交换机处理能力计算出来的最大同时服务用户的数量。按报告期末已割接入网正式投入使用的设备实际容量统计。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.transport_post_software.e5421bcb
+  name_zh: 互联网宽带接入端口
+  topic_ids:
+  - cnstat.transport
+  definition: 指用于接入互联网用户的各类实际安装运行的接入端口的数量，包括xDSL用户接入端口、LAN接入端口、其他类型接入端口等，不包括窄带拨号接入端口。
+  source_name: 国家统计局·指标解释·运输、邮电和软件业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

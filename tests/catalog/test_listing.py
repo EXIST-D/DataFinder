@@ -100,3 +100,14 @@ def test_infer_period_is_conservative():
     assert infer_period("2025年", "2026-02-28") == (2025, "annual", 2026)
     assert infer_period("2024年国民经济和社会发展统计公报", None)[1] == "annual"
     assert infer_period("国家统计局解读数据", None) == (None, None, None)
+
+
+def test_short_column_names_in_a_cluster_are_items_but_nav_text_is_not():
+    # 指标解释栏目：条目标题只有 2–3 个字（工业、人口、建筑业），它们是正经条目
+    names = ["综合", "人口", "工业", "建筑业"]
+    items = "".join(
+        f'<a href="./202302/t20230202_189711{i}.html">{n}</a>' for i, n in enumerate(names)
+    )
+    nav = '<a href="/">首页</a><a href="/sj/">数据</a><a href="/xwdt/">新闻</a>'
+    got = item_links(extract_links(items + nav, BASE), BASE)
+    assert [x.text for x in got] == names

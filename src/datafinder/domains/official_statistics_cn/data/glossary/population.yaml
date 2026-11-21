@@ -1,0 +1,127 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.population.057093a4
+  name_zh: 人口数
+  topic_ids:
+  - cnstat.population
+  definition: '指一定时点、一定地区范围内有生命的个人总和。
+
+    年度统计的年末人口数指每年12月31日24时的人口数。年度统计的全国人口总数内未包括香港、澳门特别行政区和台湾省以及海外华侨人数。'
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.f6fdc660
+  name_zh: 城镇人口和乡村人口
+  topic_ids:
+  - cnstat.population
+  definition: 城镇人口是指居住在城镇范围内的全部常住人口；乡村人口是除上述人口以外的全部人口。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.a6abdeee
+  name_zh: 出生率
+  aliases:
+  - 粗出生率
+  topic_ids:
+  - cnstat.population
+  definition: '指在一定时期内（通常为一年）一定地区的出生人数与同期内平均人数（或期中人数）之比，用千分率表示。本资料中的出生率指年出生率，其计算公式为：
+
+    式中：出生人数指活产婴儿，即胎儿脱离母体时（不管怀孕月数），有过呼吸或其他生命现象。年平均人数指年初、年底人口数的平均数，也可用年中人口数代替。'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.36b41383
+  name_zh: 死亡率
+  aliases:
+  - 粗死亡率
+  topic_ids:
+  - cnstat.population
+  definition: 指在一定时期内（通常为一年）一定地区的死亡人数与同期内平均人数（或期中人数）之比，用千分率表示。本资料中的死亡率指年死亡率，其计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.ee506900
+  name_zh: 人口自然增长率
+  topic_ids:
+  - cnstat.population
+  definition: 指在一定时期内（通常为一年）人口自然增加数（出生人数减死亡人数）与该时期内平均人数（或期中人数）之比，用千分率表示。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.2d413295
+  name_zh: 总抚养比
+  topic_ids:
+  - cnstat.population
+  definition: '也称总负担系数。指人口总体中非劳动年龄人口数与劳动年龄人口数之比。通常用百分比表示。说明每100名劳动年龄人口大致要负担多少名非劳动年龄人口。用于从人口角度反映人口与经济发展的基本关系。计算公式为：
+
+    其中：GDR为总抚养比；
+
+    P0~14为0～14岁少年儿童人口数；
+
+    P65+为65岁及65岁以上的老年人口数；
+
+    P15~64为15～64岁劳动年龄人口数。'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.72609709
+  name_zh: 老年人口抚养比
+  topic_ids:
+  - cnstat.population
+  definition: '也称老年人口抚养系数。指某一人口中老年人口数与劳动年龄人口数之比。通常用百分比表示。用以表明每100名劳动年龄人口要负担多少名老年人。老年人口抚养比是从经济角度反映人口老化社会后果的指标之一。计算公式为：
+
+    其中：ODR为老年人口抚养比；
+
+    P65+为65岁及65岁以上的老年人口数；
+
+    P15~64为15～64岁的劳动年龄人口数。'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.a2a00a92
+  name_zh: 少年儿童抚养比
+  topic_ids:
+  - cnstat.population
+  definition: '也称少年儿童抚养系数。指某一人口中少年儿童人口数与劳动年龄人口数之比。通常用百分比表示。以反映每100名劳动年龄人口要负担多少名少年儿童。计算公式为：
+
+    其中：CDR为少年儿童抚养比；
+
+    P0~14为0～14岁少年儿童人口数；
+
+    P15~64为15～64岁劳动年龄人口数。'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.4e409218
+  name_zh: 人户分离人口
+  topic_ids:
+  - cnstat.population
+  definition: 是指居住地与户口登记地所在的乡镇街道不一致且离开户口登记地半年以上的人口。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.population.a50647f1
+  name_zh: 流动人口
+  topic_ids:
+  - cnstat.population
+  definition: 是指人户分离人口中不包括市辖区内人户分离的人口。市辖区内人户分离的人口是指一个直辖市或地级市所辖区内和区与区之间，居住地和户口登记地不在同一乡镇街道的人口。
+  source_name: 国家统计局·指标解释·人口
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

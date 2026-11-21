@@ -1,0 +1,99 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.energy.fa5bdf1c
+  name_zh: 能源生产总量
+  topic_ids:
+  - cnstat.energy
+  definition: 指一定时期内，全国一次能源生产量的总和。该指标是观察全国能源生产水平、规模、构成和发展速度的总量指标。一次能源生产量包括原煤、原油、天然气、水电、核能及其他动力能（如风能、地热能等）发电量，不包括低热值燃料生产量、太阳热能等的利用和由一次能源加工转换而成的二次能源产量。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.ee26d19c
+  name_zh: 能源消费总量
+  topic_ids:
+  - cnstat.energy
+  definition: '指一定地域内，国民经济各行业和居民家庭在一定时期内消费的各种能源的总和。包括：原煤、原油、天然气、水能、核能、风能、太阳能、地热能、生物质能等一次能源；一次能源通过加工转换产生的洗煤、焦炭、煤气、电力、热力、成品油等二次能源和同时产生的其他产品；其他化石能源、可再生能源和新能源。其中水能、风能、太阳能、地热能、生物质能等可再生能源，是指人们通过一定技术手段获得的，并作为商品能源使用的部分。在核算过程中，一次能源、二次能源消费不能重复计算。能源消费总量分为终端能源消费量、能源加工转换损失量和能源损失量三部分。
+
+    （1）终端能源消费量：指一定时期内，全国生产和生活消费的各种能源在扣除了用于加工转换二次能源消费量和损失量以后的数量。
+
+    （2）能源加工转换损失量：指一定时期内，全国投入加工转换的各种能源数量之和与产出各种能源产品之和的差额。该指标是观察能源在加工转换过程中损失量变化的指标。
+
+    （3）能源损失量：指一定时期内，能源在输送、分配、储存过程中发生的损失和由客观原因造成的各种损失量，不包括各种气体能源放空、放散量。'
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.2a204caf
+  name_zh: 能源生产弹性系数
+  topic_ids:
+  - cnstat.energy
+  definition: '是研究能源生产增长速度与国民经济增长速度之间关系的指标。计算公式：
+
+    国民经济年平均增长速度，可根据不同的目的或需要，用国民生产总值、国内生产总值等指标来计算，本年鉴是采用国内生产总值指标计算的。'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.0373b731
+  name_zh: 电力生产弹性系数
+  topic_ids:
+  - cnstat.energy
+  definition: 是研究电力生产增长速度与国民经济增长速度之间关系的指标。一般来说，电力的发展应当快于国民经济的发展，也就是说电力应超前发展。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.61d80e2d
+  name_zh: 能源消费弹性系数
+  topic_ids:
+  - cnstat.energy
+  definition: 反映能源消费增长速度与国民经济增长速度之间比例关系的指标。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.f6c7a83a
+  name_zh: 电力消费弹性系数
+  topic_ids:
+  - cnstat.energy
+  definition: 反映电力消费增长速度与国民经济增长速度之间比例关系的指标。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.52f6279c
+  name_zh: 能源加工转换效率
+  topic_ids:
+  - cnstat.energy
+  definition: 指一定时期内，能源经过加工、转换后，产出的各种能源产品的数量与同期内投入加工转换的各种能源数量的比率。该指标是观察能源加工转换装置和生产工艺先进与落后、管理水平高低等的重要指标。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.0c1b3945
+  name_zh: 单位国内生产总值能耗
+  topic_ids:
+  - cnstat.energy
+  definition: 指一定时期内，一个国家或地区每生产一个单位的国内生产总值所消费的能源。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.energy.68b1cf94
+  name_zh: 单位国内生产总值电耗
+  topic_ids:
+  - cnstat.energy
+  definition: 指一定时期内，一个国家或地区每生产一个单位的国内生产总值所消费的电力。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·能源
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

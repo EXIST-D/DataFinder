@@ -1,0 +1,42 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.education.abc9002b
+  name_zh: 普通高等学校
+  topic_ids:
+  - cnstat.education
+  definition: '指通过国家普通高等教育招生考试，招收高中毕业生为主要培养对象，实施高等学历教育的全日制大学、独立设置的学院、独立学院和高等专科学校、高等职业学校及其他普通高教机构。
+
+    大学、独立设置的学院主要实施本科及本科层次以上的教育。独立学院主要实施本科层次的教育。高等专科学校、高等职业学校实施专科层次的教育。其他普通高教机构是指承担国家普通招生计划任务不计校数的机构，包括普通高等学校分校、大专班等。'
+  source_name: 国家统计局·指标解释·教育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897090.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.education.a071e2b4
+  name_zh: 成人高等学校
+  topic_ids:
+  - cnstat.education
+  definition: 指通过国家成人高等教育招生考试，招收具有高中毕业或同等学力的人员为主要培养对象，利用函授、业余、脱产等多种形式，对其实施高等学历教育的学校。包括：职工高等学校、农民高等学校、管理干部学院、教育学院、独立函授学院、广播电视大学、其他成人高教机构等。其他成人高教机构是指承担国家成人招生计划任务不计校数的机构。
+  source_name: 国家统计局·指标解释·教育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897090.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.education.bb8d4805
+  name_zh: 小学学龄儿童净入学率
+  topic_ids:
+  - cnstat.education
+  definition: 指调查范围内已入小学学习的学龄儿童占校内外学龄儿童总数的比重。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·教育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897090.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.education.e00fd545
+  name_zh: 国家财政性教育经费
+  topic_ids:
+  - cnstat.education
+  definition: 包括一般公共预算安排的教育经费，政府性基金预算安排的教育经费，企业办学中的企业拨款，校办产业和社会服务收入用于教育的经费，其他属于国家财政性教育经费。
+  source_name: 国家统计局·指标解释·教育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897090.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

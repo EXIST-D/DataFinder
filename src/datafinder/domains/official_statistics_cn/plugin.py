@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datafinder.catalog.adapters import register_adapter
+from datafinder.catalog.glossary import register_glossary
 from datafinder.catalog.scout import register_probe
 from datafinder.catalog.portal_links import register_portal_links
 from datafinder.catalog.taxonomy import register_taxonomy
@@ -13,7 +14,7 @@ from datafinder.resources import load_package_yaml
 from datafinder.server.routers import register_router
 from datafinder.sources.registry import register_protocol
 
-from . import DOMAIN_ID, admin
+from . import DOMAIN_ID, admin, glossary_load
 from .hmt.hk import HkAdapter
 from .hmt.tw import TwAdapter
 from .nbs.adapter import NbsAdapter
@@ -28,7 +29,12 @@ PACKAGE = f"datafinder.domains.{DOMAIN_ID}"
 register_domain(DOMAIN_ID, "中国官方统计")
 register_portal_links(DOMAIN_ID, load_package_yaml(PACKAGE, "portal_source_links.yaml")["links"])
 register_protocol("nbs", NbsSource)
-register_thesaurus(DOMAIN_ID, load_package_yaml(PACKAGE, "thesaurus.zh.yaml"))
+_GLOSSARY, _GLOSSARY_ALIASES = glossary_load.load()
+register_glossary(DOMAIN_ID, _GLOSSARY)
+# 检索词表：手写词表优先；词典里官方原文写明的缩写/又称（如 GDP、粗出生率）作补充
+register_thesaurus(
+    DOMAIN_ID, {**_GLOSSARY_ALIASES, **load_package_yaml(PACKAGE, "thesaurus.zh.yaml")}
+)
 register_taxonomy(
     DOMAIN_ID,
     load_package_yaml(PACKAGE, "taxonomy.yaml"),

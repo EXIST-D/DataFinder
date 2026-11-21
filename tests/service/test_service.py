@@ -348,3 +348,63 @@ async def test_tables_with_both_a_file_and_a_parseable_web_page_can_be_fetched_t
     # 只有文件、没有可生成入口的资源仍然不能 fetch
     with pytest.raises(ServiceError, match="不能 fetch"):
         await service.fetch("yb.sd:table:2025/14-08", confirm=True)
+
+
+# ───────────── 术语词典 ─────────────
+
+
+def test_glossary_list_detail_and_find_data_come_with_source_and_status():
+    r = service.glossary.list_terms("GDP")
+    assert r["items"][0]["name_zh"] == "国内生产总值" and r["items"][0]["status_zh"] == "官方原文"
+    assert r["topics"] and r["items"][0]["source_url"].startswith(
+        "https://www.stats.gov.cn/sj/zbjs/"
+    )
+    d = service.glossary.detail(r["items"][0]["term_id"])
+    assert d["definition"].startswith("指一个国家所有常住单位")  # 官方原文，不改写
+    assert any(
+        x["type"] == "not_equivalent" and x["name_zh"] == "国民总收入" for x in d["relations"]
+    )
+    assert d["find_data"] == {"query": "国内生产总值", "topic_ids": ["cnstat.macro"]}
+    assert d["source_resource_id"] is None  # 出处页面不在这个（测试）目录里
+    with pytest.raises(ServiceError) as e:
+        service.glossary.detail("nope")
+    assert e.value.code == "NOT_FOUND"
+    with pytest.raises(ServiceError) as e:
+        service.glossary.list_terms(topic="cnstat.nope")
+    assert e.value.code == "INVALID_FACET_ID"
+
+
+def test_inspect_and_plan_carry_official_definitions_only_for_exact_term_names(portals):
+    cat = Catalog.open()
+    cat.upsert_source(
+        "nbs", domain_id="official_statistics_cn", adapter_id="nbs", name="国家统计局"
+    )
+    from datafinder.catalog import Entry
+
+    cat.upsert(
+        [
+            Entry("nbs", "indicator", "x/1", "国内生产总值 (亿元)"),
+            Entry("nbs", "indicator", "x/2", "工业增加值"),
+        ]
+    )
+    cat.close()
+    gdp = service.inspect("nbs:indicator:x/1")["glossary"]
+    assert gdp and gdp[0]["name_zh"] == "国内生产总值" and gdp[0]["source_url"]
+    assert service.inspect("nbs:indicator:x/2")["glossary"] == []  # 词典里没有的就不说
+    plan = service.plan_sources("河北省国内生产总值", "河北")
+    assert [t["name_zh"] for t in plan["sources"]["glossary"]["items"]] == ["国内生产总值"]
+
+
+def test_glossary_detail_links_to_the_catalog_resource_of_its_source_page():
+    from datafinder.catalog import Entry
+
+    d0 = service.glossary.list_terms("国内生产总值")["items"][0]
+    cat = Catalog.open()
+    cat.upsert_source(
+        "site.nbs", domain_id="official_statistics_cn", adapter_id="site", name="官网"
+    )
+    cat.upsert(
+        [Entry("site.nbs", "reference", "zbjs", "国民经济核算", landing_url=d0["source_url"])]
+    )
+    cat.close()
+    assert service.glossary.detail(d0["term_id"])["source_resource_id"] == "site.nbs:reference:zbjs"

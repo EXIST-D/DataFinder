@@ -1,0 +1,75 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.culture_sports.ad5471e3
+  name_zh: 广播/电视节目综合人口覆盖率
+  topic_ids:
+  - cnstat.culture
+  definition: 指根据国家广播电视总局制定的《广播电视人口覆盖率统计技术标准和方法》进行统计调查的，在对象区内能接收到由中央、省、地市或县通过无线、有线或卫星等各种技术方式转播的各级广播/电视节目的人口数占全国总人口数的百分比。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.2109e440
+  name_zh: 艺术表演团体
+  topic_ids:
+  - cnstat.culture
+  definition: 指由文化部门主办或实行行业管理（经文化行政部门审批或已申报登记并领取相关许可证），专门从事表演艺术等活动的各类专业艺术表演团体，含民间职业剧团。不包括群众业余文艺表演团体。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.1fc1e27e
+  name_zh: 艺术表演场馆
+  topic_ids:
+  - cnstat.culture
+  definition: 指由文化部门主办或实行行业管理（经文化市场行政部门审批或已申报登记并领取相关许可证），有观众席、舞台、灯光设备，公开售票、专供文艺团体演出的文化活动场所。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.7dd8d03f
+  name_zh: 文化市场经营机构
+  topic_ids:
+  - cnstat.culture
+  definition: 指经文化市场行政部门审批或已申报登记并领取相关许可证的、从事文化经营和文化服务活动的机构。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.68ebc135
+  name_zh: 国家综合档案馆
+  topic_ids:
+  - cnstat.culture
+  definition: 指由中央或地方各级档案行政管理部门直接管理的，按行政区划或历史时期设置的，收集和管理所辖范围内多种门类档案的档案馆。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.e39059c0
+  name_zh: 规模以上文化制造业企业
+  topic_ids:
+  - cnstat.culture
+  definition: 指《文化及相关产业分类（2018）》所规定行业范围内，年主营业务收入在2000万元及以上的工业企业法人。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.ce7c599e
+  name_zh: 限额以上文化批发和零售业企业
+  topic_ids:
+  - cnstat.culture
+  definition: 指《文化及相关产业分类（2018）》所规定行业范围内，年主营业务收入在2000万元及以上的批发业企业法人和年主营业务收入在500万元及以上的零售业企业法人。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.culture_sports.12bd19e9
+  name_zh: 规模以上文化服务业企业
+  topic_ids:
+  - cnstat.culture
+  definition: 指《文化及相关产业分类（2018）》所规定行业范围内，从业人员在50人及以上或年营业收入在1000万元及以上的服务业企业法人，其中文化和娱乐业的年营业收入在500万元及以上。
+  source_name: 国家统计局·指标解释·文化和体育
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

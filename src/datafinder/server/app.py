@@ -9,6 +9,8 @@
 - GET /api/catalog/tree       目录树：当前检索的命中集合按 主题/地域/来源 逐级展开（无状态，计数口径同 search 的 total）
 数据来源（门户与已索引来源的关联、接入等级）：
 - GET /api/data-sources|detail|resources   列表（scope=indexed|all）、详情、关联来源下的资源检索
+术语词典：
+- GET /api/glossary|detail|resources      查词（名称/别名/定义）、定义与出处与关系、用术语名找相关资源
 门户目录：
 - GET /api/browse/facets      各维度取值与条数（在其他筛选条件下）
 - GET /api/browse/portals     分页门户列表
@@ -410,6 +412,42 @@ def create_app() -> FastAPI:
             return await service.search(
                 q, source_ids=linked, limit=limit, offset=offset, facets=False
             )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    # ───────────── 术语词典 ─────────────
+
+    @app.get("/api/glossary")
+    def glossary_list(
+        q: str = Query("", max_length=MAX_QUERY),
+        topic: str | None = Query(None, max_length=100),
+        domain: str | None = Query(None, max_length=60),
+        status: str | None = Query(None, max_length=30),
+        limit: int = Query(20, ge=1, le=50),
+        offset: int = Query(0, ge=0, le=5000),
+    ) -> dict[str, Any]:
+        try:
+            return service.glossary.list_terms(
+                q, topic=topic, domain=domain, status=status, limit=limit, offset=offset
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/glossary/detail")
+    def glossary_detail(id: str = Query(..., max_length=200)) -> dict[str, Any]:  # noqa: A002
+        try:
+            return service.glossary.detail(id)
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/glossary/resources")
+    async def glossary_resources(
+        id: str = Query(..., max_length=200),  # noqa: A002
+        limit: int = Query(20, ge=1, le=50),
+        offset: int = Query(0, ge=0, le=5000),
+    ) -> dict[str, Any]:
+        try:
+            return await service.glossary.resources(id, limit=limit, offset=offset)
         except Exception as exc:  # noqa: BLE001
             raise _service_http_error(exc) from exc
 

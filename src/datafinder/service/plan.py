@@ -20,6 +20,7 @@ from ..query.tokenize import has_cjk
 from ..store import connect, portal_count
 from .common import open_catalog
 from .errors import ServiceError, guard
+from .glossary import for_text
 
 TABLE_KINDS = ["table", "census_product"]  # 年鉴表与普查数据表同属"数据表"
 DOC_KINDS = ["bulletin", "report"]  # 统计公报、数据发布与解读
@@ -274,6 +275,10 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
                 "references": {
                     "title": "统计制度、分类标准、指标解释与出版物书目（说明数据怎么统计）",
                     "items": references,
+                },
+                "glossary": {
+                    "title": "术语与口径（国家统计局指标解释原文）",
+                    "items": for_text(f"{region or ''} {topic}"),
                 },
                 "regional_portals": {"title": "目标地区的官方入口", "items": regional_portals},
                 "official_portals": {"title": "相关领域的官方/权威门户", "items": official_portals},

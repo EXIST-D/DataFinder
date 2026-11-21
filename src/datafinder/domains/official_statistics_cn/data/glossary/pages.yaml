@@ -1,0 +1,30 @@
+# 国家统计局“指标解释”页面清单（glossary_extract 的输入）。key 用于术语 id 与缓存文件名；file 是输出文件（按主题）。
+# 页面由 https://www.stats.gov.cn/sj/zbjs/ 的列表给出；个别页面已下线（HTTP 404）时会被跳过。
+# 术语定义逐字摘自这些页面，版权归国家统计局；词典里每条都注明出处与摘录日期。
+version: 1
+pages:
+  - {key: overview, title: 综合, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897110.html", file: macro, topic_ids: [cnstat.macro]}
+  - {key: population, title: 人口, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897109.html", file: population, topic_ids: [cnstat.population]}
+  - {key: national_accounts, title: 国民经济核算, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897108.html", file: macro, topic_ids: [cnstat.macro]}
+  - {key: employment_wages, title: 就业和工资, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897107.html", file: livelihood, topic_ids: [cnstat.livelihood]}
+  - {key: prices, title: 价格, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897106.html", file: prices, topic_ids: [cnstat.prices]}
+  - {key: living, title: 人民生活, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897105.html", file: livelihood, topic_ids: [cnstat.livelihood]}
+  - {key: fiscal, title: 财政, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897104.html", file: fiscal, topic_ids: [cnstat.fiscal]}
+  - {key: resources_environment, title: 资源和环境, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html", file: environment, topic_ids: [cnstat.environment]}
+  - {key: energy, title: 能源, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897102.html", file: energy, topic_ids: [cnstat.energy]}
+  - {key: fixed_investment, title: 固定资产投资, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897101.html", file: investment, topic_ids: [cnstat.investment]}
+  - {key: foreign_trade, title: 对外经济贸易, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897100.html", file: trade, topic_ids: [cnstat.trade]}
+  - {key: agriculture, title: 农业, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897099.html", file: agriculture, topic_ids: [cnstat.agriculture]}
+  - {key: industry, title: 工业, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897098.html", file: industry, topic_ids: [cnstat.industry]}
+  - {key: construction, title: 建筑业, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897097.html", file: investment, topic_ids: [cnstat.investment]}
+  - {key: wholesale_retail, title: 批发和零售业, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897096.html", file: commerce, topic_ids: [cnstat.commerce]}
+  - {key: transport_post_software, title: 运输、邮电和软件业, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897095.html", file: transport, topic_ids: [cnstat.transport]}
+  - {key: lodging_catering_tourism, title: 住宿、餐饮业和旅游, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897094.html", file: commerce, topic_ids: [cnstat.commerce]}
+  - {key: real_estate, title: 房地产, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897093.html", file: investment, topic_ids: [cnstat.investment]}
+  - {key: finance, title: 金融业, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html", file: finance, topic_ids: [cnstat.finance]}
+  - {key: science_tech, title: 科学技术, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897091.html", file: innovation, topic_ids: [cnstat.innovation]}
+  - {key: education, title: 教育, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897090.html", file: education, topic_ids: [cnstat.education]}
+  - {key: health_social, title: 卫生和社会服务, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897089.html", file: health, topic_ids: [cnstat.health]}
+  - {key: culture_sports, title: 文化和体育, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897088.html", file: culture, topic_ids: [cnstat.culture]}
+  - {key: public_admin, title: 公共管理、社会保障和社会组织, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897087.html", file: health, topic_ids: [cnstat.health]}
+  - {key: urban_rural_regional, title: 城市、农村和区域发展, url: "https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897086.html", file: regional, topic_ids: [cnstat.regional]}

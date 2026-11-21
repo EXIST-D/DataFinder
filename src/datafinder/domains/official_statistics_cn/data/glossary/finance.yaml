@@ -1,0 +1,147 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.finance.d955e1ba
+  name_zh: 信贷资金
+  topic_ids:
+  - cnstat.finance
+  definition: 指金融机构以信用方式积聚和分配的货币资金。金融机构信贷资金的来源有各项存款、金融债券、对国际金融机构负债、流通中现金、其他项目等；信贷资金的运用有各项贷款、有价证券及投资、黄金占款、外汇买卖、财政借款及在国际金融机构中的资产等。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.292ece79
+  name_zh: 存款
+  topic_ids:
+  - cnstat.finance
+  definition: 指企业、机关、团体或居民把货币资金存入银行或其他信贷机构保管，可随时或按约定时间支取款项，并取得一定利息的一种信用活动形式。根据存款对象或性质的不同可划分为住户存款、非金融企业存款、政府存款、非银行业金融机构存款等科目。它是银行信贷资金的主要来源。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.daf8b929
+  name_zh: 贷款
+  topic_ids:
+  - cnstat.finance
+  definition: 指银行或其他信贷机构根据资金必须归还的原则，按一定利率，为企业、个人等提供资金的一种信用活动形式。我国银行贷款分为短期贷款、中长期贷款、融资租赁、票据融资、各项垫款、境外贷款等。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.81aef246
+  name_zh: 保险公司
+  topic_ids:
+  - cnstat.finance
+  definition: 在中国境内的、经过保险监督管理部门批准设立，并依法登记注册的各类商业保险公司。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.b216c335
+  name_zh: 保险金额
+  topic_ids:
+  - cnstat.finance
+  definition: 指保险人承担赔偿或者给付保险金责任的最高限额。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.66a9a7ef
+  name_zh: 保费
+  topic_ids:
+  - cnstat.finance
+  definition: 指投保人为取得保险人在约定范围内所承担赔偿责任而支付给保险人的费用。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.3404a10d
+  name_zh: 赔款
+  topic_ids:
+  - cnstat.finance
+  definition: 指保险人根据保险合同的规定，向被保险人支付的赔偿保险责任损失的金额。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.a5ec1aee
+  name_zh: 给付
+  topic_ids:
+  - cnstat.finance
+  definition: 包括死伤医疗给付和满期给付。死伤医疗给付是指保险人根据人寿保险及长期健康保险合同的规定，因被保险人在保险期内发生保险责任范围内的保险事故支付给被保险人（或受益人）的金额。满期给付是指被保险人生存期满，保险人按人寿保险合同规定支付给被保险人的满期保险金额。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.b1d34d2d
+  name_zh: 社会融资规模增量
+  topic_ids:
+  - cnstat.finance
+  definition: 指一定时期内实体经济从金融体系获得的资金总额。主要包括：人民币贷款、外币贷款（折合人民币）、委托贷款、信托贷款、未贴现的银行承兑汇票、企业债券、地方政府专项债券、非金融企业境内股票融资、投资性房地产、保险公司赔偿等。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.7a4f4fd6
+  name_zh: 社会融资规模存量
+  topic_ids:
+  - cnstat.finance
+  definition: 指一定时期末（月末、季末或年末）实体经济从金融体系获得的资金余额。主要包括：人民币贷款、外币贷款（折合人民币）、委托贷款、信托贷款、未贴现的银行承兑汇票、企业债券、地方政府专项债券、非金融企业境内股票融资、投资性房地产、保险公司赔偿等。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.3c66507a
+  name_zh: 境内上市公司数
+  topic_ids:
+  - cnstat.finance
+  definition: 指在统计期末其发行的股票在沪、深交易所上市的股份有限公司的数量。以股票上市日进行统计，同时发行A、B股的上市公司，按一家计算。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.56895830
+  name_zh: 股票总发行股本
+  topic_ids:
+  - cnstat.finance
+  definition: 也称上市公司总股本，是指统计期末上市公司在境内发行的全部股份数量合计，包括A股股本、B股股本和其他不流通的境内股本。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.db3ac3a6
+  name_zh: 股票市价总值
+  topic_ids:
+  - cnstat.finance
+  definition: 指统计期末根据上市公司股票价格和对应股票数量计算的股权价值合计。具体统计口径和计算方法如下：如当日无交易价格，采用最后交易日的收盘价；暂停上市股票的价格以零计算；未股改公司的非流通股以流通A股价格计算市值；仅发行B股的上市公司，其非流通股不进行股票市值计算；对当日除权股票进行市值计算时需要包含在途股份（已登记未上市）的市值。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.4ec3e905
+  name_zh: 交易所债券发行额
+  topic_ids:
+  - cnstat.finance
+  definition: 指统计期内各类债券发行票面金额合计。按发行首日口径计算。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.a7f4beb6
+  name_zh: 债券成交额
+  topic_ids:
+  - cnstat.finance
+  definition: 指统计期内各类债券成交金额合计，包括债券现货成交金额和债券回购成交金额。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.finance.0be6a52f
+  name_zh: 证券投资基金只数
+  topic_ids:
+  - cnstat.finance
+  definition: 指统计期末基金市场上基金产品的只数。自基金合同生效日（基金成立日）纳入统计，自基金合同终止日从统计中剔除。一般根据证监会主代码（基金主合同）口径统计。
+  source_name: 国家统计局·指标解释·金融业
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897092.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

@@ -1,0 +1,542 @@
+# 由 glossary_extract 从国家统计局指标解释页面抽取（官方原文）；人工补充请写在 curated.yaml，不要改这里。
+version: 1
+terms:
+- term_id: cnstat.term.resources_environment.ae25ef89
+  name_zh: 耕地
+  topic_ids:
+  - cnstat.environment
+  definition: 指种植农作物的土地，包括熟地，新开发、复垦、整理地，休闲地（含轮歇地、轮作地）；以种植农作物（含蔬菜）为主，间有零星果树、桑树或其他树木的土地；平均每年能保证收获一季的已垦滩地和海涂。耕地中包括南方宽度＜1.0米，北方宽度＜2.0米固定的沟、渠、路和地坎（埂）；临时种植药材、草皮、花卉、苗木等的耕地，以及其他临时改变用途的耕地。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.1d491477
+  name_zh: 园地
+  topic_ids:
+  - cnstat.environment
+  definition: 指种植以采集果、叶、根、茎、汁等为主的集约经营的多年生木本和草本作物，覆盖度大于50%和每亩株数大于合理株数70%的土地。包括用于育苗的土地。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.6684f9b0
+  name_zh: 林地
+  topic_ids:
+  - cnstat.environment
+  definition: 指生长乔木、竹类、灌木的土地，及沿海生长红树林的土地。包括迹地，不包括居民点内部的绿化林木用地，铁路、公路征地范围内的林木，以及河流、沟渠的护堤林。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.eaae6a1f
+  name_zh: 牧草地
+  topic_ids:
+  - cnstat.environment
+  definition: 指生长草本植物为主的土地。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.d7a34e5e
+  name_zh: 径流量
+  topic_ids:
+  - cnstat.environment
+  definition: '指在一定时段内通过河流某一过水断面的水量，用以反映一个国家或地区水资源的丰歉程度。计算公式为：
+
+    径流量=降水量-蒸发量'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.3d1e816c
+  name_zh: 流域
+  topic_ids:
+  - cnstat.environment
+  definition: 每条河流都有自己的干流和支流，干支流共同组成这条河流的水系。每条河流都有自己的集水区域，这个集水区域就称为该河流的流域。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.92935cd8
+  name_zh: 外流河
+  topic_ids:
+  - cnstat.environment
+  definition: 指直接或间接流入海洋的河流。供给外流河河水的区域称为外流区域。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.6b5fb1fa
+  name_zh: 内陆河
+  topic_ids:
+  - cnstat.environment
+  definition: 指在陆地内部干燥地区，河水沿途消失于沙漠或注入内陆湖泊的河流。供给内陆河河水的区域称为内陆区域。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.af8aef1b
+  name_zh: 矿产资源
+  topic_ids:
+  - cnstat.environment
+  definition: 矿产资源指由地质作用形成的，具有利用价值的，呈固态、液态、气态的自然资源，是社会生产发展的重要物质基础。目前我国已发现矿种有170多种，按其特点和用途，可分为能源矿产（如煤炭、石油、天然气、地热）、金属矿产（如铁矿、锰矿、铜矿、铅矿、铝土矿）、非金属矿产（如金刚石、石灰岩、粘土）和水气矿产（如地下水、矿泉水、二氧化碳气）四大类。其中：金属矿产按其物质成份和性质又可分为：黑色金属矿产、有色金属矿产、贵金属矿产、稀有金属矿产、稀土金属矿产、分散元素金属矿产六类。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.6bb697f4
+  name_zh: 矿产基础储量
+  topic_ids:
+  - cnstat.environment
+  definition: 基础储量是查明矿产资源的一部分。它能满足现行采矿和生产所需的指标要求，是控制的、探明的并通过可行性或预可行性研究认为属于经济的、边界经济的部分，用未扣除设计、采矿损失的数量表示。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.06bbac36
+  name_zh: 平均气温
+  topic_ids:
+  - cnstat.environment
+  definition: 气温指空气的温度，我国一般以摄氏度为单位表示。气象观测的温度表是放在离地面约1.5米处通风良好的百叶箱里测量的，因此，通常说的气温指的是离地面1.5米处百叶箱中的温度。计算方法：月平均气温是将全月各日的平均气温相加，除以该月的天数而得。年平均气温是将12个月的月平均气温累加后除以12而得。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.e047ae25
+  name_zh: 年平均相对湿度
+  topic_ids:
+  - cnstat.environment
+  definition: 指空气中实际水气压与当时气温下的饱和水气压之比。其统计方法与气温相同。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.0051fd98
+  name_zh: 降水量
+  topic_ids:
+  - cnstat.environment
+  definition: 指从天空降落到地面的液态或固态（经融化后）水，未经蒸发、渗透、流失而在地面上积聚的深度。计算方法：月降水量是将全月各日的降水量累加而得。年降水量是将12个月的月降水量累加而得。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.14a51da3
+  name_zh: 全年日照时数
+  topic_ids:
+  - cnstat.environment
+  definition: 指太阳实际照射地面的时数，通常以小时为单位表示。其统计方法与降水量相同。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.407199d7
+  name_zh: 水资源总量
+  topic_ids:
+  - cnstat.environment
+  definition: 指当地降水形成的地表和地下产水总量，即地表径流量与降水入渗补给量之和。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.250db345
+  name_zh: 地表水资源量
+  topic_ids:
+  - cnstat.environment
+  definition: 指河流、湖泊以及冰川等地表水体中可以逐年更新的动态水量，即天然河川径流量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.821bdadb
+  name_zh: 地下水资源量
+  topic_ids:
+  - cnstat.environment
+  definition: 指地下饱和含水层逐年更新的动态水量，即降水和地表水入渗对地下水的补给量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.8026dbc2
+  name_zh: 地表水与地下水重复计算量
+  topic_ids:
+  - cnstat.environment
+  definition: 指地表水和地下水相互转化的部分，即天然河川径流量中的地下水排泄量和地下水补给量中来源于地表水的入渗补给量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.6664ee80
+  name_zh: 供水总量
+  topic_ids:
+  - cnstat.environment
+  definition: 指各种水源为用水户提供的包括输水损失在内的毛水量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.1636efa1
+  name_zh: 地表水源供水量
+  topic_ids:
+  - cnstat.environment
+  definition: 指地表水体工程的取水量，按蓄、引、提、调四种形式统计。从水库、塘坝中引水或提水，均属蓄水工程供水量；从河道或湖泊中自流引水的，无论有闸或无闸，均属引水工程供水量；利用扬水站从河道或湖泊中直接取水的，属提水工程供水量；跨流域调水指水资源一级区或独立流域之间的跨流域调配水量，不包括在蓄、引、提水量中。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.60ec11c5
+  name_zh: 地下水源供水量
+  topic_ids:
+  - cnstat.environment
+  definition: 指水井工程的开采量，按浅层淡水、深层承压水和微咸水分别统计。城市地下水源供水量包括自来水厂的开采量和工矿企业自备井的开采量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.a0d274cc
+  name_zh: 其他水源供水量
+  topic_ids:
+  - cnstat.environment
+  definition: 包括污水处理再利用、集雨工程、海水淡化等水源工程的供水量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.d9cf451a
+  name_zh: 用水总量
+  topic_ids:
+  - cnstat.environment
+  definition: 指各类用水户取用的包括输水损失在内的毛水量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.303bc767
+  name_zh: 农业用水
+  topic_ids:
+  - cnstat.environment
+  definition: 包括农田灌溉用水、林果地灌溉用水、草地灌溉用水、鱼塘补水和畜禽用水。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.b8175423
+  name_zh: 工业用水
+  topic_ids:
+  - cnstat.environment
+  definition: 指工矿企业在生产过程中用于制造、加工、冷却、空调、净化、洗涤等方面的用水，按新水取用量计，不包括企业内部的重复利用水量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.8bd6f424
+  name_zh: 生活用水
+  topic_ids:
+  - cnstat.environment
+  definition: 包括城镇生活用水和农村生活用水。城镇生活用水由居民用水和公共用水（含第三产业及建筑业等用水）组成；农村生活用水指居民生活用水。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.cc7e021f
+  name_zh: 生态环境补水
+  topic_ids:
+  - cnstat.environment
+  definition: 仅包括人为措施供给的城镇环境用水和部分河湖、湿地补水，而不包括降水、径流自然满足的水量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.4a75a89b
+  name_zh: 一般工业固体废物产生量
+  topic_ids:
+  - cnstat.environment
+  definition: '指未被列入《国家危险废物名录》或者根据国家规定的危险废物鉴别标准（GB5085）、固体废物浸出毒性浸出方法（GB5086）及固体废物浸出毒性测定方法（GB／T 15555）鉴别方法判定不具有危险特性的工业固体废物。计算公式是：
+
+    一般工业固体废物产生量=（一般工业固体废物综合利用量－其中：综合利用往年贮存量）+一般工业固体废物贮存量+（一般工业固体废物处置量－其中：处置往年贮存量）+一般工业固体废物倾倒丢弃量'
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.2b61d122
+  name_zh: 一般工业固体废物综合利用量
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期内企业通过回收、加工、循环、交换等方式，从固体废物中提取或者使其转化为可以利用的资源、能源和其他原材料的固体废物量（包括当年利用的往年工业固体废物累计贮存量）。如用作农业肥料、生产建筑材料、筑路等。综合利用量由原产生固体废物的单位统计。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.c3cb89ea
+  name_zh: 一般工业固体废物处置量
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期内企业将工业固体废物焚烧和用其他改变工业固体废物的物理、化学、生物特性的方法，达到减少或者消除其危险成分的活动，或者将工业固体废物最终置于符合环境保护规定要求的填埋场的活动中，所消纳固体废物的量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.40e4cef1
+  name_zh: 一般工业固体废物贮存量
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期内企业以综合利用或处置为目的，将固体废物暂时贮存或堆存在专设的贮存设施或专设的集中堆存场所内的量。专设的固体废物贮存场所或贮存设施必须有防扩散、防流失、防渗漏、防止污染大气、水体的措施。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.8b999057
+  name_zh: 一般工业固体废物倾倒丢弃量
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期内企业将所产生的固体废物倾倒或者丢弃到固体废物污染防治设施、场所以外的量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.893f2c16
+  name_zh: 危险废物产生量
+  topic_ids:
+  - cnstat.environment
+  definition: 指当年全年调查对象实际产生的危险废物的量。危险废物指列入国家危险废物名录或者根据国家规定的危险废物鉴别标准和鉴别方法认定的，具有爆炸性、易燃性、易氧化性、毒性、腐蚀性、易传染性疾病等危险特性之一的废物。按《国家危险废物名录》（环境保护部、国家发展和改革委员会2008部令第1号）填报。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.099def2e
+  name_zh: 危险废物综合利用量
+  topic_ids:
+  - cnstat.environment
+  definition: 指当年全年调查对象从危险废物中提取物质作为原材料或者燃料的活动中消纳危险废物的量。包括本单位利用或委托、提供给外单位利用的量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.039690f5
+  name_zh: 危险废物处置量
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期内企业将危险废物焚烧和用其他改变工业固体废物的物理、化学、生物特性的方法，达到减少或者消除其危险成分的活动，或者将危险废物最终置于符合环境保护规定要求的填埋场的活动中，所消纳危险废物的量。处置量包括处置本单位或委托给外单位处置的量。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.a145d735
+  name_zh: 危险废物贮存量
+  topic_ids:
+  - cnstat.environment
+  definition: 指将危险废物以一定包装方式暂时存放在专设的贮存设施内的量。专设的贮存设施指对危险废物的包装、选址、设计、安全防护、监测和关闭等符合《危险废物贮存污染控制标准》（GB18597-2001）等相关环保法律法规要求，具有防扩散、防流失、防渗漏、防止污染大气和水体措施的设施。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.1a56a679
+  name_zh: 生活垃圾清运量
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期收集和运送到各生活垃圾处理厂（场）和生活垃圾最终消纳点的生活垃圾数量。生活垃圾指城市日常生活或为城市日常生活提供服务的活动中产生的固体废物以及法律行政规定的视为城市生活垃圾的固体废物。包括：居民生活垃圾、商业垃圾、集市贸易市场垃圾、街道清扫垃圾、公共场所垃圾和机关、学校、厂矿等单位的生活垃圾。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.43b0eb49
+  name_zh: 生活垃圾无害化处理率
+  topic_ids:
+  - cnstat.environment
+  definition: 指报告期生活垃圾无害化处理量与生活垃圾产生量的比率。在统计上，由于生活垃圾产生量不易取得，可用清运量代替。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.6737ae61
+  name_zh: 森林面积
+  topic_ids:
+  - cnstat.environment
+  definition: 包括郁闭度0.2以上的乔木林地面积和竹林面积，国家特别规定的灌木林地面积，农田林网以及村旁、路旁、水旁、宅旁林木的覆盖面积。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.8a49f2ea
+  name_zh: 人工林面积
+  topic_ids:
+  - cnstat.environment
+  definition: 指由人工播种、植苗或扦插造林形成的生长稳定，（一般造林3-5年后或飞机播种5-7年后）每公顷保存株数大于或等于造林设计植树株数80%或郁闭度0.20以上（含0.20）的林分面积。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.c5973320
+  name_zh: 森林覆盖率
+  topic_ids:
+  - cnstat.environment
+  definition: 以行政区域为单位的森林面积占区域土地总面积的百分比。计算公式为：
+  scope_note: 官方页面里的计算公式是图片，这里没有收录；请到出处页面查看。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.035365e1
+  name_zh: 活立木总蓄积量
+  topic_ids:
+  - cnstat.environment
+  definition: 指一定范围土地上全部树木蓄积的总量，包括森林蓄积、疏林蓄积、散生木蓄积和四旁树蓄积。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.91ad271b
+  name_zh: 森林蓄积量
+  topic_ids:
+  - cnstat.environment
+  definition: 指一定森林面积上存在着的林木树干部分的总材积。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.a8e33c8c
+  name_zh: 造林面积
+  topic_ids:
+  - cnstat.environment
+  definition: 指在宜林荒山荒地、宜林沙荒地、无立木林地、疏林地和退耕地等其他宜林地上通过人工措施形成或恢复森林、林木、灌木林的过程。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.00bb8f51
+  name_zh: 人工造林
+  topic_ids:
+  - cnstat.environment
+  definition: 指在宜林荒山荒地、宜林沙荒地、无立木林地、疏林地和退耕地等其他宜林地上通过播种、植苗和分植来提高森林植被覆被率的技术措施。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.643174b8
+  name_zh: 飞播造林
+  topic_ids:
+  - cnstat.environment
+  definition: 通过飞机播种，并辅以适当的人工措施，在自然力的作用下使其形成森林或灌草植被，提高森林植被覆被率或提高森林植被质量的技术措施。包括荒山飞播造林和飞播营林。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.f53a5abf
+  name_zh: 新封山育林
+  topic_ids:
+  - cnstat.environment
+  definition: 对宜林地、无立木林地、疏林地或低质低效有林地、灌木林地实施封禁并辅以人工促进手段，使其形成森林或灌草植被或提高林分质量的一项技术措施。包括无林地和疏林地封育以及有林地和灌木林地封育。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.f5105990
+  name_zh: 退化林修复
+  topic_ids:
+  - cnstat.environment
+  definition: 为改善林分的活力和结构，有效遏制防护林退化，提高林分质量和恢复森林功能，对结构失调和稳定性降低、功能退化甚至丧失且自然更新能力弱的林分采取的结构调整、树种替换、补植补播、嫁接复壮等森林经营措施。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.057dedf4
+  name_zh: 人工更新造林
+  topic_ids:
+  - cnstat.environment
+  definition: 指在采伐迹地、火烧迹地、林中空地上通过人工造林重新形成森林的过程。包括通过松土除草、平茬或断根复壮、补植补播、除蘖间苗等措施促进目的树种幼苗幼树生长发育的人工促进天然更新。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.985a05e7
+  name_zh: 湿地
+  topic_ids:
+  - cnstat.environment
+  definition: 指天然或人工、长久或暂时性的沼泽地、泥炭地或水域地带，包括静止或流动、淡水、半咸水、咸水体，低潮时水深不超过6米的水域以及海岸地带地区的珊瑚滩和海草床、滩涂、红树林、河口、河流、淡水沼泽、沼泽森林、湖泊、盐沼及盐湖。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.de8d3882
+  name_zh: 自然保护区
+  topic_ids:
+  - cnstat.environment
+  definition: 指为了保护自然环境和自然资源，促进国民经济的持续发展，将一定面积的陆地和水体划分出来，并经各级人民政府批准而进行特殊保护和管理的区域个数。根据保护对象，自然保护区分为自然生态系统类、野生生物类、自然遗迹类。风景名胜区、文物保护区不计在内。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.9d06d159
+  name_zh: 滑坡
+  topic_ids:
+  - cnstat.environment
+  definition: 指斜坡上不稳定的岩土体在重力作用下沿一定软弱面（或滑动带）整体向下滑动的物理地质现象。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.0ad06a3d
+  name_zh: 崩塌
+  topic_ids:
+  - cnstat.environment
+  definition: 指陡坡上大块的岩土体在重力作用下突然脱离母体崩落的物理地质现象。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.15cb06e3
+  name_zh: 泥石流
+  topic_ids:
+  - cnstat.environment
+  definition: 指山地突然爆发的饱含大量泥沙、石块的特殊洪流。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.032a2ade
+  name_zh: 地面塌陷
+  topic_ids:
+  - cnstat.environment
+  definition: 指地表岩、土体在自然或人为因素作用下向下陷落，并在地面形成塌陷坑（洞）的一种动力地质现象。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.80936b19
+  name_zh: 森林火灾次数
+  topic_ids:
+  - cnstat.environment
+  definition: 指发生在城市市区外的一切森林、林木和林地的火灾次数。按照受害森林面积和伤亡人数，森林火灾分为一般森林火灾、较大森林火灾、重大森林火灾和特别重大森林火灾：1.一般森林火灾：受害森林面积在1公顷以下或者其他林地起火的，或者死亡1人以上3人以下的，或者重伤1人以上10人以下的；2.较大森林火灾：受害森林面积在1公顷以上100公顷以下的，或者死亡3人以上10人以下的，或者重伤10人以上50人以下的；3.重大森林火灾：受害森林面积在100公顷以上1000公顷以下的，或者死亡10人以上30人以下的，或者重伤50人以上100人以下的；4.特别重大森林火灾：受害森林面积在1000公顷以上的，或者死亡30人以上的，或者重伤100人以上的。本条所称“以上”包括本数，“以下”不包括本数。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.e1d124b0
+  name_zh: 林业有害生物
+  topic_ids:
+  - cnstat.environment
+  definition: 危害森林、林木、荒漠植被、湿地植被等的病虫鼠兔及有害植物。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.5e9562a9
+  name_zh: 突发环境事件
+  topic_ids:
+  - cnstat.environment
+  definition: 指突然发生，造成或可能造成重大人员伤亡、重大财产损失和对全国或者某一地区的经济社会稳定、政治安定构成重大威胁和损害，有重大社会影响的涉及公共安全的环境事件。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced
+- term_id: cnstat.term.resources_environment.9cd9c089
+  name_zh: 发生地震灾害次数
+  topic_ids:
+  - cnstat.environment
+  definition: 指发生形成灾害（包括人员伤亡或经济损失）的所有震级的地震次数。
+  source_name: 国家统计局·指标解释·资源和环境
+  source_url: https://www.stats.gov.cn/sj/zbjs/202302/t20230202_1897103.html
+  retrieved_at: '2026-11-21'
+  verification_status: official_sourced

@@ -9,6 +9,7 @@ from datafinder.catalog.search import summarize
 
 from .common import open_catalog
 from .errors import ServiceError, guard
+from .glossary import for_title
 from .portal_directory import portal_for_source
 
 _REQ = SearchRequest()
@@ -79,6 +80,7 @@ def inspect(
             "extra": {k: v for k, v in e.extra.items() if k not in ("indicators_done",)},
             "container": e.kind in kinds.container_kinds(),
             "source": _source_info(cat, e.source_id),
+            "glossary": for_title(e.title),
         }
         if e.delivery == "generate":
             out["how_to_get"] = {

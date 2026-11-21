@@ -1,0 +1,35 @@
+# 人工补充：只写官方原文（指标解释页）里明确支持的别名与关系，并在 note 里引用依据。
+# 与 glossary_extract 生成的文件分开维护：重新抽取不会覆盖这里。
+# ref 写术语名；同名术语（如死亡率在人口页与卫生页各一条）写成 "页面key/术语名"（页面 key 见 pages.yaml）。
+# 关系 type：alias 同一概念 · broader/narrower 上位/下位（自动补反向）· related 相关但不同 · not_equivalent 容易混淆、不能互相替代。
+# related / not_equivalent / alias 自动补对称的另一侧；检索只用已确认的 aliases，不用 related。
+version: 1
+patches:
+  - ref: 国内生产总值
+    aliases: [地区生产总值, 地区GDP]
+    note: 官方原文："对于一个地区来说，称为地区生产总值或地区GDP。"
+    relations:
+      - {type: not_equivalent, target: 国民总收入, note: '官方原文："与国内生产总值不同，国民总收入是个收入概念，而国内生产总值是个生产概念。"'}
+  - ref: 居民消费价格指数
+    relations:
+      - {type: narrower, target: 城市居民消费价格指数, note: '官方原文：居民消费价格指数是"对城市居民消费价格指数和农村居民消费价格指数进行综合汇总计算的结果"。'}
+      - {type: narrower, target: 农村居民消费价格指数}
+  - ref: 总抚养比
+    relations:
+      - {type: narrower, target: 老年人口抚养比, note: 总抚养比 = 非劳动年龄人口 ÷ 劳动年龄人口，由少年儿童与老年两部分构成（见定义中的公式变量）。}
+      - {type: narrower, target: 少年儿童抚养比}
+  - ref: population/人口自然增长率
+    relations:
+      - {type: related, target: population/出生率, note: 人口自然增加数 = 出生人数 − 死亡人数（官方原文）。}
+      - {type: related, target: population/死亡率}
+  - ref: 全社会固定资产投资
+    relations:
+      - {type: not_equivalent, target: 固定资产投资（不含农户）, note: '口径不同：后者是计划总投资500万元及以上的建设项目投资和房地产开发投资，自2011年起使用（官方原文）。'}
+  - ref: 工业生产者出厂价格指数
+    relations:
+      - {type: not_equivalent, target: 工业生产者购进价格指数, note: 前者是工业产品第一次出售时的出厂价格，后者是原材料、燃料、动力的购进价格（官方原文）。}
+  - ref: 研究与试验发展
+    relations:
+      - {type: narrower, target: 基础研究, note: 官方原文："包括基础研究、应用研究、试验发展三类活动。"}
+      - {type: narrower, target: 应用研究}
+      - {type: narrower, target: 试验发展}

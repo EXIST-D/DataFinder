@@ -94,6 +94,40 @@ def _official_portals(
     return _dedupe_portals(ministries, stats, others)[: size + 4]
 
 
+_VERIFY = {"supported": "ok", "blocked": "blocked", "unavailable": "unavailable"}
+
+
+def _norm_url(url: str) -> str:
+    return re.sub(r"^https?://(www\.)?", "", url.strip().lower()).rstrip("/")
+
+
+def _catalog_portal(r: dict) -> dict:
+    """目录里的机构入口/栏目（来自官网适配器等）→ 与门户库同形的条目，标明来源，便于和门户库去重合并。"""
+    regions = [x["region_id"] for x in r["regions"] if x["relation"] == "covers"]
+    return {
+        "id": r["resource_id"],
+        "name": r["title"],
+        "url": r["landing_url"],
+        "region_code": regions[0] if regions else None,
+        "official": True,
+        "verify": _VERIFY.get(r["access_status"], "unverified"),
+        "note": r.get("path"),
+        "source": "catalog",
+    }
+
+
+def _merge_portals(first: list[dict], second: list[dict], size: int) -> list[dict]:
+    """按顺序合并并按网址去重（同一网站只留先出现的）。"""
+    seen: set[str] = set()
+    out: list[dict] = []
+    for p in [*first, *second]:
+        key = _norm_url(p["url"] or p["id"])
+        if key not in seen:
+            seen.add(key)
+            out.append(p)
+    return out[:size]
+
+
 def _search_entries(topic: str) -> list[dict]:
     keep = {"dateno", "google-ds", "scidb", "europa", "datacite"}
     return [
@@ -133,8 +167,13 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
         region_names = [province_zh_name(c) or c for c in region_codes]
         intent = bool(region_codes) or bool(_REGIONAL_INTENT.search(topic))
 
-        def run(**kw: Any) -> list[dict[str, Any]]:
-            req = SearchRequest(query=topic, limit=per_group, include_facets=False, **kw)
+        def run(query: str | None = None, **kw: Any) -> list[dict[str, Any]]:
+            req = SearchRequest(
+                query=topic if query is None else query,
+                limit=kw.pop("limit", per_group),
+                include_facets=False,
+                **kw,
+            )
             return catalog_search(cat, req).to_dict()["results"]
 
         with open_catalog() as cat:
@@ -160,6 +199,16 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
                 else run(kinds=TABLE_KINDS)
             )
             references = run(kinds=["reference"])  # 统计制度/分类标准/指标解释/出版物书目：不分地区
+            # 目录里新收的机构入口与栏目：目标地区的（不看主题）+ 与主题相关的（不限地区）
+            cat_regional = (
+                [
+                    _catalog_portal(r)
+                    for r in run("", kinds=["portal"], region_ids=region_codes, limit=20)
+                ]
+                if region_codes
+                else []
+            )
+            cat_topical = [_catalog_portal(r) for r in run(kinds=["portal"], limit=12)]
             national_docs = (
                 run(kinds=DOC_KINDS, region_ids=["CN"], region_match="exact")
                 if intent
@@ -179,8 +228,12 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
                     code="INDEX_NOT_READY",
                     next_action="datafinder sync",
                 )
-            regional_portals = _regional_portals(conn, region_codes, per_group)
-            official_portals = _official_portals(conn, domains, country, per_group)
+            regional_portals = _merge_portals(
+                _regional_portals(conn, region_codes, per_group), cat_regional, per_group + 4
+            )
+            official_portals = _merge_portals(
+                cat_topical, _official_portals(conn, domains, country, per_group), per_group + 8
+            )
         finally:
             conn.close()
 

@@ -252,6 +252,51 @@ def test_plan_sources_groups_by_kind_with_fetch_hints_and_no_domain_words(portal
     assert sd and sd[0]["resource_id"] == TABLE_JPG and sd[0]["versions"] == [2025, 2024]
 
 
+def test_plan_merges_catalog_agency_portals_with_the_portal_db_without_duplicates(portals):
+    from datafinder.catalog import Distribution, Entry, RegionLink
+
+    with Catalog.open() as cat:
+        cat.upsert_source(
+            "site.pbc", domain_id="official_statistics_cn", adapter_id="site", name="人民银行网站"
+        )
+        cn = [RegionLink("CN", "covers", None, "exact", "structure")]
+        cat.upsert(
+            [
+                Entry(
+                    "site.pbc",
+                    "portal",
+                    "home",
+                    "中国人民银行网站",
+                    path="货币政策 金融统计 社会融资规模 货币供应量",
+                    landing_url="https://pbc.example.gov/",
+                    access_status="blocked",
+                    regions=cn,
+                    distributions=[Distribution("manual", "https://pbc.example.gov/")],
+                ),
+                Entry(  # 与门户库里的"工业和信息化部"是同一个网站：只应出现一次
+                    "site.pbc",
+                    "portal",
+                    "miit",
+                    "工业和信息化部网站",
+                    path="工业 制造业",
+                    landing_url="https://miit.example.org/",
+                    regions=cn,
+                    distributions=[Distribution("page", "https://miit.example.org/")],
+                ),
+            ]
+        )
+    items = service.plan_sources("社会融资规模与货币供应量")["sources"]["official_portals"]["items"]
+    pbc = next(p for p in items if p["name"] == "中国人民银行网站")
+    assert (
+        pbc["source"] == "catalog" and pbc["verify"] == "blocked"
+    )  # 目录里的机构入口，标明来源与核验状态
+    urls = [
+        p["url"].rstrip("/")
+        for p in service.plan_sources("工业增加值")["sources"]["official_portals"]["items"]
+    ]
+    assert len(urls) == len(set(urls))  # 同一网站不重复
+
+
 def test_plan_sources_validates_input():
     with pytest.raises(ServiceError) as e:
         service.plan_sources("  ")

@@ -283,3 +283,20 @@ async def test_title_filtered_columns_keep_paging_past_pages_without_matches(cat
     await adapter(h, monkeypatch, spec).discover(cat, DiscoverOptions(params={"site": "nbs"}))
     titles = sorted(e.title for e in cat.iter_all("site.nbs") if e.kind == "reference")
     assert titles == ["中国农村统计年鉴-2021", "中国统计年鉴-2021", "中国能源统计年鉴2018"]
+
+
+async def test_home_entry_follows_config_scope_but_keeps_crawled_status(cat, monkeypatch):
+    table = {"https://s.example.gov.cn/sj/zxfb/": page("zxfb", 3)}
+    await adapter(routes(table), monkeypatch).discover(cat, DiscoverOptions(params={"site": "nbs"}))
+    assert cat.get("site.nbs:portal:home").access_status == "supported"
+    spec = {
+        **SPEC,
+        "publishers": [{**SPEC["publishers"][0], "scope": "货币政策 社会融资规模", "columns": []}],
+    }
+    await adapter(routes({}), monkeypatch, spec).discover(
+        cat, DiscoverOptions(params={"site": "nbs"})
+    )
+    home = cat.get("site.nbs:portal:home")
+    assert (
+        home.path == "货币政策 社会融资规模" and home.access_status == "supported"
+    )  # 职责词刷新，状态不丢

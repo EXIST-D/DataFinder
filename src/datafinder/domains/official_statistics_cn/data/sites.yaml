@@ -75,57 +75,60 @@ publishers:
   - {id: CN-XJ, name: 新疆维吾尔自治区统计局, region: CN-XJ, home: "https://tjj.xinjiang.gov.cn/", discover_nav: true}
 
   # ── 部委及其他国家级发布机构 ──
-  - {id: ndrc, name: 国家发展和改革委员会, region: CN, home: "https://www.ndrc.gov.cn/", type: ministry, discover_nav: true}
+  - {id: ndrc, name: 国家发展和改革委员会, region: CN, home: "https://www.ndrc.gov.cn/", type: ministry, discover_nav: true, scope: "发展改革 投资 价格 区域发展 经济运行 能源"}
   - id: miit
     name: 工业和信息化部
     region: CN
     home: "https://www.miit.gov.cn/"
     type: ministry
     discover_nav: true
+    scope: "工业 制造业 信息通信 软件 互联网 电子信息 通信业 行业运行"
     columns:
       - {id: monitor, title: 行业运行监测, url: "https://www.miit.gov.cn/gxsj/index.html", kind: report, text: "运行情况|经济运行", topics: [cnstat.industry]}
-  - {id: moe, name: 教育部, region: CN, home: "http://www.moe.gov.cn/", type: ministry, discover_nav: true}
-  - {id: most, name: 科学技术部, region: CN, home: "https://www.most.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mohrss, name: 人力资源和社会保障部, region: CN, home: "https://www.mohrss.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mnr, name: 自然资源部, region: CN, home: "https://www.mnr.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mee, name: 生态环境部, region: CN, home: "https://www.mee.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mohurd, name: 住房和城乡建设部, region: CN, home: "https://www.mohurd.gov.cn/", type: ministry, discover_nav: true}
+  - {id: moe, name: 教育部, region: CN, home: "http://www.moe.gov.cn/", type: ministry, discover_nav: true, scope: "教育 学校 在校学生 教师 毕业生 教育经费 高等教育"}
+  - {id: most, name: 科学技术部, region: CN, home: "https://www.most.gov.cn/", type: ministry, discover_nav: true, scope: "科技 研发 创新 科技经费 研究与试验发展"}
+  - {id: mohrss, name: 人力资源和社会保障部, region: CN, home: "https://www.mohrss.gov.cn/", type: ministry, discover_nav: true, scope: "就业 失业 社会保险 养老保险 工资 人力资源 社会保障 劳动"}
+  - {id: mnr, name: 自然资源部, region: CN, home: "https://www.mnr.gov.cn/", type: ministry, discover_nav: true, scope: "自然资源 土地 矿产 海洋 国土 测绘"}
+  - {id: mee, name: 生态环境部, region: CN, home: "https://www.mee.gov.cn/", type: ministry, discover_nav: true, scope: "生态环境 空气质量 水质 污染 排放 碳排放 环境保护 大气"}
+  - {id: mohurd, name: 住房和城乡建设部, region: CN, home: "https://www.mohurd.gov.cn/", type: ministry, discover_nav: true, scope: "住房 城乡建设 房地产 城市建设 住宅 市政"}
   - id: mot
     name: 交通运输部
     region: CN
     home: "https://www.mot.gov.cn/"
     type: ministry
     discover_nav: true
+    scope: "交通运输 铁路 公路 水路 民航 港口 邮政 货运量 客运量 物流"
     columns:
       - {id: stat-monthly, title: 统计数据, url: "https://www.mot.gov.cn/shuju/index.html", kind: report, href: "/shuju/tongjishuju/", topics: [cnstat.transport]}
       - {id: bulletin, title: 行业公报, url: "https://www.mot.gov.cn/shuju/index.html", kind: bulletin, href: "/shuju/fenxigongbao/", topics: [cnstat.transport]}
       - {id: freight-index, title: 运价指数与运输市场分析, url: "https://www.mot.gov.cn/shuju/index.html", kind: report, href: "/shuju/yunjiazhishu/", topics: [cnstat.transport, cnstat.prices]}
-  - {id: mwr, name: 水利部, region: CN, home: "https://www.mwr.gov.cn/", type: ministry, discover_nav: true}
-  - {id: moa, name: 农业农村部, region: CN, home: "https://www.moa.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mofcom, name: 商务部, region: CN, home: "https://www.mofcom.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mct, name: 文化和旅游部, region: CN, home: "https://www.mct.gov.cn/", type: ministry, discover_nav: true}
-  - {id: nhc, name: 国家卫生健康委员会, region: CN, home: "http://www.nhc.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mem, name: 应急管理部, region: CN, home: "https://www.mem.gov.cn/", type: ministry, discover_nav: true}
-  - {id: mof, name: 财政部, region: CN, home: "https://www.mof.gov.cn/", type: ministry, discover_nav: true}
-  - {id: pbc, name: 中国人民银行, region: CN, home: "http://www.pbc.gov.cn/", type: ministry, discover_nav: true}
-  - {id: customs, name: 海关总署, region: CN, home: "http://www.customs.gov.cn/", type: ministry, discover_nav: true}
-  - {id: chinatax, name: 国家税务总局, region: CN, home: "https://www.chinatax.gov.cn/", type: ministry, discover_nav: true}
-  - {id: samr, name: 国家市场监督管理总局, region: CN, home: "https://www.samr.gov.cn/", type: ministry, discover_nav: true}
-  - {id: nhsa, name: 国家医疗保障局, region: CN, home: "https://www.nhsa.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mwr, name: 水利部, region: CN, home: "https://www.mwr.gov.cn/", type: ministry, discover_nav: true, scope: "水利 水资源 防洪 灌溉 节水"}
+  - {id: moa, name: 农业农村部, region: CN, home: "https://www.moa.gov.cn/", type: ministry, discover_nav: true, scope: "农业 农村 粮食 种植业 畜牧 渔业 农产品"}
+  - {id: mofcom, name: 商务部, region: CN, home: "https://www.mofcom.gov.cn/", type: ministry, discover_nav: true, scope: "商务 对外贸易 外资 外商直接投资 进出口 消费品零售"}
+  - {id: mct, name: 文化和旅游部, region: CN, home: "https://www.mct.gov.cn/", type: ministry, discover_nav: true, scope: "文化 旅游 文物 文化产业"}
+  - {id: nhc, name: 国家卫生健康委员会, region: CN, home: "http://www.nhc.gov.cn/", type: ministry, discover_nav: true, scope: "卫生 医疗 医疗卫生 人口 生育 卫生健康 医院"}
+  - {id: mem, name: 应急管理部, region: CN, home: "https://www.mem.gov.cn/", type: ministry, discover_nav: true, scope: "应急管理 安全生产 自然灾害 事故"}
+  - {id: mof, name: 财政部, region: CN, home: "https://www.mof.gov.cn/", type: ministry, discover_nav: true, scope: "财政 税收 预算 财政收入 财政支出 国有资产"}
+  - {id: pbc, name: 中国人民银行, region: CN, home: "http://www.pbc.gov.cn/", type: ministry, discover_nav: true, scope: "货币政策 金融统计 社会融资规模 货币供应量 金融机构 利率 汇率 信贷 存款 贷款"}
+  - {id: customs, name: 海关总署, region: CN, home: "http://www.customs.gov.cn/", type: ministry, discover_nav: true, scope: "海关 进出口 对外贸易 海关统计 关税"}
+  - {id: chinatax, name: 国家税务总局, region: CN, home: "https://www.chinatax.gov.cn/", type: ministry, discover_nav: true, scope: "税收 税务 税收收入 纳税"}
+  - {id: samr, name: 国家市场监督管理总局, region: CN, home: "https://www.samr.gov.cn/", type: ministry, discover_nav: true, scope: "市场监管 市场主体 质量 标准 计量 认证"}
+  - {id: nhsa, name: 国家医疗保障局, region: CN, home: "https://www.nhsa.gov.cn/", type: ministry, discover_nav: true, scope: "医疗保障 医保 基本医疗保险 生育保险"}
   - id: nea
     name: 国家能源局
     region: CN
     home: "https://www.nea.gov.cn/"
     type: ministry
     discover_nav: true
+    scope: "能源 电力 煤炭 石油 天然气 新能源 可再生能源 发电量 用电量 光伏 风电"
     columns:
       - {id: power-stats, title: 电力工业统计数据, url: "http://www.nea.gov.cn/sjzz/ghs/zjgx.htm", kind: report, text: "统计数据|用电量", topics: [cnstat.energy]}
-  - {id: cnipa, name: 国家知识产权局, region: CN, home: "https://www.cnipa.gov.cn/", type: ministry, discover_nav: true}
-  - {id: caac, name: 中国民用航空局, region: CN, home: "https://www.caac.gov.cn/", type: ministry, discover_nav: true}
-  - {id: safe, name: 国家外汇管理局, region: CN, home: "https://www.safe.gov.cn/", type: ministry, discover_nav: true}
-  - {id: csrc, name: 中国证券监督管理委员会, region: CN, home: "https://www.csrc.gov.cn/", type: ministry, discover_nav: true}
-  - {id: nfra, name: 国家金融监督管理总局, region: CN, home: "https://www.nfra.gov.cn/", type: ministry, discover_nav: true}
-  - {id: nda, name: 国家数据局, region: CN, home: "https://www.nda.gov.cn/", type: ministry, discover_nav: true}
+  - {id: cnipa, name: 国家知识产权局, region: CN, home: "https://www.cnipa.gov.cn/", type: ministry, discover_nav: true, scope: "知识产权 专利 商标 发明"}
+  - {id: caac, name: 中国民用航空局, region: CN, home: "https://www.caac.gov.cn/", type: ministry, discover_nav: true, scope: "民航 航空 机场 运输周转量"}
+  - {id: safe, name: 国家外汇管理局, region: CN, home: "https://www.safe.gov.cn/", type: ministry, discover_nav: true, scope: "外汇 国际收支 外汇储备 跨境资金"}
+  - {id: csrc, name: 中国证券监督管理委员会, region: CN, home: "https://www.csrc.gov.cn/", type: ministry, discover_nav: true, scope: "证券 资本市场 上市公司 股票 期货 基金"}
+  - {id: nfra, name: 国家金融监督管理总局, region: CN, home: "https://www.nfra.gov.cn/", type: ministry, discover_nav: true, scope: "银行业 保险业 金融监管 不良贷款"}
+  - {id: nda, name: 国家数据局, region: CN, home: "https://www.nda.gov.cn/", type: ministry, discover_nav: true, scope: "数据 数字经济 公共数据 数据要素"}
 
   # ── 澳门（没有公开数据接口：只做数据库与刊物的栏目入口；2026-11-21 首页导航核实）──
   - id: CN-MO

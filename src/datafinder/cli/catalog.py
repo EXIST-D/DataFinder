@@ -334,6 +334,7 @@ def plan_cmd(
             for p in g["items"]:
                 flag = {
                     "blocked": " [yellow]（拒绝自动访问）[/yellow]",
+                    "unavailable": " [yellow]（连不上）[/yellow]",
                     "unverified": " [dim]（未核验）[/dim]",
                 }.get(p.get("verify") or "", "")
                 console.print(f"  · {p['name']}{flag}  [blue]{p['url']}[/blue]")

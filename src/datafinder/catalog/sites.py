@@ -79,6 +79,7 @@ class Publisher:
     columns: tuple[Column, ...] = ()
     discover_nav: bool = False
     interval: float | None = None  # 对该站点的最小请求间隔（秒）；防护敏感的站点调大
+    scope: str = ""  # 机构职责关键词（空格分隔）：写进首页条目的路径，让"社会融资规模→人民银行"这类按职责找机构能命中
 
 
 @dataclass
@@ -121,6 +122,7 @@ def load_spec(data: dict[str, Any]) -> SiteSpec:
                 cols,
                 p.get("discover_nav", False),
                 p.get("interval"),
+                p.get("scope", ""),
             )
         )
     nav = [
@@ -186,6 +188,7 @@ class SiteAdapter(Adapter):
             "home",
             f"{pub.name}网站",
             Target(),
+            path=pub.scope or None,
             landing_url=pub.home,
             access_status=access_status,
             verification_level="observed" if verified else "source_asserted",
@@ -273,7 +276,8 @@ class SiteAdapter(Adapter):
         self.register_sources(cat)
         # 机构首页与已配置的栏目入口先登记（不联网；已有的不覆盖，保留抓取得到的状态）
         for p in pubs:
-            self._register(cat, [self.home_entry(p), *(self.column_entry(p, c) for c in p.columns)])
+            self._refresh_home(cat, p)
+            self._register(cat, [self.column_entry(p, c) for c in p.columns])
         run = cat.start_run("site", "discover")
         result = DiscoverResult("done")
         slow = {urlsplit(p.home).netloc: p.interval for p in pubs if p.interval}
@@ -295,6 +299,24 @@ class SiteAdapter(Adapter):
             message="；".join(result.stopped) or None,
         )
         return result
+
+    def _refresh_home(self, cat: Catalog, pub: Publisher) -> None:
+        """机构首页每次都按配置刷新（名称、职责关键词可能改了），但保留抓取得到的访问状态与说明。"""
+        old = cat.get(make_id(source_id(pub), "portal", "home"))
+        if old is None:
+            cat.upsert([self.home_entry(pub)])
+            return
+        note = old.distributions[0].note if old.distributions else None
+        cat.upsert(
+            [
+                self.home_entry(
+                    pub,
+                    access_status=old.access_status,
+                    note=note,
+                    verified=old.verification_level == "observed",
+                )
+            ]
+        )
 
     @staticmethod
     def _register(cat: Catalog, entries: list[Entry]) -> None:

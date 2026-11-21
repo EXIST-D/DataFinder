@@ -202,6 +202,16 @@ class Catalog:
                 "DELETE FROM resources WHERE parent_id=?", (parent_id,)
             ).rowcount
 
+    def delete(self, resource_id: str) -> None:
+        """删除一个资源及其直接子资源。"""
+        self.delete_children(resource_id)
+        with self.conn:
+            self.conn.execute(
+                "DELETE FROM resources_fts WHERE rowid IN (SELECT rowid FROM resources WHERE resource_id=?)",
+                (resource_id,),
+            )
+            self.conn.execute("DELETE FROM resources WHERE resource_id=?", (resource_id,))
+
     # ── 读取 ──
     def get(self, resource_id: str) -> Entry | None:
         row = self.conn.execute(
@@ -216,6 +226,12 @@ class Catalog:
             ).fetchone()
             is not None
         )
+
+    def access_status(self, resource_id: str) -> str | None:
+        row = self.conn.execute(
+            "SELECT access_status FROM resources WHERE resource_id=?", (resource_id,)
+        ).fetchone()
+        return row[0] if row else None
 
     def children(
         self, parent_id: str | None, *, kind: str | None = None, limit: int = 100, offset: int = 0

@@ -6,30 +6,20 @@
 
 from __future__ import annotations
 
-from datafinder.catalog.entities import Distribution, Entry, RegionLink, make_id
+from datafinder.catalog.entities import Distribution, Entry, RegionLink, TopicLink, make_id
+from datafinder.catalog.files import distribution_for
 from datafinder.catalog.rules import Target
 
 from ..classify import regions_for, topics_for
 from .parse import TocEntry
 from .registry import Series
 
-# 文件扩展名 → (file_format, usability)。图片可以"下载"，但内容不能直接分析（usability=image）。
-FORMATS = {
-    "xls": ("xls", "tabular"),
-    "xlsx": ("xlsx", "tabular"),
-    "csv": ("csv", "tabular"),
-    "html": ("html", "html_table"),
-    "jpg": ("jpg", "image"),
-    "png": ("png", "image"),
-    "gif": ("gif", "image"),
-    "pdf": ("pdf", "document"),
-    "doc": ("doc", "document"),
-    "docx": ("docx", "document"),
-}
-
 
 def source_id(series: Series | str) -> str:
-    return f"yearbook.{series if isinstance(series, str) else series.id}"
+    """年鉴来源 `yearbook.<id>`，普查资料来源 `census.<id>`（字符串参数按年鉴处理）。"""
+    if isinstance(series, str):
+        return f"yearbook.{series}"
+    return f"{series.type}.{series.id}"
 
 
 def series_resource_id(series: Series) -> str:
@@ -42,13 +32,6 @@ def edition_resource_id(series: Series, year: int) -> str:
 
 def _base_region(series: Series) -> list[RegionLink]:
     return [RegionLink(series.region, "covers", None, "exact", "structure")]
-
-
-def distribution_for(url: str, fmt: str) -> Distribution:
-    if fmt in FORMATS:
-        file_format, usability = FORMATS[fmt]
-        return Distribution("direct_file", url, file_format, usability)
-    return Distribution("page", url, note="目录页给出的链接格式不是常见文件，请在浏览器打开")
 
 
 def series_entry(
@@ -77,12 +60,12 @@ def series_entry(
 
 
 def edition_entry(series: Series, year: int, toc_url: str) -> Entry:
-    landing = series.base.format(year=year) + "indexch.htm" if series.base else series.home
+    landing = series.landing_for(year)
     return Entry(
         source_id(series),
         "edition",
         str(year),
-        f"{series.zh} {year}",
+        f"{series.zh} {series.label_for(year)}",
         parent_id=series_resource_id(series),
         landing_url=landing,
         edition_year=year,
@@ -93,21 +76,73 @@ def edition_entry(series: Series, year: int, toc_url: str) -> Entry:
     )
 
 
-def table_entry(series: Series, year: int, t: TocEntry, key_suffix: str = "") -> Entry:
-    target = Target(top=t.chapter, path=[t.chapter], title=t.title)
+_USABILITY_RANK = {"tabular": 0, "html_table": 1, "document": 2, "image": 3}
+
+
+def _distributions(t: TocEntry) -> list[Distribution]:
+    """同一张表目录里给出的各种格式：能直接分析的排前面（xls 先于网页表格先于图片）。"""
+    seen, out = set(), []
+    for url, fmt in ((t.url, t.fmt), *t.others):
+        if url not in seen:
+            seen.add(url)
+            out.append(distribution_for(url, fmt))
+    return _sorted(out)
+
+
+def _sorted(dists: list[Distribution]) -> list[Distribution]:
+    """可下载的在前，其次按可分析程度（xls 先于网页表格先于图片）。"""
+    return sorted(
+        dists,
+        key=lambda d: (d.access_method != "direct_file", _USABILITY_RANK.get(d.usability or "", 9)),
+    )
+
+
+def table_key(t: TocEntry) -> str:
+    return t.no or t.title[:20]
+
+
+def listed_edition_entry(
+    series: Series, year: int, page_url: str, distributions: list[Distribution]
+) -> Entry:
+    """只有版次列表的年鉴：版次页 + 可下载附件/在线浏览入口（不拆到表）。"""
+    dists = _sorted(distributions)
+    if all(d.url != page_url for d in dists):  # 版次链接本身就是文件时，不再重复一个页面入口
+        dists.append(Distribution("page", page_url))
     return Entry(
         source_id(series),
-        "table",
-        f"{year}/{t.no or t.title[:20]}{key_suffix}",
+        "edition",
+        str(year),
+        f"{series.zh} {year}",
+        parent_id=series_resource_id(series),
+        landing_url=page_url,
+        edition_year=year,
+        verification_level="source_asserted",
+        topics=[TopicLink(x, "manual") for x in series.topics],
+        regions=_base_region(series),
+        distributions=dists,
+        extra={"listed": True},
+    )
+
+
+def table_entry(series: Series, year: int, t: TocEntry, key_suffix: str = "") -> Entry:
+    target = Target(top=t.chapter, path=[t.chapter], title=t.title)
+    topics = topics_for(target)
+    topics += [
+        TopicLink(x, "manual") for x in series.topics if x not in {y.topic_id for y in topics}
+    ]
+    return Entry(
+        source_id(series),
+        "census_product" if series.type == "census" else "table",
+        f"{year}/{table_key(t)}{key_suffix}",
         t.title,
         parent_id=edition_resource_id(series, year),
         path=t.chapter,
         landing_url=t.url,
         edition_year=year,
         verification_level="source_asserted",
-        topics=topics_for(target),
+        topics=topics,
         regions=regions_for(target, _base_region(series)),
-        distributions=[distribution_for(t.url, t.fmt)],
+        distributions=_distributions(t),
         extra={"no": t.no, "chapter": t.chapter, "series": series.id},
     )
 
@@ -119,7 +154,7 @@ def table_entries(series: Series, year: int, toc: list[TocEntry]) -> list[Entry]
     for t in toc:
         if t.kind != "table":
             continue
-        key = t.no or t.title[:20]
+        key = table_key(t)
         seen[key] = seen.get(key, 0) + 1
         out.append(table_entry(series, year, t, f"#{seen[key]}" if seen[key] > 1 else ""))
     return out

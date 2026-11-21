@@ -1,10 +1,6 @@
 from pathlib import Path
 
-from datafinder.domains.official_statistics_cn.yearbook.parse import (
-    decode,
-    fmt_of,
-    parse_toc,
-)
+from datafinder.domains.official_statistics_cn.yearbook.parse import parse_toc
 
 HTML = (Path(__file__).parents[3] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
 BASE = "https://example.gov.cn/sj/ndsj/2025/left.htm"
@@ -36,14 +32,6 @@ def test_parse_toc_handles_trailing_space_in_href_and_plain_li_chapter():
         and entries["15.1"].url == "https://example.gov.cn/sj/ndsj/x/C15-01.HTM"
     )  # ../ 相对路径正确解析
     assert entries["15.1"].fmt == "html"
-
-
-def test_fmt_of_and_decode():
-    assert fmt_of("https://a/b/C0101.JPG?x=1") == "jpg"
-    assert fmt_of("https://a/b/C0101.HTM") == "html"
-    assert fmt_of("https://a/b/") == "other"
-    assert decode("中国统计年鉴".encode("gb18030")) == "中国统计年鉴"
-    assert decode("中国统计年鉴".encode()) == "中国统计年鉴"
 
 
 def test_appendix_tables_with_prefixed_numbers_are_tables_not_notes():

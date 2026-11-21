@@ -52,7 +52,8 @@ region_rules:
   - {scope: top,   any: [香港], region: CN-HK, relation: covers, scope_mode: exact}
   - {scope: top,   any: [澳门], region: CN-MO, relation: covers, scope_mode: exact}
   - {scope: top,   any: [台湾], region: CN-TW, relation: covers, scope_mode: exact}
-  - {scope: top,   any: [国际], region: WORLD, relation: covers, scope_mode: descendants}
+  # 国际主要指标：数据是各国的，不是中国省份的——exact 让它只回答"世界"，不冒充任何省份/地区查询的结果
+  - {scope: top,   any: [国际], region: WORLD, relation: covers, scope_mode: exact}
   - {scope: top,   any: [县(市、区), 县（市、区）, 各县], region: null, relation: reports_at, granularity: county, scope_mode: descendants}
   - {scope: title, any: [各县, 分县], region: null, relation: reports_at, granularity: county, scope_mode: descendants}
   - {scope: title, any: [各市, 分市, 地级市, 各地级], region: null, relation: reports_at, granularity: prefecture, scope_mode: descendants}

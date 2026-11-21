@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+import re
+
 from datafinder.catalog.adapters import (
     CAP_DISCOVER,
     CAP_MIGRATE,
@@ -14,15 +16,29 @@ from datafinder.catalog.adapters import (
     DiscoverResult,
     SourceInfo,
 )
+from datafinder.catalog.entities import Distribution
+from datafinder.catalog.files import decode_html, distribution_for, fmt_of
+from datafinder.catalog.listing import Link, extract_links
 from datafinder.catalog.repository import Catalog
 from datafinder.engine.errors import SourceError
 from datafinder.engine.http import Http
 
 from .. import DOMAIN_ID
-from .entries import edition_entry, edition_resource_id, series_entry, source_id, table_entries
-from .parse import decode, parse_toc
+from .entries import (
+    edition_entry,
+    edition_resource_id,
+    listed_edition_entry,
+    series_entry,
+    source_id,
+    table_entries,
+    table_key,
+)
+from .parse import TocEntry, parse_toc, parse_tree_toc
 from .registry import Series, load_series
 
+PARSERS = {"zk": parse_toc, "tree": parse_tree_toc}
+ARCHIVES = {"zip", "rar", "xls", "xlsx", "pdf", "doc", "docx"}  # 版次页上可下载的附件类型
+_YEAR = re.compile(r"(?:19|20)\d{2}")
 MIN_TABLES = 20  # 少于这个数当作"不是目录页"，避免把错误页当成目录
 HEADERS = {"Accept": "text/html,*/*"}
 
@@ -30,21 +46,63 @@ HEADERS = {"Accept": "text/html,*/*"}
 def _hosts(series_list: list[Series]) -> dict[str, float]:
     from urllib.parse import urlsplit
 
-    return {urlsplit(s.base.format(year=2024)).netloc: 1.0 for s in series_list if s.base}
+    return {
+        urlsplit(s.base_for(s.edition_years()[0])).netloc: 1.0
+        for s in series_list
+        if s.edition_years()
+    }
+
+
+def _merge_alternates(primary: list[TocEntry], others: list[list[TocEntry]]) -> list[TocEntry]:
+    """同一版次常有多份目录（网页版、Excel 版）。以第一份为准，按"表号+出现次序"把其他格式并进来。"""
+    from dataclasses import replace
+
+    def keyed(toc: list[TocEntry]) -> dict[tuple[str, int], TocEntry]:
+        seen: dict[str, int] = {}
+        out = {}
+        for t in toc:
+            if t.kind == "table":
+                k = table_key(t)
+                seen[k] = seen.get(k, 0) + 1
+                out[(k, seen[k])] = t
+        return out
+
+    base = keyed(primary)
+    extra = []
+    for toc in others:
+        alt = keyed(toc)
+        if len(set(alt) & set(base)) >= 0.8 * len(base):  # 对不上号的目录不并（避免张冠李戴）
+            extra.append(alt)
+    if not extra:
+        return primary
+    out, seen = [], {}
+    for t in primary:
+        if t.kind != "table":
+            out.append(t)
+            continue
+        k = table_key(t)
+        seen[k] = seen.get(k, 0) + 1
+        more = tuple((a[(k, seen[k])].url, a[(k, seen[k])].fmt) for a in extra if (k, seen[k]) in a)
+        out.append(replace(t, others=more))
+    return out
 
 
 async def fetch_edition(http: Http, series: Series, year: int):
     """返回 (status, toc_url, toc_entries, message)；status: ok | missing | error。"""
     last = ""
+    good: list[tuple[str, list[TocEntry]]] = []
     for url in series.toc_urls(year):
         code, content = await http.get_bytes(url, headers=HEADERS)
         if code in (404, 410):
             continue
-        toc = parse_toc(decode(content), url)
+        toc = PARSERS[series.format](decode_html(content), url)
         n = sum(1 for e in toc if e.kind == "table")
         if n >= MIN_TABLES:
-            return "ok", url, toc, ""
-        last = f"{url} 解析出的数据表只有 {n} 张，不像年鉴目录页"
+            good.append((url, toc))
+        else:
+            last = f"{url} 解析出的数据表只有 {n} 张，不像年鉴目录页"
+    if good:
+        return "ok", good[0][0], _merge_alternates(good[0][1], [t for _, t in good[1:]]), ""
     return (
         ("error", None, None, last)
         if last
@@ -75,7 +133,7 @@ class YearbookAdapter(Adapter):
         crawlable = [s for s in load_series() if s.crawl and (not wanted or s.id in wanted)]
         run = cat.start_run("yearbook", "discover")
         result = DiscoverResult("done")
-        http = Http(min_interval=_hosts(crawlable))
+        http = Http(min_interval=_hosts(crawlable), default_interval=1.0)
         try:
             for s in crawlable:
                 await self._series(cat, http, s, lo, hi, opts, result)
@@ -100,6 +158,9 @@ class YearbookAdapter(Adapter):
         opts: DiscoverOptions,
         result: DiscoverResult,
     ) -> None:
+        if s.format == "list":
+            await self._list_series(cat, http, s, lo, hi, opts, result)
+            return
         for year in s.edition_years(lo, hi):
             rid = edition_resource_id(s, year)
             if not opts.refresh and cat.exists(rid):
@@ -131,6 +192,64 @@ class YearbookAdapter(Adapter):
             result.seen += 1 + len(tables)
             result.added += 1 + len(tables)
             opts.say(f"{s.zh} {year}：{len(tables)} 张表")
+
+    async def _list_series(
+        self,
+        cat: Catalog,
+        http: Http,
+        s: Series,
+        lo: int | None,
+        hi: int | None,
+        opts: DiscoverOptions,
+        result: DiscoverResult,
+    ) -> None:
+        """只有"各版次列表"的年鉴（广东、湖北）：每个版次登记一个条目，附件（zip/xls/pdf）作为可下载入口。"""
+        found: dict[int, Link] = {}
+        try:
+            for url in s.list_urls:
+                result.requests += 1
+                code, content = await http.get_bytes(url, headers=HEADERS)
+                if code in (404, 410):
+                    continue
+                for link in extract_links(decode_html(content), url):
+                    m = _YEAR.search(link.text)
+                    if not m or "统计年鉴" not in link.text:
+                        continue
+                    year = int(m.group(0))
+                    if (lo or 0) <= year <= (hi or 9999):
+                        found.setdefault(year, link)
+            for year, link in sorted(found.items(), reverse=True):
+                rid = edition_resource_id(s, year)
+                if not opts.refresh and cat.exists(rid):
+                    continue
+                files = [distribution_for(link.href)] if fmt_of(link.href) in ARCHIVES else []
+                if s.follow and not files:
+                    result.requests += 1
+                    code, content = await http.get_bytes(link.href, headers=HEADERS)
+                    if code not in (404, 410):
+                        for x in extract_links(decode_html(content), link.href):
+                            if fmt_of(x.href) in ARCHIVES:
+                                files.append(distribution_for(x.href))
+                            elif "在线浏览" in x.text:
+                                files.append(Distribution("page", x.href, note="在线浏览"))
+                cat.upsert([listed_edition_entry(s, year, link.href, files)])
+                result.seen += 1
+                result.added += 1
+                opts.say(f"{s.zh} {year}：{len(files)} 个可下载/浏览入口")
+        except SourceError as exc:
+            cat.upsert(
+                [
+                    series_entry(
+                        s,
+                        access_status="blocked"
+                        if exc.kind in ("blocked", "rate_limited")
+                        else "unavailable",
+                        note=str(exc),
+                    )
+                ]
+            )
+            result.stopped.append(f"{s.zh}：{exc}")
+            opts.say(f"{s.zh}：{exc}（放弃该系列，不重试不绕过）")
 
     def legacy_present(self) -> bool:
         from datafinder.config import data_dir

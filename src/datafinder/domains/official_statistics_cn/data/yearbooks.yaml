@@ -1,4 +1,4 @@
-# 统计年鉴系列：每个系列给出"各版次目录页"的地址模板，供 `datafinder yearbook index` 逐版次抓取目录。
+# 统计年鉴与普查资料系列（同一套"zk"目录页模板）：每个系列给出"各版次目录页"的地址模板，供 `datafinder yearbook index` 逐版次抓取目录。
 #
 # 字段：
 #   id        系列标识（全国 cn；省级用 ISO 3166-2 码，如 CN-HE）
@@ -9,7 +9,13 @@
 #   base      版次根地址模板，{year} 会被替换；目录页为 base + toc
 #   toc       目录页文件名候选（按顺序尝试）
 #   home      年鉴列表页（给人看的入口；没有可抓取的模板时只作导航）
-#   crawl     false = 只导航不抓取（页面形态与统一模板不同）
+#   crawl     false = 只导航不抓取（页面形态没有可用的解析方式）
+#   format    zk（默认，统计出版社模板）| tree（树形目录，上海）| list（只有各版次列表，广东/湖北）
+#   landing / list_urls / follow  见 yearbook/registry.py
+#   type      yearbook（默认）| census（普查资料，来源前缀 census.）
+#   editions  没有"每年一版"规律时逐版列出 {year, base, label, landing}，代替 years/base
+#   topics    整个系列固定的主题（普查资料按卷章难以推断）
+#   toc 里的多份目录（网页版/Excel 版）会合并：同一张表的 xls 与网页/图片格式都会登记，xls 排前
 #
 # 地址来源：国家统计局年鉴页的版次链接（2026-11-20 实际访问）；省级来自各统计局公开的年鉴入口，
 # 只收录"页面结构与统计出版社 zk 模板一致"的系列，其余省份先只放 home，待逐个核验后再开启抓取。
@@ -21,7 +27,7 @@ series:
     publisher: 国家统计局
     years: [2005, 2025]
     base: "https://www.stats.gov.cn/sj/ndsj/{year}/"
-    toc: [left.htm]
+    toc: [left.htm, lefte.htm]
     home: https://www.stats.gov.cn/sj/ndsj/
 
   - id: CN-BJ
@@ -87,33 +93,46 @@ series:
     toc: [left.htm, lefte.htm]
     home: https://tjj.henan.gov.cn
 
-  # 以下省份年鉴页面形态不同（动态页或单页列表），先只做导航
+  # 以下省份年鉴页面形态与 zk 模板不同：用对应的解析方式（format），解析不了的只做导航
   - id: CN-SH
     zh: 上海统计年鉴
     region: CN-SH
     publisher: 上海市统计局
+    format: tree                  # 树形目录页：每张表一个网页表格（html），2004–2025 共 22 版
+    years: [2004, 2025]
+    base: "https://tjj.sh.gov.cn/tjnj/"
+    toc: ["tjnj{year}.htm"]
+    landing: "https://tjj.sh.gov.cn/tjnj/tjnj{year}.htm"
     home: https://tjj.sh.gov.cn/tjnj/
-    crawl: false
 
   - id: CN-GD
     zh: 广东统计年鉴
     region: CN-GD
     publisher: 广东省统计局
+    format: list                  # 只有各版次列表；版次页给出整本 zip（光盘内容）与在线浏览
+    follow: true
+    list_urls:
+      - http://stats.gd.gov.cn/gdtjnj/
+      - http://stats.gd.gov.cn/gdtjnj/index_1.html
+      - http://stats.gd.gov.cn/gdtjnj/index_2.html
     home: http://stats.gd.gov.cn/gdtjnj/
-    crawl: false
-
-  - id: CN-JS
-    zh: 江苏统计年鉴
-    region: CN-JS
-    publisher: 江苏省统计局
-    home: http://tj.jiangsu.gov.cn/col/col85821/index.html
-    crawl: false
 
   - id: CN-HB
     zh: 湖北统计年鉴
     region: CN-HB
     publisher: 湖北省统计局
+    format: list                  # 列表里每个版次直接是整本 zip/rar
+    list_urls:
+      - https://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/qstjnj/
+      - https://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/qstjnj/index_1.html
     home: https://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/
+
+  # 江苏（动态页，列表由脚本加载）、宁夏（easyquery 数据平台）暂时只做导航
+  - id: CN-JS
+    zh: 江苏统计年鉴
+    region: CN-JS
+    publisher: 江苏省统计局
+    home: http://tj.jiangsu.gov.cn/col/col85821/index.html
     crawl: false
 
   - id: CN-NX
@@ -122,3 +141,30 @@ series:
     publisher: 宁夏回族自治区统计局
     home: https://data.tj.nx.gov.cn/publish.htm?cn=G01
     crawl: false
+
+  - id: pop
+    zh: 全国人口普查资料
+    type: census
+    region: CN
+    publisher: 国家统计局
+    home: https://www.stats.gov.cn/sj/pcsj/
+    toc: [lefte.htm, left.htm]
+    topics: [cnstat.population, cnstat.population.census]
+    editions:
+      - {year: 2020, label: 第七次（2020年）, base: "https://www.stats.gov.cn/sj/pcsj/rkpc/7rp/zk/", landing: "https://www.stats.gov.cn/sj/pcsj/rkpc/7rp/indexch.htm"}
+      - {year: 2010, label: 第六次（2010年）, base: "https://www.stats.gov.cn/sj/pcsj/rkpc/6rp/"}
+
+  - id: econ
+    zh: 全国经济普查资料
+    type: census
+    region: CN
+    publisher: 国家统计局
+    home: https://www.stats.gov.cn/sj/pcsj/
+    toc: [lefte.htm, left.htm]
+    topics: [cnstat.macro]
+    editions:
+      - {year: 2023, label: 第五次（2023年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/5jp/zk/", landing: "https://www.stats.gov.cn/sj/pcsj/jjpc/5jp/indexch.htm"}
+      - {year: 2018, label: 第四次（2018年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/4jp/zk/", landing: "https://www.stats.gov.cn/sj/pcsj/jjpc/4jp/indexch.htm"}
+      - {year: 2013, label: 第三次（2013年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/3jp/zk/", landing: "https://www.stats.gov.cn/sj/pcsj/jjpc/3jp/indexch.htm"}
+      - {year: 2008, label: 第二次（2008年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/2jp/"}
+      - {year: 2004, label: 第一次（2004年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/1jp/"}

@@ -17,7 +17,7 @@ from datafinder.domains.official_statistics_cn.yearbook.entries import (
     table_entries,
 )
 from datafinder.domains.official_statistics_cn.yearbook.parse import TocEntry, parse_toc
-from datafinder.domains.official_statistics_cn.yearbook.registry import Series, get_series
+from datafinder.domains.official_statistics_cn.yearbook.registry import Edition, Series, get_series
 from datafinder.engine.http import Http
 
 HTML = (Path(__file__).parents[3] / "fixtures" / "yearbook_toc.htm").read_text(encoding="utf-8")
@@ -196,9 +196,192 @@ def test_registry_is_consistent():
     assert len(ids) == len(set(ids)) and "cn" in ids
     for s in all_series:
         assert s.home.startswith("http")
-        if s.crawl:
-            assert s.base and "{year}" in s.base and s.years and s.years[0] <= s.years[1]
+        if s.crawl and s.editions:  # 普查资料：逐版列出
+            assert s.type == "census" and all(e.base.startswith("http") for e in s.editions)
+            assert all(u.startswith("http") for u in s.toc_urls(s.edition_years()[0]))
+        elif s.crawl and s.format == "list":
+            assert s.list_urls and all(u.startswith("http") for u in s.list_urls)
+        elif s.crawl:
+            assert s.base and s.years and s.years[0] <= s.years[1]
+            assert s.format in ("zk", "tree")
+            assert s.format == "tree" or "{year}" in s.base
             assert all(u.startswith("http") for u in s.toc_urls(s.years[1]))
     assert get_series("cn").edition_years(2023, 2030) == [2023, 2024, 2025]
     with pytest.raises(ValueError, match="未知年鉴系列"):
         get_series("nope")
+
+
+async def test_alternate_tocs_are_merged_so_excel_comes_first():
+    xls = BIG.replace(".jpg", ".xls")
+
+    def handler(req):
+        return httpx.Response(
+            200, content=(xls if str(req.url).endswith("lefte.htm") else BIG).encode()
+        )
+
+    status, _, toc, _ = await fetch_edition(http_for(handler), series(), 2025)
+    assert status == "ok"
+    first = next(t for t in toc if t.kind == "table" and t.no == "1-2")
+    assert dict(first.others)["https://t.example/2025/zk/html/C01-02.xls"] == "xls"
+    entry = next(e for e in table_entries(series(), 2025, toc) if e.extra["no"] == "1-2")
+    assert [d.file_format for d in entry.distributions] == ["xls", "jpg"]  # 能直接分析的在前
+    assert entry.distributions[0].usability == "tabular"
+
+
+async def test_mismatched_alternate_toc_is_not_merged():
+    other = (
+        "<ul><li id='foldheader'>一、x</li>"
+        + "".join(f"<li><a href='o/{i}.xls'>7-{i} 别的表{i}</a></li>" for i in range(30))
+        + "</ul>"
+    )
+
+    def handler(req):
+        return httpx.Response(
+            200, content=(other if str(req.url).endswith("lefte.htm") else BIG).encode()
+        )
+
+    _, _, toc, _ = await fetch_edition(http_for(handler), series(), 2025)
+    assert all(not t.others for t in toc)  # 对不上号就不张冠李戴
+
+
+def test_census_series_use_their_own_source_prefix_kind_and_topics():
+    from datafinder.domains.official_statistics_cn.yearbook.entries import source_id
+
+    census = Series(
+        id="pop",
+        zh="全国人口普查资料",
+        region="CN",
+        publisher="x",
+        home="https://t.example/",
+        type="census",
+        topics=("cnstat.population",),
+        editions=(
+            Edition(
+                2020,
+                "https://t.example/7rp/zk/",
+                "第七次（2020年）",
+                "https://t.example/7rp/indexch.htm",
+            ),
+        ),
+    )
+    assert source_id(census) == "census.pop" and census.edition_years() == [2020]
+    ed = edition_entry(census, 2020, "u")
+    assert ed.title == "全国人口普查资料 第七次（2020年）" and ed.landing_url.endswith(
+        "7rp/indexch.htm"
+    )
+    toc = parse_toc(HTML, "https://t.example/7rp/zk/left.htm")
+    tables = table_entries(census, 2020, toc)
+    assert {e.kind for e in tables} == {"census_product"}
+    assert all("cnstat.population" in {t.topic_id for t in e.topics} for e in tables)
+
+
+# ───────────────────────── 非 zk 模板：树形目录（上海）与版次列表（广东、湖北）─────────────────────────
+
+TREE = """<ul>
+<li><div class="treeview-folder"> 第一篇——综合</div><ul>
+ <li><div class="treeview-file"><a href="nj25.htm?d1=2025tjnj/zbhtml/C0001.htm">简要说明</a></div></li>
+ <li><div class="treeview-file"><a href="nj25.htm?d1=2025tjnj/C0101.htm">表1.1 行政区划(2024)</a></div></li>
+ <li><div class="treeview-folder">指标解释</div><ul><li><a href="nj25.htm?d1=2025tjnj/zbhtml/C0107.htm">指 数</a></li></ul></li>
+</ul></li>
+<li><div class="treeview-folder"> 第二篇——人口、就业与工资</div><ul>
+ <li><div class="treeview-file"><a href="nj25.htm?d1=2025tjnj/C0201.htm">表2.1 户数、人口、人口密度（1978～2024）</a></div></li>
+ <li><div class="treeview-file"><a href="nj25.htm?d1=2025tjnj/C0202.htm">2.2各区常住人口（2024）</a></div></li>
+ <li><div class="treeview-file"><a href="nj25.htm?d1=2025tjnj/zbhtml/C0301.htm">图1 上海市生产总值</a></div></li>
+</ul></li></ul>"""
+
+
+def test_tree_toc_maps_viewer_links_to_real_files_and_keeps_chapters():
+    from datafinder.domains.official_statistics_cn.yearbook.parse import parse_tree_toc
+
+    toc = parse_tree_toc(TREE, "https://t.example/tjnj/tjnj2025.htm")
+    tables = [t for t in toc if t.kind == "table"]
+    assert [t.no for t in tables] == ["1.1", "2.1", "2.2"]
+    assert tables[0].url == "https://t.example/tjnj/2025tjnj/C0101.htm" and tables[0].fmt == "html"
+    assert tables[0].chapter == "第一篇——综合" and tables[2].chapter == "第二篇——人口、就业与工资"
+    notes = [t.title for t in toc if t.kind == "note"]
+    assert "简要说明" in notes and "图1 上海市生产总值" in notes  # 图与说明不当作数据表
+
+
+async def test_tree_series_is_fetched_with_year_in_toc_name(cat, patch_series):
+    urls = []
+    big = TREE.replace(
+        "</ul></li></ul>",
+        "".join(
+            f"<li><a href='nj25.htm?d1=2025tjnj/C09{i:02d}.htm'>表9.{i} 表{i}</a></li>"
+            for i in range(30)
+        )
+        + "</ul></li></ul>",
+    )
+
+    def handler(req):
+        urls.append(str(req.url))
+        return httpx.Response(200, content=big.encode())
+
+    sh = series(
+        id="CN-SH",
+        format="tree",
+        years=(2025, 2025),
+        base="https://t.example/tjnj/",
+        toc=("tjnj{year}.htm",),
+        landing="https://t.example/tjnj/tjnj{year}.htm",
+    )
+    patch_series(handler, [sh])
+    await YearbookAdapter().discover(cat, DiscoverOptions())
+    assert urls == ["https://t.example/tjnj/tjnj2025.htm"]
+    ed = cat.get("yearbook.CN-SH:edition:2025")
+    assert ed and ed.landing_url == "https://t.example/tjnj/tjnj2025.htm"
+    assert cat.stats()["by_kind"]["table"] == 33
+
+
+LIST_PAGE = """<a href="/gdtjnj/content/post_2.html">广东统计年鉴2025年</a>
+<a href="/gdtjnj/content/post_1.html">广东统计年鉴2024年</a>
+<a href="/gdtjnj/">广东统计年鉴</a><a href="/x/y.html">年度报告2025</a>"""
+EDITION_PAGE = """<a href="http://t.example/online/2025/">在线浏览</a>
+<a href="/attachment/0/630/2.zip">2025广东统计年鉴光盘内容.zip</a>"""
+
+
+async def test_list_series_registers_editions_with_attachments_and_online_links(cat, patch_series):
+    def handler(req):
+        path = req.url.path
+        if path == "/gdtjnj/":
+            return httpx.Response(200, content=LIST_PAGE.encode())
+        if path.endswith("post_2.html"):
+            return httpx.Response(200, content=EDITION_PAGE.encode())
+        return httpx.Response(200, text="<html>无附件</html>")
+
+    gd = series(
+        id="CN-GD",
+        format="list",
+        follow=True,
+        years=None,
+        base=None,
+        list_urls=("https://t.example/gdtjnj/",),
+    )
+    patch_series(handler, [gd])
+    result = await YearbookAdapter().discover(cat, DiscoverOptions())
+    assert result.added == 2
+    e25 = cat.get("yearbook.CN-GD:edition:2025")
+    assert [(d.access_method, d.file_format) for d in e25.distributions][:2] == [
+        ("direct_file", "zip"),
+        ("page", None),
+    ]
+    assert (
+        e25.delivery == "download" and e25.distributions[0].usability is None
+    )  # 压缩包不冒充可直接分析
+    e24 = cat.get("yearbook.CN-GD:edition:2024")
+    assert e24.delivery == "link"  # 没找到附件：只给版次页
+    # 只收有年份的"统计年鉴"链接；再次运行不重复请求
+    assert cat.stats()["by_kind"]["edition"] == 2
+
+
+async def test_list_series_whose_link_is_the_file_itself(cat, patch_series):
+    page = '<a href="/q/2025.zip">2025年统计年鉴</a>'
+    hb = series(
+        id="CN-HB", format="list", years=None, base=None, list_urls=("https://t.example/q/",)
+    )
+    patch_series(lambda req: httpx.Response(200, content=page.encode()), [hb])
+    await YearbookAdapter().discover(cat, DiscoverOptions())
+    e = cat.get("yearbook.CN-HB:edition:2025")
+    assert [d.access_method for d in e.distributions] == [
+        "direct_file"
+    ]  # 不重复一个指向同一文件的页面入口

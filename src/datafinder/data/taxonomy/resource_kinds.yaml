@@ -24,7 +24,7 @@ access_methods:
   page:        {zh: 仅页面,     delivery: link}
   manual:      {zh: 需人工获取（登录/申请/拒绝机器人）, delivery: link}
 
-file_formats: [csv, xlsx, xls, json, html, jpg, png, pdf, doc, docx, zip, other]
+file_formats: [csv, xlsx, xls, json, html, jpg, png, pdf, doc, docx, zip, rar, other]
 
 # usability：下载下来的东西能不能直接分析。图片年鉴可以"下载"，但 usability=image。
 usability:

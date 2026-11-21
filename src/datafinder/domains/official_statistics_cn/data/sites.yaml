@@ -1,0 +1,99 @@
+# 官方网站栏目配置：发布机构（国家统计局、省级统计局、部委）及其栏目。
+#
+# 机构：id（省用 ISO 3166-2 码）、name、region、home；discover_nav: true = 从首页导航按下面的 nav 规则自动发现栏目。
+# 栏目：已核实的栏目页（列表页会被逐页收录为条目），可指定条目类型 kind、链接/标题正则、翻页上限 pages、固定主题 topics。
+# 站点拒绝/连不上时只保留首页入口并标注原因，换个网络后重跑 `datafinder index build site` 即可补全。
+#
+# 地址来源：首页来自各机构官网（2026-11-20 访问）；国家统计局栏目于 2026-11-21 逐个访问核实。
+
+pages: 3                      # 未单独指定时，每个栏目最多翻几页
+
+# 首页导航 → 栏目类型。按顺序匹配，先匹配先赢；nav_skip 命中的文字直接忽略（年鉴由年鉴适配器负责）。
+nav_skip: "年鉴|新闻|办事|互动|留言|信箱|登录|公开目录|党建|招聘|招考|采购|法规|政策|纪检|机构|简介|领导|党组"
+nav:
+  - {match: "统计公报|公报", kind: bulletin}
+  - {match: "普查", kind: census_product}
+  - {match: "数据发布|统计数据|数据查询|统计信息|统计快报|统计月报|月度数据|经济运行|统计分析|数据解读|数据开放|开放数据|主要指标|统计报告|统计资料|数据", kind: report}
+
+publishers:
+  # ── 国家统计局 ──
+  - id: nbs
+    name: 国家统计局
+    region: CN
+    home: https://www.stats.gov.cn/
+    interval: 2.0               # 2026-11-21 实测：1 秒间隔连续翻 70 页后会触发人机验证，2 秒更稳
+    columns:
+      - {id: release,   title: 数据发布, url: "https://www.stats.gov.cn/sj/zxfb/", kind: report, pages: 70}
+      - {id: interpret, title: 数据解读, url: "https://www.stats.gov.cn/sj/sjjd/", kind: report, pages: 70}
+      - {id: bulletin-annual, title: 全国年度统计公报, url: "https://www.stats.gov.cn/sj/tjgb/ndtjgb/qgndtjgb/", kind: bulletin, frequency: annual, pages: 6, item_title: "国民经济和社会发展统计公报 {text}", topics: [cnstat.macro]}
+      - {id: bulletin-pop,   title: 人口普查公报, url: "https://www.stats.gov.cn/sj/tjgb/rkpcgb/", kind: bulletin, topics: [cnstat.population, cnstat.population.census]}
+      - {id: bulletin-econ,  title: 经济普查公报, url: "https://www.stats.gov.cn/sj/tjgb/jjpcgb/", kind: bulletin, topics: [cnstat.macro]}
+      - {id: bulletin-agri,  title: 农业普查公报, url: "https://www.stats.gov.cn/sj/tjgb/nypcgb/", kind: bulletin, topics: [cnstat.agriculture]}
+      - {id: bulletin-rd,    title: R&D资源清查公报, url: "https://www.stats.gov.cn/sj/tjgb/rdpcgb/", kind: bulletin, topics: [cnstat.innovation]}
+      - {id: bulletin-unit,  title: 基本单位普查公报, url: "https://www.stats.gov.cn/sj/tjgb/jbdwpcgb/", kind: bulletin}
+      - {id: bulletin-ind,   title: 工业普查公报, url: "https://www.stats.gov.cn/sj/tjgb/gypcgb/", kind: bulletin, topics: [cnstat.industry]}
+      - {id: bulletin-svc,   title: 第三产业普查公报, url: "https://www.stats.gov.cn/sj/tjgb/scpcgb/", kind: bulletin}
+      - {id: bulletin-other, title: 其他统计公报, url: "https://www.stats.gov.cn/sj/tjgb/qttjgb/", kind: bulletin}
+
+  # ── 省级统计局：首页导航自动发现栏目 ──
+  - {id: CN-BJ, name: 北京市统计局, region: CN-BJ, home: "https://tjj.beijing.gov.cn/", discover_nav: true}
+  - {id: CN-TJ, name: 天津市统计局, region: CN-TJ, home: "https://stats.tj.gov.cn/", discover_nav: true}
+  - {id: CN-HE, name: 河北省统计局, region: CN-HE, home: "http://tjj.hebei.gov.cn/", discover_nav: true}
+  - {id: CN-SX, name: 山西省统计局, region: CN-SX, home: "https://tjj.shanxi.gov.cn/", discover_nav: true}
+  - {id: CN-NM, name: 内蒙古自治区统计局, region: CN-NM, home: "https://tj.nmg.gov.cn/", discover_nav: true}
+  - {id: CN-LN, name: 辽宁省统计局, region: CN-LN, home: "https://tjj.ln.gov.cn/", discover_nav: true}
+  - {id: CN-JL, name: 吉林省统计局, region: CN-JL, home: "https://tjj.jl.gov.cn/", discover_nav: true}
+  - {id: CN-HL, name: 黑龙江省统计局, region: CN-HL, home: "https://tjj.hlj.gov.cn/", discover_nav: true}
+  - {id: CN-SH, name: 上海市统计局, region: CN-SH, home: "https://tjj.sh.gov.cn/", discover_nav: true}
+  - {id: CN-JS, name: 江苏省统计局, region: CN-JS, home: "http://tj.jiangsu.gov.cn/", discover_nav: true}
+  - {id: CN-ZJ, name: 浙江省统计局, region: CN-ZJ, home: "http://tjj.zj.gov.cn/", discover_nav: true}
+  - {id: CN-AH, name: 安徽省统计局, region: CN-AH, home: "https://tjj.ah.gov.cn/", discover_nav: true}
+  - {id: CN-FJ, name: 福建省统计局, region: CN-FJ, home: "https://tjj.fujian.gov.cn/", discover_nav: true}
+  - {id: CN-JX, name: 江西省统计局, region: CN-JX, home: "https://tjj.jiangxi.gov.cn/", discover_nav: true}
+  - {id: CN-SD, name: 山东省统计局, region: CN-SD, home: "http://tjj.shandong.gov.cn/", discover_nav: true}
+  - {id: CN-HA, name: 河南省统计局, region: CN-HA, home: "https://tjj.henan.gov.cn/", discover_nav: true}
+  - {id: CN-HB, name: 湖北省统计局, region: CN-HB, home: "https://tjj.hubei.gov.cn/", discover_nav: true}
+  - {id: CN-HN, name: 湖南省统计局, region: CN-HN, home: "https://tjj.hunan.gov.cn/", discover_nav: true}
+  - {id: CN-GD, name: 广东省统计局, region: CN-GD, home: "http://stats.gd.gov.cn/", discover_nav: true}
+  - {id: CN-GX, name: 广西壮族自治区统计局, region: CN-GX, home: "http://tjj.gxzf.gov.cn/", discover_nav: true}
+  - {id: CN-HI, name: 海南省统计局, region: CN-HI, home: "https://stats.hainan.gov.cn/", discover_nav: true}
+  - {id: CN-CQ, name: 重庆市统计局, region: CN-CQ, home: "https://tjj.cq.gov.cn/", discover_nav: true}
+  - {id: CN-SC, name: 四川省统计局, region: CN-SC, home: "https://tjj.sc.gov.cn/", discover_nav: true}
+  - {id: CN-GZ, name: 贵州省统计局, region: CN-GZ, home: "https://stjj.guizhou.gov.cn/", discover_nav: true}
+  - {id: CN-YN, name: 云南省统计局, region: CN-YN, home: "https://stats.yn.gov.cn/", discover_nav: true}
+  - {id: CN-XZ, name: 西藏自治区统计局, region: CN-XZ, home: "https://tjj.xizang.gov.cn/", discover_nav: true}
+  - {id: CN-SN, name: 陕西省统计局, region: CN-SN, home: "https://tjj.shaanxi.gov.cn/", discover_nav: true}
+  - {id: CN-GS, name: 甘肃省统计局, region: CN-GS, home: "https://tjj.gansu.gov.cn/", discover_nav: true}
+  - {id: CN-QH, name: 青海省统计局, region: CN-QH, home: "https://tjj.qinghai.gov.cn/", discover_nav: true}
+  - {id: CN-NX, name: 宁夏回族自治区统计局, region: CN-NX, home: "https://tj.nx.gov.cn/", discover_nav: true}
+  - {id: CN-XJ, name: 新疆维吾尔自治区统计局, region: CN-XJ, home: "https://tjj.xinjiang.gov.cn/", discover_nav: true}
+
+  # ── 部委及其他国家级发布机构 ──
+  - {id: ndrc, name: 国家发展和改革委员会, region: CN, home: "https://www.ndrc.gov.cn/", type: ministry, discover_nav: true}
+  - {id: miit, name: 工业和信息化部, region: CN, home: "https://www.miit.gov.cn/", type: ministry, discover_nav: true}
+  - {id: moe, name: 教育部, region: CN, home: "http://www.moe.gov.cn/", type: ministry, discover_nav: true}
+  - {id: most, name: 科学技术部, region: CN, home: "https://www.most.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mohrss, name: 人力资源和社会保障部, region: CN, home: "https://www.mohrss.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mnr, name: 自然资源部, region: CN, home: "https://www.mnr.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mee, name: 生态环境部, region: CN, home: "https://www.mee.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mohurd, name: 住房和城乡建设部, region: CN, home: "https://www.mohurd.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mot, name: 交通运输部, region: CN, home: "https://www.mot.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mwr, name: 水利部, region: CN, home: "https://www.mwr.gov.cn/", type: ministry, discover_nav: true}
+  - {id: moa, name: 农业农村部, region: CN, home: "https://www.moa.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mofcom, name: 商务部, region: CN, home: "https://www.mofcom.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mct, name: 文化和旅游部, region: CN, home: "https://www.mct.gov.cn/", type: ministry, discover_nav: true}
+  - {id: nhc, name: 国家卫生健康委员会, region: CN, home: "http://www.nhc.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mem, name: 应急管理部, region: CN, home: "https://www.mem.gov.cn/", type: ministry, discover_nav: true}
+  - {id: mof, name: 财政部, region: CN, home: "https://www.mof.gov.cn/", type: ministry, discover_nav: true}
+  - {id: pbc, name: 中国人民银行, region: CN, home: "http://www.pbc.gov.cn/", type: ministry, discover_nav: true}
+  - {id: customs, name: 海关总署, region: CN, home: "http://www.customs.gov.cn/", type: ministry, discover_nav: true}
+  - {id: chinatax, name: 国家税务总局, region: CN, home: "https://www.chinatax.gov.cn/", type: ministry, discover_nav: true}
+  - {id: samr, name: 国家市场监督管理总局, region: CN, home: "https://www.samr.gov.cn/", type: ministry, discover_nav: true}
+  - {id: nhsa, name: 国家医疗保障局, region: CN, home: "https://www.nhsa.gov.cn/", type: ministry, discover_nav: true}
+  - {id: nea, name: 国家能源局, region: CN, home: "https://www.nea.gov.cn/", type: ministry, discover_nav: true}
+  - {id: cnipa, name: 国家知识产权局, region: CN, home: "https://www.cnipa.gov.cn/", type: ministry, discover_nav: true}
+  - {id: caac, name: 中国民用航空局, region: CN, home: "https://www.caac.gov.cn/", type: ministry, discover_nav: true}
+  - {id: safe, name: 国家外汇管理局, region: CN, home: "https://www.safe.gov.cn/", type: ministry, discover_nav: true}
+  - {id: csrc, name: 中国证券监督管理委员会, region: CN, home: "https://www.csrc.gov.cn/", type: ministry, discover_nav: true}
+  - {id: nfra, name: 国家金融监督管理总局, region: CN, home: "https://www.nfra.gov.cn/", type: ministry, discover_nav: true}
+  - {id: nda, name: 国家数据局, region: CN, home: "https://www.nda.gov.cn/", type: ministry, discover_nav: true}

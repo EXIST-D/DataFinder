@@ -13,6 +13,7 @@ from datafinder.sources.registry import register_protocol
 from . import DOMAIN_ID
 from .nbs.adapter import NbsAdapter
 from .nbs.search import NbsSource
+from .sites.adapter import build as build_site_adapter
 from .yearbook.adapter import YearbookAdapter
 
 PACKAGE = f"datafinder.domains.{DOMAIN_ID}"
@@ -28,6 +29,7 @@ register_taxonomy(
 MIN_INTERVAL["data.stats.gov.cn"] = 0.8
 register_adapter(NbsAdapter())
 register_adapter(YearbookAdapter())
+register_adapter(build_site_adapter())
 
 
 def _web_router():

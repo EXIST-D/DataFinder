@@ -51,12 +51,14 @@ class Http:
         client: httpx.AsyncClient | None = None,
         *,
         min_interval: dict[str, float] | None = None,
+        default_interval: float = 0.0,
     ) -> None:
         self._client = client or httpx.AsyncClient(
             headers={"User-Agent": USER_AGENT}, follow_redirects=True
         )
         self._owns = client is None
         self._min_interval = min_interval or {}
+        self._default_interval = default_interval  # 没有单独配置的主机用这个间隔
 
     async def aclose(self) -> None:
         if self._owns:
@@ -64,7 +66,7 @@ class Http:
 
     async def _throttle(self, url: str) -> None:
         host = urlsplit(url).netloc
-        gap = self._min_interval.get(host, 0.0)
+        gap = self._min_interval.get(host, self._default_interval)
         if not gap:
             return
         now = time.monotonic()

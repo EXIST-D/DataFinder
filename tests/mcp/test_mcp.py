@@ -97,7 +97,10 @@ async def test_fetch_and_download_preview_without_side_effects(ready):
     mcp = build_server()
     f = await mcp.call_tool("fetch", {"resource_id": "nbs:indicator:6/c1/i1", "regions": ["河北"]})
     d = await mcp.call_tool("download", {"resource_id": "yb.sd:table:2025/14-08"})
-    assert '"status": "plan"' in text_of(f) and '"status": "plan"' in text_of(d)
+    assert f.structured_content["status"] == "plan" and d.structured_content["status"] == "plan"
+    assert f.structured_content["data_stage"] == d.structured_content["data_stage"] == "previewed"
+    assert f.structured_content["presentation"]["operation_status"] == "needs_confirmation"
+    assert "confirm=true" in f.content[0].text and "已预览" in f.content[0].text
     assert not list(exports_dir().glob("*"))
 
 
@@ -107,5 +110,37 @@ async def test_download_cannot_take_an_arbitrary_url_or_path(ready):
         "resource_id",
         "distribution_index",
         "confirm",
+        "detail",  # 汇报详细程度，不是路径或网址
     }
     assert "path" not in tools["fetch"].input_schema["properties"]  # MCP 不允许指定写入位置
+
+
+async def test_content_is_concise_text_while_structured_content_keeps_full_data(ready, portals):
+    mcp = build_server()
+    args = {"query": "工业增加值", "region_ids": ["河北"], "kinds": ["indicator"]}
+    r = await mcp.call_tool("search", args)
+    text = r.content[0].text
+    assert not text.lstrip().startswith("{")  # 给助手的是简明文字，不是 JSON
+    assert "nbs:indicator:6/c1/i1" in text  # 但后续调用需要的 id 在里面
+    sc = r.structured_content
+    assert sc["results"] and sc["total"] >= 1  # 完整数据不变
+    pres = sc["presentation"]
+    assert set(pres) == {"operation_status", "summary", "evidence", "gaps", "next_actions"}
+    assert pres["operation_status"] == "complete"
+
+
+async def test_detail_json_gives_compact_json_and_bad_detail_is_coded(ready, portals):
+    mcp = build_server()
+    r = await mcp.call_tool("search", {"query": "工业增加值", "detail": "json"})
+    data = json.loads(r.content[0].text)
+    assert data["results"] and "presentation" in data and "\n" not in r.content[0].text
+    with pytest.raises(ToolError, match=r"\[INVALID_ARGUMENT\]"):
+        await mcp.call_tool("search", {"query": "工业", "detail": "huge"})
+
+
+async def test_concise_text_is_much_smaller_than_the_full_json(ready, portals):
+    mcp = build_server()
+    for tool, args in (("plan", {"topic": "河北省工业增加值"}), ("search", {"query": "工业"})):
+        r = await mcp.call_tool(tool, args)
+        full = len(json.dumps(r.structured_content, ensure_ascii=False))
+        assert len(r.content[0].text) < full  # 简明版不比完整数据大

@@ -97,6 +97,7 @@ async def fetch(
         )
         plan = {
             "status": "plan",
+            "data_stage": "previewed",
             "resource_id": resource_id,
             "title": e.title,
             "delivery": "generate",
@@ -119,8 +120,12 @@ async def fetch(
         table = await adapter_for(cat, e.source_id).fetch(cat, e, params)
         explicit = _explicit_periods(start, end)
         result = table_result(table, fmt=fmt, path=dest, stats=describe)
+        cov = coverage(table, periods=explicit)
         result.update(
-            status="done", resource_id=resource_id, coverage=coverage(table, periods=explicit)
+            status="done",
+            data_stage="validated" if cov and cov["status"] == "complete" else "acquired",
+            resource_id=resource_id,
+            coverage=cov,
         )
         write_manifest(
             Path(result["saved_to"]),
@@ -165,6 +170,7 @@ def download(
         dest_dir = Path(_confine(path, trusted=trusted) or exports_dir() / "downloads")
         plan = {
             "status": "plan",
+            "data_stage": "previewed",
             "resource_id": resource_id,
             "title": e.title,
             "delivery": "download",
@@ -202,6 +208,7 @@ def download(
         return {
             **plan,
             "status": "done",
+            "data_stage": "acquired",
             "saved_to": str(saved),
             "size_bytes": size,
             "confirm_required": False,
@@ -234,6 +241,7 @@ async def get(resource_id: str, **kw: Any) -> dict[str, Any]:
         )
     return {
         "status": "link",
+        "data_stage": "located",
         "resource_id": resource_id,
         "delivery": "link",
         "landing_url": landing,

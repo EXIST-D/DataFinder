@@ -18,9 +18,11 @@ from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
+from mcp.types import CallToolResult, TextContent
 
 from .. import service
 from ..service import ServiceError, translate
+from ..service.presentation import present
 
 INSTRUCTIONS = """\
 DataFinder：多领域、多来源的找数与取数工具（当前已接入：中国官方统计）。
@@ -31,7 +33,11 @@ DataFinder：多领域、多来源的找数与取数工具（当前已接入：�
 3. 拿数据：看 delivery ——
    generate（需要生成）→ fetch；download（可直接下载）→ download；link（只有链接）→ 把链接和获取方式告诉用户。
    fetch/download **默认只预览**（返回将做什么、缺什么参数），用户同意后再带 confirm=true 执行。
-4. 汇报时：给出每条数据的来源链接、取数时间、统计口径；标明哪些数据无法自动获取（需登录/申请/站点拒绝机器人）。
+4. 汇报时按四段写：结论 → 依据（来源链接、取数时间、统计口径）→ 缺口（哪些数据无法自动获取：需登录/申请/站点拒绝机器人）→ 下一步。
+
+返回的文字是简明版（含 resource_id 与取数参数）。要更多条目加 detail="full"；要完整 JSON 加 detail="json"；
+完整数据始终在 structuredContent 里，其中 presentation 块已给出 结论/依据/缺口/下一步 与 operation_status。
+fetch/download 的 data_stage：previewed 只是预览（还没取）→ acquired 已取回 → validated 已通过覆盖检查；link 类只是 located（已定位）。
 
 约定：
 - 不要编造数据或链接：数值只来自 fetch/download 的返回。
@@ -85,6 +91,12 @@ def guard(fn: Callable[..., Any]) -> Callable[..., Any]:
     return wrapper
 
 
+def reply(tool: str, data: dict[str, Any], detail: str) -> CallToolResult:
+    """`content` 给助手一份简明文字；`structuredContent` 保留完整数据（含 presentation 汇报块）。"""
+    full, text = present(tool, data, detail=detail)
+    return CallToolResult(content=[TextContent(type="text", text=text)], structured_content=full)
+
+
 def build_server() -> MCPServer:
     mcp = MCPServer("datafinder", instructions=INSTRUCTIONS)
 
@@ -96,23 +108,23 @@ def build_server() -> MCPServer:
 
     # ── L0 上下文 ──
     @tool()
-    def facets(domain_id: str | None = None) -> dict[str, Any]:
+    def facets(domain_id: str | None = None, detail: str = "concise") -> CallToolResult:
         """【L0】合法的主题树、地域、资源类型与获取方式（带当前目录里的计数）。search 的筛选参数从这里取值。
 
         topics：主题树（level 1/2，aliases 可当检索词）；regions：目录里出现过的地域；kinds：资源类型；
         delivery：获取方式（download 可直接下载 / generate 需要生成 / link 只有链接）。
         """
-        return service.facets(domain_id)
+        return reply("facets", service.facets(domain_id), detail)
 
     @tool()
-    def sources() -> dict[str, Any]:
+    def sources(detail: str = "concise") -> CallToolResult:
         """【L0】目录里有哪些来源（含能力、资源数、可访问状态）、可实时检索的外部来源、门户库规模。"""
-        return service.sources()
+        return reply("sources", service.sources(), detail)
 
     @tool()
-    def status() -> dict[str, Any]:
+    def status(detail: str = "concise") -> CallToolResult:
         """【L0】DataFinder 状态：目录与门户库规模、导出目录、是否有待迁移的旧索引。出问题时先看这个（hints 写明怎么办）。"""
-        return service.status()
+        return reply("status", service.status(), detail)
 
     # ── L1 发现 ──
     @tool()
@@ -133,7 +145,8 @@ def build_server() -> MCPServer:
         offset: int = 0,
         include_facets: bool = True,
         live: bool = False,
-    ) -> dict[str, Any]:
+        detail: str = "concise",
+    ) -> CallToolResult:
         """【L1】跨主题 × 地域 × 资源类型检索（目录检索不联网，毫秒级）。同一分面多选 OR，不同分面 AND。
 
         query：自然语言或关键词；topic_ids：主题 id/中文名（含下级主题）；region_ids：CN-HE / 河北 / 130000 均可；
@@ -144,7 +157,7 @@ def build_server() -> MCPServer:
         返回：results（含 why_matched、delivery、usability、verification_level）、facets（当前候选集的分面计数）、portals（相关门户，永远只有链接）。
         live=true 才会实时请求外部数据平台（Zenodo、DataCite、各国开放数据等），结果放在 live 里，来源失败不等于没有数据。
         """
-        return await service.search(
+        data = await service.search(
             query,
             domain_ids=domain_ids,
             topic_ids=topic_ids,
@@ -162,27 +175,33 @@ def build_server() -> MCPServer:
             facets=include_facets,
             live=live,
         )
+        return reply("search", data, detail)
 
     @tool()
-    def plan(topic: str, region: str | None = None) -> dict[str, Any]:
+    def plan(topic: str, region: str | None = None, detail: str = "concise") -> CallToolResult:
         """【L1·起点】为一个研究/分析主题给出找数方案：可取数的指标（带取数参数）、数据表、目标地区与领域的官方入口、继续检索的入口、统计分析建议。
 
         topic：自然语言主题，如"工业质量体系评价"；region：省/市/国家名，如"河北省"（也可直接写进 topic）。
         纯本地计算、秒回、不联网。
         """
-        return service.plan_sources(topic, region)
+        return reply("plan", service.plan_sources(topic, region), detail)
 
     # ── L2 检视 ──
     @tool()
     def inspect(
-        resource_id: str, children: bool = False, limit: int = 50, offset: int = 0
-    ) -> dict[str, Any]:
+        resource_id: str,
+        children: bool = False,
+        limit: int = 50,
+        offset: int = 0,
+        detail: str = "concise",
+    ) -> CallToolResult:
         """【L2】看清一个资源：所在层级、分发入口与获取方式（how_to_get）、取数需要什么参数、子资源。
 
         resource_id 来自 search/plan 的结果。容器类资源（库、数据集、系列、版次、分类）会列出子资源（children），
         逐级向下就能浏览整棵目录树。
         """
-        return service.inspect(resource_id, children=children, limit=limit, offset=offset)
+        data = service.inspect(resource_id, children=children, limit=limit, offset=offset)
+        return reply("inspect", data, detail)
 
     # ── L3 获取（默认只预览）──
     @tool()
@@ -196,7 +215,8 @@ def build_server() -> MCPServer:
         format: str = "csv",
         confirm: bool = False,
         describe: bool = True,
-    ) -> dict[str, Any]:
+        detail: str = "concise",
+    ) -> CallToolResult:
         """【L3】对有"生成"入口的资源实时取数 → 整洁长表（期别、地区、指标、数值、单位），导出 CSV/xlsx，附描述统计与覆盖检查。
         生成入口有两类：接口（api，如国家统计局、香港、台湾）和**网页表格**（html_parse，统计年鉴/普查的网页版表格，实时解析）。
         表同时有 xls 时默认走下载（见 inspect 的 how_to_get），但你可以 fetch 它的网页版得到整洁长表。
@@ -207,7 +227,7 @@ def build_server() -> MCPServer:
         时间：给 start/end（年度 "2015"；月度 "201501"；季度 "202401"）取区间，否则取最近 periods 期；format：csv（Excel 可直接打开）或 xlsx。
         返回 saved_to（文件路径）、前 40 行预览、coverage（期望 vs 实际取到的单元数与缺口）。
         """
-        return await service.fetch(
+        data = await service.fetch(
             resource_id,
             regions=regions,
             indicators=indicators,
@@ -218,27 +238,32 @@ def build_server() -> MCPServer:
             confirm=confirm,
             describe=describe,
         )
+        return reply("fetch", data, detail)
 
     @tool()
     def download(
-        resource_id: str, distribution_index: int | None = None, confirm: bool = False
-    ) -> dict[str, Any]:
+        resource_id: str,
+        distribution_index: int | None = None,
+        confirm: bool = False,
+        detail: str = "concise",
+    ) -> CallToolResult:
         """【L3】下载 delivery=download 的文件（目录里登记过的直链），保存到导出目录并附清单（来源、时间、体积、sha256、许可）。
 
         **不带 confirm 只返回将下载什么**（格式、usability、许可、其他可选文件）；确认后 confirm=true 才下载。
         usability=image 的文件能下载但不能直接做数据分析。只下载目录里登记的链接，不接受任意 URL。
         """
-        return service.download(resource_id, distribution_index=distribution_index, confirm=confirm)
+        data = service.download(resource_id, distribution_index=distribution_index, confirm=confirm)
+        return reply("download", data, detail)
 
     # ── L4 后处理 ──
     @tool()
-    def describe(file: str) -> dict[str, Any]:
+    def describe(file: str, detail: str = "concise") -> CallToolResult:
         """【L4】对 fetch 导出的文件（csv/xlsx，位于导出目录）重新计算描述统计：各指标×地区的均值、中位数、标准差、变异系数、增速，以及最新一期的地区排名。"""
         from ..tables import describe as describe_table
         from ..tables import describe_markdown
 
         result = describe_table(service.load_table(file))
-        return {**result, "markdown": describe_markdown(result)}
+        return reply("describe", {**result, "markdown": describe_markdown(result)}, detail)
 
     @mcp.prompt(title="研究选题找数")
     def research_data_plan(topic: str, region: str = "") -> str:

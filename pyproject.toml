@@ -3,6 +3,16 @@ name = "datafinder"
 version = "0.0.1"
 description = "中文优先的找数入口：用关键词或自然语言，快速找到各行业的数据门户、数据集、数据表与下载/API 地址。"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "EXIST-D" }]
+keywords = ["data discovery", "open data", "official statistics", "MCP", "中文"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
 requires-python = ">=3.11"
 dependencies = [
     "dataseek>=0.10,<0.11",
@@ -24,6 +34,10 @@ dev = [
     "pytest-asyncio>=0.24",
     "ruff>=0.6",
 ]
+
+[project.urls]
+Homepage = "https://github.com/EXIST-D/DataFinder"
+Issues = "https://github.com/EXIST-D/DataFinder/issues"
 
 [project.scripts]
 # 注意：不使用 `df` 作为命令名，它会遮蔽系统自带的 /bin/df

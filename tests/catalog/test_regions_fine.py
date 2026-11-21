@@ -31,3 +31,9 @@ def test_tables_reporting_at_prefecture_level_cover_its_cities(cat):
     assert any("工业增加值" in t for t in titles)  # 山东年鉴"按地市报告"的表
     other = SearchRequest(query="工业增加值", kinds=["table"], region_ids=["沈阳"])
     assert run_search(cat, other).total == 0  # 辽宁没有这类表：不会借山东的
+
+
+def test_special_regions_win_over_same_named_country_entries():
+    assert regions.resolve("香港") == "CN-HK"
+    assert regions.resolve("澳门") == "CN-MO" and regions.resolve("台湾") == "CN-TW"
+    assert regions.resolve("HK") == "HK"  # 国家代码本身仍然认

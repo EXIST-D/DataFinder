@@ -69,7 +69,9 @@ def _load() -> tuple[dict[str, Region], dict[str, str]]:
             )
     regions.update(_EXTRA)
     index: dict[str, str] = {}
-    for r in regions.values():
+    # 省级与特别行政区先登记：同名时"香港"指 CN-HK（本目录里挂数据的地区），而不是国家词表里的 HK
+    ordered = sorted(regions.values(), key=lambda r: r.level not in ("province", "special"))
+    for r in ordered:
         if r.level in _NAME_ONLY_IF_UNIQUE:
             continue
         for key in (r.id, r.name_zh, *r.aliases, r.gb, r.stat12):

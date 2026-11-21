@@ -27,6 +27,7 @@ index_app = typer.Typer(
     help="资源目录的建立与维护：下载快照、抓取、迁移旧索引、制作快照、状态。", no_args_is_help=True
 )
 
+_FREQ = {"annual": "年度", "quarterly": "季度", "monthly": "月度"}
 DELIVERY_ICON = {
     "download": "[green]⬇ 可下载[/green]",
     "generate": "[cyan]⚙ 需生成[/cyan]",
@@ -159,6 +160,13 @@ def inspect_cmd(
     console.print(
         f"  {r['kind']} · {r['source_id']} · 核验：{res['verification_level']} · {DELIVERY_ICON[r['delivery']]}"
     )
+    tags = [
+        f"路径：{r['path']}" if r.get("path") else "",
+        f"单位：{r['unit']}" if r.get("unit") else "",
+        f"频度：{_FREQ.get(r['frequency'] or '', r['frequency'])}" if r.get("frequency") else "",
+    ]
+    if any(tags):
+        console.print("  " + " ｜ ".join(t for t in tags if t))
     for d in res["distributions"]:
         console.print(
             f"  [dim]入口 {d['access_method']} → {d['delivery']}  {d['url'] or ''} {d['file_format'] or ''} {d['usability'] or ''} {d['note'] or ''}[/dim]"

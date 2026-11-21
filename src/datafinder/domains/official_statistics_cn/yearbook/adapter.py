@@ -1,11 +1,13 @@
 """统计年鉴适配器：目录抓取（discover）与旧索引迁移（migrate）。年鉴目录里的文件直链由通用下载能力处理。
 
-每个版次一个请求，串行、间隔 ≥1 秒；404 的版次不收录；站点拒绝/限流/连不上时放弃该系列（不重试不绕过）并标注原因。
+每个版次一个请求，串行、间隔 ≥1 秒（站点敏感时按系列调大）；404 的版次不收录；
+站点拒绝某一版次时跳过该版次（不重试同一个地址），连续多版被拒或连不上时放弃该系列并标注原因。
 """
 
 from __future__ import annotations
 
 import re
+from urllib.parse import urljoin
 
 from datafinder.catalog import regions
 from datafinder.catalog.adapters import (
@@ -21,7 +23,7 @@ from datafinder.catalog.adapters import (
 )
 from datafinder.catalog.entities import Distribution, Entry
 from datafinder.catalog.files import decode_html, distribution_for, fmt_of
-from datafinder.catalog.htmltable import frame_layout, has_table, layout_urls, to_table
+from datafinder.catalog.htmltable import frame_layout, grid_html, has_table, layout_urls, to_table
 from datafinder.catalog.listing import Link, extract_links
 from datafinder.catalog.repository import Catalog
 from datafinder.engine.errors import SourceError
@@ -38,13 +40,34 @@ from .entries import (
     table_entries,
     table_key,
 )
-from .parse import TocEntry, parse_toc, parse_tree_toc
+from .parse import (
+    TocEntry,
+    parse_fj_toc,
+    parse_fp_chapters,
+    parse_fp_toc,
+    parse_heb_toc,
+    parse_json_toc,
+    parse_ml_toc,
+    parse_toc,
+    parse_tree_toc,
+    parse_yb_toc,
+)
 from .registry import Series, load_series
 
-PARSERS = {"zk": parse_toc, "tree": parse_tree_toc}
+PARSERS = {
+    "zk": parse_toc,
+    "tree": parse_tree_toc,
+    "json": parse_json_toc,
+    "ml": parse_ml_toc,
+    "yb": parse_yb_toc,
+    "fp": parse_fp_toc,
+    "fj": parse_fj_toc,
+    "heb": parse_heb_toc,
+}
 ARCHIVES = {"zip", "rar", "xls", "xlsx", "pdf", "doc", "docx"}  # 版次页上可下载的附件类型
 _YEAR = re.compile(r"(?:19|20)\d{2}")
 MIN_TABLES = 20  # 少于这个数当作"不是目录页"，避免把错误页当成目录
+MAX_BLOCKED = 3  # 连续这么多个版次被站点拒绝，才判定整个系列不可访问（不重试同一地址）
 HEADERS = {"Accept": "text/html,*/*"}
 
 
@@ -52,7 +75,7 @@ def _hosts(series_list: list[Series]) -> dict[str, float]:
     from urllib.parse import urlsplit
 
     return {
-        urlsplit(s.base_for(s.edition_years()[0])).netloc: 1.0
+        urlsplit(s.base_for(s.edition_years()[0])).netloc: s.interval
         for s in series_list
         if s.edition_years()
     }
@@ -92,15 +115,29 @@ def _merge_alternates(primary: list[TocEntry], others: list[list[TocEntry]]) -> 
     return out
 
 
-async def fetch_edition(http: Http, series: Series, year: int):
+async def fetch_edition(
+    http: Http, series: Series, year: int, result: DiscoverResult | None = None
+):
     """返回 (status, toc_url, toc_entries, message)；status: ok | missing | error。"""
+    if series.format == "fp":
+        return await _fetch_fp(http, series, year, result)
     last = ""
     good: list[tuple[str, list[TocEntry]]] = []
     for url in series.toc_urls(year):
-        code, content = await http.get_bytes(url, headers=HEADERS)
+        try:
+            code, content = await http.get_bytes(url, headers=HEADERS)
+        except SourceError as exc:
+            # 多份目录（网页版/Excel 版/旧版入口）是并列候选：已经拿到一份可用的目录时，
+            # 备选地址被拒不该让整个版次作废；一份都没拿到才向上报错。
+            if good:
+                last = f"{url}：{exc}"
+                continue
+            raise
         if code in (404, 410):
             continue
-        toc = PARSERS[series.format](decode_html(content), url)
+        toc = PARSERS[series.format](
+            decode_html(content), urljoin(url, series.link_prefix) if series.link_prefix else url
+        )
         n = sum(1 for e in toc if e.kind == "table")
         if n >= MIN_TABLES:
             good.append((url, toc))
@@ -115,15 +152,46 @@ async def fetch_edition(http: Http, series: Series, year: int):
     )
 
 
+async def _fetch_fp(http: Http, series: Series, year: int, result: DiscoverResult | None = None):
+    """江苏：目录分两级（索引页 → 章节页 → 每表一个页面），这里把三级的目录拼成一份。"""
+    index = series.toc_urls(year)[0]
+    code, content = await http.get_bytes(index, headers=HEADERS)
+    if result is not None:
+        result.requests += 1
+    if code in (404, 410):
+        return "missing", None, None, "该版次的目录页不存在（404）"
+    chapters = parse_fp_chapters(decode_html(content), index)
+    if not chapters:
+        return "error", None, None, f"{index} 里没有找到章节页"
+    toc: list[TocEntry] = []
+    for url in chapters[:60]:
+        code, content = await http.get_bytes(url, headers=HEADERS)
+        if result is not None:
+            result.requests += 1
+        if code != 200:
+            continue
+        toc.extend(parse_fp_toc(decode_html(content), url))
+    n = sum(1 for e in toc if e.kind == "table")
+    if n < MIN_TABLES:
+        return "error", None, None, f"{index} 只解析出 {n} 张表，不像年鉴目录页"
+    return "ok", index, toc, ""
+
+
 async def _html_with_table(http: Http, url: str):
     """取网页；若是框架页（上海年鉴：标题、角标、表头、行标签、数据各在一个框架里），把各子框架取回来，
-    按框架的嵌套关系（上下 rows / 左右 cols）组成布局。返回 (页面或布局, 实际地址)。"""
+    按框架的嵌套关系（上下 rows / 左右 cols）组成布局。返回 (页面或布局, 实际地址)。
+
+    浙江统计年鉴的表是脚本注入的网格（页面里没有 <table>），这里还原成等价 HTML 表再交给同一条解析路径。
+    """
     code, content = await http.get_bytes(url, headers=HEADERS)
     if code in (404, 410):
         raise AdapterError(f"网页不存在（HTTP {code}）：{url}")
     html = decode_html(content)
     if has_table(html):
         return html, url
+    grid = grid_html(html)
+    if grid:
+        return grid, url
     tree = frame_layout(html, url)
     if tree is None:
         raise AdapterError("页面里没有表格（可能是图片版或纯文字页）：请用 inspect 查看其他格式")
@@ -222,12 +290,13 @@ class YearbookAdapter(Adapter):
         if s.format == "list":
             await self._list_series(cat, http, s, lo, hi, opts, result)
             return
+        blocked_streak = 0
         for year in s.edition_years(lo, hi):
             rid = edition_resource_id(s, year)
             if not opts.refresh and cat.exists(rid):
                 continue
             try:
-                status, toc_url, toc, msg = await fetch_edition(http, s, year)
+                status, toc_url, toc, msg = await fetch_edition(http, s, year, result)
             except SourceError as exc:
                 blocked = exc.kind in ("blocked", "rate_limited")
                 cat.upsert(
@@ -237,9 +306,20 @@ class YearbookAdapter(Adapter):
                         )
                     ]
                 )
-                result.stopped.append(f"{s.zh}：{exc}")
-                opts.say(f"{s.zh} {year}：{exc}（放弃该系列，不重试不绕过）")
-                return
+                if not blocked:
+                    result.stopped.append(f"{s.zh}：{exc}")
+                    opts.say(f"{s.zh} {year}：{exc}（放弃该系列，不重试不绕过）")
+                    return
+                # 单个版次被站点拒绝（常见于防火墙按突发请求拦截）时只跳过这一版，
+                # 不重试同一个地址；连续多版被拒才判定整个系列不可访问。
+                blocked_streak += 1
+                if blocked_streak >= MAX_BLOCKED:
+                    result.stopped.append(f"{s.zh}：{exc}")
+                    opts.say(f"{s.zh} {year}：{exc}（连续 {blocked_streak} 版被拒，放弃该系列）")
+                    return
+                opts.say(f"{s.zh} {year}：{exc}（跳过该版次，不重试）")
+                continue
+            blocked_streak = 0
             result.requests += 1
             if status == "missing":
                 opts.say(f"{s.zh} {year}：无此版次")

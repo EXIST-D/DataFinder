@@ -196,16 +196,22 @@ def test_registry_is_consistent():
     assert len(ids) == len(set(ids)) and "cn" in ids
     for s in all_series:
         assert s.home.startswith("http")
-        if s.crawl and s.editions:  # 普查资料：逐版列出
-            assert s.type == "census" and all(e.base.startswith("http") for e in s.editions)
+        assert s.interval >= 1.0  # 对来源站点保持间隔
+        if not s.crawl:
+            continue
+        if s.editions:  # 逐版列出：普查资料，以及版次路径不规律的省份（陕西）
+            assert all(e.base.startswith("http") for e in s.editions)
             assert all(u.startswith("http") for u in s.toc_urls(s.edition_years()[0]))
-        elif s.crawl and s.format == "list":
+            continue
+        if s.format == "list":
             assert s.list_urls and all(u.startswith("http") for u in s.list_urls)
-        elif s.crawl:
-            assert s.base and s.years and s.years[0] <= s.years[1]
-            assert s.format in ("zk", "tree")
-            assert s.format == "tree" or "{year}" in s.base
-            assert all(u.startswith("http") for u in s.toc_urls(s.years[1]))
+            continue
+        assert s.base and s.years and s.years[0] <= s.years[1]
+        assert s.format in ("zk", "tree", "json", "ml", "yb", "fp", "fj")
+        # 版次地址按年份模板化（上海把 {year} 放在 toc 文件名里；陕西走 editions）
+        assert "{year}" in (s.base or "") or any("{year}" in t for t in s.toc)
+        assert all(u.startswith("http") for u in s.toc_urls(s.years[1]))
+    assert get_series("pop").type == "census" and get_series("econ").type == "census"
     assert get_series("cn").edition_years(2023, 2030) == [2023, 2024, 2025]
     with pytest.raises(ValueError, match="未知年鉴系列"):
         get_series("nope")
@@ -532,3 +538,51 @@ def test_xls_filename_case_follows_the_web_page_name_because_the_server_is_case_
         table_entries(series(), 2005, [other])[0].distributions[0].url
         == "https://t.example/excel/B1.xls"
     )
+
+
+# ── 其他形态：江苏两级目录、单版被拦不放弃系列 ──
+
+
+async def test_fetch_edition_fp_walks_index_then_chapters():
+    """江苏：索引页 → 章节页 → 每表一个页面，三级目录拼成一份。"""
+    table_links = "".join(f'<a href="nj01/nj01{i:02d}.htm">1-{i} 表{i}</a>' for i in range(1, 25))
+    pages = {
+        "https://t.example/2025/indexc.htm": '<a href="nj01.htm">综合</a>',
+        "https://t.example/2025/nj01.htm": f"<title>综合</title>{table_links}",
+    }
+
+    def handler(req):
+        return httpx.Response(200, content=pages.get(str(req.url), "").encode("utf-8"))
+
+    s = series(format="fp", base="https://t.example/{year}/", toc=("indexc.htm",))
+    status, url, toc, msg = await fetch_edition(http_for(handler), s, 2025)
+    assert status == "ok" and url.endswith("indexc.htm") and msg == ""
+    tables = [t for t in toc if t.kind == "table"]
+    assert len(tables) == 24 and tables[0].chapter == "综合"
+
+
+async def test_one_blocked_edition_is_skipped_and_the_series_continues(cat, patch_series):
+    """单个版次被站点拒绝时只跳过那一版（不重试同一地址），不放弃整个系列。"""
+
+    def handler(req):
+        if "/2023/" in str(req.url):
+            return httpx.Response(403)
+        return httpx.Response(200, content=BIG.encode("utf-8"))
+
+    patch_series(handler, [series(years=(2023, 2025))])
+    res = await YearbookAdapter().discover(cat, DiscoverOptions())
+    assert not cat.exists("yearbook.CN-SD:edition:2023")
+    assert cat.exists("yearbook.CN-SD:edition:2024") and cat.exists("yearbook.CN-SD:edition:2025")
+    assert res.stopped == []  # 单版被拒不写进"已放弃"
+
+
+async def test_three_blocked_editions_in_a_row_give_up_the_series(cat, patch_series):
+    async def run(handler):
+        patch_series(handler, [series(years=(2023, 2025))])
+        res = await YearbookAdapter().discover(cat, DiscoverOptions())
+        return res
+
+    res = await run(lambda r: httpx.Response(403))
+    assert len(res.stopped) == 1 and "山东统计年鉴" in res.stopped[0]
+    he = cat.get("yearbook.CN-SD:series:CN-SD")
+    assert he.access_status == "blocked"

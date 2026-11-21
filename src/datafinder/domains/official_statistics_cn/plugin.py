@@ -15,6 +15,7 @@ from .hmt.hk import HkAdapter
 from .hmt.tw import TwAdapter
 from .nbs.adapter import NbsAdapter
 from .nbs.search import NbsSource
+from .province.hebei import HebeiQueryAdapter
 from .sites.adapter import build as build_site_adapter
 from .yearbook.adapter import YearbookAdapter
 
@@ -31,6 +32,7 @@ register_taxonomy(
 MIN_INTERVAL["data.stats.gov.cn"] = 0.8
 register_adapter(NbsAdapter())
 register_adapter(YearbookAdapter())
+register_adapter(HebeiQueryAdapter())
 register_adapter(build_site_adapter())
 register_adapter(HkAdapter())
 register_adapter(TwAdapter())

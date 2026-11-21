@@ -296,3 +296,39 @@ def test_stacked_year_blocks_keep_their_section_title_and_year_labels_without_mo
     assert ("1980YY", "按1980年价格 · 其他", 375.0) in rows
     assert ("1978YY", "按1980年价格 · 第三产业", 800.0) in rows  # 同一年在两个段里不混
     assert len(rows) == 8 and {r[5] for r in t.rows} == {"亿元"}
+
+
+GRID_HTML = """
+<script>
+  $(function () {
+    var data = {"templetname":"国民经济和社会发展总量与速度","fixedRowsTop":2,
+      "data":[["指标","","1978","2024"],["","","",""],
+              ["年末常住人口","(万人)","5985","6670"],
+              ["地区生产总值","(亿元)","249","90131"]],
+      "mergeCells":[{"col":0,"row":0,"colspan":2,"rowspan":2},
+                    {"col":2,"row":0,"colspan":1,"rowspan":2},
+                    {"col":3,"row":0,"colspan":1,"rowspan":2}]};
+    $('#x').datagrid(data);
+  });
+</script>
+"""
+
+
+def test_grid_html_restores_merged_cells_and_parses_to_tidy_table():
+    """浙江年鉴的表是脚本注入的网格（页面里没有 <table>），按 mergeCells 还原后照样能解析。"""
+    from datafinder.catalog.htmltable import grid_html, to_table
+
+    html = grid_html(GRID_HTML)
+    assert html is not None and html.count("rowspan") >= 3
+    table = to_table(html, default_region="浙江", source_url="https://t.example/1-1.html")
+    # 一个数值单元格 = 一行：1978/2024 两个年份 × 两个指标
+    assert len(table.rows) == 4
+    assert {r[0] for r in table.rows} == {"1978年", "2024年"}
+    assert any("年末常住人口" in r[3] and r[4] == 6670.0 for r in table.rows)
+    assert table.meta["解析"]["可信度"] in ("中", "高")  # 表名还原成标题行后不该判低
+
+
+def test_grid_html_returns_none_for_plain_pages():
+    from datafinder.catalog.htmltable import grid_html
+
+    assert grid_html("<html><body><p>没有网格</p></body></html>") is None

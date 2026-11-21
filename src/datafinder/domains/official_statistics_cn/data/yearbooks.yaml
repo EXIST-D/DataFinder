@@ -10,15 +10,22 @@
 #   toc       目录页文件名候选（按顺序尝试）
 #   home      年鉴列表页（给人看的入口；没有可抓取的模板时只作导航）
 #   crawl     false = 只导航不抓取（页面形态没有可用的解析方式）
-#   format    zk（默认，统计出版社模板）| tree（树形目录，上海）| list（只有各版次列表，广东/湖北）
+#   format    目录页形态：
+#               zk    统计出版社模板（left.htm，章节 foldheader）——国家统计局与多数省份
+#               tree  树形目录（上海，表格在框架页里按版面拼回）
+#               list  只有各版次列表（广东/湖北/云南，整本 zip/rar/在线浏览）
+#               json  目录内嵌在页面脚本里（安徽，const contents='[...]'）
+#               ml    Word 导出的左侧目录（吉林，njmlc.htm + ../html/1-1.html）
+#               yb    查看器目录树（浙江，<a main="./cn/html/1-1 …html">）
+#               fp    FrontPage 两级目录（江苏，indexc.htm → nj01.htm → nj01/nj0101.htm）
 #   landing / list_urls / follow  见 yearbook/registry.py
 #   type      yearbook（默认）| census（普查资料，来源前缀 census.）
 #   editions  没有"每年一版"规律时逐版列出 {year, base, label, landing}，代替 years/base
 #   topics    整个系列固定的主题（普查资料按卷章难以推断）
 #   toc 里的多份目录（网页版/Excel 版）会合并：同一张表的 xls 与网页/图片格式都会登记，xls 排前
 #
-# 地址来源：国家统计局年鉴页的版次链接（2026-11-20 实际访问）；省级来自各统计局公开的年鉴入口，
-# 只收录"页面结构与统计出版社 zk 模板一致"的系列，其余省份先只放 home，待逐个核验后再开启抓取。
+# 地址来源：2026-11-21 在本机逐省实测（首页/栏目页 → 版次页 → 目录页），每个系列都验证过
+# "目录页能解析出表"。站点形态与本清单不同的省（甘肃 412 防护、青海证书）见 README 的覆盖说明。
 
 series:
   - id: cn
@@ -31,6 +38,7 @@ series:
     wrapper_html: [2014]          # 2014 版目录里的 zk/html/Z*.HTM 是图片外壳页，同名 .xls 才是表格（抽样 8/8 核验）
     home: https://www.stats.gov.cn/sj/ndsj/
 
+  # ── zk 模板（统计出版社）──
   - id: CN-BJ
     zh: 北京统计年鉴
     region: CN-BJ
@@ -39,33 +47,75 @@ series:
     base: "https://hgk.tjj.beijing.gov.cn/{year}tjnj/tjnj/zk/"
     toc: [left.htm, lefte.htm]
     home: https://tjj.beijing.gov.cn/tjsj_31433/tjnj_31441/bjtjnj_31442/
+    # 该站证书链不完整，engine.http 的 INSECURE_HOSTS 里按主机放宽（只影响这一个主机）
+
+  - id: CN-TJ
+    zh: 天津统计年鉴
+    region: CN-TJ
+    publisher: 天津市统计局
+    years: [2014, 2025]
+    base: "https://stats.tj.gov.cn/nianjian/{year}nj/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://stats.tj.gov.cn/tjsj_52032/tjnj/
 
   - id: CN-HE
     zh: 河北统计年鉴
     region: CN-HE
     publisher: 河北省统计局
-    years: [2015, 2025]
-    base: "http://tjj.hebei.gov.cn/hbstjj/tjnj/{year}/zk/"
-    toc: [left.htm, lefte.htm]
-    home: http://tjj.hebei.gov.cn
+    format: heb                   # 三代形态：2008–2012 文章页内嵌目录｜2013–2019 图片版｜2020 起 zk
+    toc: [left.htm, lefte.htm, ""]
+    interval: 5.0                 # 连续请求过快会被 403（突发即拦、稍后恢复；5 秒实测稳定）
+    home: https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/index.html
+    # 目录地址四套（2026-11-21 逐版实测）：
+    #   2024–2025 /hbstjj/tjnj/{year}/zk/ ｜ 2020–2023 /hetj/tjnj/{year}/zk/
+    #   2017–2019 /res/nj{year}/zk/ ｜ 2013–2016 /res/nj{year}/
+    # 2008–2012 是年鉴文章页，正文里嵌着当年的折叠目录（表页 /extra/col20/[年/]0101.htm，网页表格）
+    editions:
+      - {year: 2025, base: "https://tjj.hebei.gov.cn/hbstjj/tjnj/2025/zk/"}
+      - {year: 2024, base: "https://tjj.hebei.gov.cn/hbstjj/tjnj/2024/zk/"}
+      - {year: 2023, base: "https://tjj.hebei.gov.cn/hetj/tjnj/2023/zk/"}
+      - {year: 2022, base: "http://tjj.hebei.gov.cn/hetj/tjnj/2022/zk/"}
+      - {year: 2021, base: "http://tjj.hebei.gov.cn/hetj/tjnj/2021/zk/"}
+      - {year: 2020, base: "http://tjj.hebei.gov.cn/hetj/tjnj/2020/zk/"}
+      - {year: 2019, base: "http://tjj.hebei.gov.cn/res/nj2019/zk/", label: "2019（河北经济年鉴）"}
+      - {year: 2018, base: "http://tjj.hebei.gov.cn/res/nj2018/zk/", label: "2018（河北经济年鉴）"}
+      - {year: 2017, base: "http://tjj.hebei.gov.cn/res/nj2017/zk/", label: "2017（河北经济年鉴）"}
+      - {year: 2016, base: "http://tjj.hebei.gov.cn/res/nj2016/", label: "2016（河北经济年鉴）"}
+      - {year: 2015, base: "http://tjj.hebei.gov.cn/res/nj2015/", label: "2015（河北经济年鉴）"}
+      - {year: 2014, base: "http://tjj.hebei.gov.cn/res/nj2014/", label: "2014（河北经济年鉴）"}
+      - {year: 2013, base: "http://tjj.hebei.gov.cn/res/nj2013/", label: "2013（河北经济年鉴）"}
+      - {year: 2012, base: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122468.html", landing: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122468.html", label: "2012（河北经济年鉴）"}
+      - {year: 2011, base: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122470.html", landing: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122470.html", label: "2011（河北经济年鉴）"}
+      - {year: 2010, base: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122472.html", landing: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122472.html", label: "2010（河北经济年鉴）"}
+      - {year: 2009, base: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122474.html", landing: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122474.html", label: "2009（河北经济年鉴）"}
+      - {year: 2008, base: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122476.html", landing: "https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/tjnj/101702088122476.html", label: "2008（河北经济年鉴）"}
 
-  - id: CN-HL
-    zh: 黑龙江统计年鉴
-    region: CN-HL
-    publisher: 黑龙江省统计局
-    years: [2015, 2025]
-    base: "https://tjj.hlj.gov.cn/tjjnianjian/{year}/zk/"
+  - id: CN-SX
+    zh: 山西统计年鉴
+    region: CN-SX
+    publisher: 山西省统计局
+    years: [2019, 2025]
+    base: "http://tjj.shanxi.gov.cn/tjsj/tjnj/nj{year}/zk/"
     toc: [left.htm, lefte.htm]
-    home: https://tjj.hlj.gov.cn/tjj/c106782/common_zfxxgk.shtml
+    home: http://tjj.shanxi.gov.cn/tjsj/tjnj/
 
   - id: CN-LN
     zh: 辽宁统计年鉴
     region: CN-LN
     publisher: 辽宁省统计局
-    years: [2015, 2025]
+    years: [2014, 2025]
     base: "https://tjj.ln.gov.cn/tjj/tjsj/otherpages/{year}/zk/"
     toc: [left.htm, lefte.htm]
     home: https://tjj.ln.gov.cn/tjj/tjsj/tjnj/lntjnj/index.shtml
+
+  - id: CN-HL
+    zh: 黑龙江统计年鉴
+    region: CN-HL
+    publisher: 黑龙江省统计局
+    years: [2020, 2025]
+    base: "https://tjj.hlj.gov.cn/tjjnianjian/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.hlj.gov.cn/tjj/c106782/common_zfxxgk.shtml
 
   - id: CN-SD
     zh: 山东统计年鉴
@@ -76,25 +126,168 @@ series:
     toc: [left.htm, lefte.htm]
     home: http://tjj.shandong.gov.cn/col/col6279/
 
-  - id: CN-SC
-    zh: 四川统计年鉴
-    region: CN-SC
-    publisher: 四川省统计局
-    years: [2015, 2025]
-    base: "https://tjj.sc.gov.cn/scstjj/tjnjnew/{year}/zk/"
-    toc: [left.htm, lefte.htm]
-    home: https://tjj.sc.gov.cn
-
   - id: CN-HA
     zh: 河南统计年鉴
     region: CN-HA
     publisher: 河南省统计局
-    years: [2015, 2025]
-    base: "https://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/{year}nj/zk/"
     toc: [left.htm, lefte.htm]
     home: https://tjj.henan.gov.cn
+    # 路径有三套（2026-11-21 逐版实测）：2020/2021/2023/2024 用 {year}nj/zk/，
+    # 2014–2019 与 2022/2025 用 {year}/zk/，2013 用 {year}/
+    editions:
+      - {year: 2025, base: "https://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2025/zk/"}
+      - {year: 2024, base: "https://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2024nj/zk/"}
+      - {year: 2023, base: "https://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2023nj/zk/"}
+      - {year: 2022, base: "https://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2022/zk/"}
+      - {year: 2021, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2021nj/zk/"}
+      - {year: 2020, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2020nj/zk/"}
+      - {year: 2019, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2019/zk/"}
+      - {year: 2018, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2018/zk/"}
+      - {year: 2017, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2017/zk/"}
+      - {year: 2016, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2016/zk/"}
+      - {year: 2015, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2015/zk/"}
+      - {year: 2014, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2014/zk/"}
+      - {year: 2013, base: "http://oss.henan.gov.cn/sbgt-wztipt/attachment/hntjj/hntj/lib/tjnj/2013/"}
 
-  # 以下省份年鉴页面形态与 zk 模板不同：用对应的解析方式（format），解析不了的只做导航
+  - id: CN-FJ
+    zh: 福建统计年鉴
+    region: CN-FJ
+    publisher: 福建省统计局
+    format: fj                    # 2011–2022 光盘版树形目录（contents-cn.htm）；2023 起是 zk 目录页
+    toc: [left.htm, contents-cn.htm]
+    home: https://tjj.fujian.gov.cn/xxgk/njgb/tjnj/
+    # 2025 在 /zk/ 下，2023–2024 在根目录；2022 及更早是光盘版（frameset + contents-cn.htm）
+    editions:
+      - {year: 2025, base: "https://tjj.fujian.gov.cn/tongjinianjian/dz2025/zk/"}
+      - {year: 2024, base: "https://tjj.fujian.gov.cn/tongjinianjian/dz2024/"}
+      - {year: 2023, base: "https://tjj.fujian.gov.cn/tongjinianjian/dz2023/"}
+      - {year: 2022, base: "https://tjj.fujian.gov.cn/tongjinianjian/dz2022/", landing: "https://tjj.fujian.gov.cn/tongjinianjian/dz2022/index.htm"}
+      - {year: 2021, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2021/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2021/index.htm"}
+      - {year: 2020, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2020/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2020/index.htm"}
+      - {year: 2019, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2019/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2019/index.htm"}
+      - {year: 2018, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2018/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2018/index-cn.htm"}
+      - {year: 2017, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2017/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2017/index-cn.htm"}
+      - {year: 2016, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2016/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2016/index-cn.htm"}
+      - {year: 2015, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2015/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2015/index-cn.htm"}
+      - {year: 2014, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2014/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2014/index-cn.htm"}
+      - {year: 2013, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2013/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2013/index-cn.htm"}
+      - {year: 2012, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2012/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2012/index-cn.htm"}
+      - {year: 2011, base: "http://tjj.fujian.gov.cn/tongjinianjian/dz2011/", landing: "http://tjj.fujian.gov.cn/tongjinianjian/dz2011/index-cn.htm"}
+
+  - id: CN-JX
+    zh: 江西统计年鉴
+    region: CN-JX
+    publisher: 江西省统计局
+    years: [2012, 2025]
+    base: "http://tjj.jiangxi.gov.cn/resource/nj/{year}CD/"
+    toc: [left.htm]               # 目录在根目录（indexch.htm 是框架页）
+    home: http://tjj.jiangxi.gov.cn/jxstjj/col/col38595/index.html
+
+  - id: CN-HN
+    zh: 湖南统计年鉴
+    region: CN-HN
+    publisher: 湖南省统计局
+    toc: [left.htm]
+    home: https://tjj.hunan.gov.cn/hntj/tjfx/hntjnj/index.html
+    # 年鉴正文放在省局的一台公开服务器上（IP 直连）；https 版证书不合规，用 http。
+    # 2024–2025 目录在根目录，2020–2023 在 /zk/ 下（2026-11-21 实测）
+    editions:
+      - {year: 2025, base: "http://222.240.193.190/2025tjnj/"}
+      - {year: 2024, base: "http://222.240.193.190/2024tjnj/"}
+      - {year: 2023, base: "http://222.240.193.190/2023tjnj/zk/"}
+      - {year: 2022, base: "http://222.240.193.190/2022tjnj/zk/"}
+      - {year: 2021, base: "http://222.240.193.190/2021tjnj/zk/"}
+      - {year: 2020, base: "http://222.240.193.190/2020tjnj/zk/"}
+
+  - id: CN-GX
+    zh: 广西统计年鉴
+    region: CN-GX
+    publisher: 广西壮族自治区统计局
+    years: [2013, 2025]
+    base: "http://tjj.gxzf.gov.cn/tjsj/tjnj/material/tjnj20200415/{year}/"
+    toc: [left.htm, lefte.htm]
+    home: http://tjj.gxzf.gov.cn/tjsj/tjnj/
+
+  - id: CN-GZ
+    zh: 贵州统计年鉴
+    region: CN-GZ
+    publisher: 贵州省统计局
+    years: [2014, 2025]
+    base: "https://hgk.guizhou.gov.cn/publish/tj/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://stjj.guizhou.gov.cn/
+
+  - id: CN-SC
+    zh: 四川统计年鉴
+    region: CN-SC
+    publisher: 四川省统计局
+    years: [2014, 2025]
+    base: "https://tjj.sc.gov.cn/scstjj/tjnjnew/{year}/zk/"
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.sc.gov.cn
+
+  - id: CN-SN
+    zh: 陕西统计年鉴
+    region: CN-SN
+    publisher: 陕西省统计局
+    toc: [left.htm, lefte.htm]
+    landing: "https://tjj.shaanxi.gov.cn/tjsj/ndsj/tjnj/sxtjnj/index.html?{year}"
+    home: https://tjj.shaanxi.gov.cn/tjsj/ndsj/tjnj/
+    # 2019–2021 版换了存放目录（/upload/2022/zl/{year}/zk/），所以逐版列出
+    editions:
+      - {year: 2026, base: "https://tjj.shaanxi.gov.cn/upload/2026/zk/"}
+      - {year: 2025, base: "https://tjj.shaanxi.gov.cn/upload/2025/zk/"}
+      - {year: 2024, base: "https://tjj.shaanxi.gov.cn/upload/2024/zk/"}
+      - {year: 2023, base: "https://tjj.shaanxi.gov.cn/upload/2023/zk/"}
+      - {year: 2022, base: "https://tjj.shaanxi.gov.cn/upload/2022/zk/"}
+      - {year: 2021, base: "https://tjj.shaanxi.gov.cn/upload/2022/zl/2021/zk/"}
+      - {year: 2020, base: "https://tjj.shaanxi.gov.cn/upload/2022/zl/2020/zk/"}
+      - {year: 2019, base: "https://tjj.shaanxi.gov.cn/upload/2022/zl/2019/zk/"}
+
+  # ── 其他目录形态 ──
+  - id: CN-JL
+    zh: 吉林统计年鉴
+    region: CN-JL
+    publisher: 吉林省统计局
+    format: ml                    # njmlc.htm 的左侧目录，表在 ../html/1-1.html
+    years: [2018, 2025]
+    base: "https://tjj.jl.gov.cn/tjsj/tjnj/{year}/"
+    toc: [ml/njmlc.htm]
+    landing: "https://tjj.jl.gov.cn/tjsj/tjnj/{year}/enter.htm"
+    home: http://tjj.jl.gov.cn/tjsj/tjnj/
+
+  - id: CN-JS
+    zh: 江苏统计年鉴
+    region: CN-JS
+    publisher: 江苏省统计局
+    format: fp                    # indexc.htm → 章节页 nj01.htm → 每表一个 nj01/nj0101.htm
+    years: [2012, 2025]
+    base: "http://tj.jiangsu.gov.cn/{year}/"
+    toc: [indexc.htm]
+    interval: 10.0                # 站点防火墙对突发请求敏感：间隔 <5 秒会被 403，10 秒实测稳定
+    home: http://tj.jiangsu.gov.cn/col/col93166/index.html
+
+  - id: CN-ZJ
+    zh: 浙江统计年鉴
+    region: CN-ZJ
+    publisher: 浙江省统计局
+    format: yb                    # 查看器目录树，表是 <a main="./cn/html/1-1 …html">
+    years: [2022, 2025]
+    base: "https://zjjcmspublicnew.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/cms_files/jcms1/web3077/site/flash/tjj/Reports1/{year}浙江统计年鉴/"
+    toc: [indexcn.html]
+    home: https://tjj.zj.gov.cn/col/col1525563/index.html
+
+  - id: CN-AH
+    zh: 安徽统计年鉴
+    region: CN-AH
+    publisher: 安徽省统计局
+    format: json                  # 目录内嵌在页面脚本里（const contents='[...]'）
+    years: [2023, 2025]
+    base: "https://tjj.ah.gov.cn/oldfiles/tjj/tjjweb/tjnj/{year}/"
+    toc: [""]
+    link_prefix: statics/         # 表页在 statics/ 子目录（脚本里写的是 './statics/'+条目）
+    home: https://tjj.ah.gov.cn/
+
   - id: CN-SH
     zh: 上海统计年鉴
     region: CN-SH
@@ -106,6 +299,7 @@ series:
     landing: "https://tjj.sh.gov.cn/tjnj/tjnj{year}.htm"
     home: https://tjj.sh.gov.cn/tjnj/
 
+  # ── 只有版次列表（整本下载）──
   - id: CN-GD
     zh: 广东统计年鉴
     region: CN-GD
@@ -128,20 +322,58 @@ series:
       - https://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/qstjnj/index_1.html
     home: https://tjj.hubei.gov.cn/tjsj/sjkscx/tjnj/
 
-  # 江苏（动态页，列表由脚本加载）、宁夏（easyquery 数据平台）暂时只做导航
-  - id: CN-JS
-    zh: 江苏统计年鉴
-    region: CN-JS
-    publisher: 江苏省统计局
-    home: http://tj.jiangsu.gov.cn/col/col85821/index.html
-    crawl: false
+  - id: CN-YN
+    zh: 云南统计年鉴
+    region: CN-YN
+    publisher: 云南省统计局
+    format: list                  # 版次页给整本 zip
+    follow: true
+    list_urls:
+      - https://stats.yn.gov.cn/zwgk/zfxxgk/fdzdgknr/tjsj/tjnj/
+    home: https://stats.yn.gov.cn/zwgk/zfxxgk/fdzdgknr/tjsj/tjnj/
+
+  # ── 只做导航：没有可抓取的公开目录页 ──
+  - id: CN-NM
+    zh: 内蒙古统计年鉴
+    region: CN-NM
+    publisher: 内蒙古自治区统计局
+    crawl: false                  # 年鉴在 datashow 数据平台里（脚本渲染，无公开目录页）
+    home: "https://tj.nmg.gov.cn/datashow/pubmgr/publishmanage.htm?m=iframePublish&cn=A017"
+
+  - id: CN-HI
+    zh: 海南统计年鉴
+    region: CN-HI
+    publisher: 海南省统计局
+    crawl: false                  # 年度数据以 PDF 发布，没有逐年目录页
+    home: https://stats.hainan.gov.cn/tjj/tjsu/ndsj/
+
+  - id: CN-CQ
+    zh: 重庆统计年鉴
+    region: CN-CQ
+    publisher: 重庆市统计局
+    crawl: false                  # 年鉴以整本 PDF 发布，列表由脚本加载
+    home: https://tjj.cq.gov.cn/zwgk_233/tjnj/
+
+  - id: CN-XZ
+    zh: 西藏统计年鉴
+    region: CN-XZ
+    publisher: 西藏自治区统计局
+    crawl: false                  # 未公布电子版
+    home: https://tjj.xizang.gov.cn/
 
   - id: CN-NX
     zh: 宁夏统计年鉴
     region: CN-NX
     publisher: 宁夏回族自治区统计局
+    crawl: false                  # 年鉴在宁夏数据平台（域名解析不到）
     home: https://data.tj.nx.gov.cn/publish.htm?cn=G01
-    crawl: false
+
+  - id: CN-XJ
+    zh: 新疆统计年鉴
+    region: CN-XJ
+    publisher: 新疆维吾尔自治区统计局
+    crawl: false                  # 未公布电子版
+    home: https://tjj.xinjiang.gov.cn/
 
   - id: pop
     zh: 全国人口普查资料
@@ -169,3 +401,15 @@ series:
       - {year: 2013, label: 第三次（2013年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/3jp/zk/", landing: "https://www.stats.gov.cn/sj/pcsj/jjpc/3jp/indexch.htm"}
       - {year: 2008, label: 第二次（2008年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/2jp/"}
       - {year: 2004, label: 第一次（2004年）, base: "https://www.stats.gov.cn/sj/pcsj/jjpc/1jp/"}
+
+  # ── 省级普查年鉴 ──
+  - id: CN-HE-pop
+    zh: 河北人口普查年鉴
+    type: census
+    region: CN-HE
+    publisher: 河北省统计局
+    toc: [left.htm, lefte.htm]
+    home: https://tjj.hebei.gov.cn/hbstjj/sj/sjcx/rknj
+    # 人口年鉴栏目下目前只有第七次人口普查（2020）一版，目录是标准 zk 模板
+    editions:
+      - {year: 2020, label: 第七次（2020年）, base: "https://tjj.hebei.gov.cn/extra/col20/rkpc2020/", landing: "https://tjj.hebei.gov.cn/extra/col20/rkpc2020/indexch.htm"}

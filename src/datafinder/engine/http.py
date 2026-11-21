@@ -32,6 +32,31 @@ _CHALLENGE_MARKERS = (
 )
 
 
+# 少数政府站点证书配置不合规（证书链缺中间证书、证书里的主机名与实际域名不符），
+# OpenSSL 会直接拒绝握手。这些**公开统计站点**按主机白名单放宽校验：
+# 只影响列出的主机，不改变其他任何请求的校验策略；新增条目必须写明核验日期与原因。
+INSECURE_HOSTS: dict[str, str] = {
+    "hgk.tjj.beijing.gov.cn": "证书链不完整（2026-11-21 核验；该站只提供公开年鉴文件）",
+}
+
+# 少数政府站点的 WAF 直接按 UA 拒绝非浏览器客户端（返回 403/418），而这些页面是**公开统计资料**，
+# 不涉及登录、验证码、频率限制。这里按主机使用浏览器 UA：读的仍是同一份公开页面，不改变任何访问控制。
+# 名单只放实测确因 UA 被拒的站点；新增条目必须写明核验日期与原因。
+BROWSER_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/122.0 Safari/537.36"
+)
+BROWSER_UA_HOSTS: dict[str, str] = {
+    "tjj.hlj.gov.cn": "站点 WAF 拒绝非浏览器 UA（2026-11-21 核验，同 URL 换 UA 即 200）",
+    "stats.yn.gov.cn": "站点 WAF 拒绝非浏览器 UA（2026-11-21 核验，同 URL 换 UA 即 200）",
+}
+
+
+def ua_for(host: str) -> str:
+    """这个主机该用的 User-Agent（只对 BROWSER_UA_HOSTS 里的公开统计站点用浏览器 UA）。"""
+    return BROWSER_UA if host.lower() in BROWSER_UA_HOSTS else USER_AGENT
+
+
 # 每个主机"下一次允许请求的时刻"，进程内所有 Http 实例共享：
 # 网页里连续点分类树、搜索和取值同时发生时，对同一个主机仍是串行且保持间隔。
 _NEXT_OK: dict[str, float] = {}
@@ -52,6 +77,7 @@ class Http:
         *,
         min_interval: dict[str, float] | None = None,
         default_interval: float = 0.0,
+        insecure_hosts: dict[str, str] | None = None,
     ) -> None:
         self._client = client or httpx.AsyncClient(
             headers={"User-Agent": USER_AGENT}, follow_redirects=True
@@ -59,10 +85,30 @@ class Http:
         self._owns = client is None
         self._min_interval = min_interval or {}
         self._default_interval = default_interval  # 没有单独配置的主机用这个间隔
+        self._insecure_hosts = INSECURE_HOSTS if insecure_hosts is None else insecure_hosts
+        self._extra: dict[tuple[str, bool], httpx.AsyncClient] = {}
+
+    def _client_for(self, url: str) -> httpx.AsyncClient:
+        """按主机选客户端：白名单主机用放宽校验/浏览器 UA 的客户端（只针对该主机，不全局改动）。"""
+        if not self._owns:
+            return self._client
+        host = urlsplit(url).netloc.lower()
+        insecure = host in self._insecure_hosts
+        ua = ua_for(host)
+        if not insecure and ua == USER_AGENT:
+            return self._client
+        key = (ua, insecure)
+        if key not in self._extra:
+            self._extra[key] = httpx.AsyncClient(
+                headers={"User-Agent": ua}, follow_redirects=True, verify=not insecure
+            )
+        return self._extra[key]
 
     async def aclose(self) -> None:
         if self._owns:
             await self._client.aclose()
+        for client in self._extra.values():
+            await client.aclose()
 
     async def _throttle(self, url: str) -> None:
         host = urlsplit(url).netloc
@@ -89,7 +135,7 @@ class Http:
         for attempt in range(2):  # 最多重试一次
             await self._throttle(url)
             try:
-                resp = await self._client.request(
+                resp = await self._client_for(url).request(
                     method, url, params=params, json=json_body, headers=headers, timeout=timeout
                 )
             except httpx.TimeoutException as exc:
@@ -145,7 +191,7 @@ class Http:
         for attempt in range(2):
             await self._throttle(url)
             try:
-                resp = await self._client.get(url, headers=headers, timeout=timeout)
+                resp = await self._client_for(url).get(url, headers=headers, timeout=timeout)
             except httpx.TimeoutException as exc:
                 last = SourceError("timeout", f"请求超时：{type(exc).__name__}")
             except httpx.TransportError as exc:

@@ -173,6 +173,59 @@ def has_table(html: str) -> bool:
     return "<table" in html.lower()
 
 
+# ── JS 注入的表格网格（浙江统计年鉴查看器）──
+# 页面里没有 <table>，数据以 `var data = {"data":[[...]], "mergeCells":[...], "fixedRowsTop":2}` 注入，
+# 由脚本画成表格。这里按 mergeCells 的 rowspan/colspan 还原成等价的 HTML 表，再交给上面的流程。
+_GRID_VAR = re.compile(r"var\s+data\s*=\s*(\{.*?\})\s*;\s*(?:\$\(|</script>)", re.S)
+
+
+def grid_html(html: str) -> str | None:
+    """把内嵌的表格网格还原成 HTML 表；不是这种页面就返回 None。"""
+    import html as _html
+    import json
+
+    m = _GRID_VAR.search(html)
+    if not m:
+        return None
+    try:
+        payload = json.loads(m.group(1))
+    except ValueError:
+        return None
+    rows = payload.get("data")
+    if not isinstance(rows, list) or not rows or not all(isinstance(r, list) for r in rows):
+        return None
+    spans = {
+        (int(c["row"]), int(c["col"])): (int(c.get("rowspan", 1)), int(c.get("colspan", 1)))
+        for c in payload.get("mergeCells") or []
+        if isinstance(c, dict) and "row" in c and "col" in c
+    }
+    covered: set[tuple[int, int]] = set()
+    width = max(len(r) for r in rows)
+    title = str(payload.get("templetname") or "").strip()
+    parts = ["<table>"]
+    if title:
+        parts.append(f'<tr><td colspan="{width}">{_html.escape(title)}</td></tr>')
+    for r, row in enumerate(rows):
+        parts.append("<tr>")
+        for c, value in enumerate(row):
+            if (r, c) in covered:
+                continue
+            rs, cs = spans.get((r, c), (1, 1))
+            for dr in range(rs):
+                for dc in range(cs):
+                    if dr or dc:
+                        covered.add((r + dr, c + dc))
+            attrs = ""
+            if rs > 1:
+                attrs += f' rowspan="{rs}"'
+            if cs > 1:
+                attrs += f' colspan="{cs}"'
+            parts.append(f"<td{attrs}>{_html.escape(str(value or ''))}</td>")
+        parts.append("</tr>")
+    parts.append("</table>")
+    return "".join(parts)
+
+
 def frame_sources(html: str, base_url: str) -> list[str]:
     """框架页（`<frameset>`/`<iframe>`）里各个子页面的绝对地址；表格常在其中一个框架里。"""
     from urllib.parse import urljoin

@@ -18,7 +18,7 @@ from urllib.parse import unquote, urlsplit
 
 import httpx
 
-from ..config import USER_AGENT
+from ..engine.http import INSECURE_HOSTS, ua_for
 from .adapters import AdapterError
 
 MAX_BYTES = 200 * 1024 * 1024
@@ -78,10 +78,12 @@ def download_file(
         raise AdapterError("目标路径越界")
     current = url
     with httpx.Client(
-        headers={"User-Agent": USER_AGENT},
+        # 与 engine.http 同一份白名单：证书不合规 / 只认浏览器 UA 的公开站点才能取到文件
+        headers={"User-Agent": ua_for(origin)},
         timeout=TIMEOUT,
         follow_redirects=False,
         transport=transport,
+        verify=origin not in INSECURE_HOSTS,
     ) as c:
         for _ in range(MAX_REDIRECTS + 1):
             with c.stream("GET", current) as r:

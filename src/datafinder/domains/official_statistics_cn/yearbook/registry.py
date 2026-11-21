@@ -38,6 +38,8 @@ class Series:
     landing: str | None = None  # 版次入口页模板（含 {year}）；默认 base + indexch.htm
     list_urls: tuple[str, ...] = ()  # format=list：各版次列表页（可多页）
     follow: bool = False  # format=list：进入每个版次页收集附件（zip/xls/pdf）与在线浏览链接
+    interval: float = 1.0  # 同一站点相邻请求的最小间隔（秒）；站点防火墙敏感时调大
+    link_prefix: str = ""  # 目录里的相对链接相对这个子目录（安徽的表页在 statics/ 下）
 
     def edition_years(self, lo: int | None = None, hi: int | None = None) -> list[int]:
         if self.editions:
@@ -99,6 +101,8 @@ def load_series() -> list[Series]:
                 landing=s.get("landing"),
                 list_urls=tuple(s.get("list_urls", ())),
                 follow=s.get("follow", False),
+                interval=float(s.get("interval", 1.0)),
+                link_prefix=s.get("link_prefix", ""),
             )
         )
     return out

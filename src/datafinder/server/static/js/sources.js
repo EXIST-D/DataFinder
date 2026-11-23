@@ -46,7 +46,7 @@ async function load() {
   }
 }
 
-async function openDetail(id) {
+export async function openDetail(id) {
   openSheet((b) => { b.innerHTML = '<p class="sheet-note"><span class="spinner"></span>读取中…</p>'; });
   try {
     const d = await api("/api/data-sources/detail", { id });

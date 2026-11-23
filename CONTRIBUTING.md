@@ -49,6 +49,13 @@ gh release upload catalog-latest snapshot/* --clobber                           
 
 用户 `datafinder index pull` 安装；清单里的库版本与程序不一致时会拒绝安装（请升级程序或自行 `index build`）。库结构变更要同步提升 `SCHEMA_VERSION` 并重新发布快照。
 
+### 多台机器协作时（避免编号重复、快照互相覆盖）
+
+1. **开工前先 `git pull`**；提交编号 `DF-<n>` 取 `git log --format=%s | grep -o '^DF-[0-9]*'` 里的最大值加一。
+2. **快照只由一台"发布机"生成**（能访问受限站点的那台）。流程：`git pull` → `datafinder index pull --force`（装当前快照）→ 补抓（`index build …`，国家统计局栏目 `--opt site=nbs --refresh --max-requests 320`，预算要给足）→ `pytest` 与 `datafinder bench topics` / `bench facets` 不退步 → `index snapshot` → `gh release upload catalog-latest … --clobber`。
+3. 其他机器**不要**发布快照；它们的本地目录只用于开发。README 里写的覆盖数字以已发布快照为准，发布后再改。
+4. 覆盖范围变化（新省、新栏目）合并后，在 `index status` 的输出里核对 `by_source` 再发布。
+
 ## 工程原则
 
 - **一个概念只有一份实现**：存储 schema、检索打分、导出、错误枚举各一份；发现重复就合并，不要并存。

@@ -9,6 +9,8 @@
 - GET /api/catalog/tree       目录树：当前检索的命中集合按 主题/地域/来源 逐级展开（无状态，计数口径同 search 的 total）
 数据来源（门户与已索引来源的关联、接入等级）：
 - GET /api/data-sources|detail|resources   列表（scope=indexed|all）、详情、关联来源下的资源检索
+门户树：
+- GET /api/portal-tree|search   全部门户按 国家 → 地区 → 机构类型 → 门户 逐层展开（按需加载），已接入的门户可继续展开到来源与资源
 术语词典：
 - GET /api/glossary|detail|resources      查词（名称/别名/定义）、定义与出处与关系、用术语名找相关资源
 门户目录：
@@ -412,6 +414,32 @@ def create_app() -> FastAPI:
             return await service.search(
                 q, source_ids=linked, limit=limit, offset=offset, facets=False
             )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    # ───────────── 门户树 ─────────────
+
+    @app.get("/api/portal-tree")
+    def portal_tree(
+        node: str = Query("", max_length=600),
+        limit: int = Query(100, ge=1, le=300),
+        offset: int = Query(0, ge=0, le=50000),
+        indexed: bool = False,
+        focus: str = Query("", max_length=200),
+    ) -> dict[str, Any]:
+        try:
+            return service.portal_tree.children(
+                node or None, limit=limit, offset=offset, indexed_only=indexed, focus=focus or None
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/portal-tree/search")
+    def portal_tree_search(
+        q: str = Query(..., min_length=1, max_length=MAX_QUERY), limit: int = Query(20, ge=1, le=50)
+    ) -> dict[str, Any]:
+        try:
+            return service.portal_tree.search(q, limit=limit)
         except Exception as exc:  # noqa: BLE001
             raise _service_http_error(exc) from exc
 

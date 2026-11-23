@@ -218,6 +218,27 @@ def _entry(d: _Directory, portal: dict[str, Any], links: list[dict[str, Any]]) -
 _RANK = {lv: i for i, lv in enumerate(LEVELS)}  # 接入越深越靠前
 
 
+_CACHE: dict[str, Any] = {}
+
+
+def cached_directory(cat: Catalog, conn: sqlite3.Connection | None) -> _Directory:
+    """关联结果的进程内缓存：目录库或门户库有变化（文件时间/大小，含 WAL）才重算。门户树逐层展开时会频繁用到。"""
+    from datafinder.config import data_dir
+
+    home = data_dir()
+    key = tuple(
+        (name, st.st_mtime_ns, st.st_size)
+        for name in ("catalog.db", "catalog.db-wal", "datafinder.db", "datafinder.db-wal")
+        if (st := (home / name).stat() if (home / name).exists() else None)
+    )
+    hit = _CACHE.get("directory")
+    if hit and hit[0] == key:
+        return hit[1]
+    d = _Directory(cat, conn)
+    _CACHE["directory"] = (key, d)
+    return d
+
+
 def _open_portals() -> sqlite3.Connection | None:
     conn = connect()
     if not portal_count(conn):

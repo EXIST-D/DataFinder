@@ -331,3 +331,26 @@ def test_glossary_resources_reuse_catalog_search(client, catalog_ready):
     tid = client.get("/api/glossary", params={"q": "国内生产总值"}).json()["items"][0]["term_id"]
     r = client.get("/api/glossary/resources", params={"id": tid})
     assert r.status_code == 200 and "results" in r.json()
+
+
+def test_portal_tree_endpoints(client):
+    from datafinder.portals.sync import write_db
+    from datafinder.store import connect
+
+    from ..conftest import P
+
+    conn = connect()
+    write_db(
+        conn,
+        [P("a", "A", name_zh="甲门户", country="CN", owner_type="Central government")],
+        meta={},
+    )
+    conn.close()
+    r = client.get("/api/portal-tree", params={"limit": 300}).json()
+    assert r["children"][0]["id"] == "c:CN" and r["children"][0]["count"] == 1
+    kids = client.get("/api/portal-tree", params={"node": "c:CN"}).json()["children"]
+    assert kids[0]["id"] == "p:a" and kids[0]["level_zh"] == "仅门户入口"
+    s = client.get("/api/portal-tree/search", params={"q": "甲门户"}).json()
+    assert s["results"][0]["node"]["portal_id"] == "a" and s["results"][0]["trail"] == ["c:CN"]
+    assert client.get("/api/portal-tree", params={"node": "zzz"}).status_code == 404
+    assert client.get("/api/portal-tree", params={"limit": 999}).status_code == 422

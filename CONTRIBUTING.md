@@ -52,7 +52,7 @@ gh release upload catalog-latest snapshot/* --clobber                           
 ### 多台机器协作时（避免编号重复、快照互相覆盖）
 
 1. **开工前先 `git pull`**；提交编号 `DF-<n>` 取 `git log --format=%s | grep -o '^DF-[0-9]*'` 里的最大值加一。
-2. **快照只由一台"发布机"生成**（能访问受限站点的那台）。流程：`git pull` → `datafinder index pull --force`（装当前快照）→ 补抓（`index build …`，国家统计局栏目 `--opt site=nbs --refresh --max-requests 320`，预算要给足）→ `pytest` 与 `datafinder bench topics` / `bench facets` 不退步 → `index snapshot` → `gh release upload catalog-latest … --clobber`。
+2. **快照只由一台"发布机"生成**（能访问受限站点、本地目录最全的那台）。流程：`git pull` → **不要** `index pull --force`（会用旧快照覆盖发布机上更全的本地目录；`pull` 发现本地比快照新会自动拒绝，保持拒绝即可）→ 补抓（国家统计局栏目 `index build site --opt site=nbs --refresh --max-requests 320`，预算要给足）→ `pytest` 与 `datafinder bench topics` / `bench facets` 不退步 → `index status` 核对数量与来源 → `index snapshot` → `gh release upload catalog-latest … --clobber`。
 3. 其他机器**不要**发布快照；它们的本地目录只用于开发。README 里写的覆盖数字以已发布快照为准，发布后再改。
 4. 覆盖范围变化（新省、新栏目）合并后，在 `index status` 的输出里核对 `by_source` 再发布。
 

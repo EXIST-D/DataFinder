@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from datafinder.catalog.adapters import register_adapter
 from datafinder.catalog.glossary import register_glossary
-from datafinder.catalog.scout import register_probe
 from datafinder.catalog.portal_links import register_portal_links
+from datafinder.catalog.scout import register_probe
 from datafinder.catalog.taxonomy import register_taxonomy
 from datafinder.catalog.tree import register_domain
 from datafinder.finder import MIN_INTERVAL

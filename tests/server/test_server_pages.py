@@ -354,3 +354,45 @@ def test_portal_tree_endpoints(client):
     assert s["results"][0]["node"]["portal_id"] == "a" and s["results"][0]["trail"] == ["c:CN"]
     assert client.get("/api/portal-tree", params={"node": "zzz"}).status_code == 404
     assert client.get("/api/portal-tree", params={"limit": 999}).status_code == 422
+
+
+def test_portal_tree_list_summary_and_filters_over_http(client):
+    from datafinder.portals.sync import write_db
+    from datafinder.store import connect
+
+    from ..conftest import P
+
+    conn = connect()
+    write_db(
+        conn,
+        [
+            P(
+                "a",
+                "A",
+                name_zh="甲门户",
+                country="CN",
+                owner_type="Central government",
+                catalog_type="Indicators catalog",
+            ),
+            P("b", "B", name_zh="乙门户", country="CN", owner_type="Academy"),
+        ],
+        meta={},
+    )
+    conn.close()
+    lst = client.get("/api/portal-tree/list", params={"node": "c:CN"}).json()
+    assert lst["total"] == 2 and lst["path"][0]["name"] == "中国"
+    lst = client.get("/api/portal-tree/list", params={"node": "c:CN", "kind": "statistics"}).json()
+    assert [i["portal_id"] for i in lst["items"]] == ["a"]
+    s = client.get("/api/portal-tree/summary", params={"node": "c:CN", "official": "true"}).json()
+    assert s["total"] == 1 and s["official"] == 1 and s["kinds"]
+    assert (
+        client.get("/api/portal-tree/summary", params={"node": "p:a"}).json()["portal"]["name"]
+        == "甲门户"
+    )
+    assert (
+        client.get("/api/portal-tree", params={"axis": "kind"})
+        .json()["children"][0]["id"]
+        .startswith("s:kind=")
+    )
+    assert client.get("/api/portal-tree/list", params={"node": "p:a"}).status_code == 400
+    assert client.get("/api/portal-tree/list", params={"kind": "nope"}).status_code == 400

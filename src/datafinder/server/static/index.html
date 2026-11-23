@@ -132,23 +132,38 @@
       </section>
     </div>
 
-    <!-- ═══════════ 门户树（国家 → 地区 → 机构类型 → 门户 → 来源 → 资源）═══════════ -->
-    <div class="view page" data-view="ptree" hidden>
-      <header class="page-head">
-        <h1 class="page-title">门户树</h1>
-        <p class="page-sub">全部数据门户按 国家 → 地区 → 机构类型 逐层展开；已接入的门户可以继续点开，一直到来源里的具体资源。</p>
+    <!-- ═══════════ 门户树：左树 · 中列表 · 右详情 ═══════════ -->
+    <div class="view page ptv" data-view="ptree" hidden>
+      <header class="pt-head">
+        <h1 class="page-title pt-title">门户树</h1>
+        <p class="pt-sub">全部数据门户按 国家 → 地区 → 机构类型 逐层展开；选中任何一层，中间看这一层的全部门户，右边看概况与详情。已接入的门户可以继续点开到来源和具体资源。</p>
       </header>
-      <form class="search compact" id="ptForm" role="search" autocomplete="off">
-        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <input id="ptQ" type="search" placeholder="按名称找门户并在树中定位，如：统计局、data.gov、开放数据" maxlength="200" aria-label="门户名称">
-      </form>
-      <div class="pt-toolbar"><div class="tree-axes" id="ptChips" role="group" aria-label="范围"></div><button type="button" class="chip sm" id="ptCollapse">全部收起</button></div>
+      <div class="pt-bar">
+        <form class="pt-search" id="ptForm" role="search" autocomplete="off">
+          <svg class="pt-search-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="ptQ" type="search" placeholder="按名称找门户并在树中定位，如：统计局、data.gov" maxlength="200" aria-label="门户名称">
+        </form>
+        <div class="pt-axes" id="ptAxes" role="group" aria-label="树的分法"></div>
+      </div>
+      <div class="pt-filters" id="ptFilters" role="group" aria-label="筛选"></div>
+      <div class="pt-active" id="ptActive" aria-live="polite"></div>
       <div class="panel pt-results" id="ptResults" hidden></div>
-      <section class="browse-main" aria-label="门户树">
-        <div class="panel pt-panel" id="ptTree"></div>
-        <p class="note" id="ptNote"></p>
-        <p class="note">想按列表看已接入的来源：<a href="/?v=sources" data-view="sources">数据来源</a>；按机构类型和领域筛选全部门户：<a href="/?v=browse" data-view="browse">门户目录</a>。</p>
-      </section>
+      <div class="pt-shell">
+        <aside class="pt-pane pt-left" aria-label="门户树">
+          <div class="pt-pane-head"><strong>树</strong><button type="button" class="pt-link" id="ptCollapse">全部收起</button></div>
+          <div class="pt-scroll" id="ptTree"></div>
+        </aside>
+        <section class="pt-pane pt-mid" aria-label="列表">
+          <nav class="pt-crumbs" id="ptCrumbs" aria-label="当前位置"></nav>
+          <div class="pt-pane-head" id="ptMidHead"></div>
+          <div class="pt-scroll" id="ptList"></div>
+        </section>
+        <aside class="pt-pane pt-right" aria-label="详情">
+          <div class="pt-scroll" id="ptDetail"></div>
+        </aside>
+      </div>
+      <p class="note" id="ptNote"></p>
+      <p class="note">想按列表看已接入的来源：<a href="/?v=sources" data-view="sources">数据来源</a>；按机构类型和领域筛选全部门户：<a href="/?v=browse" data-view="browse">门户目录</a>。</p>
     </div>
 
     <!-- ═══════════ 术语词典 ═══════════ -->

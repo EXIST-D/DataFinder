@@ -10,7 +10,7 @@
 数据来源（门户与已索引来源的关联、接入等级）：
 - GET /api/data-sources|detail|resources   列表（scope=indexed|all）、详情、关联来源下的资源检索
 门户树：
-- GET /api/portal-tree|search   全部门户按 国家 → 地区 → 机构类型 → 门户 逐层展开（按需加载），已接入的门户可继续展开到来源与资源
+- GET /api/portal-tree|list|summary|search   全部门户：左树逐层展开（按需加载）、中间列表（拍平分页）、右边概况；筛选对三者同时生效
 术语词典：
 - GET /api/glossary|detail|resources      查词（名称/别名/定义）、定义与出处与关系、用术语名找相关资源
 门户目录：
@@ -419,6 +419,9 @@ def create_app() -> FastAPI:
 
     # ───────────── 门户树 ─────────────
 
+    def _ptf(kind: str, official: bool, api: bool, indexed: bool) -> dict[str, Any]:
+        return {"kind": kind or None, "official": official, "api": api, "indexed_only": indexed}
+
     @app.get("/api/portal-tree")
     def portal_tree(
         node: str = Query("", max_length=600),
@@ -426,11 +429,57 @@ def create_app() -> FastAPI:
         offset: int = Query(0, ge=0, le=50000),
         indexed: bool = False,
         focus: str = Query("", max_length=200),
+        kind: str = Query("", max_length=20),
+        official: bool = False,
+        api: bool = False,
+        axis: str = Query("geo", max_length=8),
     ) -> dict[str, Any]:
         try:
             return service.portal_tree.children(
-                node or None, limit=limit, offset=offset, indexed_only=indexed, focus=focus or None
+                node or None,
+                limit=limit,
+                offset=offset,
+                focus=focus or None,
+                axis=axis,
+                **_ptf(kind, official, api, indexed),
             )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/portal-tree/list")
+    def portal_tree_list(
+        node: str = Query("", max_length=600),
+        limit: int = Query(30, ge=1, le=100),
+        offset: int = Query(0, ge=0, le=50000),
+        sort: str = Query("official", max_length=12),
+        q: str = Query("", max_length=MAX_QUERY),
+        indexed: bool = False,
+        kind: str = Query("", max_length=20),
+        official: bool = False,
+        api: bool = False,
+    ) -> dict[str, Any]:
+        try:
+            return service.portal_tree.listing(
+                node or None,
+                limit=limit,
+                offset=offset,
+                sort=sort,
+                q=q,
+                **_ptf(kind, official, api, indexed),
+            )
+        except Exception as exc:  # noqa: BLE001
+            raise _service_http_error(exc) from exc
+
+    @app.get("/api/portal-tree/summary")
+    def portal_tree_summary(
+        node: str = Query("", max_length=600),
+        indexed: bool = False,
+        kind: str = Query("", max_length=20),
+        official: bool = False,
+        api: bool = False,
+    ) -> dict[str, Any]:
+        try:
+            return service.portal_tree.summary(node or None, **_ptf(kind, official, api, indexed))
         except Exception as exc:  # noqa: BLE001
             raise _service_http_error(exc) from exc
 

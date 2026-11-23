@@ -81,6 +81,8 @@ def world(monkeypatch):
                 url="https://data.example.org",
                 country="CN",
                 owner_type="Central government",
+                catalog_type="Indicators catalog",
+                has_api=True,
             ),
             P(
                 "lonely",
@@ -201,3 +203,78 @@ def test_tree_needs_the_portal_library(tmp_path, monkeypatch):
     with pytest.raises(ServiceError) as e:
         pt.children()
     assert e.value.code == "INDEX_NOT_READY"
+
+
+# ───────────── 左树 · 中列表 · 右概况，与筛选 ─────────────
+
+
+def test_list_pages_portals_then_the_catalog_only_sources(world):
+    first = pt.listing("c:CN", limit=3)
+    assert first["total"] == 5 and [i["kind"] for i in first["items"]] == ["portal"] * 3
+    second = pt.listing("c:CN", limit=3, offset=3)
+    assert [i["kind"] for i in second["items"]] == [
+        "source",
+        "source",
+    ]  # 门户库里没有记录的来源接在最后
+    assert pt.listing("c:CN", sort="name")["items"][0]["kind"] == "portal"
+    with pytest.raises(ServiceError) as e:
+        pt.listing("p:datax")
+    assert e.value.code == "INVALID_ARGUMENT"
+    with pytest.raises(ServiceError):
+        pt.listing("c:CN", sort="zzz")
+
+
+def test_filters_apply_to_tree_counts_list_and_summary_alike(world):
+    assert pt.listing("c:CN", kind="statistics")["total"] == 1
+    assert [c["id"] for c in pt.children(kind="statistics")["children"]] == ["c:CN"]
+    assert pt.children(kind="statistics")["children"][0]["count"] == 1
+    assert pt.listing("c:CN", api=True)["total"] == 1
+    assert (
+        pt.listing("c:US", official=True)["total"] == 12
+    )  # 12 个地方政府是官方，12 个科研与高校不是
+    s = pt.summary("c:US", official=True)
+    assert s["total"] == 12 and s["official"] == 12  # 概况里的数量与列表一致
+    # 数据形态自己的分布不受数据形态筛选影响（筛选后其他形态仍可见、可切换）
+    s = pt.summary("c:CN", kind="statistics")
+    assert s["total"] == 1 and {k["key"]: k["count"] for k in s["kinds"]} == {
+        "statistics": 1,
+        "other": 2,
+    }
+    # 带门户属性的筛选时，门户库里没有记录的来源不出现
+    assert pt.summary("c:CN")["total"] == 5 and pt.summary("c:CN", kind="other")["total"] == 2
+    with pytest.raises(ServiceError) as e:
+        pt.listing("c:CN", kind="nope")
+    assert e.value.code == "INVALID_FACET_ID"
+
+
+def test_summary_gives_distributions_and_the_object_itself(world):
+    s = pt.summary("c:CN")
+    assert (
+        s["kind"] == "scope" and s["name"] == "中国" and s["indexed"] == 3
+    )  # 3 个已接入（含 2 个仅目录来源）
+    assert {t["name"]: t["count"] for t in s["tiers"]} == {"国家级政府": 2, "地方政府": 1}
+    root = pt.summary(None)
+    assert root["name"] == "全部门户" and root["total"] >= 28
+    p = pt.summary("p:datax")
+    assert p["kind"] == "p" and p["portal"]["level"] == "indexed_and_fetchable"
+    assert [x["id"] for x in p["path"]] == ["c:CN", "p:datax"]
+    k = pt.summary("k:source:nbs")
+    assert k["kind"] == "k" and k["path"][-1]["id"] == "k:source:nbs"
+
+
+def test_other_axes_group_by_kind_or_tier_then_country_then_portals(world):
+    top = {c["id"]: c for c in pt.children(axis="kind")["children"]}
+    assert top["s:kind=statistics"]["count"] == 1 and top["s:kind=other"]["name"] == "其他"
+    countries = pt.children("s:kind=other")["children"]
+    assert any(c["id"] == "s:kind=other;country=US" and c["count"] == 24 for c in countries)
+    portals = pt.children("s:kind=other;country=US", limit=10)
+    assert portals["total_children"] == 24 and len(portals["children"]) == 10
+    assert pt.listing("s:kind=other;country=US")["total"] == 24
+    assert [x["name"] for x in pt.summary("s:kind=other;country=US")["path"]] == ["其他", "美国"]
+    tiers = pt.children(axis="tier")["children"]
+    assert tiers[0]["id"].startswith("s:tier=") and sum(t["count"] for t in tiers) == 28
+    with pytest.raises(ServiceError):
+        pt.children(axis="zzz")
+    with pytest.raises(ServiceError) as e:
+        pt.children("s:bogus=1")
+    assert e.value.code == "NOT_FOUND"

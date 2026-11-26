@@ -99,13 +99,19 @@ def download_file(
                     raise AdapterError(f"下载失败（HTTP {r.status_code}）")
                 size = 0
                 tmp = target.with_suffix(target.suffix + ".part")
-                with tmp.open("wb") as f:
-                    for chunk in r.iter_bytes(1 << 16):
-                        size += len(chunk)
-                        if size > MAX_BYTES:
-                            tmp.unlink(missing_ok=True)
-                            raise AdapterError(f"文件超过 {MAX_BYTES // (1 << 20)}MB 上限，已中止")
-                        f.write(chunk)
+                try:
+                    with tmp.open("wb") as f:
+                        for chunk in r.iter_bytes(1 << 16):
+                            size += len(chunk)
+                            if size > MAX_BYTES:
+                                # 先抛出、关掉句柄再删：Windows 不允许删除仍打开的临时文件
+                                raise AdapterError(
+                                    f"文件超过 {MAX_BYTES // (1 << 20)}MB 上限，已中止"
+                                )
+                            f.write(chunk)
+                except AdapterError:
+                    tmp.unlink(missing_ok=True)
+                    raise
                 tmp.replace(target)
                 return target, size
     raise AdapterError("重定向次数过多，已中止")

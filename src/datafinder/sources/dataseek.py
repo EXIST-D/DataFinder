@@ -27,6 +27,18 @@ MAX_STDOUT = 8 * 1024 * 1024
 INTERNAL_DEADLINE = 12  # 秒，传给 dsk --timeout；外层超时要比它略长
 
 
+def exec_command(exe: str, *args: str) -> list[str]:
+    """拼子进程命令行。
+
+    真正的可执行文件（uv tool 装出来的 dsk / dsk.exe）原样执行；
+    `.py` 脚本交给当前解释器——Windows 上没有执行位，CreateProcess 会报
+    "不是有效的 Win32 应用程序"，源码安装和测试替身都会遇到。
+    """
+    if exe.lower().endswith(".py"):
+        return [sys.executable, exe, *args]
+    return [exe, *args]
+
+
 def find_executable() -> str | None:
     """优先找与本程序同一环境里的 dsk（uv tool 安装时它不在 PATH 上）。"""
     sibling = Path(sys.executable).parent / "dsk"
@@ -101,11 +113,7 @@ async def inspect_url(url: str, *, timeout: float = 20.0) -> list[Resource]:
     if exe is None:
         raise SourceError("down", "未安装 Dataseek，无法读取文件列表")
     proc = await asyncio.create_subprocess_exec(
-        exe,
-        "inspect",
-        url,
-        "--json",
-        "-q",
+        *exec_command(exe, "inspect", url, "--json", "-q"),
         stdin=asyncio.subprocess.DEVNULL,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
@@ -161,7 +169,7 @@ class DataseekSource(EnglishSource):
 
     async def fetch(self, ctx: Ctx, query: str, limit: int) -> list[Dataset]:
         assert self.exe
-        cmd = [
+        cmd = exec_command(
             self.exe,
             "search",
             query,
@@ -171,7 +179,7 @@ class DataseekSource(EnglishSource):
             str(limit),
             "--timeout",
             str(INTERNAL_DEADLINE),
-        ]
+        )
         if self.exclude:
             cmd += ["-x", ",".join(self.exclude)]
         proc = await asyncio.create_subprocess_exec(

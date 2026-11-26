@@ -1,5 +1,4 @@
 import json
-import stat
 from pathlib import Path
 
 import httpx
@@ -189,9 +188,9 @@ def test_nbs_not_supported_for_unmappable_english_query():
 
 
 def fake_dsk(tmp_path, body: str) -> str:
-    script = tmp_path / "dsk"
-    script.write_text(f"#!/usr/bin/env python3\n{body}\n")
-    script.chmod(script.stat().st_mode | stat.S_IEXEC)
+    """造一个假的 dsk：写成 .py，交给解释器执行（Windows 上没有执行位，直接 exec 会 WinError 193）。"""
+    script = tmp_path / "dsk.py"
+    script.write_text(body + "\n")
     return str(script)
 
 

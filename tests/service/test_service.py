@@ -408,3 +408,31 @@ def test_glossary_detail_links_to_the_catalog_resource_of_its_source_page():
     )
     cat.close()
     assert service.glossary.detail(d0["term_id"])["source_resource_id"] == "site.nbs:reference:zbjs"
+
+
+def test_plan_keeps_link_only_indicators_out_of_the_fetchable_group(portals):
+    from datafinder.catalog import Distribution, Entry, RegionLink
+
+    cat = Catalog.open()
+    cat.upsert_source(
+        "prov.he", domain_id="official_statistics_cn", adapter_id="x", name="省级平台"
+    )
+    cat.upsert(
+        [
+            Entry(
+                "prov.he",
+                "indicator",
+                "g1",
+                "工业增加值（省级平台）",
+                regions=[RegionLink("CN-HE", "covers", None, "exact", "structure")],
+                distributions=[Distribution("page", "https://x/q")],
+            )
+        ]
+    )
+    cat.close()
+    src = service.plan_sources("河北省工业增加值", "河北")["sources"]
+    assert src["indicators"]["items"] and all(
+        i["delivery"] == "generate" for i in src["indicators"]["items"]
+    )
+    assert [i["resource_id"] for i in src["indicator_links"]["items"]] == ["prov.he:indicator:g1"]
+    assert "仅链接" in src["indicator_links"]["title"]

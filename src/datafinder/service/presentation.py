@@ -192,7 +192,7 @@ def _search(data: dict, full: bool) -> tuple[dict, str]:
 
 
 # ── plan ──
-_PLAN_GROUPS = ("indicators", "tables", "documents", "references")
+_PLAN_GROUPS = ("indicators", "indicator_links", "tables", "documents", "references")
 
 
 def _plan(data: dict, full: bool) -> tuple[dict, str]:
@@ -206,7 +206,7 @@ def _plan(data: dict, full: bool) -> tuple[dict, str]:
         gaps.append("没有找到目标地区的官方入口")
     pres = {
         "operation_status": "complete",
-        "summary": f"“{data['topic']}”：可取数指标 {counts['indicators']}（其中 {gen} 个可直接 fetch）、数据表 {counts['tables']}、公报 {counts['documents']}、说明文档 {counts['references']}。",
+        "summary": f"“{data['topic']}”：可取数指标 {counts['indicators']}（其中 {gen} 个可直接 fetch）、仅链接指标 {counts.get('indicator_links', 0)}、数据表 {counts['tables']}、公报 {counts['documents']}、说明文档 {counts['references']}。",
         "evidence": [
             f"理解：地区 {('、'.join(u.get('regions') or []) or '未指定')}；领域 {('、'.join(u.get('domains') or []) or '未识别')}；概念 {('、'.join(u.get('concepts') or []) or '无')}"
         ],

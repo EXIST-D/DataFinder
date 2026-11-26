@@ -192,3 +192,67 @@ def test_query_with_only_place_names_browses_by_filters_instead_of_failing(cat):
     r = S(cat, query="山东", region_ids=["CN-SD"], kinds=["table"])
     assert r.total == 3 and r.results and any("已忽略" in h for h in r.hints)
     assert S(cat, query="山东").results == []  # 没有任何筛选条件：仍然提示换具体词
+
+
+# ───────────── 同样相关时的座次：全国性、拿得到数据、能直接分析的在前 ─────────────
+
+
+def _practical_catalog(cat):
+    from datafinder.catalog import Distribution, Entry, RegionLink
+
+    for sid in ("p.nat", "p.prov", "p.img", "p.link", "p.xls"):
+        cat.upsert_source(sid, domain_id="official_statistics_cn", adapter_id="yearbook", name=sid)
+    nat = [RegionLink("CN", "covers", "country", "exact", "structure")]
+    prov = [RegionLink("CN-SD", "covers", None, "exact", "structure")]
+    xls = [Distribution("direct_file", "https://x/a.xls", "xls", "tabular")]
+    cat.upsert(
+        [
+            Entry("p.prov", "table", "1", "居民消费水平", regions=prov, distributions=xls),
+            Entry("p.nat", "table", "1", "居民消费水平（全国表）", regions=nat, distributions=xls),
+            Entry(
+                "p.img",
+                "table",
+                "2",
+                "城镇登记失业率",
+                regions=nat,
+                distributions=[Distribution("direct_file", "https://x/a.jpg", "jpg", "image")],
+            ),
+            Entry(
+                "p.xls", "table", "2", "城镇登记失业率（可分析版）", regions=nat, distributions=xls
+            ),
+            Entry(
+                "p.link",
+                "table",
+                "3",
+                "农村居民消费支出",
+                regions=nat,
+                distributions=[Distribution("page", "https://x/page")],
+            ),
+            Entry(
+                "p.xls", "table", "3", "农村居民消费支出（下载版）", regions=nat, distributions=xls
+            ),
+        ]
+    )
+
+
+def _order(cat, query, **kw):
+    r = search(cat, SearchRequest(query=query, kinds=["table"], **kw))
+    return [x["source_id"] for x in r.to_dict()["results"]]
+
+
+def test_without_a_named_region_national_resources_come_before_province_only_ones(cat):
+    _practical_catalog(cat)
+    order = _order(cat, "居民消费水平")
+    assert order.index("p.nat") < order.index("p.prov")  # 标题完全相同，全国性的在前
+    # 注意：全国表的标题更长（本来略吃亏），仍排在前面；点名了地区就不再惩罚省级资源
+    assert _order(cat, "居民消费水平", region_ids=["CN-SD"])[0] == "p.prov"
+
+
+def test_analyzable_files_come_before_images_and_downloadable_before_link_only(cat):
+    _practical_catalog(cat)
+    assert _order(cat, "城镇登记失业率").index("p.xls") < _order(cat, "城镇登记失业率").index(
+        "p.img"
+    )
+    assert _order(cat, "农村居民消费支出").index("p.xls") < _order(cat, "农村居民消费支出").index(
+        "p.link"
+    )

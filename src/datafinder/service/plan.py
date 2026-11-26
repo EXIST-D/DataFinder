@@ -179,26 +179,40 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
 
         with open_catalog() as cat:
             if region_codes:
-                regional = run(kinds=["indicator"], region_ids=region_codes)
+                regional = run(kinds=["indicator"], delivery=["generate"], region_ids=region_codes)
                 regional_tables = run(kinds=TABLE_KINDS, region_ids=region_codes)
                 regional_docs = run(kinds=DOC_KINDS, region_ids=region_codes)
             elif intent:
-                regional = run(kinds=["indicator"], geo_granularity="province")
+                regional = run(
+                    kinds=["indicator"], delivery=["generate"], geo_granularity="province"
+                )
                 regional_tables = run(kinds=TABLE_KINDS, geo_granularity="province")
                 regional_docs = run(kinds=DOC_KINDS, geo_granularity="province")
             else:
                 regional, regional_tables, regional_docs = [], [], []
             # 全国口径也要给：做地区研究时总要和全国对照（它们覆盖的是"全国"，不含该地区，所以单独查）
             national = (
-                run(kinds=["indicator"], region_ids=["CN"], region_match="exact")
+                run(
+                    kinds=["indicator"],
+                    delivery=["generate"],
+                    region_ids=["CN"],
+                    region_match="exact",
+                )
                 if intent
-                else run(kinds=["indicator"])
+                else run(kinds=["indicator"], delivery=["generate"])
             )
             national_tables = (
                 run(kinds=TABLE_KINDS, region_ids=["CN"], region_match="exact")
                 if intent
                 else run(kinds=TABLE_KINDS)
             )
+            # 只有目录信息、没有取数入口的指标（如省级平台只开放元数据）：另立一组，不混进"可取数的指标"
+            link_scope = (
+                {"region_ids": region_codes}
+                if region_codes
+                else ({"geo_granularity": "province"} if intent else {})
+            )
+            linked = run(kinds=["indicator"], delivery=["link"], limit=4, **link_scope)
             references = run(kinds=["reference"])  # 统计制度/分类标准/指标解释/出版物书目：不分地区
             # 目录里新收的机构入口与栏目：目标地区的（不看主题）+ 与主题相关的（不限地区）
             cat_regional = (
@@ -267,6 +281,10 @@ def plan_sources(topic: str, region: str | None = None, *, per_group: int = 8) -
             },
             "sources": {
                 "indicators": {"title": "可取数的指标", "items": indicators},
+                "indicator_links": {
+                    "title": "仅链接的指标（只有目录信息，数值要到站点上查）",
+                    "items": linked,
+                },
                 "tables": {"title": "数据表（年鉴、普查资料等，可按版次查）", "items": tables},
                 "documents": {
                     "title": "公报与数据发布（统计公报、月度/季度发布）",

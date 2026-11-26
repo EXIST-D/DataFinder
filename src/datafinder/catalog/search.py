@@ -219,13 +219,44 @@ class _Cand:
     versions: list[sqlite3.Row] = field(default_factory=list)
 
 
+def _national_ids() -> list[str]:
+    """ "全国/国际"级别的地域 id：覆盖它们的资源对没点名地区的问题来说是"通用"的。"""
+    return [r.id for r in regions.regions().values() if r.level in ("country", "world")]
+
+
+def _practicality(row: sqlite3.Row, req: SearchRequest) -> float:
+    """同样相关时，谁更值得先给用户：全国性的（没点名地区时）、拿得到数据的、能直接分析的。
+
+    量级很小——只用来在相关度接近的候选里排座次，不会把明显更相关的结果压下去。
+    省级平台/省级年鉴的覆盖变大后，没点名地区的问题里省级资源不能挤掉全国资源；
+    仅链接（没有取数/下载入口）和图片也该排在可取数、可分析的后面。
+    """
+    adj = 0.0
+    if not (req.region_ids or req.geo_granularity) and not row["_nat"]:
+        adj -= 0.12  # 只覆盖某一个省/市的资源，但用户没有点名地区
+    if row["_dr"] == 2:  # 只有链接
+        adj -= 0.04
+    if row["_us"] == 3:  # 能下载但只是图片，不能直接分析
+        adj -= 0.05
+    return adj
+
+
 def _rank(cat: Catalog, where: Where, units: list[Unit], req: SearchRequest) -> list[_Cand]:
     # 候选按 FTS 相关度（bm25）排序后封顶，再用检索单元精细打分；总数与分面计数不受封顶影响
     clause, args = where.sql(skip=("text",))
+    nat = _national_ids()
+    marks = ",".join("?" * len(nat))
     rows = cat.conn.execute(
-        "SELECT r.* FROM resources_fts f JOIN resources r ON r.rowid = f.rowid"
+        f"SELECT r.*, {delivery_rank_sql()} AS _dr,"
+        " (SELECT MIN(CASE d.usability WHEN 'tabular' THEN 0 WHEN 'html_table' THEN 1 WHEN 'image' THEN 3 ELSE 2 END)"
+        "    FROM distributions d WHERE d.resource_id = r.resource_id) AS _us,"
+        " CASE WHEN NOT EXISTS (SELECT 1 FROM resource_regions x WHERE x.resource_id = r.resource_id AND x.relation = 'covers')"
+        f"   OR EXISTS (SELECT 1 FROM resource_regions x WHERE x.resource_id = r.resource_id AND x.relation = 'covers'"
+        f"              AND (x.region_id IN ({marks}) OR x.scope_mode = 'descendants'))"
+        "   THEN 1 ELSE 0 END AS _nat"
+        " FROM resources_fts f JOIN resources r ON r.rowid = f.rowid"
         f" WHERE resources_fts MATCH ? AND {clause} ORDER BY bm25(resources_fts) LIMIT {CANDIDATE_CAP}",
-        [where.match, *args],
+        [*nat, where.match, *args],
     )
     cands: list[_Cand] = []
     for row in rows:
@@ -242,6 +273,7 @@ def _rank(cat: Catalog, where: Where, units: list[Unit], req: SearchRequest) -> 
                     row,
                     s
                     + known
+                    + _practicality(row, req)
                     + KIND_PREFERENCE.get(row["kind"], 0.0)
                     - 0.0005 * min(len(row["title"]), 80),
                     vec,
